@@ -21,6 +21,10 @@ import { ComboSystem } from '../systems/ComboSystem.js';
 import { CharacterCustomization } from '../systems/CharacterCustomization.js';
 import { DailyRewards } from '../systems/DailyRewards.js';
 import { TutorialSystem } from '../systems/TutorialSystem.js';
+import { CraftingSystem } from '../systems/CraftingSystem.js';
+import { EconomySystem } from '../systems/EconomySystem.js';
+import { EnhancementSystem } from '../systems/EnhancementSystem.js';
+import { TradingSystem } from '../systems/TradingSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -48,6 +52,10 @@ export class GameEngine {
         this.characterCustomization = null;
         this.dailyRewards = null;
         this.tutorialSystem = null;
+        this.craftingSystem = null;
+        this.economySystem = null;
+        this.enhancementSystem = null;
+        this.tradingSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -69,6 +77,9 @@ export class GameEngine {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x1a0033);
         this.scene.fog = new THREE.FogExp2(0x2d0a4e, 0.02);
+        
+        // Store game engine reference in scene for systems to access
+        this.scene.userData.gameEngine = this;
         
         // Setup camera
         this.camera = new THREE.PerspectiveCamera(
@@ -135,6 +146,13 @@ export class GameEngine {
         this.characterCustomization = new CharacterCustomization(this);
         this.dailyRewards = new DailyRewards(this);
         this.tutorialSystem = new TutorialSystem(this);
+        
+        // Phase 4: Crafting & Economy Systems
+        this.craftingSystem = new CraftingSystem(this);
+        this.economySystem = new EconomySystem(this);
+        this.enhancementSystem = new EnhancementSystem(this);
+        this.tradingSystem = new TradingSystem(this);
+        
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -234,6 +252,23 @@ export class GameEngine {
         // Update quest system
         if (this.questSystem) {
             this.questSystem.update(delta);
+        }
+        
+        // Update Phase 4 systems
+        if (this.craftingSystem) {
+            this.craftingSystem.update(delta);
+        }
+        
+        if (this.economySystem) {
+            this.economySystem.update(delta);
+        }
+        
+        if (this.enhancementSystem) {
+            this.enhancementSystem.update(delta);
+        }
+        
+        if (this.tradingSystem) {
+            this.tradingSystem.update(delta);
         }
         
         // Update camera to follow player
