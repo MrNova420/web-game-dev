@@ -66,6 +66,24 @@ import { TeleportationSystem } from '../systems/TeleportationSystem.js';
 import { StartingZoneSystem } from '../systems/StartingZoneSystem.js';
 import { Advanced3DModelSystem } from '../systems/Advanced3DModelSystem.js';
 import { AdvancedUIInterfaceSystem } from '../systems/AdvancedUIInterfaceSystem.js';
+import { BiomeGenerationSystem } from '../systems/BiomeGenerationSystem.js';
+import { BiomeSpecificEnemies } from '../systems/BiomeSpecificEnemies.js';
+import { BiomeWeatherEffects } from '../systems/BiomeWeatherEffects.js';
+import { BiomeResourcesSystem } from '../systems/BiomeResourcesSystem.js';
+import { BiomeDungeonsSystem } from '../systems/BiomeDungeonsSystem.js';
+import { DodgeAndParrySystem } from '../systems/DodgeAndParrySystem.js';
+import { ComboChainSystem } from '../systems/ComboChainSystem.js';
+import { ProceduralGenerationSystem } from '../systems/ProceduralGenerationSystem.js';
+import { Enhanced3DGraphicsSystem } from '../systems/Enhanced3DGraphicsSystem.js';
+import { StorylineAndLoreSystem } from '../systems/StorylineAndLoreSystem.js';
+import { WeaponSkillSystem } from '../systems/WeaponSkillSystem.js';
+import { TacticalCombatAI } from '../systems/TacticalCombatAI.js';
+import { PvPArenaSystem } from '../systems/PvPArenaSystem.js';
+import { GuildAndHousingSystem } from '../systems/GuildAndHousingSystem.js';
+import { MatchmakingAndEventsSystem } from '../systems/MatchmakingAndEventsSystem.js';
+import { AdvancedGraphicsSystem } from '../systems/AdvancedGraphicsSystem.js';
+import { IntelligentEnemyAI } from '../systems/IntelligentEnemyAI.js';
+import { AnimeCharacterSystem } from '../systems/AnimeCharacterSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -138,6 +156,24 @@ export class GameEngine {
         this.startingZoneSystem = null;
         this.advanced3DModelSystem = null;
         this.advancedUIInterfaceSystem = null;
+        this.biomeGenerationSystem = null;
+        this.biomeSpecificEnemies = null;
+        this.biomeWeatherEffects = null;
+        this.biomeResourcesSystem = null;
+        this.biomeDungeonsSystem = null;
+        this.dodgeAndParrySystem = null;
+        this.comboChainSystem = null;
+        this.proceduralGenerationSystem = null;
+        this.enhanced3DGraphicsSystem = null;
+        this.storylineAndLoreSystem = null;
+        this.weaponSkillSystem = null;
+        this.tacticalCombatAI = null;
+        this.pvpArenaSystem = null;
+        this.guildAndHousingSystem = null;
+        this.matchmakingAndEventsSystem = null;
+        this.advancedGraphicsSystem = null;
+        this.intelligentEnemyAI = null;
+        this.animeCharacterSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -333,12 +369,60 @@ export class GameEngine {
             this.advanced3DModelSystem = new Advanced3DModelSystem(this.scene);
             this.advancedUIInterfaceSystem = new AdvancedUIInterfaceSystem();
             
+            // Phase 4: Biome Expansion Systems (NEW)
+            this.biomeGenerationSystem = new BiomeGenerationSystem(this.scene, this.camera);
+            this.biomeSpecificEnemies = new BiomeSpecificEnemies(this.scene);
+            this.biomeWeatherEffects = new BiomeWeatherEffects(this.scene, this.camera);
+            this.biomeResourcesSystem = new BiomeResourcesSystem(this.scene);
+            this.biomeDungeonsSystem = new BiomeDungeonsSystem(this.scene);
+            
+            // Initialize Phase 4 systems
+            this.biomeGenerationSystem.init();
+            this.biomeWeatherEffects.init();
+            
+            // Phase 5: Advanced Combat Mechanics (NEW)
+            this.dodgeAndParrySystem = new DodgeAndParrySystem(this);
+            this.comboChainSystem = new ComboChainSystem(this);
+            this.weaponSkillSystem = new WeaponSkillSystem(this);
+            this.tacticalCombatAI = new TacticalCombatAI(this);
+            
+            // Phase 5.2: PvP Systems
+            this.pvpArenaSystem = new PvPArenaSystem(this);
+            
+            // Phase 6: Social & Community Features
+            this.guildAndHousingSystem = new GuildAndHousingSystem(this);
+            this.matchmakingAndEventsSystem = new MatchmakingAndEventsSystem();
+            this.advancedGraphicsSystem = new AdvancedGraphicsSystem(this.scene, this.renderer);
+            
+            // Phase 6+: Procedural Generation & Enhanced Graphics
+            this.proceduralGenerationSystem = new ProceduralGenerationSystem(this);
+            this.enhanced3DGraphicsSystem = new Enhanced3DGraphicsSystem(this.scene, this.renderer, this.camera);
+            this.storylineAndLoreSystem = new StorylineAndLoreSystem(this);
+            
+            // Phase 8-9: Intelligent AI & Anime Character Systems
+            this.intelligentEnemyAI = new IntelligentEnemyAI();
+            this.animeCharacterSystem = new AnimeCharacterSystem(this.scene);
+            
+            // Initialize new systems
+            this.enhanced3DGraphicsSystem.init();
+            this.storylineAndLoreSystem.init(1); // Start at level 1
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
             console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
             console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
             console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
             console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
+            console.log('🌲 Phase 4 Biome Expansion Systems initialized (5 systems: Generation, Enemies, Weather, Resources, Dungeons)');
+            console.log('⚔️ Phase 5 Combat Enhancement Systems initialized (4 systems: Dodge & Parry, Combo Chains, Weapon Skills, Tactical AI)');
+            console.log('🏟️ Phase 5.2 PvP Systems initialized (Arena, Matchmaking, Duels, Rankings)');
+            console.log('🏰 Phase 6 Social Systems initialized (Guilds, Housing, Marketplace, Matchmaking, Events)');
+            console.log('🎲 Procedural Generation System initialized (Endless content generation)');
+            console.log('🎨 Enhanced 3D Graphics System initialized (Amazing visuals & models)');
+            console.log('🌊 Advanced Graphics System initialized (Terrain, Water, Lighting, Animations)');
+            console.log('📖 Storyline & Lore System initialized (Deep narrative integration)');
+            console.log('🧠 Phase 8 Intelligent Enemy AI initialized (Behavior trees, learning, pack tactics)');
+            console.log('✨ Phase 9 Anime Character System initialized (Detailed models, customization, physics)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -362,6 +446,11 @@ export class GameEngine {
         // Create player
         this.player = new Player(this.scene);
         await this.player.init();
+        
+        // Initialize combat systems with player reference
+        if (this.dodgeAndParrySystem) {
+            this.dodgeAndParrySystem.init(this.player);
+        }
         
         // Set initial companion
         this.companionManager.setActiveCompanion('smoke_siren');
@@ -608,6 +697,86 @@ export class GameEngine {
         
         if (this.advancedUIInterfaceSystem) {
             this.advancedUIInterfaceSystem.update(delta);
+        }
+        
+        // Update Phase 4 Biome Expansion Systems
+        if (this.biomeGenerationSystem && this.player) {
+            this.biomeGenerationSystem.update(this.player.mesh.position, delta);
+        }
+        
+        if (this.biomeSpecificEnemies && this.player) {
+            const currentBiome = this.biomeGenerationSystem ? this.biomeGenerationSystem.getCurrentBiome() : null;
+            this.biomeSpecificEnemies.update(delta, this.player.mesh.position, currentBiome);
+        }
+        
+        if (this.biomeWeatherEffects && this.player) {
+            this.biomeWeatherEffects.update(delta, this.player.mesh.position);
+        }
+        
+        if (this.biomeResourcesSystem) {
+            this.biomeResourcesSystem.update(delta);
+        }
+        
+        // Update Phase 5 Combat Systems
+        if (this.dodgeAndParrySystem) {
+            this.dodgeAndParrySystem.update(delta);
+        }
+        
+        if (this.comboChainSystem) {
+            this.comboChainSystem.update(delta);
+        }
+        
+        if (this.weaponSkillSystem) {
+            this.weaponSkillSystem.update(delta);
+        }
+        
+        if (this.tacticalCombatAI && this.player) {
+            this.tacticalCombatAI.update(delta, this.player.mesh.position);
+        }
+        
+        if (this.pvpArenaSystem) {
+            this.pvpArenaSystem.update(delta);
+        }
+        
+        if (this.guildAndHousingSystem) {
+            this.guildAndHousingSystem.update(delta);
+        }
+        
+        if (this.matchmakingAndEventsSystem) {
+            this.matchmakingAndEventsSystem.update(delta);
+        }
+        
+        if (this.advancedGraphicsSystem && this.camera) {
+            this.advancedGraphicsSystem.update(delta, this.camera.position);
+        }
+        
+        // Update Phase 8-9 Systems (Intelligent AI & Anime Visuals)
+        if (this.intelligentEnemyAI && this.player) {
+            const playerState = {
+                justDodged: this.player.dodgeState?.justDodged || false,
+                dodgeDirection: this.player.dodgeState?.direction || null,
+                justAttacked: this.player.combatState?.justAttacked || false,
+                attackType: this.player.combatState?.attackType || null,
+                skillUsed: this.player.combatState?.lastSkill || null
+            };
+            this.intelligentEnemyAI.update(delta, this.player.mesh.position, playerState);
+        }
+        
+        if (this.animeCharacterSystem) {
+            this.animeCharacterSystem.update(delta);
+        }
+        
+        // Update Procedural Generation & Enhanced Systems
+        if (this.proceduralGenerationSystem) {
+            this.proceduralGenerationSystem.update(delta);
+        }
+        
+        if (this.enhanced3DGraphicsSystem) {
+            this.enhanced3DGraphicsSystem.update(delta);
+        }
+        
+        if (this.storylineAndLoreSystem && this.player) {
+            this.storylineAndLoreSystem.update(delta, this.player.level || 1);
         }
         
         // Update performance optimizer
