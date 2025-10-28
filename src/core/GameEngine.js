@@ -50,6 +50,8 @@ import { WeatherSystem } from '../systems/WeatherSystem.js';
 import { PostProcessingSystem } from '../systems/PostProcessingSystem.js';
 import { AdvancedParticleSystem } from '../systems/AdvancedParticleSystem.js';
 import { DayNightCycleSystem } from '../systems/DayNightCycleSystem.js';
+import { ModernUISystem } from '../systems/ModernUISystem.js';
+import { EnvironmentDetailsSystem } from '../systems/EnvironmentDetailsSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -106,6 +108,8 @@ export class GameEngine {
         this.postProcessingSystem = null;
         this.advancedParticleSystem = null;
         this.dayNightCycleSystem = null;
+        this.modernUISystem = null;
+        this.environmentDetailsSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -274,8 +278,10 @@ export class GameEngine {
             this.postProcessingSystem = new PostProcessingSystem(this);
             this.advancedParticleSystem = new AdvancedParticleSystem(this.scene);
             this.dayNightCycleSystem = new DayNightCycleSystem(this);
+            this.modernUISystem = new ModernUISystem(this);
+            this.environmentDetailsSystem = new EnvironmentDetailsSystem(this);
             
-            console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night)');
+            console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -476,6 +482,14 @@ export class GameEngine {
         
         if (this.dayNightCycleSystem) {
             this.dayNightCycleSystem.update(delta);
+        }
+        
+        if (this.modernUISystem) {
+            this.modernUISystem.update(delta);
+        }
+        
+        if (this.environmentDetailsSystem) {
+            this.environmentDetailsSystem.update(delta);
         }
         
         // Update performance optimizer
