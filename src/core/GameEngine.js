@@ -18,6 +18,7 @@ import { AchievementSystem } from '../systems/AchievementSystem.js';
 import { AudioSystem } from '../systems/AudioSystem.js';
 import { SkillTreeSystem } from '../systems/SkillTreeSystem.js';
 import { ComboSystem } from '../systems/ComboSystem.js';
+import { CharacterCustomization } from '../systems/CharacterCustomization.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -42,6 +43,7 @@ export class GameEngine {
         this.audioSystem = null;
         this.skillTreeSystem = null;
         this.comboSystem = null;
+        this.characterCustomization = null;
         
         // Game state
         this.isRunning = false;
@@ -126,6 +128,7 @@ export class GameEngine {
         this.audioSystem = new AudioSystem(this);
         this.skillTreeSystem = new SkillTreeSystem(this);
         this.comboSystem = new ComboSystem(this);
+        this.characterCustomization = new CharacterCustomization(this);
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize

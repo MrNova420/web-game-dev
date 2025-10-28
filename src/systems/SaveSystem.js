@@ -68,9 +68,10 @@ export class SaveSystem {
         const achievementSystem = this.engine.achievementSystem;
         const audioSystem = this.engine.audioSystem;
         const skillTreeSystem = this.engine.skillTreeSystem;
+        const characterCustomization = this.engine.characterCustomization;
         
         return {
-            version: '1.0.2',
+            version: '1.0.3',
             timestamp: Date.now(),
             saveType: 'auto',
             
@@ -133,6 +134,9 @@ export class SaveSystem {
             // Skill tree data
             skills: skillTreeSystem ? skillTreeSystem.getSaveData() : { unlockedSkills: [], skillPoints: 0 },
             
+            // Character customization data
+            customization: characterCustomization ? characterCustomization.getSaveData() : { current: {}, unlockedOptions: {} },
+            
             // Dungeon state
             dungeon: {
                 biome: this.engine.currentDungeon?.biome || 'crystal_cavern'
@@ -186,6 +190,7 @@ export class SaveSystem {
         const achievementSystem = this.engine.achievementSystem;
         const audioSystem = this.engine.audioSystem;
         const skillTreeSystem = this.engine.skillTreeSystem;
+        const characterCustomization = this.engine.characterCustomization;
         
         // Restore player stats
         Object.assign(player.stats, saveData.player.stats);
@@ -229,6 +234,34 @@ export class SaveSystem {
             inventorySystem.loadSaveData(saveData.inventory);
         }
         
+        // Restore quests
+        if (saveData.quests && questSystem) {
+            questSystem.loadSaveData(saveData.quests);
+        }
+        
+        // Restore achievements
+        if (saveData.achievements && achievementSystem) {
+            achievementSystem.loadSaveData(saveData.achievements);
+        }
+        
+        // Restore audio settings
+        if (saveData.audio && audioSystem) {
+            audioSystem.loadSaveData(saveData.audio);
+        }
+        
+        // Restore skills (must be done before other systems)
+        if (saveData.skills && skillTreeSystem) {
+            skillTreeSystem.loadSaveData(saveData.skills);
+        }
+        
+        // Restore character customization
+        if (saveData.customization && characterCustomization) {
+            characterCustomization.loadSaveData(saveData.customization);
+        }
+        
+        // Update UI
+        endlessMode.updateUI();
+        this.engine.updatePlayerUI();
         // Restore quests
         if (saveData.quests && questSystem) {
             questSystem.loadSaveData(saveData.quests);
