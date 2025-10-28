@@ -1,14 +1,14 @@
 {
   "name": "dynasty-of-emberveil",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A browser-based 2D/2.5D/3D psychedelic fantasy action RPG",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "serve": "node serve.js 3000 dev",
-    "serve:prod": "node serve.js 8000 prod",
+    "serve": "node serve.cjs 3000 dev",
+    "serve:prod": "npm run build && node serve.cjs 8000 prod",
     "lint": "echo 'Linting...' && exit 0",
     "test": "echo 'Tests will be implemented' && exit 0"
   },

@@ -84,6 +84,17 @@ import { MatchmakingAndEventsSystem } from '../systems/MatchmakingAndEventsSyste
 import { AdvancedGraphicsSystem } from '../systems/AdvancedGraphicsSystem.js';
 import { IntelligentEnemyAI } from '../systems/IntelligentEnemyAI.js';
 import { AnimeCharacterSystem } from '../systems/AnimeCharacterSystem.js';
+// Phase 8-9 Advanced Systems
+import { IntelligentAISystem } from '../systems/IntelligentAISystem.js';
+import { DynamicDifficultySystem } from '../systems/DynamicDifficultySystem.js';
+import { ProgressiveWorldSystem } from '../systems/ProgressiveWorldSystem.js';
+import { MagicalEffectsSystem } from '../systems/MagicalEffectsSystem.js';
+import { WorldBeautificationSystem } from '../systems/WorldBeautificationSystem.js';
+import { MonsterDesignSystem } from '../systems/MonsterDesignSystem.js';
+import { AddictiveGameplaySystem } from '../systems/AddictiveGameplaySystem.js';
+import { PlayerControlSettingsSystem } from '../systems/PlayerControlSettingsSystem.js';
+import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
+import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -174,6 +185,18 @@ export class GameEngine {
         this.advancedGraphicsSystem = null;
         this.intelligentEnemyAI = null;
         this.animeCharacterSystem = null;
+        
+        // Phase 8-9 Advanced Systems
+        this.intelligentAISystem = null;
+        this.dynamicDifficultySystem = null;
+        this.progressiveWorldSystem = null;
+        this.magicalEffectsSystem = null;
+        this.worldBeautificationSystem = null;
+        this.monsterDesignSystem = null;
+        this.addictiveGameplaySystem = null;
+        this.playerControlSettingsSystem = null;
+        this.cloudSaveSystem = null;
+        this.advancedAutoManagementSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -403,9 +426,33 @@ export class GameEngine {
             this.intelligentEnemyAI = new IntelligentEnemyAI();
             this.animeCharacterSystem = new AnimeCharacterSystem(this.scene);
             
+            // Phase 8-9: Advanced Game Systems
+            this.intelligentAISystem = new IntelligentAISystem(this);
+            this.dynamicDifficultySystem = new DynamicDifficultySystem(this);
+            this.progressiveWorldSystem = new ProgressiveWorldSystem(this);
+            this.magicalEffectsSystem = new MagicalEffectsSystem(this);
+            this.worldBeautificationSystem = new WorldBeautificationSystem(this);
+            this.monsterDesignSystem = new MonsterDesignSystem(this);
+            this.addictiveGameplaySystem = new AddictiveGameplaySystem(this);
+            this.playerControlSettingsSystem = new PlayerControlSettingsSystem(this);
+            this.cloudSaveSystem = new CloudSaveSystem(this);
+            this.advancedAutoManagementSystem = new AdvancedAutoManagementSystem(this);
+            
             // Initialize new systems
             this.enhanced3DGraphicsSystem.init();
             this.storylineAndLoreSystem.init(1); // Start at level 1
+            
+            // Initialize Phase 8-9 systems
+            await this.intelligentAISystem.init();
+            await this.dynamicDifficultySystem.init();
+            await this.progressiveWorldSystem.init();
+            await this.magicalEffectsSystem.init();
+            await this.worldBeautificationSystem.init();
+            await this.monsterDesignSystem.init();
+            await this.addictiveGameplaySystem.init();
+            await this.playerControlSettingsSystem.init();
+            await this.cloudSaveSystem.init();
+            await this.advancedAutoManagementSystem.init();
             
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
@@ -423,6 +470,17 @@ export class GameEngine {
             console.log('📖 Storyline & Lore System initialized (Deep narrative integration)');
             console.log('🧠 Phase 8 Intelligent Enemy AI initialized (Behavior trees, learning, pack tactics)');
             console.log('✨ Phase 9 Anime Character System initialized (Detailed models, customization, physics)');
+            console.log('🎯 Phase 8-9 Advanced Systems COMPLETE:');
+            console.log('  ✅ Intelligent AI System - Advanced enemy behaviors');
+            console.log('  ✅ Dynamic Difficulty System - Adaptive challenge');
+            console.log('  ✅ Progressive World System - Evolving environment');
+            console.log('  ✅ Magical Effects System - 8 magic schools with effects');
+            console.log('  ✅ World Beautification System - Flora, fauna, atmosphere');
+            console.log('  ✅ Monster Design System - 50+ unique monsters');
+            console.log('  ✅ Addictive Gameplay System - Daily activities, battle pass');
+            console.log('  ✅ Player Control Settings - Complete customization');
+            console.log('  ✅ Cloud Save System - Auto-sync with recovery');
+            console.log('  ✅ Advanced Auto Management - Performance optimization');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -764,6 +822,47 @@ export class GameEngine {
         
         if (this.animeCharacterSystem) {
             this.animeCharacterSystem.update(delta);
+        }
+        
+        // Update Phase 8-9 Advanced Systems
+        if (this.intelligentAISystem) {
+            this.intelligentAISystem.update(delta);
+        }
+        
+        if (this.dynamicDifficultySystem) {
+            this.dynamicDifficultySystem.update(delta);
+        }
+        
+        if (this.progressiveWorldSystem) {
+            this.progressiveWorldSystem.update(delta);
+        }
+        
+        if (this.magicalEffectsSystem) {
+            this.magicalEffectsSystem.update(delta);
+        }
+        
+        if (this.worldBeautificationSystem) {
+            this.worldBeautificationSystem.update(delta);
+        }
+        
+        if (this.monsterDesignSystem) {
+            this.monsterDesignSystem.update(delta);
+        }
+        
+        if (this.addictiveGameplaySystem) {
+            this.addictiveGameplaySystem.update(delta);
+        }
+        
+        if (this.playerControlSettingsSystem) {
+            this.playerControlSettingsSystem.update(delta);
+        }
+        
+        if (this.cloudSaveSystem) {
+            this.cloudSaveSystem.update(delta);
+        }
+        
+        if (this.advancedAutoManagementSystem) {
+            this.advancedAutoManagementSystem.update(delta);
         }
         
         // Update Procedural Generation & Enhanced Systems
