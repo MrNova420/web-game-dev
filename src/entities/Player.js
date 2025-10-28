@@ -155,6 +155,9 @@ export class Player {
     
     die() {
         console.log('💀 Player defeated');
-        // TODO: Implement death/respawn logic
+        // Trigger endless mode end
+        if (window.gameEngine && window.gameEngine.endlessMode) {
+            window.gameEngine.endlessMode.endRun(false);
+        }
     }
 }

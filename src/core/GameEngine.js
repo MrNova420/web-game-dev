@@ -10,6 +10,7 @@ import { DungeonGenerator } from '../worlds/DungeonGenerator.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { EnemyManager } from '../systems/EnemyManager.js';
+import { EndlessMode } from '../systems/EndlessMode.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -26,6 +27,7 @@ export class GameEngine {
         this.combatSystem = null;
         this.particleSystem = null;
         this.enemyManager = null;
+        this.endlessMode = null;
         
         // Game state
         this.isRunning = false;
@@ -103,6 +105,7 @@ export class GameEngine {
         this.combatSystem = new CombatSystem(this);
         this.particleSystem = new ParticleSystem(this.scene);
         this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
+        this.endlessMode = new EndlessMode(this);
         
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
@@ -125,6 +128,9 @@ export class GameEngine {
         
         // Spawn initial enemies using EnemyManager
         this.enemyManager.spawnEnemiesForDungeon(this.currentDungeon, 5);
+        
+        // Start endless mode
+        this.endlessMode.start();
     }
     
     loadDungeon(dungeon) {
@@ -169,6 +175,11 @@ export class GameEngine {
         // Update enemy manager
         if (this.enemyManager) {
             this.enemyManager.update(delta, this.player);
+        }
+        
+        // Update endless mode
+        if (this.endlessMode) {
+            this.endlessMode.update(delta);
         }
         
         // Update camera to follow player
@@ -250,6 +261,9 @@ export class GameEngine {
                 const damage = enemy.takeDamage(25);
                 if (!enemy.isAlive) {
                     this.player.gainExp(enemy.stats.exp);
+                    if (this.endlessMode) {
+                        this.endlessMode.onEnemyDefeated();
+                    }
                 }
             }
         });
@@ -279,6 +293,9 @@ export class GameEngine {
             this.player.stats.hp = Math.min(this.player.stats.maxHp, this.player.stats.hp + 15);
             if (!nearestEnemy.isAlive) {
                 this.player.gainExp(nearestEnemy.stats.exp);
+                if (this.endlessMode) {
+                    this.endlessMode.onEnemyDefeated();
+                }
             }
         }
     }

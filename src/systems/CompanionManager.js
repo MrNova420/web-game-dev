@@ -154,6 +154,9 @@ const companionAbilities = {
                     enemy.takeDamage(30);
                     if (!enemy.isAlive && engine.player) {
                         engine.player.gainExp(enemy.stats.exp);
+                        if (engine.endlessMode) {
+                            engine.endlessMode.onEnemyDefeated();
+                        }
                     }
                 }, delay);
                 delay += 200;
@@ -173,6 +176,9 @@ const companionAbilities = {
                 enemy.takeDamage(20);
                 if (!enemy.isAlive && engine.player) {
                     engine.player.gainExp(enemy.stats.exp);
+                    if (engine.endlessMode) {
+                        engine.endlessMode.onEnemyDefeated();
+                    }
                 }
             }
         });
@@ -190,6 +196,9 @@ const companionAbilities = {
                 }
                 if (!enemy.isAlive && engine.player) {
                     engine.player.gainExp(enemy.stats.exp);
+                    if (engine.endlessMode) {
+                        engine.endlessMode.onEnemyDefeated();
+                    }
                 }
             }
         });
