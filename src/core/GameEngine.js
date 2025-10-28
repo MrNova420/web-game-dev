@@ -66,6 +66,9 @@ import { TeleportationSystem } from '../systems/TeleportationSystem.js';
 import { StartingZoneSystem } from '../systems/StartingZoneSystem.js';
 import { Advanced3DModelSystem } from '../systems/Advanced3DModelSystem.js';
 import { AdvancedUIInterfaceSystem } from '../systems/AdvancedUIInterfaceSystem.js';
+import { BiomeGenerationSystem } from '../systems/BiomeGenerationSystem.js';
+import { BiomeSpecificEnemies } from '../systems/BiomeSpecificEnemies.js';
+import { BiomeWeatherEffects } from '../systems/BiomeWeatherEffects.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -138,6 +141,9 @@ export class GameEngine {
         this.startingZoneSystem = null;
         this.advanced3DModelSystem = null;
         this.advancedUIInterfaceSystem = null;
+        this.biomeGenerationSystem = null;
+        this.biomeSpecificEnemies = null;
+        this.biomeWeatherEffects = null;
         
         // Game state
         this.isRunning = false;
@@ -333,12 +339,22 @@ export class GameEngine {
             this.advanced3DModelSystem = new Advanced3DModelSystem(this.scene);
             this.advancedUIInterfaceSystem = new AdvancedUIInterfaceSystem();
             
+            // Phase 4: Biome Expansion Systems (NEW)
+            this.biomeGenerationSystem = new BiomeGenerationSystem(this.scene, this.camera);
+            this.biomeSpecificEnemies = new BiomeSpecificEnemies(this.scene);
+            this.biomeWeatherEffects = new BiomeWeatherEffects(this.scene, this.camera);
+            
+            // Initialize Phase 4 systems
+            this.biomeGenerationSystem.init();
+            this.biomeWeatherEffects.init();
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
             console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
             console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
             console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
             console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
+            console.log('🌲 Phase 4 Biome Expansion Systems initialized (Biome Generation, Biome Enemies, Biome Weather)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -608,6 +624,20 @@ export class GameEngine {
         
         if (this.advancedUIInterfaceSystem) {
             this.advancedUIInterfaceSystem.update(delta);
+        }
+        
+        // Update Phase 4 Biome Expansion Systems
+        if (this.biomeGenerationSystem && this.player) {
+            this.biomeGenerationSystem.update(this.player.mesh.position, delta);
+        }
+        
+        if (this.biomeSpecificEnemies && this.player) {
+            const currentBiome = this.biomeGenerationSystem ? this.biomeGenerationSystem.getCurrentBiome() : null;
+            this.biomeSpecificEnemies.update(delta, this.player.mesh.position, currentBiome);
+        }
+        
+        if (this.biomeWeatherEffects && this.player) {
+            this.biomeWeatherEffects.update(delta, this.player.mesh.position);
         }
         
         // Update performance optimizer
