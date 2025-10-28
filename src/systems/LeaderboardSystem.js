@@ -11,9 +11,6 @@ export class LeaderboardSystem {
         // Leaderboard categories
         this.leaderboards = new Map();
         
-        // Player scores
-        this.playerScores = new Map();
-        
         // Ranking cache
         this.rankings = new Map();
         
