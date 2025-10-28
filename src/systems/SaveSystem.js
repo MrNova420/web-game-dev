@@ -67,9 +67,10 @@ export class SaveSystem {
         const questSystem = this.engine.questSystem;
         const achievementSystem = this.engine.achievementSystem;
         const audioSystem = this.engine.audioSystem;
+        const skillTreeSystem = this.engine.skillTreeSystem;
         
         return {
-            version: '1.0.1',
+            version: '1.0.2',
             timestamp: Date.now(),
             saveType: 'auto',
             
@@ -86,6 +87,13 @@ export class SaveSystem {
                     level: player.stats.level,
                     exp: player.stats.exp,
                     expToNext: player.stats.expToNext
+                },
+                baseStats: {
+                    maxHp: player.baseStats.maxHp,
+                    maxMp: player.baseStats.maxMp,
+                    attack: player.baseStats.attack,
+                    defense: player.baseStats.defense,
+                    speed: player.baseStats.speed
                 },
                 position: {
                     x: player.mesh.position.x,
@@ -121,6 +129,9 @@ export class SaveSystem {
             
             // Audio settings
             audio: audioSystem ? audioSystem.getSaveData() : { settings: {} },
+            
+            // Skill tree data
+            skills: skillTreeSystem ? skillTreeSystem.getSaveData() : { unlockedSkills: [], skillPoints: 0 },
             
             // Dungeon state
             dungeon: {
@@ -174,9 +185,15 @@ export class SaveSystem {
         const questSystem = this.engine.questSystem;
         const achievementSystem = this.engine.achievementSystem;
         const audioSystem = this.engine.audioSystem;
+        const skillTreeSystem = this.engine.skillTreeSystem;
         
         // Restore player stats
         Object.assign(player.stats, saveData.player.stats);
+        
+        // Restore base stats
+        if (saveData.player.baseStats) {
+            Object.assign(player.baseStats, saveData.player.baseStats);
+        }
         
         // Restore player position
         if (saveData.player.position) {
@@ -225,6 +242,11 @@ export class SaveSystem {
         // Restore audio settings
         if (saveData.audio && audioSystem) {
             audioSystem.loadSaveData(saveData.audio);
+        }
+        
+        // Restore skills (must be done before other systems)
+        if (saveData.skills && skillTreeSystem) {
+            skillTreeSystem.loadSaveData(saveData.skills);
         }
         
         // Update UI

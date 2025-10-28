@@ -16,6 +16,7 @@ import { InventorySystem } from '../systems/InventorySystem.js';
 import { QuestSystem } from '../systems/QuestSystem.js';
 import { AchievementSystem } from '../systems/AchievementSystem.js';
 import { AudioSystem } from '../systems/AudioSystem.js';
+import { SkillTreeSystem } from '../systems/SkillTreeSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -38,6 +39,7 @@ export class GameEngine {
         this.questSystem = null;
         this.achievementSystem = null;
         this.audioSystem = null;
+        this.skillTreeSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -120,6 +122,7 @@ export class GameEngine {
         this.questSystem = new QuestSystem(this);
         this.achievementSystem = new AchievementSystem(this);
         this.audioSystem = new AudioSystem(this);
+        this.skillTreeSystem = new SkillTreeSystem(this);
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize

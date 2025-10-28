@@ -9,7 +9,16 @@ export class Player {
         this.scene = scene;
         this.mesh = null;
         
-        // Player stats
+        // Base stats (before skill bonuses)
+        this.baseStats = {
+            maxHp: 100,
+            maxMp: 100,
+            attack: 15,
+            defense: 10,
+            speed: 5
+        };
+        
+        // Player stats (with skill bonuses applied)
         this.stats = {
             hp: 100,
             maxHp: 100,
@@ -22,6 +31,9 @@ export class Player {
             exp: 0,
             expToNext: 100
         };
+        
+        // Skill effects
+        this.skillEffects = {};
         
         // Movement flags
         this.moveForward = false;
@@ -142,7 +154,13 @@ export class Player {
         this.stats.exp = 0;
         this.stats.expToNext = Math.floor(this.stats.expToNext * 1.5);
         
-        // Increase stats
+        // Increase base stats
+        this.baseStats.maxHp += 20;
+        this.baseStats.maxMp += 15;
+        this.baseStats.attack += 3;
+        this.baseStats.defense += 2;
+        
+        // Increase current stats
         this.stats.maxHp += 20;
         this.stats.maxMp += 15;
         this.stats.hp = this.stats.maxHp;
@@ -160,6 +178,11 @@ export class Player {
         // Track achievement
         if (window.gameEngine && window.gameEngine.achievementSystem) {
             window.gameEngine.achievementSystem.onLevelReached(this.stats.level);
+        }
+        
+        // Update skill points
+        if (window.gameEngine && window.gameEngine.skillTreeSystem) {
+            window.gameEngine.skillTreeSystem.updateSkillPoints();
         }
         
         // Notify quest system
