@@ -431,7 +431,7 @@ export class GameEngine {
             this.dynamicDifficultySystem = new DynamicDifficultySystem(this);
             this.progressiveWorldSystem = new ProgressiveWorldSystem(this);
             this.magicalEffectsSystem = new MagicalEffectsSystem(this);
-            this.worldBeautificationSystem = new WorldBeautificationSystem(this);
+            this.worldBeautificationSystem = new WorldBeautificationSystem(this.scene);
             this.monsterDesignSystem = new MonsterDesignSystem(this);
             this.addictiveGameplaySystem = new AddictiveGameplaySystem(this);
             this.playerControlSettingsSystem = new PlayerControlSettingsSystem(this);
@@ -521,16 +521,21 @@ export class GameEngine {
             console.log('✅ Open world terrain active');
         }
         
-        // Start weather effects
+        // Start weather effects with visible rain
         if (this.weatherSystem) {
-            this.weatherSystem.setWeather('clear', 1.0);
-            console.log('🌦️ Weather system active');
+            this.weatherSystem.setWeather('rain', 0.3);
+            console.log('🌦️ Weather system active - rain enabled');
         }
         
         // Start day/night cycle
         if (this.dayNightCycleSystem) {
             this.dayNightCycleSystem.setTime(12); // Start at noon
             console.log('☀️ Day/night cycle active');
+        }
+        
+        // Magical effects system ready
+        if (this.magicalEffectsSystem) {
+            console.log('✨ Magical effects system ready');
         }
         
         // Populate environment with grass, trees, rocks
@@ -550,7 +555,34 @@ export class GameEngine {
         
         // Spawn animals/creatures
         if (this.worldBeautificationSystem) {
-            console.log('🦌 Wildlife system active');
+            console.log('🦌 Wildlife system active - flora, fauna, and structures created');
+        }
+        
+        // Spawn anime characters/NPCs
+        if (this.animeCharacterSystem) {
+            // Spawn some anime characters around the starting area
+            const characterConfigs = [
+                { id: 'npc_warrior_1', face: 'fierce', hairstyle: 'short_spiky', hairColor: '#FF0000', accessories: ['demon_horns'] },
+                { id: 'npc_mage_1', face: 'elegant', hairstyle: 'long_wavy', hairColor: '#9370DB', accessories: ['wizard_hat'] },
+                { id: 'npc_elf_1', face: 'gentle', hairstyle: 'long_straight', hairColor: '#FFD700', accessories: ['elf_ears'] },
+                { id: 'npc_ninja_1', face: 'mysterious', hairstyle: 'ponytail', hairColor: '#000000', accessories: ['cat_ears', 'cat_tail'] },
+                { id: 'npc_knight_1', face: 'determined', hairstyle: 'short_messy', hairColor: '#4169E1', accessories: ['crown'] }
+            ];
+            
+            for (let i = 0; i < characterConfigs.length; i++) {
+                const config = characterConfigs[i];
+                const angle = (i / characterConfigs.length) * Math.PI * 2;
+                const radius = 15;
+                const character = this.animeCharacterSystem.createCharacter(config.id, config);
+                if (character && character.mesh) {
+                    character.mesh.position.set(
+                        Math.cos(angle) * radius,
+                        0,
+                        Math.sin(angle) * radius
+                    );
+                }
+            }
+            console.log('✨ Anime characters spawned in world');
         }
         
         // Enable all waypoints for fast travel
