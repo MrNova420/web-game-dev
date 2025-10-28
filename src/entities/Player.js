@@ -151,6 +151,11 @@ export class Player {
         this.stats.defense += 2;
         
         console.log(`🌟 Level Up! Now level ${this.stats.level}`);
+        
+        // Auto-save on level up
+        if (window.gameEngine && window.gameEngine.saveSystem) {
+            window.gameEngine.saveSystem.saveGame('Level up');
+        }
     }
     
     die() {

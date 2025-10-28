@@ -99,6 +99,11 @@ export class EndlessMode {
         // Show floor transition
         this.showFloorTransition();
         
+        // Auto-save on floor advancement
+        if (this.engine.saveSystem) {
+            this.engine.saveSystem.saveGame('Floor completion');
+        }
+        
         console.log(`⬆️ Advanced to Floor ${this.currentFloor}`);
     }
     

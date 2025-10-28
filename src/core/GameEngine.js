@@ -11,6 +11,7 @@ import { CombatSystem } from '../systems/CombatSystem.js';
 import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { EnemyManager } from '../systems/EnemyManager.js';
 import { EndlessMode } from '../systems/EndlessMode.js';
+import { SaveSystem } from '../systems/SaveSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -28,6 +29,7 @@ export class GameEngine {
         this.particleSystem = null;
         this.enemyManager = null;
         this.endlessMode = null;
+        this.saveSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -106,6 +108,7 @@ export class GameEngine {
         this.particleSystem = new ParticleSystem(this.scene);
         this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
         this.endlessMode = new EndlessMode(this);
+        this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
@@ -122,7 +125,21 @@ export class GameEngine {
         this.companionManager.setActiveCompanion('smoke_siren');
         this.updateCompanionUI();
         
-        // Generate starting dungeon
+        // Check for existing save
+        if (this.saveSystem.hasSaveData()) {
+            const metadata = this.saveSystem.getSaveMetadata();
+            if (metadata) {
+                console.log(`💾 Save found: Floor ${metadata.floor}, Level ${metadata.level}`);
+                // Offer to load save (for now, auto-load)
+                const shouldLoad = true; // Could show UI prompt here
+                if (shouldLoad) {
+                    this.saveSystem.loadGame();
+                    return; // Skip initial dungeon generation
+                }
+            }
+        }
+        
+        // Generate starting dungeon (if no save loaded)
         this.currentDungeon = this.dungeonGenerator.generate('crystal_cavern', 1);
         this.loadDungeon(this.currentDungeon);
         
