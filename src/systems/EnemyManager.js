@@ -3,6 +3,7 @@
  */
 
 import { Enemy } from '../entities/Enemy.js';
+import { Boss } from '../entities/Boss.js';
 import * as THREE from 'three';
 
 export class EnemyManager {
@@ -88,6 +89,67 @@ export class EnemyManager {
         this.enemies.push(enemy);
     }
     
+    spawnBoss(dungeon) {
+        // Choose boss type based on biome
+        const bossTypes = {
+            crystal_cavern: 'essence_wraith',
+            fungal_city: 'weed_golem',
+            vine_cathedral: 'corrupted_angel',
+            broken_starship: 'shadow_bard',
+            twilight_throne: 'corrupted_angel'
+        };
+        
+        const bossType = bossTypes[dungeon.biome] || 'corrupted_angel';
+        
+        // Spawn boss in center of dungeon
+        const spawnPosition = new THREE.Vector3(0, 1, 0);
+        
+        const boss = new Boss(this.scene, bossType, spawnPosition);
+        this.enemies.push(boss);
+        
+        console.log(`👑 Boss spawned: ${boss.stats.name} in ${dungeon.name}`);
+        
+        // Show boss intro
+        this.showBossIntro(boss.stats.name);
+    }
+    
+    showBossIntro(bossName) {
+        const intro = document.createElement('div');
+        intro.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #1a0033, #4a0e7a);
+            border: 3px solid #ffd60a;
+            border-radius: 20px;
+            padding: 40px 60px;
+            color: #ffd60a;
+            font-size: 2.5em;
+            font-weight: bold;
+            z-index: 9999;
+            animation: bossIntro 4s ease-out;
+            box-shadow: 0 0 60px #ffd60a;
+            text-align: center;
+        `;
+        intro.innerHTML = `
+            <div style="font-size: 0.6em; color: #c77dff; margin-bottom: 10px;">⚠️ BOSS ENCOUNTER ⚠️</div>
+            <div>${bossName}</div>
+            <div style="font-size: 0.5em; color: #e0aaff; margin-top: 10px;">Prepare for Battle!</div>
+        `;
+        
+        document.body.appendChild(intro);
+        
+        setTimeout(() => {
+            if (intro.parentNode) {
+                intro.style.animation = 'fadeOut 0.5s ease-out';
+                setTimeout(() => {
+                    document.body.removeChild(intro);
+                }, 500);
+            }
+        }, 3500);
+    }
+    
     getEnemies() {
         return this.enemies;
     }
@@ -101,3 +163,15 @@ export class EnemyManager {
         this.enemies = [];
     }
 }
+
+// Add CSS animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes bossIntro {
+        0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+        20% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    }
+`;
+document.head.appendChild(style);

@@ -63,6 +63,8 @@ export class SaveSystem {
         const player = this.engine.player;
         const endlessMode = this.engine.endlessMode;
         const companionManager = this.engine.companionManager;
+        const inventorySystem = this.engine.inventorySystem;
+        const questSystem = this.engine.questSystem;
         
         return {
             version: '1.0.0',
@@ -105,6 +107,12 @@ export class SaveSystem {
                 unlockedCompanions: Object.keys(companionManager.companions)
                     .filter(id => companionManager.companions[id].unlocked)
             },
+            
+            // Inventory data
+            inventory: inventorySystem ? inventorySystem.getSaveData() : { items: [], equipment: {} },
+            
+            // Quest data
+            quests: questSystem ? questSystem.getSaveData() : { activeQuests: [], completedQuests: [], availableQuests: [] },
             
             // Dungeon state
             dungeon: {
@@ -154,6 +162,8 @@ export class SaveSystem {
         const player = this.engine.player;
         const endlessMode = this.engine.endlessMode;
         const companionManager = this.engine.companionManager;
+        const inventorySystem = this.engine.inventorySystem;
+        const questSystem = this.engine.questSystem;
         
         // Restore player stats
         Object.assign(player.stats, saveData.player.stats);
@@ -185,6 +195,16 @@ export class SaveSystem {
         
         if (saveData.companions.activeCompanion) {
             companionManager.setActiveCompanion(saveData.companions.activeCompanion);
+        }
+        
+        // Restore inventory
+        if (saveData.inventory && inventorySystem) {
+            inventorySystem.loadSaveData(saveData.inventory);
+        }
+        
+        // Restore quests
+        if (saveData.quests && questSystem) {
+            questSystem.loadSaveData(saveData.quests);
         }
         
         // Update UI

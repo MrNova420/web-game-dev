@@ -12,6 +12,8 @@ import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { EnemyManager } from '../systems/EnemyManager.js';
 import { EndlessMode } from '../systems/EndlessMode.js';
 import { SaveSystem } from '../systems/SaveSystem.js';
+import { InventorySystem } from '../systems/InventorySystem.js';
+import { QuestSystem } from '../systems/QuestSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -30,6 +32,8 @@ export class GameEngine {
         this.enemyManager = null;
         this.endlessMode = null;
         this.saveSystem = null;
+        this.inventorySystem = null;
+        this.questSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -108,6 +112,8 @@ export class GameEngine {
         this.particleSystem = new ParticleSystem(this.scene);
         this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
         this.endlessMode = new EndlessMode(this);
+        this.inventorySystem = new InventorySystem(this);
+        this.questSystem = new QuestSystem(this);
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -199,6 +205,11 @@ export class GameEngine {
             this.endlessMode.update(delta);
         }
         
+        // Update quest system
+        if (this.questSystem) {
+            this.questSystem.update(delta);
+        }
+        
         // Update camera to follow player
         if (this.player && this.player.mesh) {
             const targetPosition = this.player.mesh.position.clone();
@@ -281,6 +292,12 @@ export class GameEngine {
                     if (this.endlessMode) {
                         this.endlessMode.onEnemyDefeated();
                     }
+                    // Drop loot
+                    this.dropLoot(enemy);
+                    // Update quests
+                    if (this.questSystem) {
+                        this.questSystem.onEnemyDefeated(enemy.isBoss);
+                    }
                 }
             }
         });
@@ -313,6 +330,12 @@ export class GameEngine {
                 if (this.endlessMode) {
                     this.endlessMode.onEnemyDefeated();
                 }
+                // Drop loot
+                this.dropLoot(nearestEnemy);
+                // Update quests
+                if (this.questSystem) {
+                    this.questSystem.onEnemyDefeated(nearestEnemy.isBoss);
+                }
             }
         }
     }
@@ -341,5 +364,35 @@ export class GameEngine {
         });
         
         return nearest;
+    }
+    
+    dropLoot(enemy) {
+        // Bosses always drop loot, regular enemies have 30% chance
+        const dropChance = enemy.isBoss ? 1.0 : 0.3;
+        
+        if (Math.random() < dropChance) {
+            const floor = this.endlessMode ? this.endlessMode.currentFloor : 1;
+            
+            // Bosses drop better loot
+            let loot;
+            if (enemy.isBoss) {
+                // Always drop rare or better
+                const rarities = ['rare', 'epic', 'legendary'];
+                const rarity = rarities[Math.floor(Math.random() * rarities.length)];
+                loot = this.inventorySystem.generateLoot(floor, rarity);
+                
+                // Bosses can drop multiple items
+                this.inventorySystem.addItem(loot);
+                
+                // 50% chance for a second item
+                if (Math.random() < 0.5) {
+                    const bonusLoot = this.inventorySystem.generateLoot(floor, rarity);
+                    this.inventorySystem.addItem(bonusLoot);
+                }
+            } else {
+                loot = this.inventorySystem.generateLoot(floor);
+                this.inventorySystem.addItem(loot);
+            }
+        }
     }
 }

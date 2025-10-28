@@ -70,8 +70,9 @@ class Game {
         console.log('🎮 Dynasty of Emberveil - Game Started!');
         this.engine.start();
         
-        // Make engine globally accessible for player death handling
+        // Make engine and input manager globally accessible
         window.gameEngine = this.engine;
+        window.gameEngine.inputManager = this.inputManager;
         
         // Start game loop
         this.gameLoop();

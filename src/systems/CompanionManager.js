@@ -157,6 +157,10 @@ const companionAbilities = {
                         if (engine.endlessMode) {
                             engine.endlessMode.onEnemyDefeated();
                         }
+                        engine.dropLoot(enemy);
+                        if (engine.questSystem) {
+                            engine.questSystem.onEnemyDefeated(enemy.isBoss);
+                        }
                     }
                 }, delay);
                 delay += 200;
@@ -179,6 +183,10 @@ const companionAbilities = {
                     if (engine.endlessMode) {
                         engine.endlessMode.onEnemyDefeated();
                     }
+                    engine.dropLoot(enemy);
+                    if (engine.questSystem) {
+                        engine.questSystem.onEnemyDefeated(enemy.isBoss);
+                    }
                 }
             }
         });
@@ -198,6 +206,10 @@ const companionAbilities = {
                     engine.player.gainExp(enemy.stats.exp);
                     if (engine.endlessMode) {
                         engine.endlessMode.onEnemyDefeated();
+                    }
+                    engine.dropLoot(enemy);
+                    if (engine.questSystem) {
+                        engine.questSystem.onEnemyDefeated(enemy.isBoss);
                     }
                 }
             }

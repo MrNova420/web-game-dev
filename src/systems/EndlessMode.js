@@ -84,6 +84,11 @@ export class EndlessMode {
             this.highestFloor = this.currentFloor;
         }
         
+        // Notify quest system about floor
+        if (this.engine.questSystem) {
+            this.engine.questSystem.onFloorReached(this.currentFloor);
+        }
+        
         // Check if boss floor
         this.isBossFloor = (this.currentFloor % 5 === 0);
         
@@ -155,16 +160,22 @@ export class EndlessMode {
         this.engine.currentDungeon = this.engine.dungeonGenerator.generate(biome, this.currentFloor);
         this.engine.loadDungeon(this.engine.currentDungeon);
         
-        // Spawn enemies based on floor
-        const enemyCount = this.isBossFloor ? 1 : Math.min(15, 5 + Math.floor(this.currentFloor / 2));
-        
-        // Apply modifier
-        let actualCount = enemyCount;
-        if (this.floorModifier && this.floorModifier.effect === 'extra_enemies') {
-            actualCount = Math.floor(enemyCount * 1.5);
+        // Spawn enemies or boss
+        if (this.isBossFloor) {
+            // Spawn a boss
+            this.engine.enemyManager.spawnBoss(this.engine.currentDungeon);
+        } else {
+            // Spawn regular enemies based on floor
+            const enemyCount = Math.min(15, 5 + Math.floor(this.currentFloor / 2));
+            
+            // Apply modifier
+            let actualCount = enemyCount;
+            if (this.floorModifier && this.floorModifier.effect === 'extra_enemies') {
+                actualCount = Math.floor(enemyCount * 1.5);
+            }
+            
+            this.engine.enemyManager.spawnEnemiesForDungeon(this.engine.currentDungeon, actualCount);
         }
-        
-        this.engine.enemyManager.spawnEnemiesForDungeon(this.engine.currentDungeon, actualCount);
         
         // Apply difficulty multipliers to spawned enemies
         this.applyDifficultyToEnemies();
