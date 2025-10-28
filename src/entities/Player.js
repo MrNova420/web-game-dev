@@ -11,21 +11,21 @@ export class Player {
         
         // Base stats (before skill bonuses)
         this.baseStats = {
-            maxHp: 100,
+            maxHp: 150,  // Increased from 100
             maxMp: 100,
-            attack: 15,
-            defense: 10,
+            attack: 20,  // Increased from 15
+            defense: 15, // Increased from 10
             speed: 5
         };
         
         // Player stats (with skill bonuses applied)
         this.stats = {
-            hp: 100,
-            maxHp: 100,
+            hp: 150,     // Increased from 100
+            maxHp: 150,  // Increased from 100
             mp: 100,
             maxMp: 100,
-            attack: 15,
-            defense: 10,
+            attack: 20,  // Increased from 15
+            defense: 15, // Increased from 10
             speed: 5,
             level: 1,
             exp: 0,
@@ -44,6 +44,16 @@ export class Player {
         // Combat
         this.lastAttackTime = 0;
         this.attackCooldown = 0.5; // seconds
+        
+        // Invulnerability frames
+        this.isInvulnerable = false;
+        this.invulnerabilityDuration = 1.0; // 1 second of invulnerability after taking damage
+        this.lastDamageTime = 0;
+        
+        // Spawn protection
+        this.spawnProtection = true;
+        this.spawnProtectionDuration = 3.0; // 3 seconds of spawn protection
+        this.spawnTime = Date.now() / 1000;
     }
     
     async init() {
@@ -80,6 +90,29 @@ export class Player {
     }
     
     update(delta) {
+        const currentTime = Date.now() / 1000;
+        
+        // Handle spawn protection
+        if (this.spawnProtection) {
+            if (currentTime - this.spawnTime >= this.spawnProtectionDuration) {
+                this.spawnProtection = false;
+                console.log('🛡️ Spawn protection ended');
+            }
+        }
+        
+        // Handle invulnerability frames
+        if (this.isInvulnerable) {
+            if (currentTime - this.lastDamageTime >= this.invulnerabilityDuration) {
+                this.isInvulnerable = false;
+            }
+            // Flicker effect during invulnerability
+            if (this.mesh) {
+                this.mesh.visible = Math.floor(currentTime * 10) % 2 === 0;
+            }
+        } else if (this.mesh) {
+            this.mesh.visible = true;
+        }
+        
         // Handle movement with animation
         const moveSpeed = this.stats.speed * delta;
         let isMoving = false;
@@ -145,19 +178,40 @@ export class Player {
     }
     
     takeDamage(amount) {
+        // Check for spawn protection
+        if (this.spawnProtection) {
+            console.log('🛡️ Spawn protection active - no damage taken');
+            return 0;
+        }
+        
+        // Check for invulnerability frames
+        if (this.isInvulnerable) {
+            return 0;
+        }
+        
         const actualDamage = Math.max(1, amount - this.stats.defense);
         this.stats.hp = Math.max(0, this.stats.hp - actualDamage);
+        
+        // Start invulnerability period
+        this.isInvulnerable = true;
+        this.lastDamageTime = Date.now() / 1000;
         
         // Flash red when hit
         const originalColor = this.mesh.material.color.clone();
         this.mesh.material.color.setHex(0xff0000);
         setTimeout(() => {
-            this.mesh.material.color.copy(originalColor);
+            if (this.mesh && this.mesh.material) {
+                this.mesh.material.color.copy(originalColor);
+            }
         }, 100);
+        
+        console.log(`💔 Player took ${actualDamage} damage (HP: ${this.stats.hp}/${this.stats.maxHp})`);
         
         if (this.stats.hp <= 0) {
             this.die();
         }
+        
+        return actualDamage;
     }
     
     heal(amount) {

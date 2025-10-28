@@ -3,6 +3,8 @@
  * Replaces simple purple theme with immersive, multi-layered color palettes
  */
 
+import * as THREE from 'three';
+
 export class AdvancedThemeSystem {
     constructor(gameEngine) {
         this.gameEngine = gameEngine;
