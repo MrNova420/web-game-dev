@@ -61,6 +61,9 @@ import { NPCSystem } from '../systems/NPCSystem.js';
 import { AdvancedInventorySystem } from '../systems/AdvancedInventorySystem.js';
 import { AnimeStyleRenderingSystem } from '../systems/AnimeStyleRenderingSystem.js';
 import { ProductionReadinessSystem } from '../systems/ProductionReadinessSystem.js';
+import { MultiplayerSocialSystem } from '../systems/MultiplayerSocialSystem.js';
+import { TeleportationSystem } from '../systems/TeleportationSystem.js';
+import { StartingZoneSystem } from '../systems/StartingZoneSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -128,6 +131,9 @@ export class GameEngine {
         this.advancedInventorySystem = null;
         this.animeStyleRenderingSystem = null;
         this.productionReadinessSystem = null;
+        this.multiplayerSocialSystem = null;
+        this.teleportationSystem = null;
+        this.startingZoneSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -314,10 +320,16 @@ export class GameEngine {
             this.animeStyleRenderingSystem = new AnimeStyleRenderingSystem(this);
             this.productionReadinessSystem = new ProductionReadinessSystem(this);
             
+            // Multiplayer & Social Systems
+            this.multiplayerSocialSystem = new MultiplayerSocialSystem(this);
+            this.teleportationSystem = new TeleportationSystem(this);
+            this.startingZoneSystem = new StartingZoneSystem(this);
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
             console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
             console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
+            console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -565,6 +577,19 @@ export class GameEngine {
         
         if (this.productionReadinessSystem) {
             this.productionReadinessSystem.update(delta);
+        }
+        
+        // Update Multiplayer & Social Systems
+        if (this.multiplayerSocialSystem) {
+            this.multiplayerSocialSystem.update(delta);
+        }
+        
+        if (this.teleportationSystem) {
+            this.teleportationSystem.update(delta);
+        }
+        
+        if (this.startingZoneSystem) {
+            this.startingZoneSystem.update(delta);
         }
         
         // Update performance optimizer
