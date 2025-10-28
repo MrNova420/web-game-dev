@@ -65,9 +65,15 @@ export class SaveSystem {
         const companionManager = this.engine.companionManager;
         const inventorySystem = this.engine.inventorySystem;
         const questSystem = this.engine.questSystem;
+        const achievementSystem = this.engine.achievementSystem;
+        const audioSystem = this.engine.audioSystem;
+        const skillTreeSystem = this.engine.skillTreeSystem;
+        const characterCustomization = this.engine.characterCustomization;
+        const dailyRewards = this.engine.dailyRewards;
+        const tutorialSystem = this.engine.tutorialSystem;
         
         return {
-            version: '1.0.0',
+            version: '1.0.4',
             timestamp: Date.now(),
             saveType: 'auto',
             
@@ -84,6 +90,13 @@ export class SaveSystem {
                     level: player.stats.level,
                     exp: player.stats.exp,
                     expToNext: player.stats.expToNext
+                },
+                baseStats: {
+                    maxHp: player.baseStats.maxHp,
+                    maxMp: player.baseStats.maxMp,
+                    attack: player.baseStats.attack,
+                    defense: player.baseStats.defense,
+                    speed: player.baseStats.speed
                 },
                 position: {
                     x: player.mesh.position.x,
@@ -113,6 +126,24 @@ export class SaveSystem {
             
             // Quest data
             quests: questSystem ? questSystem.getSaveData() : { activeQuests: [], completedQuests: [], availableQuests: [] },
+            
+            // Achievement data
+            achievements: achievementSystem ? achievementSystem.getSaveData() : { unlockedAchievements: [], progress: {} },
+            
+            // Audio settings
+            audio: audioSystem ? audioSystem.getSaveData() : { settings: {} },
+            
+            // Skill tree data
+            skills: skillTreeSystem ? skillTreeSystem.getSaveData() : { unlockedSkills: [], skillPoints: 0 },
+            
+            // Character customization data
+            customization: characterCustomization ? characterCustomization.getSaveData() : { current: {}, unlockedOptions: {} },
+            
+            // Daily rewards data
+            dailyRewards: dailyRewards ? dailyRewards.getSaveData() : {},
+            
+            // Tutorial data
+            tutorial: tutorialSystem ? tutorialSystem.getSaveData() : { completed: false },
             
             // Dungeon state
             dungeon: {
@@ -164,9 +195,20 @@ export class SaveSystem {
         const companionManager = this.engine.companionManager;
         const inventorySystem = this.engine.inventorySystem;
         const questSystem = this.engine.questSystem;
+        const achievementSystem = this.engine.achievementSystem;
+        const audioSystem = this.engine.audioSystem;
+        const skillTreeSystem = this.engine.skillTreeSystem;
+        const characterCustomization = this.engine.characterCustomization;
+        const dailyRewards = this.engine.dailyRewards;
+        const tutorialSystem = this.engine.tutorialSystem;
         
         // Restore player stats
         Object.assign(player.stats, saveData.player.stats);
+        
+        // Restore base stats
+        if (saveData.player.baseStats) {
+            Object.assign(player.baseStats, saveData.player.baseStats);
+        }
         
         // Restore player position
         if (saveData.player.position) {
@@ -205,6 +247,64 @@ export class SaveSystem {
         // Restore quests
         if (saveData.quests && questSystem) {
             questSystem.loadSaveData(saveData.quests);
+        }
+        
+        // Restore achievements
+        if (saveData.achievements && achievementSystem) {
+            achievementSystem.loadSaveData(saveData.achievements);
+        }
+        
+        // Restore audio settings
+        if (saveData.audio && audioSystem) {
+            audioSystem.loadSaveData(saveData.audio);
+        }
+        
+        // Restore skills (must be done before other systems)
+        if (saveData.skills && skillTreeSystem) {
+            skillTreeSystem.loadSaveData(saveData.skills);
+        }
+        
+        // Restore character customization
+        if (saveData.customization && characterCustomization) {
+            characterCustomization.loadSaveData(saveData.customization);
+        }
+        
+        // Restore daily rewards
+        if (saveData.dailyRewards && dailyRewards) {
+            dailyRewards.loadSaveData(saveData.dailyRewards);
+        }
+        
+        // Restore tutorial
+        if (saveData.tutorial && tutorialSystem) {
+            tutorialSystem.loadSaveData(saveData.tutorial);
+            
+            // Start tutorial if not completed
+            if (!tutorialSystem.completed) {
+                setTimeout(() => tutorialSystem.start(), 2000);
+            }
+        }
+        
+        // Update UI
+        endlessMode.updateUI();
+        this.engine.updatePlayerUI();
+        // Restore quests
+        if (saveData.quests && questSystem) {
+            questSystem.loadSaveData(saveData.quests);
+        }
+        
+        // Restore achievements
+        if (saveData.achievements && achievementSystem) {
+            achievementSystem.loadSaveData(saveData.achievements);
+        }
+        
+        // Restore audio settings
+        if (saveData.audio && audioSystem) {
+            audioSystem.loadSaveData(saveData.audio);
+        }
+        
+        // Restore skills (must be done before other systems)
+        if (saveData.skills && skillTreeSystem) {
+            skillTreeSystem.loadSaveData(saveData.skills);
         }
         
         // Update UI

@@ -9,7 +9,16 @@ export class Player {
         this.scene = scene;
         this.mesh = null;
         
-        // Player stats
+        // Base stats (before skill bonuses)
+        this.baseStats = {
+            maxHp: 100,
+            maxMp: 100,
+            attack: 15,
+            defense: 10,
+            speed: 5
+        };
+        
+        // Player stats (with skill bonuses applied)
         this.stats = {
             hp: 100,
             maxHp: 100,
@@ -22,6 +31,9 @@ export class Player {
             exp: 0,
             expToNext: 100
         };
+        
+        // Skill effects
+        this.skillEffects = {};
         
         // Movement flags
         this.moveForward = false;
@@ -68,20 +80,39 @@ export class Player {
     }
     
     update(delta) {
-        // Handle movement
+        // Handle movement with animation
         const moveSpeed = this.stats.speed * delta;
+        let isMoving = false;
         
         if (this.moveForward) {
             this.mesh.position.z -= moveSpeed;
+            isMoving = true;
         }
         if (this.moveBackward) {
             this.mesh.position.z += moveSpeed;
+            isMoving = true;
         }
         if (this.moveLeft) {
             this.mesh.position.x -= moveSpeed;
+            isMoving = true;
         }
         if (this.moveRight) {
             this.mesh.position.x += moveSpeed;
+            isMoving = true;
+        }
+        
+        // Bounce animation when moving
+        if (isMoving) {
+            const bounceHeight = Math.abs(Math.sin(Date.now() * 0.01)) * 0.15;
+            this.mesh.position.y = 1 + bounceHeight;
+            
+            // Lean in direction of movement
+            const targetRotation = this.moveForward ? 0.1 : (this.moveBackward ? -0.1 : 0);
+            this.mesh.rotation.x += (targetRotation - this.mesh.rotation.x) * 0.1;
+        } else {
+            // Return to normal position
+            this.mesh.position.y += (1 - this.mesh.position.y) * 0.1;
+            this.mesh.rotation.x *= 0.9;
         }
         
         // Regenerate MP slowly
@@ -89,11 +120,15 @@ export class Player {
             this.stats.mp = Math.min(this.stats.maxMp, this.stats.mp + 5 * delta);
         }
         
-        // Animate aura
+        // Animate aura with enhanced pulsing
         if (this.mesh.children[0]) {
-            this.mesh.children[0].rotation.y += delta;
-            const scale = 1 + Math.sin(Date.now() * 0.002) * 0.1;
+            this.mesh.children[0].rotation.y += delta * 1.5;
+            const scale = 1 + Math.sin(Date.now() * 0.003) * 0.15;
             this.mesh.children[0].scale.set(scale, scale, scale);
+            
+            // Pulse opacity
+            const opacity = 0.2 + Math.sin(Date.now() * 0.002) * 0.1;
+            this.mesh.children[0].material.opacity = opacity;
         }
     }
     
@@ -142,7 +177,13 @@ export class Player {
         this.stats.exp = 0;
         this.stats.expToNext = Math.floor(this.stats.expToNext * 1.5);
         
-        // Increase stats
+        // Increase base stats
+        this.baseStats.maxHp += 20;
+        this.baseStats.maxMp += 15;
+        this.baseStats.attack += 3;
+        this.baseStats.defense += 2;
+        
+        // Increase current stats
         this.stats.maxHp += 20;
         this.stats.maxMp += 15;
         this.stats.hp = this.stats.maxHp;
@@ -151,6 +192,31 @@ export class Player {
         this.stats.defense += 2;
         
         console.log(`🌟 Level Up! Now level ${this.stats.level}`);
+        
+        // Play level up sound
+        if (window.gameEngine && window.gameEngine.audioSystem) {
+            window.gameEngine.audioSystem.playSoundEffect('level_up');
+        }
+        
+        // Create level up particle effect
+        if (window.gameEngine && window.gameEngine.particleSystem) {
+            window.gameEngine.particleSystem.createLevelUpEffect(this.mesh.position);
+        }
+        
+        // Track achievement
+        if (window.gameEngine && window.gameEngine.achievementSystem) {
+            window.gameEngine.achievementSystem.onLevelReached(this.stats.level);
+        }
+        
+        // Update skill points
+        if (window.gameEngine && window.gameEngine.skillTreeSystem) {
+            window.gameEngine.skillTreeSystem.updateSkillPoints();
+        }
+        
+        // Check for cosmetic unlocks
+        if (window.gameEngine && window.gameEngine.characterCustomization) {
+            window.gameEngine.characterCustomization.checkUnlocks();
+        }
         
         // Notify quest system
         if (window.gameEngine && window.gameEngine.questSystem) {

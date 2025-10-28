@@ -10,14 +10,22 @@
     "lint": "echo 'Linting...' && exit 0",
     "test": "echo 'Tests will be implemented' && exit 0"
   },
-  "keywords": ["game", "webgl", "3d", "rpg", "action", "fantasy", "browser-game"],
+  "keywords": [
+    "game",
+    "webgl",
+    "3d",
+    "rpg",
+    "action",
+    "fantasy",
+    "browser-game"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "vite": "^5.4.21"
+    "vite": "^7.1.12"
   },
   "dependencies": {
-    "three": "^0.160.0",
-    "cannon-es": "^0.20.0"
+    "cannon-es": "^0.20.0",
+    "three": "^0.160.0"
   }
 }
