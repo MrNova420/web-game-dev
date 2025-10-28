@@ -52,6 +52,9 @@ import { AdvancedParticleSystem } from '../systems/AdvancedParticleSystem.js';
 import { DayNightCycleSystem } from '../systems/DayNightCycleSystem.js';
 import { ModernUISystem } from '../systems/ModernUISystem.js';
 import { EnvironmentDetailsSystem } from '../systems/EnvironmentDetailsSystem.js';
+import { OpenWorldSystem } from '../systems/OpenWorldSystem.js';
+import { VolumetricLightingSystem } from '../systems/VolumetricLightingSystem.js';
+import { CinematicCameraSystem } from '../systems/CinematicCameraSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -110,6 +113,9 @@ export class GameEngine {
         this.dayNightCycleSystem = null;
         this.modernUISystem = null;
         this.environmentDetailsSystem = null;
+        this.openWorldSystem = null;
+        this.volumetricLightingSystem = null;
+        this.cinematicCameraSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -281,7 +287,13 @@ export class GameEngine {
             this.modernUISystem = new ModernUISystem(this);
             this.environmentDetailsSystem = new EnvironmentDetailsSystem(this);
             
+            // Phase 2+ AAA Systems - Open World & Cinematic
+            this.openWorldSystem = new OpenWorldSystem(this);
+            this.volumetricLightingSystem = new VolumetricLightingSystem(this);
+            this.cinematicCameraSystem = new CinematicCameraSystem(this);
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
+            console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -490,6 +502,19 @@ export class GameEngine {
         
         if (this.environmentDetailsSystem) {
             this.environmentDetailsSystem.update(delta);
+        }
+        
+        // Update Phase 2+ AAA Systems
+        if (this.openWorldSystem) {
+            this.openWorldSystem.update(delta);
+        }
+        
+        if (this.volumetricLightingSystem) {
+            this.volumetricLightingSystem.update(delta);
+        }
+        
+        if (this.cinematicCameraSystem) {
+            this.cinematicCameraSystem.update(delta);
         }
         
         // Update performance optimizer
