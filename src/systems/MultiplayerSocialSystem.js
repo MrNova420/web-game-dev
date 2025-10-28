@@ -147,12 +147,28 @@ export class MultiplayerSocialSystem {
             system: '#FFC107'
         }[chatMessage.channel] || '#fff';
         
-        messageElement.innerHTML = `
-            <span style="color: ${channelColor}; font-weight: bold;">[${chatMessage.channel}]</span>
-            <span style="color: #FFD700;">${chatMessage.player}:</span>
-            <span>${chatMessage.message}</span>
-            <span style="color: #888; font-size: 11px; float: right;">${chatMessage.timestamp}</span>
-        `;
+        // Create elements safely without innerHTML to prevent XSS
+        const channelSpan = document.createElement('span');
+        channelSpan.style.cssText = `color: ${channelColor}; font-weight: bold;`;
+        channelSpan.textContent = `[${chatMessage.channel}]`;
+        
+        const playerSpan = document.createElement('span');
+        playerSpan.style.color = '#FFD700';
+        playerSpan.textContent = `${chatMessage.player}:`;
+        
+        const messageSpan = document.createElement('span');
+        messageSpan.textContent = chatMessage.message;
+        
+        const timeSpan = document.createElement('span');
+        timeSpan.style.cssText = 'color: #888; font-size: 11px; float: right;';
+        timeSpan.textContent = chatMessage.timestamp;
+        
+        messageElement.appendChild(channelSpan);
+        messageElement.appendChild(document.createTextNode(' '));
+        messageElement.appendChild(playerSpan);
+        messageElement.appendChild(document.createTextNode(' '));
+        messageElement.appendChild(messageSpan);
+        messageElement.appendChild(timeSpan);
         
         this.chatContainer.appendChild(messageElement);
         this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
