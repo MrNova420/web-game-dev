@@ -29,6 +29,8 @@ import { PetSystem } from '../systems/PetSystem.js';
 import { CompanionAI } from '../systems/CompanionAI.js';
 import { MountSystem } from '../systems/MountSystem.js';
 import { LeaderboardSystem } from '../systems/LeaderboardSystem.js';
+import { GuildSystem } from '../systems/GuildSystem.js';
+import { ChallengeMode } from '../systems/ChallengeMode.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -64,6 +66,8 @@ export class GameEngine {
         this.companionAI = null;
         this.mountSystem = null;
         this.leaderboardSystem = null;
+        this.guildSystem = null;
+        this.challengeMode = null;
         
         // Game state
         this.isRunning = false;
@@ -166,8 +170,10 @@ export class GameEngine {
         this.companionAI = new CompanionAI(this);
         this.mountSystem = new MountSystem(this);
         
-        // Phase 6: Social & Leaderboards
+        // Phase 6: Social & Leaderboards (Complete)
         this.leaderboardSystem = new LeaderboardSystem(this);
+        this.guildSystem = new GuildSystem(this);
+        this.challengeMode = new ChallengeMode(this);
         
         this.saveSystem = new SaveSystem(this);
         
@@ -303,6 +309,14 @@ export class GameEngine {
         // Update Phase 6 systems
         if (this.leaderboardSystem) {
             this.leaderboardSystem.update(delta);
+        }
+        
+        if (this.guildSystem) {
+            this.guildSystem.update(delta);
+        }
+        
+        if (this.challengeMode) {
+            this.challengeMode.update(delta);
         }
         
         // Update camera to follow player
