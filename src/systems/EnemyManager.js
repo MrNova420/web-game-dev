@@ -13,10 +13,14 @@ export class EnemyManager {
         this.spawnTimer = 0;
         this.spawnInterval = 10; // seconds
         this.maxEnemies = 10;
+        
+        // All available enemy types
+        this.allEnemyTypes = ['smoke_imp', 'essence_wraith', 'shadow_bard', 'corrupted_angel', 'weed_golem'];
     }
     
     spawnEnemiesForDungeon(dungeon, count) {
         const enemyTypes = this.getEnemyTypesForBiome(dungeon.biome);
+        let spawned = 0;
         
         for (let i = 0; i < count && this.enemies.length < this.maxEnemies; i++) {
             const spawnPoint = dungeon.spawnPoints[i % dungeon.spawnPoints.length];
@@ -24,9 +28,10 @@ export class EnemyManager {
             
             const enemy = new Enemy(this.scene, enemyType, spawnPoint);
             this.enemies.push(enemy);
+            spawned++;
         }
         
-        console.log(`👾 Spawned ${count} enemies in ${dungeon.name}`);
+        console.log(`👾 Spawned ${spawned} enemies in ${dungeon.name}`);
     }
     
     getEnemyTypesForBiome(biome) {
@@ -68,8 +73,7 @@ export class EnemyManager {
     }
     
     spawnRandomEnemy() {
-        const enemyTypes = ['smoke_imp', 'essence_wraith', 'shadow_bard', 'corrupted_angel', 'weed_golem'];
-        const randomType = enemyTypes[Math.floor(Math.random() * enemyTypes.length)];
+        const randomType = this.allEnemyTypes[Math.floor(Math.random() * this.allEnemyTypes.length)];
         
         // Spawn at random position around the edges
         const angle = Math.random() * Math.PI * 2;

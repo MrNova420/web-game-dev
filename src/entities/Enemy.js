@@ -69,6 +69,14 @@ export class Enemy {
         this.stats = { ...this.types[type] };
         this.maxHp = this.stats.hp;
         
+        // Attack cooldown
+        this.lastAttackTime = 0;
+        this.attackCooldown = 1.0; // seconds
+        
+        // Visual effects state
+        this.isFlashing = false;
+        this.fadeProgress = 1.0;
+        
         this.init(position);
     }
     
@@ -141,6 +149,26 @@ export class Enemy {
     update(delta, player) {
         if (!this.isAlive || !this.mesh) return;
         
+        // Handle death fade-out animation
+        if (this.fadeProgress < 1.0) {
+            this.fadeProgress -= delta * 2;
+            if (this.fadeProgress <= 0) {
+                this.scene.remove(this.mesh);
+                if (this.mesh.geometry) this.mesh.geometry.dispose();
+                if (this.mesh.material) this.mesh.material.dispose();
+                return;
+            }
+            this.mesh.material.transparent = true;
+            this.mesh.material.opacity = this.fadeProgress;
+            return;
+        }
+        
+        // Handle damage flash effect
+        if (this.isFlashing) {
+            this.isFlashing = false;
+            this.mesh.material.color.copy(this.originalColor);
+        }
+        
         // Simple AI: Move towards player
         if (player && player.mesh) {
             const direction = new THREE.Vector3();
@@ -169,14 +197,12 @@ export class Enemy {
         this.stats.hp = Math.max(0, this.stats.hp - actualDamage);
         this.mesh.userData.hp = this.stats.hp;
         
-        // Flash red when hit
-        const originalColor = this.mesh.material.color.clone();
-        this.mesh.material.color.setHex(0xff0000);
-        setTimeout(() => {
-            if (this.mesh && this.mesh.material) {
-                this.mesh.material.color.copy(originalColor);
-            }
-        }, 100);
+        // Flash red when hit (managed in update loop)
+        if (!this.isFlashing) {
+            this.isFlashing = true;
+            this.originalColor = this.mesh.material.color.clone();
+            this.mesh.material.color.setHex(0xff0000);
+        }
         
         if (this.stats.hp <= 0) {
             this.die();
@@ -189,19 +215,8 @@ export class Enemy {
         this.isAlive = false;
         this.mesh.userData.isAlive = false;
         
-        // Death animation - fade out
-        const fadeOut = () => {
-            if (this.mesh.material.opacity > 0) {
-                this.mesh.material.transparent = true;
-                this.mesh.material.opacity -= 0.1;
-                setTimeout(fadeOut, 50);
-            } else {
-                this.scene.remove(this.mesh);
-                if (this.mesh.geometry) this.mesh.geometry.dispose();
-                if (this.mesh.material) this.mesh.material.dispose();
-            }
-        };
-        fadeOut();
+        // Start fade-out animation (handled in update loop)
+        this.fadeProgress = 1.0;
         
         return this.stats.exp;
     }
@@ -209,9 +224,15 @@ export class Enemy {
     attackPlayer(player) {
         if (!this.isAlive || !player) return;
         
+        const currentTime = Date.now() / 1000;
+        if (currentTime - this.lastAttackTime < this.attackCooldown) {
+            return; // Still on cooldown
+        }
+        
         const distance = this.mesh.position.distanceTo(player.mesh.position);
         if (distance < 2) {
             player.takeDamage(this.stats.attack);
+            this.lastAttackTime = currentTime;
         }
     }
 }
