@@ -9,6 +9,7 @@ import { CompanionManager } from '../systems/CompanionManager.js';
 import { DungeonGenerator } from '../worlds/DungeonGenerator.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { ParticleSystem } from '../systems/ParticleSystem.js';
+import { EnemyManager } from '../systems/EnemyManager.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -24,11 +25,11 @@ export class GameEngine {
         this.dungeonGenerator = null;
         this.combatSystem = null;
         this.particleSystem = null;
+        this.enemyManager = null;
         
         // Game state
         this.isRunning = false;
         this.currentDungeon = null;
-        this.enemies = [];
         
         // UI references
         this.uiElements = {
@@ -101,6 +102,7 @@ export class GameEngine {
         this.dungeonGenerator = new DungeonGenerator();
         this.combatSystem = new CombatSystem(this);
         this.particleSystem = new ParticleSystem(this.scene);
+        this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
         
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
@@ -121,8 +123,8 @@ export class GameEngine {
         this.currentDungeon = this.dungeonGenerator.generate('crystal_cavern', 1);
         this.loadDungeon(this.currentDungeon);
         
-        // Spawn initial enemies
-        this.spawnEnemies(3);
+        // Spawn initial enemies using EnemyManager
+        this.enemyManager.spawnEnemiesForDungeon(this.currentDungeon, 5);
     }
     
     loadDungeon(dungeon) {
@@ -136,35 +138,6 @@ export class GameEngine {
         }
         
         console.log(`📍 Loaded dungeon: ${dungeon.name} (${dungeon.biome})`);
-    }
-    
-    spawnEnemies(count) {
-        // TODO: Implement enemy spawning
-        // For now, create placeholder enemy objects
-        for (let i = 0; i < count; i++) {
-            const enemyGeometry = new THREE.BoxGeometry(1, 2, 1);
-            const enemyMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-            const enemy = new THREE.Mesh(enemyGeometry, enemyMaterial);
-            enemy.position.set(
-                Math.random() * 10 - 5,
-                1,
-                Math.random() * 10 - 5
-            );
-            enemy.castShadow = true;
-            enemy.receiveShadow = true;
-            
-            // Add enemy data
-            enemy.userData = {
-                type: 'enemy',
-                hp: 50,
-                maxHp: 50,
-                damage: 10,
-                isAlive: true
-            };
-            
-            this.scene.add(enemy);
-            this.enemies.push(enemy);
-        }
     }
     
     start() {
@@ -191,6 +164,11 @@ export class GameEngine {
         // Update combat system
         if (this.combatSystem) {
             this.combatSystem.update(delta);
+        }
+        
+        // Update enemy manager
+        if (this.enemyManager) {
+            this.enemyManager.update(delta, this.player);
         }
         
         // Update camera to follow player
@@ -265,13 +243,13 @@ export class GameEngine {
         this.particleSystem.createSmokeBurst(this.player.mesh.position);
         
         // Damage nearby enemies
-        this.enemies.forEach(enemy => {
-            const distance = enemy.position.distanceTo(this.player.mesh.position);
-            if (distance < 5 && enemy.userData.isAlive) {
-                enemy.userData.hp -= 25;
-                if (enemy.userData.hp <= 0) {
-                    enemy.userData.isAlive = false;
-                    this.scene.remove(enemy);
+        const enemies = this.enemyManager.getEnemies();
+        enemies.forEach(enemy => {
+            const distance = enemy.mesh.position.distanceTo(this.player.mesh.position);
+            if (distance < 5 && enemy.isAlive) {
+                const damage = enemy.takeDamage(25);
+                if (!enemy.isAlive) {
+                    this.player.gainExp(enemy.stats.exp);
                 }
             }
         });
@@ -297,8 +275,11 @@ export class GameEngine {
         // Heal player and damage nearest enemy
         const nearestEnemy = this.findNearestEnemy();
         if (nearestEnemy) {
-            nearestEnemy.userData.hp -= 15;
+            nearestEnemy.takeDamage(15);
             this.player.stats.hp = Math.min(this.player.stats.maxHp, this.player.stats.hp + 15);
+            if (!nearestEnemy.isAlive) {
+                this.player.gainExp(nearestEnemy.stats.exp);
+            }
         }
     }
     
@@ -315,9 +296,10 @@ export class GameEngine {
         let nearest = null;
         let minDistance = Infinity;
         
-        this.enemies.forEach(enemy => {
-            if (!enemy.userData.isAlive) return;
-            const distance = enemy.position.distanceTo(this.player.mesh.position);
+        const enemies = this.enemyManager.getEnemies();
+        enemies.forEach(enemy => {
+            if (!enemy.isAlive) return;
+            const distance = enemy.mesh.position.distanceTo(this.player.mesh.position);
             if (distance < minDistance) {
                 minDistance = distance;
                 nearest = enemy;

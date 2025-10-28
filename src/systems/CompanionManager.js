@@ -130,11 +130,14 @@ const companionAbilities = {
     smoke_siren: (engine) => {
         console.log('💨 Smoke Siren uses Mind Cloud!');
         // Create confusion effect on enemies
-        engine.enemies.forEach(enemy => {
-            if (enemy.userData.isAlive) {
-                enemy.userData.confused = true;
+        const enemies = engine.enemyManager.getEnemies();
+        enemies.forEach(enemy => {
+            if (enemy.isAlive) {
+                enemy.mesh.userData.confused = true;
                 setTimeout(() => {
-                    enemy.userData.confused = false;
+                    if (enemy.mesh && enemy.mesh.userData) {
+                        enemy.mesh.userData.confused = false;
+                    }
                 }, 5000);
             }
         });
@@ -144,13 +147,13 @@ const companionAbilities = {
         console.log('⚔️ Blade Muse performs Rhythm Strike!');
         // Deal damage to multiple enemies in sequence
         let delay = 0;
-        engine.enemies.slice(0, 3).forEach(enemy => {
-            if (enemy.userData.isAlive) {
+        const enemies = engine.enemyManager.getEnemies().slice(0, 3);
+        enemies.forEach(enemy => {
+            if (enemy.isAlive) {
                 setTimeout(() => {
-                    enemy.userData.hp -= 30;
-                    if (enemy.userData.hp <= 0) {
-                        enemy.userData.isAlive = false;
-                        engine.scene.remove(enemy);
+                    enemy.takeDamage(30);
+                    if (!enemy.isAlive && engine.player) {
+                        engine.player.gainExp(enemy.stats.exp);
                     }
                 }, delay);
                 delay += 200;
@@ -164,12 +167,12 @@ const companionAbilities = {
         if (engine.player) {
             engine.player.heal(40);
         }
-        engine.enemies.forEach(enemy => {
-            if (enemy.userData.isAlive) {
-                enemy.userData.hp -= 20;
-                if (enemy.userData.hp <= 0) {
-                    enemy.userData.isAlive = false;
-                    engine.scene.remove(enemy);
+        const enemies = engine.enemyManager.getEnemies();
+        enemies.forEach(enemy => {
+            if (enemy.isAlive) {
+                enemy.takeDamage(20);
+                if (!enemy.isAlive && engine.player) {
+                    engine.player.gainExp(enemy.stats.exp);
                 }
             }
         });
@@ -178,15 +181,15 @@ const companionAbilities = {
     cyber_dryad: (engine) => {
         console.log('⚡ Cyber Dryad activates Tech-Nature Fusion!');
         // Drain energy from all enemies
-        engine.enemies.forEach(enemy => {
-            if (enemy.userData.isAlive) {
-                enemy.userData.hp -= 25;
+        const enemies = engine.enemyManager.getEnemies();
+        enemies.forEach(enemy => {
+            if (enemy.isAlive) {
+                enemy.takeDamage(25);
                 if (engine.player && engine.player.stats.mp < engine.player.stats.maxMp) {
                     engine.player.stats.mp += 10;
                 }
-                if (enemy.userData.hp <= 0) {
-                    enemy.userData.isAlive = false;
-                    engine.scene.remove(enemy);
+                if (!enemy.isAlive && engine.player) {
+                    engine.player.gainExp(enemy.stats.exp);
                 }
             }
         });
