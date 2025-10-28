@@ -55,6 +55,7 @@ import { EnvironmentDetailsSystem } from '../systems/EnvironmentDetailsSystem.js
 import { OpenWorldSystem } from '../systems/OpenWorldSystem.js';
 import { VolumetricLightingSystem } from '../systems/VolumetricLightingSystem.js';
 import { CinematicCameraSystem } from '../systems/CinematicCameraSystem.js';
+import { PhysicsSystem } from '../systems/PhysicsSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -116,6 +117,7 @@ export class GameEngine {
         this.openWorldSystem = null;
         this.volumetricLightingSystem = null;
         this.cinematicCameraSystem = null;
+        this.physicsSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -291,9 +293,10 @@ export class GameEngine {
             this.openWorldSystem = new OpenWorldSystem(this);
             this.volumetricLightingSystem = new VolumetricLightingSystem(this);
             this.cinematicCameraSystem = new CinematicCameraSystem(this);
+            this.physicsSystem = new PhysicsSystem(this);
             
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
-            console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera)');
+            console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -515,6 +518,10 @@ export class GameEngine {
         
         if (this.cinematicCameraSystem) {
             this.cinematicCameraSystem.update(delta);
+        }
+        
+        if (this.physicsSystem) {
+            this.physicsSystem.update(delta);
         }
         
         // Update performance optimizer
