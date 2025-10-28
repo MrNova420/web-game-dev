@@ -242,6 +242,28 @@
             background: rgba(157, 78, 221, 0.1);
             font-size: 0.9em;
         }
+        
+        /* Quest panel */
+        #quest-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            pointer-events: auto;
+        }
+        
+        #quest-panel h3 {
+            color: #c77dff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
     </style>
 </head>
 <body>
@@ -293,6 +315,12 @@
             <div id="inventory-panel">
                 <h3>Inventory</h3>
                 <div id="inventory-content"></div>
+            </div>
+            
+            <!-- Quest Panel -->
+            <div id="quest-panel" class="hud">
+                <h3>📜 Quests</h3>
+                <div id="quest-list"></div>
             </div>
         </div>
     </div>

@@ -41,6 +41,10 @@ export class InventorySystem {
             if (existing) {
                 existing.stack++;
                 this.updateUI();
+                // Notify quest system
+                if (this.engine.questSystem) {
+                    this.engine.questSystem.onItemCollected();
+                }
                 return true;
             }
         }
@@ -48,6 +52,12 @@ export class InventorySystem {
         this.items.push(item);
         this.updateUI();
         this.showItemPickup(item);
+        
+        // Notify quest system
+        if (this.engine.questSystem) {
+            this.engine.questSystem.onItemCollected();
+        }
+        
         return true;
     }
     

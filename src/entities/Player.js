@@ -152,6 +152,11 @@ export class Player {
         
         console.log(`🌟 Level Up! Now level ${this.stats.level}`);
         
+        // Notify quest system
+        if (window.gameEngine && window.gameEngine.questSystem) {
+            window.gameEngine.questSystem.onLevelUp(this.stats.level);
+        }
+        
         // Auto-save on level up
         if (window.gameEngine && window.gameEngine.saveSystem) {
             window.gameEngine.saveSystem.saveGame('Level up');
