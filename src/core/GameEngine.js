@@ -28,6 +28,7 @@ import { TradingSystem } from '../systems/TradingSystem.js';
 import { PetSystem } from '../systems/PetSystem.js';
 import { CompanionAI } from '../systems/CompanionAI.js';
 import { MountSystem } from '../systems/MountSystem.js';
+import { LeaderboardSystem } from '../systems/LeaderboardSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -62,6 +63,7 @@ export class GameEngine {
         this.petSystem = null;
         this.companionAI = null;
         this.mountSystem = null;
+        this.leaderboardSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -163,6 +165,9 @@ export class GameEngine {
         this.petSystem = new PetSystem(this);
         this.companionAI = new CompanionAI(this);
         this.mountSystem = new MountSystem(this);
+        
+        // Phase 6: Social & Leaderboards
+        this.leaderboardSystem = new LeaderboardSystem(this);
         
         this.saveSystem = new SaveSystem(this);
         
@@ -293,6 +298,11 @@ export class GameEngine {
         
         if (this.mountSystem) {
             this.mountSystem.update(delta);
+        }
+        
+        // Update Phase 6 systems
+        if (this.leaderboardSystem) {
+            this.leaderboardSystem.update(delta);
         }
         
         // Update camera to follow player
