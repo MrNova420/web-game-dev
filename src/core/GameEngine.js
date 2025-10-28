@@ -69,6 +69,8 @@ import { AdvancedUIInterfaceSystem } from '../systems/AdvancedUIInterfaceSystem.
 import { BiomeGenerationSystem } from '../systems/BiomeGenerationSystem.js';
 import { BiomeSpecificEnemies } from '../systems/BiomeSpecificEnemies.js';
 import { BiomeWeatherEffects } from '../systems/BiomeWeatherEffects.js';
+import { BiomeResourcesSystem } from '../systems/BiomeResourcesSystem.js';
+import { BiomeDungeonsSystem } from '../systems/BiomeDungeonsSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -144,6 +146,8 @@ export class GameEngine {
         this.biomeGenerationSystem = null;
         this.biomeSpecificEnemies = null;
         this.biomeWeatherEffects = null;
+        this.biomeResourcesSystem = null;
+        this.biomeDungeonsSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -343,6 +347,8 @@ export class GameEngine {
             this.biomeGenerationSystem = new BiomeGenerationSystem(this.scene, this.camera);
             this.biomeSpecificEnemies = new BiomeSpecificEnemies(this.scene);
             this.biomeWeatherEffects = new BiomeWeatherEffects(this.scene, this.camera);
+            this.biomeResourcesSystem = new BiomeResourcesSystem(this.scene);
+            this.biomeDungeonsSystem = new BiomeDungeonsSystem(this.scene);
             
             // Initialize Phase 4 systems
             this.biomeGenerationSystem.init();
@@ -354,7 +360,7 @@ export class GameEngine {
             console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
             console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
             console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
-            console.log('🌲 Phase 4 Biome Expansion Systems initialized (Biome Generation, Biome Enemies, Biome Weather)');
+            console.log('🌲 Phase 4 Biome Expansion Systems initialized (5 systems: Generation, Enemies, Weather, Resources, Dungeons)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -638,6 +644,10 @@ export class GameEngine {
         
         if (this.biomeWeatherEffects && this.player) {
             this.biomeWeatherEffects.update(delta, this.player.mesh.position);
+        }
+        
+        if (this.biomeResourcesSystem) {
+            this.biomeResourcesSystem.update(delta);
         }
         
         // Update performance optimizer
