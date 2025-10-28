@@ -48,7 +48,7 @@ npm install
 npm run dev
 ```
 
-The game will open at `http://localhost:3000` - fully playable with auto-save to localStorage!
+The game will open at `http://localhost:5173` - fully playable with auto-save to localStorage!
 
 **Production Build (for hosting/distribution):**
 
@@ -64,13 +64,19 @@ The `dist/` folder contains the complete game ready to deploy anywhere.
 
 ### Controls
 
+**Movement & Combat:**
 - **WASD** or **Arrow Keys**: Move character
-- **Mouse**: Look around / Aim
-- **Left Click**: Basic attack
 - **Q**: Smoke Blast (AOE damage)
 - **W**: Shadow Step (Teleport)
 - **E**: Essence Drain (Damage + Heal)
 - **R**: Companion Ability
+
+**UI Controls:**
+- **I**: Toggle Inventory
+- **K**: Toggle Skill Trees
+- **A**: Toggle Achievements
+- **C**: Toggle Character Customization
+- **ESC**: Pause / Menu
 
 ## 🎨 Game Design
 
