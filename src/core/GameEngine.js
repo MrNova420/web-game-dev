@@ -31,6 +31,8 @@ import { MountSystem } from '../systems/MountSystem.js';
 import { LeaderboardSystem } from '../systems/LeaderboardSystem.js';
 import { GuildSystem } from '../systems/GuildSystem.js';
 import { ChallengeMode } from '../systems/ChallengeMode.js';
+import { PrestigeSystem } from '../systems/PrestigeSystem.js';
+import { InfiniteDungeonSystem } from '../systems/InfiniteDungeonSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -68,6 +70,8 @@ export class GameEngine {
         this.leaderboardSystem = null;
         this.guildSystem = null;
         this.challengeMode = null;
+        this.prestigeSystem = null;
+        this.infiniteDungeonSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -174,6 +178,10 @@ export class GameEngine {
         this.leaderboardSystem = new LeaderboardSystem(this);
         this.guildSystem = new GuildSystem(this);
         this.challengeMode = new ChallengeMode(this);
+        
+        // Phase 7: Advanced Progression
+        this.prestigeSystem = new PrestigeSystem(this);
+        this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
         
         this.saveSystem = new SaveSystem(this);
         
@@ -317,6 +325,15 @@ export class GameEngine {
         
         if (this.challengeMode) {
             this.challengeMode.update(delta);
+        }
+        
+        // Update Phase 7 systems
+        if (this.prestigeSystem) {
+            this.prestigeSystem.update(delta);
+        }
+        
+        if (this.infiniteDungeonSystem) {
+            this.infiniteDungeonSystem.update(delta);
         }
         
         // Update camera to follow player
