@@ -36,7 +36,6 @@ export class EconomySystem {
         this.lastResetDate = Date.now();
         
         this.initializeMerchants();
-        this.initializeShops();
     }
     
     /**
