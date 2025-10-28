@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="game-version" content="2.0.0">
+    <title>Dynasty of Emberveil - A Psychedelic Fantasy RPG</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a0033 0%, #2d0a4e 50%, #4a0e7a 100%);
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #game-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #ui-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        #loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a0033 0%, #2d0a4e 50%, #4a0e7a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            z-index: 1000;
+            transition: opacity 0.5s;
+        }
+        
+        #loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-title {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(45deg, #9d4edd, #c77dff, #e0aaff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(157, 78, 221, 0.5);
+        }
+        
+        .loading-subtitle {
+            font-size: 1.2em;
+            color: #c77dff;
+            margin-bottom: 40px;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #9d4edd;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #9d4edd, #c77dff);
+            width: 0%;
+            transition: width 0.3s;
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.8);
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            color: #e0aaff;
+            font-size: 0.9em;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        /* HUD Elements */
+        .hud {
+            pointer-events: auto;
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            font-size: 14px;
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+        }
+        
+        #health-bar {
+            top: 20px;
+            left: 20px;
+            min-width: 200px;
+        }
+        
+        #companion-panel {
+            top: 20px;
+            right: 20px;
+            min-width: 150px;
+        }
+        
+        #abilities-bar {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .ability-button {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2d0a4e, #4a0e7a);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .ability-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.8);
+        }
+        
+        .bar {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            transition: width 0.3s;
+        }
+        
+        .health-fill {
+            background: linear-gradient(90deg, #ff0844, #ff6b9d);
+            box-shadow: 0 0 10px rgba(255, 8, 68, 0.5);
+        }
+        
+        .mana-fill {
+            background: linear-gradient(90deg, #0099ff, #66ccff);
+            box-shadow: 0 0 10px rgba(0, 153, 255, 0.5);
+        }
+        
+        /* Inventory UI */
+        #inventory-toggle {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            background: linear-gradient(135deg, #2d0a4e, #4a0e7a);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            pointer-events: auto;
+        }
+        
+        #inventory-toggle:hover {
+            background: linear-gradient(135deg, #4a0e7a, #9d4edd);
+        }
+        
+        #inventory-panel {
+            position: absolute;
+            left: 20px;
+            bottom: 150px;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            display: none;
+            pointer-events: auto;
+        }
+        
+        #inventory-panel.visible {
+            display: block;
+        }
+        
+        #inventory-panel h3 {
+            color: #c77dff;
+            margin-bottom: 10px;
+        }
+        
+        #inventory-panel h4 {
+            color: #e0aaff;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .inventory-item {
+            padding: 5px;
+            margin: 3px 0;
+            border-radius: 5px;
+            background: rgba(157, 78, 221, 0.1);
+            font-size: 0.9em;
+        }
+        
+        /* Quest panel */
+        #quest-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            max-height: 300px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            pointer-events: auto;
+        }
+        
+        #quest-panel h3 {
+            color: #c77dff;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+    </style>
+  <script type="module" crossorigin src="/assets/index-CTXkk27W.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/three-CA_qZ599.js">
+  <link rel="modulepreload" crossorigin href="/assets/cannon-DPZWuR6y.js">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="game-canvas"></canvas>
+        
+        <div id="loading-screen">
+            <div class="loading-title">Dynasty of Emberveil</div>
+            <div class="loading-subtitle">A Psychedelic Fantasy RPG</div>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <div class="loading-text" id="loading-text">Initializing...</div>
+        </div>
+        
+        <div id="ui-overlay">
+            <!-- Player Health/Mana -->
+            <div id="health-bar" class="hud">
+                <div><strong>Player</strong></div>
+                <div>HP: <span id="hp-text">100/100</span></div>
+                <div class="bar">
+                    <div class="bar-fill health-fill" id="hp-bar" style="width: 100%;"></div>
+                </div>
+                <div>MP: <span id="mp-text">100/100</span></div>
+                <div class="bar">
+                    <div class="bar-fill mana-fill" id="mp-bar" style="width: 100%;"></div>
+                </div>
+            </div>
+            
+            <!-- Active Companion -->
+            <div id="companion-panel" class="hud">
+                <div><strong>Companion</strong></div>
+                <div id="companion-name">Smoke Siren</div>
+                <div id="companion-status">Ready</div>
+            </div>
+            
+            <!-- Abilities -->
+            <div id="abilities-bar" class="hud">
+                <div class="ability-button" title="Smoke Blast (Q)" data-key="q">🔮</div>
+                <div class="ability-button" title="Shadow Step (W)" data-key="w">⚡</div>
+                <div class="ability-button" title="Essence Drain (E)" data-key="e">💀</div>
+                <div class="ability-button" title="Companion Ability (R)" data-key="r">💜</div>
+            </div>
+            
+            <!-- Inventory Toggle -->
+            <div id="inventory-toggle">📦 Inventory (I)</div>
+            
+            <!-- Inventory Panel -->
+            <div id="inventory-panel">
+                <h3>Inventory</h3>
+                <div id="inventory-content"></div>
+            </div>
+            
+            <!-- Quest Panel -->
+            <div id="quest-panel" class="hud">
+                <h3>📜 Quests</h3>
+                <div id="quest-list"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Unregister any existing service workers to prevent caching issues
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                for(let registration of registrations) {
+                    registration.unregister().then(function() {
+                        console.log('Unregistered old service worker');
+                    });
+                }
+            });
+        }
+        
+        // Clear old caches to force fresh load
+        if ('caches' in window) {
+            caches.keys().then(function(names) {
+                for (let name of names) {
+                    caches.delete(name).then(function() {
+                        console.log('Cleared old cache:', name);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>

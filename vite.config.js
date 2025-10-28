@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  // Use repository name as base for GitHub Pages
-  // Set to '/' for custom domain or local development
-  base: process.env.NODE_ENV === 'production' ? '/web-game-dev/' : '/',
+  // Base path for deployment - use '/' for root deployment
+  base: '/',
   
   server: {
     port: 3000,
