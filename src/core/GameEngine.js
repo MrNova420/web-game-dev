@@ -64,6 +64,8 @@ import { ProductionReadinessSystem } from '../systems/ProductionReadinessSystem.
 import { MultiplayerSocialSystem } from '../systems/MultiplayerSocialSystem.js';
 import { TeleportationSystem } from '../systems/TeleportationSystem.js';
 import { StartingZoneSystem } from '../systems/StartingZoneSystem.js';
+import { Advanced3DModelSystem } from '../systems/Advanced3DModelSystem.js';
+import { AdvancedUIInterfaceSystem } from '../systems/AdvancedUIInterfaceSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -134,6 +136,8 @@ export class GameEngine {
         this.multiplayerSocialSystem = null;
         this.teleportationSystem = null;
         this.startingZoneSystem = null;
+        this.advanced3DModelSystem = null;
+        this.advancedUIInterfaceSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -325,11 +329,16 @@ export class GameEngine {
             this.teleportationSystem = new TeleportationSystem(this);
             this.startingZoneSystem = new StartingZoneSystem(this);
             
+            // Advanced Visuals & UI Systems
+            this.advanced3DModelSystem = new Advanced3DModelSystem(this.scene);
+            this.advancedUIInterfaceSystem = new AdvancedUIInterfaceSystem();
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
             console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
             console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
             console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
+            console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -590,6 +599,15 @@ export class GameEngine {
         
         if (this.startingZoneSystem) {
             this.startingZoneSystem.update(delta);
+        }
+        
+        // Update advanced visuals systems
+        if (this.advanced3DModelSystem) {
+            this.advanced3DModelSystem.update(delta);
+        }
+        
+        if (this.advancedUIInterfaceSystem) {
+            this.advancedUIInterfaceSystem.update(delta);
         }
         
         // Update performance optimizer
