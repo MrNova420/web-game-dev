@@ -299,12 +299,13 @@ export class InfiniteDungeonSystem {
         // Every 10 floors, add a modifier
         const modifierCount = Math.floor(this.currentFloor / 10);
         
-        // Get random modifiers from pool
+        // Get random modifiers from pool using shuffle to avoid duplicates
         const availableModifiers = Object.entries(this.modifierPool);
+        const shuffled = [...availableModifiers].sort(() => Math.random() - 0.5);
+        const maxModifiers = Math.min(modifierCount, 5);
         
-        for (let i = 0; i < Math.min(modifierCount, 5); i++) { // Max 5 modifiers
-            const randomIndex = Math.floor(Math.random() * availableModifiers.length);
-            const [modId, modifier] = availableModifiers[randomIndex];
+        for (let i = 0; i < maxModifiers && i < shuffled.length; i++) {
+            const [modId, modifier] = shuffled[i];
             
             if (!this.activeModifiers.find(m => m.id === modId)) {
                 this.activeModifiers.push({
@@ -414,7 +415,10 @@ export class InfiniteDungeonSystem {
      * Handle dimensional rift event
      */
     handleDimensionalRift(event) {
-        const skipAmount = event.skipFloors[0] + Math.floor(Math.random() * (event.skipFloors[1] - event.skipFloors[0]));
+        const minSkip = event.skipFloors[0];
+        const maxSkip = event.skipFloors[1];
+        const range = maxSkip - minSkip;
+        const skipAmount = minSkip + Math.floor(Math.random() * range);
         
         this.currentFloor += skipAmount;
         this.highestFloor = Math.max(this.highestFloor, this.currentFloor);

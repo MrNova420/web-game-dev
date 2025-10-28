@@ -65,7 +65,7 @@ export class PrestigeSystem {
                 description: 'Start with better equipment',
                 maxLevel: 5,
                 cost: (level) => 100 * Math.pow(2, level),
-                bonus: (level) => ['common', 'uncommon', 'rare', 'epic', 'legendary'][level]
+                bonus: (level) => ['common', 'uncommon', 'rare', 'epic', 'legendary'][Math.min(level, 4)]
             },
             
             // Stat bonuses
@@ -100,7 +100,7 @@ export class PrestigeSystem {
                 bonus: (level) => level * 0.05 // 5% per level
             },
             loot_fortune: {
-                name: 'Fortune\'s Blessing',
+                name: "Fortune's Blessing",
                 description: 'Increased loot drop rate',
                 maxLevel: 10,
                 cost: (level) => 30 * level,
