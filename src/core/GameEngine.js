@@ -80,6 +80,8 @@ import { WeaponSkillSystem } from '../systems/WeaponSkillSystem.js';
 import { TacticalCombatAI } from '../systems/TacticalCombatAI.js';
 import { PvPArenaSystem } from '../systems/PvPArenaSystem.js';
 import { GuildAndHousingSystem } from '../systems/GuildAndHousingSystem.js';
+import { MatchmakingAndEventsSystem } from '../systems/MatchmakingAndEventsSystem.js';
+import { AdvancedGraphicsSystem } from '../systems/AdvancedGraphicsSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -166,6 +168,8 @@ export class GameEngine {
         this.tacticalCombatAI = null;
         this.pvpArenaSystem = null;
         this.guildAndHousingSystem = null;
+        this.matchmakingAndEventsSystem = null;
+        this.advancedGraphicsSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -383,6 +387,8 @@ export class GameEngine {
             
             // Phase 6: Social & Community Features
             this.guildAndHousingSystem = new GuildAndHousingSystem(this);
+            this.matchmakingAndEventsSystem = new MatchmakingAndEventsSystem();
+            this.advancedGraphicsSystem = new AdvancedGraphicsSystem(this.scene, this.renderer);
             
             // Phase 6+: Procedural Generation & Enhanced Graphics
             this.proceduralGenerationSystem = new ProceduralGenerationSystem(this);
@@ -402,9 +408,10 @@ export class GameEngine {
             console.log('🌲 Phase 4 Biome Expansion Systems initialized (5 systems: Generation, Enemies, Weather, Resources, Dungeons)');
             console.log('⚔️ Phase 5 Combat Enhancement Systems initialized (4 systems: Dodge & Parry, Combo Chains, Weapon Skills, Tactical AI)');
             console.log('🏟️ Phase 5.2 PvP Systems initialized (Arena, Matchmaking, Duels, Rankings)');
-            console.log('🏰 Phase 6 Social Systems initialized (Guilds, Housing, Marketplace)');
+            console.log('🏰 Phase 6 Social Systems initialized (Guilds, Housing, Marketplace, Matchmaking, Events)');
             console.log('🎲 Procedural Generation System initialized (Endless content generation)');
             console.log('🎨 Enhanced 3D Graphics System initialized (Amazing visuals & models)');
+            console.log('🌊 Advanced Graphics System initialized (Terrain, Water, Lighting, Animations)');
             console.log('📖 Storyline & Lore System initialized (Deep narrative integration)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
@@ -723,6 +730,14 @@ export class GameEngine {
         
         if (this.guildAndHousingSystem) {
             this.guildAndHousingSystem.update(delta);
+        }
+        
+        if (this.matchmakingAndEventsSystem) {
+            this.matchmakingAndEventsSystem.update(delta);
+        }
+        
+        if (this.advancedGraphicsSystem && this.camera) {
+            this.advancedGraphicsSystem.update(delta, this.camera.position);
         }
         
         // Update Procedural Generation & Enhanced Systems
