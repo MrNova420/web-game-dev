@@ -76,6 +76,8 @@ import { ComboChainSystem } from '../systems/ComboChainSystem.js';
 import { ProceduralGenerationSystem } from '../systems/ProceduralGenerationSystem.js';
 import { Enhanced3DGraphicsSystem } from '../systems/Enhanced3DGraphicsSystem.js';
 import { StorylineAndLoreSystem } from '../systems/StorylineAndLoreSystem.js';
+import { WeaponSkillSystem } from '../systems/WeaponSkillSystem.js';
+import { TacticalCombatAI } from '../systems/TacticalCombatAI.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -158,6 +160,8 @@ export class GameEngine {
         this.proceduralGenerationSystem = null;
         this.enhanced3DGraphicsSystem = null;
         this.storylineAndLoreSystem = null;
+        this.weaponSkillSystem = null;
+        this.tacticalCombatAI = null;
         
         // Game state
         this.isRunning = false;
@@ -367,6 +371,8 @@ export class GameEngine {
             // Phase 5: Advanced Combat Mechanics (NEW)
             this.dodgeAndParrySystem = new DodgeAndParrySystem(this);
             this.comboChainSystem = new ComboChainSystem(this);
+            this.weaponSkillSystem = new WeaponSkillSystem(this);
+            this.tacticalCombatAI = new TacticalCombatAI(this);
             
             // Phase 6+: Procedural Generation & Enhanced Graphics
             this.proceduralGenerationSystem = new ProceduralGenerationSystem(this);
@@ -384,7 +390,7 @@ export class GameEngine {
             console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
             console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
             console.log('🌲 Phase 4 Biome Expansion Systems initialized (5 systems: Generation, Enemies, Weather, Resources, Dungeons)');
-            console.log('⚔️ Phase 5 Combat Enhancement Systems initialized (Dodge & Parry, Combo Chains)');
+            console.log('⚔️ Phase 5 Combat Enhancement Systems initialized (4 systems: Dodge & Parry, Combo Chains, Weapon Skills, Tactical AI)');
             console.log('🎲 Procedural Generation System initialized (Endless content generation)');
             console.log('🎨 Enhanced 3D Graphics System initialized (Amazing visuals & models)');
             console.log('📖 Storyline & Lore System initialized (Deep narrative integration)');
@@ -689,6 +695,14 @@ export class GameEngine {
         
         if (this.comboChainSystem) {
             this.comboChainSystem.update(delta);
+        }
+        
+        if (this.weaponSkillSystem) {
+            this.weaponSkillSystem.update(delta);
+        }
+        
+        if (this.tacticalCombatAI && this.player) {
+            this.tacticalCombatAI.update(delta, this.player.mesh.position);
         }
         
         // Update Procedural Generation & Enhanced Systems
