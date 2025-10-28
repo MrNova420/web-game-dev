@@ -468,17 +468,37 @@ export class EnvironmentDetailsSystem {
     clearEnvironment() {
         this.environmentObjects.forEach(obj => {
             this.scene.remove(obj);
-            if (obj.geometry) obj.geometry.dispose();
-            if (obj.material) {
-                if (Array.isArray(obj.material)) {
-                    obj.material.forEach(mat => mat.dispose());
-                } else {
-                    obj.material.dispose();
-                }
-            }
+            
+            // Dispose of the object and all its children recursively
+            this.disposeObject(obj);
         });
         
         this.environmentObjects = [];
+    }
+    
+    disposeObject(obj) {
+        if (!obj) return;
+        
+        // Dispose children first
+        if (obj.children) {
+            obj.children.forEach(child => this.disposeObject(child));
+        }
+        
+        // Dispose geometry
+        if (obj.geometry) {
+            obj.geometry.dispose();
+        }
+        
+        // Dispose material(s)
+        if (obj.material) {
+            if (Array.isArray(obj.material)) {
+                obj.material.forEach(mat => {
+                    if (mat.dispose) mat.dispose();
+                });
+            } else {
+                if (obj.material.dispose) obj.material.dispose();
+            }
+        }
     }
     
     dispose() {

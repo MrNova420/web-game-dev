@@ -110,6 +110,11 @@ export class ModernUISystem {
                 100% { background-position: 1000px 0; }
             }
             
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+            
             /* Modern UI Components */
             .modern-panel {
                 background: var(--ui-background);
