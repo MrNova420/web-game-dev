@@ -40,6 +40,12 @@ import { EndlessBattleSystem } from '../systems/EndlessBattleSystem.js';
 import { EnhancedGameMechanics } from '../systems/EnhancedGameMechanics.js';
 import { AutoSaveSystem } from '../systems/AutoSaveSystem.js';
 import { PerformanceOptimizer } from '../systems/PerformanceOptimizer.js';
+import { MainMenuSystem } from '../systems/MainMenuSystem.js';
+import { SafeZoneSystem } from '../systems/SafeZoneSystem.js';
+import { EnhancedVisualsSystem } from '../systems/EnhancedVisualsSystem.js';
+import { ProgressTrackingSystem } from '../systems/ProgressTrackingSystem.js';
+import { AdvancedThemeSystem } from '../systems/AdvancedThemeSystem.js';
+import { Advanced3DGraphicsSystem } from '../systems/Advanced3DGraphicsSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -86,9 +92,16 @@ export class GameEngine {
         this.enhancedGameMechanics = null;
         this.autoSaveSystem = null;
         this.performanceOptimizer = null;
+        this.mainMenuSystem = null;
+        this.safeZoneSystem = null;
+        this.enhancedVisualsSystem = null;
+        this.progressTrackingSystem = null;
+        this.advancedThemeSystem = null;
+        this.advanced3DGraphicsSystem = null;
         
         // Game state
         this.isRunning = false;
+        this.startFromSafeZone = false;
         this.currentDungeon = null;
         
         // UI references
@@ -160,56 +173,105 @@ export class GameEngine {
             this.scene.add(light);
         }
         
-        // Initialize game systems
-        this.companionManager = new CompanionManager();
-        this.dungeonGenerator = new DungeonGenerator();
-        this.combatSystem = new CombatSystem(this);
-        this.particleSystem = new ParticleSystem(this.scene);
-        this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
-        this.endlessMode = new EndlessMode(this);
-        this.inventorySystem = new InventorySystem(this);
-        this.questSystem = new QuestSystem(this);
-        this.achievementSystem = new AchievementSystem(this);
-        this.audioSystem = new AudioSystem(this);
-        this.skillTreeSystem = new SkillTreeSystem(this);
-        this.comboSystem = new ComboSystem(this);
-        this.characterCustomization = new CharacterCustomization(this);
-        this.dailyRewards = new DailyRewards(this);
-        this.tutorialSystem = new TutorialSystem(this);
+        // Initialize game systems with error handling
+        try {
+            this.companionManager = new CompanionManager();
+            this.dungeonGenerator = new DungeonGenerator();
+            this.combatSystem = new CombatSystem(this);
+            this.particleSystem = new ParticleSystem(this.scene);
+            this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
+            this.endlessMode = new EndlessMode(this);
+            this.inventorySystem = new InventorySystem(this);
+            this.questSystem = new QuestSystem(this);
+            this.achievementSystem = new AchievementSystem(this);
+            this.audioSystem = new AudioSystem(this);
+            this.skillTreeSystem = new SkillTreeSystem(this);
+            this.comboSystem = new ComboSystem(this);
+            this.characterCustomization = new CharacterCustomization(this);
+            this.dailyRewards = new DailyRewards(this);
+            this.tutorialSystem = new TutorialSystem(this);
+        } catch (error) {
+            console.error('Error initializing core systems:', error);
+            throw new Error('Failed to initialize core game systems: ' + error.message);
+        }
         
         // Phase 4: Crafting & Economy Systems
-        this.craftingSystem = new CraftingSystem(this);
-        this.economySystem = new EconomySystem(this);
-        this.enhancementSystem = new EnhancementSystem(this);
-        this.tradingSystem = new TradingSystem(this);
+        try {
+            this.craftingSystem = new CraftingSystem(this);
+            this.economySystem = new EconomySystem(this);
+            this.enhancementSystem = new EnhancementSystem(this);
+            this.tradingSystem = new TradingSystem(this);
+        } catch (error) {
+            console.error('Error initializing Phase 4 systems:', error);
+            // Continue with degraded functionality
+            console.warn('Game will continue without some Phase 4 features');
+        }
         
         // Phase 5: Pet/Companion Combat Systems
-        this.petSystem = new PetSystem(this);
-        this.companionAI = new CompanionAI(this);
-        this.mountSystem = new MountSystem(this);
+        try {
+            this.petSystem = new PetSystem(this);
+            this.companionAI = new CompanionAI(this);
+            this.mountSystem = new MountSystem(this);
+        } catch (error) {
+            console.error('Error initializing Phase 5 systems:', error);
+            console.warn('Game will continue without some Phase 5 features');
+        }
         
         // Phase 6: Social & Leaderboards (Complete)
-        this.leaderboardSystem = new LeaderboardSystem(this);
-        this.guildSystem = new GuildSystem(this);
-        this.challengeMode = new ChallengeMode(this);
+        try {
+            this.leaderboardSystem = new LeaderboardSystem(this);
+            this.guildSystem = new GuildSystem(this);
+            this.challengeMode = new ChallengeMode(this);
+        } catch (error) {
+            console.error('Error initializing Phase 6 systems:', error);
+            console.warn('Game will continue without some Phase 6 features');
+        }
         
         // Phase 7: Advanced Progression
-        this.prestigeSystem = new PrestigeSystem(this);
-        this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
+        try {
+            this.prestigeSystem = new PrestigeSystem(this);
+            this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
+        } catch (error) {
+            console.error('Error initializing Phase 7 systems:', error);
+            console.warn('Game will continue without some Phase 7 features');
+        }
         
         // Enhanced Fantasy RPG Systems
-        this.fantasyMagicSystem = new FantasyMagicSystem();
-        this.seductiveBaddiesSystem = new SeductiveBaddiesSystem();
-        this.powerLevelingSystem = new PowerLevelingSystem();
-        this.endlessBattleSystem = new EndlessBattleSystem();
+        try {
+            this.fantasyMagicSystem = new FantasyMagicSystem();
+            this.seductiveBaddiesSystem = new SeductiveBaddiesSystem();
+            this.powerLevelingSystem = new PowerLevelingSystem();
+            this.endlessBattleSystem = new EndlessBattleSystem();
+        } catch (error) {
+            console.error('Error initializing enhanced RPG systems:', error);
+            console.warn('Game will continue without some enhanced RPG features');
+        }
         
         // Enhanced Game Mechanics & Optimizations
-        this.enhancedGameMechanics = new EnhancedGameMechanics();
-        this.autoSaveSystem = new AutoSaveSystem();
-        this.performanceOptimizer = new PerformanceOptimizer();
+        try {
+            this.enhancedGameMechanics = new EnhancedGameMechanics();
+            this.autoSaveSystem = new AutoSaveSystem();
+            this.performanceOptimizer = new PerformanceOptimizer();
+            
+            // New Enhanced Systems
+            this.advancedThemeSystem = new AdvancedThemeSystem(this);
+            this.advanced3DGraphicsSystem = new Advanced3DGraphicsSystem(this);
+            this.mainMenuSystem = new MainMenuSystem(this);
+            this.safeZoneSystem = new SafeZoneSystem(this);
+            this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
+            this.progressTrackingSystem = new ProgressTrackingSystem(this);
+        } catch (error) {
+            console.error('Error initializing enhanced mechanics:', error);
+            console.warn('Game will continue without some enhanced mechanics');
+        }
         
         // Make save system aware of all systems
-        this.saveSystem = new SaveSystem(this);
+        try {
+            this.saveSystem = new SaveSystem(this);
+        } catch (error) {
+            console.error('Error initializing save system:', error);
+            throw new Error('Failed to initialize save system: ' + error.message);
+        }
         
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
@@ -225,6 +287,13 @@ export class GameEngine {
         // Set initial companion
         this.companionManager.setActiveCompanion('smoke_siren');
         this.updateCompanionUI();
+        
+        // Check if starting from safe zone
+        if (this.startFromSafeZone) {
+            console.log('🏰 Starting from Safe Zone Hub...');
+            this.safeZoneSystem.createSafeZone();
+            return;
+        }
         
         // Check for existing save
         if (this.saveSystem.hasSaveData()) {
@@ -383,6 +452,27 @@ export class GameEngine {
         // Update performance optimizer
         if (this.performanceOptimizer) {
             this.performanceOptimizer.update(delta);
+        }
+        
+        // Update new enhanced systems
+        if (this.advancedThemeSystem) {
+            this.advancedThemeSystem.update(delta);
+        }
+        
+        if (this.advanced3DGraphicsSystem) {
+            this.advanced3DGraphicsSystem.update(delta);
+        }
+        
+        if (this.safeZoneSystem) {
+            this.safeZoneSystem.update(delta);
+        }
+        
+        if (this.enhancedVisualsSystem) {
+            this.enhancedVisualsSystem.update(delta);
+        }
+        
+        if (this.progressTrackingSystem) {
+            this.progressTrackingSystem.update(delta);
         }
         
         // Update camera to follow player

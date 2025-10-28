@@ -20,25 +20,52 @@ export class AssetLoader {
         // In production, this would load actual textures, models, and sounds
         
         const assetList = [
-            'texture_player',
-            'texture_ground',
-            'texture_wall',
-            'model_player',
-            'model_companion',
-            'sound_attack',
-            'sound_ambient',
-            'data_companions',
-            'data_enemies',
-            'data_dungeons'
+            { name: 'texture_player', size: 'small' },
+            { name: 'texture_ground', size: 'small' },
+            { name: 'texture_wall', size: 'small' },
+            { name: 'model_player', size: 'medium' },
+            { name: 'model_companion', size: 'medium' },
+            { name: 'sound_attack', size: 'small' },
+            { name: 'sound_ambient', size: 'medium' },
+            { name: 'data_companions', size: 'tiny' },
+            { name: 'data_enemies', size: 'tiny' },
+            { name: 'data_dungeons', size: 'tiny' }
         ];
         
         this.totalAssets = assetList.length;
         
+        // Load assets with retry mechanism
         for (let i = 0; i < assetList.length; i++) {
-            await this.simulateLoad(assetList[i]);
-            this.loadedAssets++;
-            if (progressCallback) {
-                progressCallback(this.loadedAssets / this.totalAssets);
+            const asset = assetList[i];
+            let loaded = false;
+            let attempts = 0;
+            const maxAttempts = 3;
+            
+            while (!loaded && attempts < maxAttempts) {
+                try {
+                    await this.simulateLoad(asset.name, asset.size);
+                    this.loadedAssets++;
+                    loaded = true;
+                    
+                    if (progressCallback) {
+                        progressCallback(this.loadedAssets / this.totalAssets, asset.name);
+                    }
+                } catch (error) {
+                    attempts++;
+                    console.warn(`Failed to load ${asset.name}, attempt ${attempts}/${maxAttempts}`);
+                    
+                    if (attempts >= maxAttempts) {
+                        console.error(`Failed to load ${asset.name} after ${maxAttempts} attempts`);
+                        // Mark as loaded anyway to prevent freezing
+                        this.loadedAssets++;
+                        if (progressCallback) {
+                            progressCallback(this.loadedAssets / this.totalAssets, asset.name);
+                        }
+                    } else {
+                        // Wait before retry
+                        await new Promise(resolve => setTimeout(resolve, 500));
+                    }
+                }
             }
         }
         
@@ -46,10 +73,26 @@ export class AssetLoader {
         return true;
     }
     
-    async simulateLoad(assetName) {
-        // Simulate network delay
-        return new Promise(resolve => {
+    async simulateLoad(assetName, size = 'medium') {
+        // Simulate network delay based on asset size
+        const delays = {
+            tiny: 20,
+            small: 50,
+            medium: 100,
+            large: 200
+        };
+        
+        const baseDelay = delays[size] || delays.medium;
+        const randomDelay = baseDelay + Math.random() * 50;
+        
+        return new Promise((resolve, reject) => {
             setTimeout(() => {
+                // Simulate occasional network issues (5% failure rate)
+                if (Math.random() < 0.05) {
+                    reject(new Error(`Network error loading ${assetName}`));
+                    return;
+                }
+                
                 // Store placeholder asset
                 if (assetName.startsWith('texture')) {
                     this.assets.textures[assetName] = { loaded: true, name: assetName };
@@ -61,7 +104,7 @@ export class AssetLoader {
                     this.assets.data[assetName] = { loaded: true, name: assetName };
                 }
                 resolve();
-            }, Math.random() * 100 + 50);
+            }, randomDelay);
         });
     }
     
