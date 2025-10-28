@@ -86,6 +86,8 @@ export class DodgeAndParrySystem {
         this.isDodging = true;
         this.hasIFrames = true;
         this.dodgeStartTime = currentTime;
+        this.dodgeEndTime = currentTime + this.dodgeConfig.duration;
+        this.iFrameEndTime = currentTime + this.dodgeConfig.iFrames;
         this.lastDodgeTime = currentTime;
         
         // Normalize direction
@@ -101,16 +103,6 @@ export class DodgeAndParrySystem {
         
         // Consume stamina
         this.useStamina(this.dodgeConfig.staminaCost);
-        
-        // End dodge after duration
-        setTimeout(() => {
-            this.isDodging = false;
-        }, this.dodgeConfig.duration);
-        
-        // End i-frames
-        setTimeout(() => {
-            this.hasIFrames = false;
-        }, this.dodgeConfig.iFrames);
         
         console.log('⚡ Dodge executed');
         return { success: true };
@@ -140,15 +132,11 @@ export class DodgeAndParrySystem {
         // Execute parry
         this.isParrying = true;
         this.parryStartTime = currentTime;
+        this.parryEndTime = currentTime + this.parryConfig.windowDuration;
         this.lastParryTime = currentTime;
         
         // Consume stamina
         this.useStamina(this.parryConfig.staminaCost);
-        
-        // End parry after window
-        setTimeout(() => {
-            this.isParrying = false;
-        }, this.parryConfig.windowDuration);
         
         console.log('🛡️ Parry initiated');
         return { success: true, parryWindow: this.parryConfig.windowDuration };
@@ -236,9 +224,26 @@ export class DodgeAndParrySystem {
      * Update system
      */
     update(deltaTime) {
+        const currentTime = Date.now();
+        
+        // Check and end dodge
+        if (this.isDodging && currentTime >= this.dodgeEndTime) {
+            this.isDodging = false;
+        }
+        
+        // Check and end i-frames
+        if (this.hasIFrames && currentTime >= this.iFrameEndTime) {
+            this.hasIFrames = false;
+        }
+        
+        // Check and end parry
+        if (this.isParrying && currentTime >= this.parryEndTime) {
+            this.isParrying = false;
+        }
+        
         // Update dodge movement
         if (this.isDodging && this.player) {
-            const progress = (Date.now() - this.dodgeStartTime) / this.dodgeConfig.duration;
+            const progress = (currentTime - this.dodgeStartTime) / this.dodgeConfig.duration;
             if (progress <= 1.0) {
                 // Apply dodge movement (eased)
                 const easeProgress = 1 - Math.pow(1 - progress, 3); // Ease out cubic

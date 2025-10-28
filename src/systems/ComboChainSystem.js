@@ -169,16 +169,16 @@ export class ComboChainSystem {
         this.comboActive = true;
         this.totalDamageDealt += finalDamage;
         
+        // Track finisher end time if this is a finisher
+        if (move.isFinisher) {
+            this.finisherEndTime = currentTime + move.animationTime;
+        }
+        
         // Update multiplier
         this.updateMultiplier();
         
         // Check for finisher availability
         this.checkFinisherAvailability();
-        
-        // Reset combo if finisher executed
-        if (move.isFinisher) {
-            setTimeout(() => this.resetCombo(), move.animationTime);
-        }
         
         console.log(`⚔️ ${move.name} | Combo: ${this.currentCombo} | Multiplier: ${this.comboMultiplier.toFixed(2)}x | Damage: ${finalDamage.toFixed(0)}`);
         
@@ -292,6 +292,12 @@ export class ComboChainSystem {
      */
     update(deltaTime) {
         const currentTime = Date.now();
+        
+        // Check for finisher completion and reset combo
+        if (this.finisherEndTime && currentTime >= this.finisherEndTime) {
+            this.resetCombo();
+            this.finisherEndTime = null;
+        }
         
         // Auto-reset combo if expired
         if (this.comboActive && currentTime - this.lastHitTime > this.comboConfig.resetTime) {

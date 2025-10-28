@@ -394,6 +394,11 @@ export class GameEngine {
         this.player = new Player(this.scene);
         await this.player.init();
         
+        // Initialize combat systems with player reference
+        if (this.dodgeAndParrySystem) {
+            this.dodgeAndParrySystem.init(this.player);
+        }
+        
         // Set initial companion
         this.companionManager.setActiveCompanion('smoke_siren');
         this.updateCompanionUI();
