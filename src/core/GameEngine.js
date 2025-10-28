@@ -46,6 +46,26 @@ import { EnhancedVisualsSystem } from '../systems/EnhancedVisualsSystem.js';
 import { ProgressTrackingSystem } from '../systems/ProgressTrackingSystem.js';
 import { AdvancedThemeSystem } from '../systems/AdvancedThemeSystem.js';
 import { Advanced3DGraphicsSystem } from '../systems/Advanced3DGraphicsSystem.js';
+import { WeatherSystem } from '../systems/WeatherSystem.js';
+import { PostProcessingSystem } from '../systems/PostProcessingSystem.js';
+import { AdvancedParticleSystem } from '../systems/AdvancedParticleSystem.js';
+import { DayNightCycleSystem } from '../systems/DayNightCycleSystem.js';
+import { ModernUISystem } from '../systems/ModernUISystem.js';
+import { EnvironmentDetailsSystem } from '../systems/EnvironmentDetailsSystem.js';
+import { OpenWorldSystem } from '../systems/OpenWorldSystem.js';
+import { VolumetricLightingSystem } from '../systems/VolumetricLightingSystem.js';
+import { CinematicCameraSystem } from '../systems/CinematicCameraSystem.js';
+import { PhysicsSystem } from '../systems/PhysicsSystem.js';
+import { CharacterClassSystem } from '../systems/CharacterClassSystem.js';
+import { NPCSystem } from '../systems/NPCSystem.js';
+import { AdvancedInventorySystem } from '../systems/AdvancedInventorySystem.js';
+import { AnimeStyleRenderingSystem } from '../systems/AnimeStyleRenderingSystem.js';
+import { ProductionReadinessSystem } from '../systems/ProductionReadinessSystem.js';
+import { MultiplayerSocialSystem } from '../systems/MultiplayerSocialSystem.js';
+import { TeleportationSystem } from '../systems/TeleportationSystem.js';
+import { StartingZoneSystem } from '../systems/StartingZoneSystem.js';
+import { Advanced3DModelSystem } from '../systems/Advanced3DModelSystem.js';
+import { AdvancedUIInterfaceSystem } from '../systems/AdvancedUIInterfaceSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -98,6 +118,26 @@ export class GameEngine {
         this.progressTrackingSystem = null;
         this.advancedThemeSystem = null;
         this.advanced3DGraphicsSystem = null;
+        this.weatherSystem = null;
+        this.postProcessingSystem = null;
+        this.advancedParticleSystem = null;
+        this.dayNightCycleSystem = null;
+        this.modernUISystem = null;
+        this.environmentDetailsSystem = null;
+        this.openWorldSystem = null;
+        this.volumetricLightingSystem = null;
+        this.cinematicCameraSystem = null;
+        this.physicsSystem = null;
+        this.characterClassSystem = null;
+        this.npcSystem = null;
+        this.advancedInventorySystem = null;
+        this.animeStyleRenderingSystem = null;
+        this.productionReadinessSystem = null;
+        this.multiplayerSocialSystem = null;
+        this.teleportationSystem = null;
+        this.startingZoneSystem = null;
+        this.advanced3DModelSystem = null;
+        this.advancedUIInterfaceSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -260,6 +300,45 @@ export class GameEngine {
             this.safeZoneSystem = new SafeZoneSystem(this);
             this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
             this.progressTrackingSystem = new ProgressTrackingSystem(this);
+            
+            // New Phase 1 Enhancement Systems - 3D Graphics & Atmosphere
+            this.weatherSystem = new WeatherSystem(this);
+            this.postProcessingSystem = new PostProcessingSystem(this);
+            this.advancedParticleSystem = new AdvancedParticleSystem(this.scene);
+            this.dayNightCycleSystem = new DayNightCycleSystem(this);
+            this.modernUISystem = new ModernUISystem(this);
+            this.environmentDetailsSystem = new EnvironmentDetailsSystem(this);
+            
+            // Phase 2+ AAA Systems - Open World & Cinematic
+            this.openWorldSystem = new OpenWorldSystem(this);
+            this.volumetricLightingSystem = new VolumetricLightingSystem(this);
+            this.cinematicCameraSystem = new CinematicCameraSystem(this);
+            this.physicsSystem = new PhysicsSystem(this);
+            
+            // Phase 3+ Character & World Systems
+            this.characterClassSystem = new CharacterClassSystem(this);
+            this.npcSystem = new NPCSystem(this);
+            this.advancedInventorySystem = new AdvancedInventorySystem(this);
+            
+            // Production Polish Systems
+            this.animeStyleRenderingSystem = new AnimeStyleRenderingSystem(this);
+            this.productionReadinessSystem = new ProductionReadinessSystem(this);
+            
+            // Multiplayer & Social Systems
+            this.multiplayerSocialSystem = new MultiplayerSocialSystem(this);
+            this.teleportationSystem = new TeleportationSystem(this);
+            this.startingZoneSystem = new StartingZoneSystem(this);
+            
+            // Advanced Visuals & UI Systems
+            this.advanced3DModelSystem = new Advanced3DModelSystem(this.scene);
+            this.advancedUIInterfaceSystem = new AdvancedUIInterfaceSystem();
+            
+            console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
+            console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
+            console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
+            console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
+            console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
+            console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -449,6 +528,88 @@ export class GameEngine {
             this.enhancedGameMechanics.update(delta);
         }
         
+        // Update Phase 1 Enhancement Systems
+        if (this.weatherSystem) {
+            this.weatherSystem.update(delta);
+        }
+        
+        if (this.advancedParticleSystem) {
+            this.advancedParticleSystem.update(delta);
+        }
+        
+        if (this.dayNightCycleSystem) {
+            this.dayNightCycleSystem.update(delta);
+        }
+        
+        if (this.modernUISystem) {
+            this.modernUISystem.update(delta);
+        }
+        
+        if (this.environmentDetailsSystem) {
+            this.environmentDetailsSystem.update(delta);
+        }
+        
+        // Update Phase 2+ AAA Systems
+        if (this.openWorldSystem) {
+            this.openWorldSystem.update(delta);
+        }
+        
+        if (this.volumetricLightingSystem) {
+            this.volumetricLightingSystem.update(delta);
+        }
+        
+        if (this.cinematicCameraSystem) {
+            this.cinematicCameraSystem.update(delta);
+        }
+        
+        if (this.physicsSystem) {
+            this.physicsSystem.update(delta);
+        }
+        
+        // Update Phase 3+ Systems
+        if (this.characterClassSystem) {
+            this.characterClassSystem.update(delta);
+        }
+        
+        if (this.npcSystem) {
+            this.npcSystem.update(delta);
+        }
+        
+        if (this.advancedInventorySystem) {
+            this.advancedInventorySystem.update(delta);
+        }
+        
+        // Update Production Polish Systems
+        if (this.animeStyleRenderingSystem) {
+            this.animeStyleRenderingSystem.update(delta);
+        }
+        
+        if (this.productionReadinessSystem) {
+            this.productionReadinessSystem.update(delta);
+        }
+        
+        // Update Multiplayer & Social Systems
+        if (this.multiplayerSocialSystem) {
+            this.multiplayerSocialSystem.update(delta);
+        }
+        
+        if (this.teleportationSystem) {
+            this.teleportationSystem.update(delta);
+        }
+        
+        if (this.startingZoneSystem) {
+            this.startingZoneSystem.update(delta);
+        }
+        
+        // Update advanced visuals systems
+        if (this.advanced3DModelSystem) {
+            this.advanced3DModelSystem.update(delta);
+        }
+        
+        if (this.advancedUIInterfaceSystem) {
+            this.advancedUIInterfaceSystem.update(delta);
+        }
+        
         // Update performance optimizer
         if (this.performanceOptimizer) {
             this.performanceOptimizer.update(delta);
@@ -487,7 +648,13 @@ export class GameEngine {
     
     render() {
         if (this.renderer && this.scene && this.camera) {
-            this.renderer.render(this.scene, this.camera);
+            // Use post-processing if available, otherwise standard rendering
+            if (this.postProcessingSystem && this.postProcessingSystem.enabled) {
+                const delta = this.clock.getDelta();
+                this.postProcessingSystem.render(delta);
+            } else {
+                this.renderer.render(this.scene, this.camera);
+            }
         }
     }
     
