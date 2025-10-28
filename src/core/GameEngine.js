@@ -56,6 +56,9 @@ import { OpenWorldSystem } from '../systems/OpenWorldSystem.js';
 import { VolumetricLightingSystem } from '../systems/VolumetricLightingSystem.js';
 import { CinematicCameraSystem } from '../systems/CinematicCameraSystem.js';
 import { PhysicsSystem } from '../systems/PhysicsSystem.js';
+import { CharacterClassSystem } from '../systems/CharacterClassSystem.js';
+import { NPCSystem } from '../systems/NPCSystem.js';
+import { AdvancedInventorySystem } from '../systems/AdvancedInventorySystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -118,6 +121,9 @@ export class GameEngine {
         this.volumetricLightingSystem = null;
         this.cinematicCameraSystem = null;
         this.physicsSystem = null;
+        this.characterClassSystem = null;
+        this.npcSystem = null;
+        this.advancedInventorySystem = null;
         
         // Game state
         this.isRunning = false;
@@ -295,8 +301,14 @@ export class GameEngine {
             this.cinematicCameraSystem = new CinematicCameraSystem(this);
             this.physicsSystem = new PhysicsSystem(this);
             
+            // Phase 3+ Character & World Systems
+            this.characterClassSystem = new CharacterClassSystem(this);
+            this.npcSystem = new NPCSystem(this);
+            this.advancedInventorySystem = new AdvancedInventorySystem(this);
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
+            console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -522,6 +534,19 @@ export class GameEngine {
         
         if (this.physicsSystem) {
             this.physicsSystem.update(delta);
+        }
+        
+        // Update Phase 3+ Systems
+        if (this.characterClassSystem) {
+            this.characterClassSystem.update(delta);
+        }
+        
+        if (this.npcSystem) {
+            this.npcSystem.update(delta);
+        }
+        
+        if (this.advancedInventorySystem) {
+            this.advancedInventorySystem.update(delta);
         }
         
         // Update performance optimizer
