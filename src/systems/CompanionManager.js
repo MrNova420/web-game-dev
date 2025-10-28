@@ -157,6 +157,7 @@ const companionAbilities = {
                         if (engine.endlessMode) {
                             engine.endlessMode.onEnemyDefeated();
                         }
+                        engine.dropLoot(enemy);
                     }
                 }, delay);
                 delay += 200;
@@ -179,6 +180,7 @@ const companionAbilities = {
                     if (engine.endlessMode) {
                         engine.endlessMode.onEnemyDefeated();
                     }
+                    engine.dropLoot(enemy);
                 }
             }
         });
@@ -199,6 +201,7 @@ const companionAbilities = {
                     if (engine.endlessMode) {
                         engine.endlessMode.onEnemyDefeated();
                     }
+                    engine.dropLoot(enemy);
                 }
             }
         });

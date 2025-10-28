@@ -184,6 +184,64 @@
             background: linear-gradient(90deg, #0099ff, #66ccff);
             box-shadow: 0 0 10px rgba(0, 153, 255, 0.5);
         }
+        
+        /* Inventory UI */
+        #inventory-toggle {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            background: linear-gradient(135deg, #2d0a4e, #4a0e7a);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 10px 20px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            pointer-events: auto;
+        }
+        
+        #inventory-toggle:hover {
+            background: linear-gradient(135deg, #4a0e7a, #9d4edd);
+        }
+        
+        #inventory-panel {
+            position: absolute;
+            left: 20px;
+            bottom: 150px;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #9d4edd;
+            border-radius: 10px;
+            padding: 15px;
+            color: #fff;
+            display: none;
+            pointer-events: auto;
+        }
+        
+        #inventory-panel.visible {
+            display: block;
+        }
+        
+        #inventory-panel h3 {
+            color: #c77dff;
+            margin-bottom: 10px;
+        }
+        
+        #inventory-panel h4 {
+            color: #e0aaff;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+        
+        .inventory-item {
+            padding: 5px;
+            margin: 3px 0;
+            border-radius: 5px;
+            background: rgba(157, 78, 221, 0.1);
+            font-size: 0.9em;
+        }
     </style>
 </head>
 <body>
@@ -226,6 +284,15 @@
                 <div class="ability-button" title="Shadow Step (W)" data-key="w">⚡</div>
                 <div class="ability-button" title="Essence Drain (E)" data-key="e">💀</div>
                 <div class="ability-button" title="Companion Ability (R)" data-key="r">💜</div>
+            </div>
+            
+            <!-- Inventory Toggle -->
+            <div id="inventory-toggle">📦 Inventory (I)</div>
+            
+            <!-- Inventory Panel -->
+            <div id="inventory-panel">
+                <h3>Inventory</h3>
+                <div id="inventory-content"></div>
             </div>
         </div>
     </div>

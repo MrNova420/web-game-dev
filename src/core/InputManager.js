@@ -35,6 +35,14 @@ export class InputManager {
             });
         });
         
+        // Inventory toggle button
+        const inventoryToggle = document.getElementById('inventory-toggle');
+        if (inventoryToggle) {
+            inventoryToggle.addEventListener('click', () => {
+                this.toggleInventory();
+            });
+        }
+        
         console.log('🎮 Input manager initialized');
     }
     
@@ -64,8 +72,14 @@ export class InputManager {
         }
         
         // Handle ability keys (Q, W, E, R)
-        if (['q', 'w', 'e', 'r'].includes(event.key.toLowerCase())) {
+        if (['q', 'e', 'r'].includes(event.key.toLowerCase())) {
             this.engine.useAbility(event.key.toLowerCase());
+            event.preventDefault();
+        }
+        
+        // Handle inventory toggle (I key)
+        if (event.key.toLowerCase() === 'i') {
+            this.toggleInventory();
             event.preventDefault();
         }
     }
@@ -121,5 +135,61 @@ export class InputManager {
     
     isMouseButtonPressed(button) {
         return this.mouseButtons[button] || false;
+    }
+    
+    toggleInventory() {
+        const inventoryPanel = document.getElementById('inventory-panel');
+        if (inventoryPanel) {
+            inventoryPanel.classList.toggle('visible');
+            
+            // Update inventory content if visible
+            if (inventoryPanel.classList.contains('visible')) {
+                this.updateInventoryDisplay();
+            }
+        }
+    }
+    
+    updateInventoryDisplay() {
+        const inventoryContent = document.getElementById('inventory-content');
+        const inventory = this.engine.inventorySystem;
+        
+        if (!inventoryContent || !inventory) return;
+        
+        inventoryContent.innerHTML = '';
+        
+        // Equipment section
+        const equipmentSection = document.createElement('div');
+        equipmentSection.innerHTML = '<h4>Equipment</h4>';
+        Object.keys(inventory.equipment).forEach(slot => {
+            const item = inventory.equipment[slot];
+            const slotDiv = document.createElement('div');
+            slotDiv.className = 'inventory-item';
+            slotDiv.textContent = `${slot}: ${item ? item.name : 'Empty'}`;
+            if (item) {
+                slotDiv.style.color = item.color;
+            }
+            equipmentSection.appendChild(slotDiv);
+        });
+        inventoryContent.appendChild(equipmentSection);
+        
+        // Items section
+        const itemsSection = document.createElement('div');
+        itemsSection.innerHTML = '<h4>Items</h4>';
+        if (inventory.items.length === 0) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.className = 'inventory-item';
+            emptyDiv.textContent = 'No items';
+            emptyDiv.style.opacity = '0.6';
+            itemsSection.appendChild(emptyDiv);
+        } else {
+            inventory.items.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'inventory-item';
+                itemDiv.style.color = item.color;
+                itemDiv.textContent = item.name + (item.stack ? ` x${item.stack}` : '');
+                itemsSection.appendChild(itemDiv);
+            });
+        }
+        inventoryContent.appendChild(itemsSection);
     }
 }

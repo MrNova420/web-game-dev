@@ -12,6 +12,7 @@ import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { EnemyManager } from '../systems/EnemyManager.js';
 import { EndlessMode } from '../systems/EndlessMode.js';
 import { SaveSystem } from '../systems/SaveSystem.js';
+import { InventorySystem } from '../systems/InventorySystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -30,6 +31,7 @@ export class GameEngine {
         this.enemyManager = null;
         this.endlessMode = null;
         this.saveSystem = null;
+        this.inventorySystem = null;
         
         // Game state
         this.isRunning = false;
@@ -108,6 +110,7 @@ export class GameEngine {
         this.particleSystem = new ParticleSystem(this.scene);
         this.enemyManager = new EnemyManager(this.scene, this.dungeonGenerator);
         this.endlessMode = new EndlessMode(this);
+        this.inventorySystem = new InventorySystem(this);
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -281,6 +284,8 @@ export class GameEngine {
                     if (this.endlessMode) {
                         this.endlessMode.onEnemyDefeated();
                     }
+                    // Drop loot
+                    this.dropLoot(enemy);
                 }
             }
         });
@@ -313,6 +318,8 @@ export class GameEngine {
                 if (this.endlessMode) {
                     this.endlessMode.onEnemyDefeated();
                 }
+                // Drop loot
+                this.dropLoot(nearestEnemy);
             }
         }
     }
@@ -341,5 +348,16 @@ export class GameEngine {
         });
         
         return nearest;
+    }
+    
+    dropLoot(enemy) {
+        // 30% chance to drop loot
+        if (Math.random() < 0.3) {
+            const floor = this.endlessMode ? this.endlessMode.currentFloor : 1;
+            const loot = this.inventorySystem.generateLoot(floor);
+            
+            // Auto-pickup for now
+            this.inventorySystem.addItem(loot);
+        }
     }
 }
