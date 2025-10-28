@@ -9,6 +9,7 @@ import { CompanionManager } from '../systems/CompanionManager.js';
 import { DungeonGenerator } from '../worlds/DungeonGenerator.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
 import { ModelLoader } from '../core/ModelLoader.js';
+import { WorldBuilder } from '../core/WorldBuilder.js';
 import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { EnemyManager } from '../systems/EnemyManager.js';
 import { EndlessMode } from '../systems/EndlessMode.js';
@@ -107,6 +108,9 @@ export class GameEngine {
         
         // Model loader for external 3D assets
         this.modelLoader = new ModelLoader();
+        
+        // World builder for creating immersive worlds from presets
+        this.worldBuilder = null; // Initialized after scene is created
         
         // Game systems
         this.player = null;
@@ -498,6 +502,10 @@ export class GameEngine {
             throw new Error('Failed to initialize save system: ' + error.message);
         }
         
+        // Initialize WorldBuilder after all systems are ready
+        this.worldBuilder = new WorldBuilder(this);
+        console.log('🏗️ WorldBuilder ready to create immersive worlds!');
+        
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
         
@@ -505,10 +513,18 @@ export class GameEngine {
     }
     
     async createWorld() {
-        console.log('🌍 Creating full game world with REAL 3D models...');
+        console.log('🌍 Creating COMPLETE immersive world using already-made assets...');
         
         // Preload models first
         await this.modelLoader.preloadCommonModels();
+        
+        // === BUILD WORLD FROM PRESET ===
+        // Use WorldBuilder to create a complete immersive world!
+        const playerLevel = 1; // Could be loaded from save
+        const currentPreset = 'crystal_caverns'; // Start with Crystal Caverns
+        
+        console.log('🏗️ Building world using WorldBuilder system...');
+        await this.worldBuilder.buildWorld(currentPreset, playerLevel);
         
         // Create player
         this.player = new Player(this.scene);
