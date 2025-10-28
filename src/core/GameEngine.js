@@ -59,6 +59,8 @@ import { PhysicsSystem } from '../systems/PhysicsSystem.js';
 import { CharacterClassSystem } from '../systems/CharacterClassSystem.js';
 import { NPCSystem } from '../systems/NPCSystem.js';
 import { AdvancedInventorySystem } from '../systems/AdvancedInventorySystem.js';
+import { AnimeStyleRenderingSystem } from '../systems/AnimeStyleRenderingSystem.js';
+import { ProductionReadinessSystem } from '../systems/ProductionReadinessSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -124,6 +126,8 @@ export class GameEngine {
         this.characterClassSystem = null;
         this.npcSystem = null;
         this.advancedInventorySystem = null;
+        this.animeStyleRenderingSystem = null;
+        this.productionReadinessSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -306,9 +310,14 @@ export class GameEngine {
             this.npcSystem = new NPCSystem(this);
             this.advancedInventorySystem = new AdvancedInventorySystem(this);
             
+            // Production Polish Systems
+            this.animeStyleRenderingSystem = new AnimeStyleRenderingSystem(this);
+            this.productionReadinessSystem = new ProductionReadinessSystem(this);
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
             console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
+            console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -547,6 +556,15 @@ export class GameEngine {
         
         if (this.advancedInventorySystem) {
             this.advancedInventorySystem.update(delta);
+        }
+        
+        // Update Production Polish Systems
+        if (this.animeStyleRenderingSystem) {
+            this.animeStyleRenderingSystem.update(delta);
+        }
+        
+        if (this.productionReadinessSystem) {
+            this.productionReadinessSystem.update(delta);
         }
         
         // Update performance optimizer
