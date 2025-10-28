@@ -82,6 +82,8 @@ import { PvPArenaSystem } from '../systems/PvPArenaSystem.js';
 import { GuildAndHousingSystem } from '../systems/GuildAndHousingSystem.js';
 import { MatchmakingAndEventsSystem } from '../systems/MatchmakingAndEventsSystem.js';
 import { AdvancedGraphicsSystem } from '../systems/AdvancedGraphicsSystem.js';
+import { IntelligentEnemyAI } from '../systems/IntelligentEnemyAI.js';
+import { AnimeCharacterSystem } from '../systems/AnimeCharacterSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -170,6 +172,8 @@ export class GameEngine {
         this.guildAndHousingSystem = null;
         this.matchmakingAndEventsSystem = null;
         this.advancedGraphicsSystem = null;
+        this.intelligentEnemyAI = null;
+        this.animeCharacterSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -395,6 +399,10 @@ export class GameEngine {
             this.enhanced3DGraphicsSystem = new Enhanced3DGraphicsSystem(this.scene, this.renderer, this.camera);
             this.storylineAndLoreSystem = new StorylineAndLoreSystem(this);
             
+            // Phase 8-9: Intelligent AI & Anime Character Systems
+            this.intelligentEnemyAI = new IntelligentEnemyAI();
+            this.animeCharacterSystem = new AnimeCharacterSystem(this.scene);
+            
             // Initialize new systems
             this.enhanced3DGraphicsSystem.init();
             this.storylineAndLoreSystem.init(1); // Start at level 1
@@ -413,6 +421,8 @@ export class GameEngine {
             console.log('🎨 Enhanced 3D Graphics System initialized (Amazing visuals & models)');
             console.log('🌊 Advanced Graphics System initialized (Terrain, Water, Lighting, Animations)');
             console.log('📖 Storyline & Lore System initialized (Deep narrative integration)');
+            console.log('🧠 Phase 8 Intelligent Enemy AI initialized (Behavior trees, learning, pack tactics)');
+            console.log('✨ Phase 9 Anime Character System initialized (Detailed models, customization, physics)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -738,6 +748,22 @@ export class GameEngine {
         
         if (this.advancedGraphicsSystem && this.camera) {
             this.advancedGraphicsSystem.update(delta, this.camera.position);
+        }
+        
+        // Update Phase 8-9 Systems (Intelligent AI & Anime Visuals)
+        if (this.intelligentEnemyAI && this.player) {
+            const playerState = {
+                justDodged: this.player.dodgeState?.justDodged || false,
+                dodgeDirection: this.player.dodgeState?.direction || null,
+                justAttacked: this.player.combatState?.justAttacked || false,
+                attackType: this.player.combatState?.attackType || null,
+                skillUsed: this.player.combatState?.lastSkill || null
+            };
+            this.intelligentEnemyAI.update(delta, this.player.mesh.position, playerState);
+        }
+        
+        if (this.animeCharacterSystem) {
+            this.animeCharacterSystem.update(delta);
         }
         
         // Update Procedural Generation & Enhanced Systems
