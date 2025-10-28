@@ -66,6 +66,11 @@ export class EndlessMode {
         this.timeElapsed += delta;
         this.updateUI();
         
+        // Track time-based achievements
+        if (this.engine.achievementSystem) {
+            this.engine.achievementSystem.onTimeElapsed(Math.floor(this.timeElapsed));
+        }
+        
         // Check if floor is cleared
         if (this.isFloorCleared()) {
             this.advanceFloor();
@@ -160,8 +165,23 @@ export class EndlessMode {
         this.engine.currentDungeon = this.engine.dungeonGenerator.generate(biome, this.currentFloor);
         this.engine.loadDungeon(this.engine.currentDungeon);
         
+        // Play biome music
+        if (this.engine.audioSystem) {
+            this.engine.audioSystem.playMusic(biome);
+        }
+        
+        // Track floor achievement
+        if (this.engine.achievementSystem) {
+            this.engine.achievementSystem.onFloorReached(this.currentFloor);
+        }
+        
         // Spawn enemies or boss
         if (this.isBossFloor) {
+            // Play boss appear sound
+            if (this.engine.audioSystem) {
+                this.engine.audioSystem.playSoundEffect('boss_appear');
+            }
+            
             // Spawn a boss
             this.engine.enemyManager.spawnBoss(this.engine.currentDungeon);
         } else {

@@ -152,6 +152,16 @@ export class Player {
         
         console.log(`🌟 Level Up! Now level ${this.stats.level}`);
         
+        // Play level up sound
+        if (window.gameEngine && window.gameEngine.audioSystem) {
+            window.gameEngine.audioSystem.playSoundEffect('level_up');
+        }
+        
+        // Track achievement
+        if (window.gameEngine && window.gameEngine.achievementSystem) {
+            window.gameEngine.achievementSystem.onLevelReached(this.stats.level);
+        }
+        
         // Notify quest system
         if (window.gameEngine && window.gameEngine.questSystem) {
             window.gameEngine.questSystem.onLevelUp(this.stats.level);

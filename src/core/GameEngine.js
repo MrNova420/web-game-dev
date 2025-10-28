@@ -14,6 +14,8 @@ import { EndlessMode } from '../systems/EndlessMode.js';
 import { SaveSystem } from '../systems/SaveSystem.js';
 import { InventorySystem } from '../systems/InventorySystem.js';
 import { QuestSystem } from '../systems/QuestSystem.js';
+import { AchievementSystem } from '../systems/AchievementSystem.js';
+import { AudioSystem } from '../systems/AudioSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -34,6 +36,8 @@ export class GameEngine {
         this.saveSystem = null;
         this.inventorySystem = null;
         this.questSystem = null;
+        this.achievementSystem = null;
+        this.audioSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -114,6 +118,8 @@ export class GameEngine {
         this.endlessMode = new EndlessMode(this);
         this.inventorySystem = new InventorySystem(this);
         this.questSystem = new QuestSystem(this);
+        this.achievementSystem = new AchievementSystem(this);
+        this.audioSystem = new AudioSystem(this);
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -278,6 +284,11 @@ export class GameEngine {
         this.player.stats.mp -= 20;
         console.log('💨 Smoke Blast!');
         
+        // Play ability sound
+        if (this.audioSystem) {
+            this.audioSystem.playSoundEffect('ability', { frequency: 440 });
+        }
+        
         // Create smoke particle effect
         this.particleSystem.createSmokeBurst(this.player.mesh.position);
         
@@ -288,16 +299,7 @@ export class GameEngine {
             if (distance < 5 && enemy.isAlive) {
                 const damage = enemy.takeDamage(25);
                 if (!enemy.isAlive) {
-                    this.player.gainExp(enemy.stats.exp);
-                    if (this.endlessMode) {
-                        this.endlessMode.onEnemyDefeated();
-                    }
-                    // Drop loot
-                    this.dropLoot(enemy);
-                    // Update quests
-                    if (this.questSystem) {
-                        this.questSystem.onEnemyDefeated(enemy.isBoss);
-                    }
+                    this.onEnemyKilled(enemy);
                 }
             }
         });
@@ -308,6 +310,11 @@ export class GameEngine {
         
         this.player.stats.mp -= 30;
         console.log('⚡ Shadow Step!');
+        
+        // Play teleport sound
+        if (this.audioSystem) {
+            this.audioSystem.playSoundEffect('teleport');
+        }
         
         // Teleport player forward
         const direction = new THREE.Vector3(0, 0, -5);
@@ -320,22 +327,18 @@ export class GameEngine {
         this.player.stats.mp -= 25;
         console.log('💀 Essence Drain!');
         
+        // Play ability sound
+        if (this.audioSystem) {
+            this.audioSystem.playSoundEffect('ability', { frequency: 330 });
+        }
+        
         // Heal player and damage nearest enemy
         const nearestEnemy = this.findNearestEnemy();
         if (nearestEnemy) {
             nearestEnemy.takeDamage(15);
             this.player.stats.hp = Math.min(this.player.stats.maxHp, this.player.stats.hp + 15);
             if (!nearestEnemy.isAlive) {
-                this.player.gainExp(nearestEnemy.stats.exp);
-                if (this.endlessMode) {
-                    this.endlessMode.onEnemyDefeated();
-                }
-                // Drop loot
-                this.dropLoot(nearestEnemy);
-                // Update quests
-                if (this.questSystem) {
-                    this.questSystem.onEnemyDefeated(nearestEnemy.isBoss);
-                }
+                this.onEnemyKilled(nearestEnemy);
             }
         }
     }
@@ -384,6 +387,16 @@ export class GameEngine {
                 // Bosses can drop multiple items
                 this.inventorySystem.addItem(loot);
                 
+                // Play pickup sound
+                if (this.audioSystem) {
+                    this.audioSystem.playSoundEffect('pickup');
+                }
+                
+                // Track achievement
+                if (this.achievementSystem) {
+                    this.achievementSystem.onItemCollected(rarity);
+                }
+                
                 // 50% chance for a second item
                 if (Math.random() < 0.5) {
                     const bonusLoot = this.inventorySystem.generateLoot(floor, rarity);
@@ -392,7 +405,46 @@ export class GameEngine {
             } else {
                 loot = this.inventorySystem.generateLoot(floor);
                 this.inventorySystem.addItem(loot);
+                
+                // Play pickup sound
+                if (this.audioSystem) {
+                    this.audioSystem.playSoundEffect('pickup');
+                }
+                
+                // Track achievement
+                if (this.achievementSystem && loot) {
+                    this.achievementSystem.onItemCollected(loot.rarity);
+                }
             }
+        }
+    }
+    
+    // Centralized enemy kill handler
+    onEnemyKilled(enemy) {
+        // Play death sound
+        if (this.audioSystem) {
+            this.audioSystem.playSoundEffect('death');
+        }
+        
+        // Give experience
+        this.player.gainExp(enemy.stats.exp);
+        
+        // Update endless mode
+        if (this.endlessMode) {
+            this.endlessMode.onEnemyDefeated();
+        }
+        
+        // Drop loot
+        this.dropLoot(enemy);
+        
+        // Update quests
+        if (this.questSystem) {
+            this.questSystem.onEnemyDefeated(enemy.isBoss);
+        }
+        
+        // Track achievements
+        if (this.achievementSystem) {
+            this.achievementSystem.onEnemyDefeated(enemy.isBoss);
         }
     }
 }

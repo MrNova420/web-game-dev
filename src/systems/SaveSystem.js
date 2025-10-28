@@ -65,9 +65,11 @@ export class SaveSystem {
         const companionManager = this.engine.companionManager;
         const inventorySystem = this.engine.inventorySystem;
         const questSystem = this.engine.questSystem;
+        const achievementSystem = this.engine.achievementSystem;
+        const audioSystem = this.engine.audioSystem;
         
         return {
-            version: '1.0.0',
+            version: '1.0.1',
             timestamp: Date.now(),
             saveType: 'auto',
             
@@ -113,6 +115,12 @@ export class SaveSystem {
             
             // Quest data
             quests: questSystem ? questSystem.getSaveData() : { activeQuests: [], completedQuests: [], availableQuests: [] },
+            
+            // Achievement data
+            achievements: achievementSystem ? achievementSystem.getSaveData() : { unlockedAchievements: [], progress: {} },
+            
+            // Audio settings
+            audio: audioSystem ? audioSystem.getSaveData() : { settings: {} },
             
             // Dungeon state
             dungeon: {
@@ -164,6 +172,8 @@ export class SaveSystem {
         const companionManager = this.engine.companionManager;
         const inventorySystem = this.engine.inventorySystem;
         const questSystem = this.engine.questSystem;
+        const achievementSystem = this.engine.achievementSystem;
+        const audioSystem = this.engine.audioSystem;
         
         // Restore player stats
         Object.assign(player.stats, saveData.player.stats);
@@ -205,6 +215,16 @@ export class SaveSystem {
         // Restore quests
         if (saveData.quests && questSystem) {
             questSystem.loadSaveData(saveData.quests);
+        }
+        
+        // Restore achievements
+        if (saveData.achievements && achievementSystem) {
+            achievementSystem.loadSaveData(saveData.achievements);
+        }
+        
+        // Restore audio settings
+        if (saveData.audio && audioSystem) {
+            audioSystem.loadSaveData(saveData.audio);
         }
         
         // Update UI
