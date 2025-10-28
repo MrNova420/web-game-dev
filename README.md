@@ -24,28 +24,43 @@ A browser-based 2D/2.5D/3D psychedelic fantasy action RPG inspired by classic du
 - **Smoke Magic**: Unique particle-based magic system
 - **Real-time Combat**: Action-oriented gameplay with abilities and combos
 
-## 🚀 Quick Start
+## 🚀 Quick Start - Local Hosting
 
-### Prerequisites
+### Play Locally (Recommended)
 
+This game runs entirely in your browser with **no backend server required**. Perfect for local/offline play!
+
+**Prerequisites:**
 - Node.js 16+ installed
 - Modern web browser (Chrome, Firefox, Edge, Safari)
 
-### Installation
+**Installation:**
 
 ```bash
+# Clone the repository
+git clone https://github.com/MrNova420/web-game-dev.git
+cd web-game-dev
+
 # Install dependencies
 npm install
 
-# Start development server
+# Start local development server
 npm run dev
+```
 
-# Build for production
+The game will open at `http://localhost:3000` - fully playable with auto-save to localStorage!
+
+**Production Build (for hosting/distribution):**
+
+```bash
+# Build optimized version
 npm run build
 
 # Preview production build
 npm run preview
 ```
+
+The `dist/` folder contains the complete game ready to deploy anywhere.
 
 ### Controls
 

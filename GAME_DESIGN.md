@@ -167,22 +167,51 @@ You are a **Wielder** - one of the rare individuals who can navigate the Vibesph
 
 ## 🎨 Visual Style
 
+### Anime-Inspired Art Direction
+
+Dynasty of Emberveil embraces anime aesthetics to create a vibrant, expressive world:
+
+**Character Design Philosophy:**
+- **Expressive Features**: Large, emotive eyes with dynamic expressions
+- **Dynamic Poses**: Action-oriented stances inspired by shonen anime
+- **Exaggerated Proportions**: Stylized anatomy emphasizing character traits
+- **Detailed Costumes**: Intricate outfit designs with flowing elements
+- **Signature Colors**: Each character has a distinct color palette
+- **Visual Effects**: Attack animations with speed lines, impact frames, and energy auras
+
+**Environmental Anime Influence:**
+- Studio Ghibli-inspired mystical environments (Fungal City, Vine Cathedral)
+- Trigger/Gainax style psychedelic sequences (dimension transitions)
+- Makoto Shinkai-inspired lighting (twilight purple haze)
+- Sword Art Online dungeon aesthetics (floating crystals, digital effects)
+
 ### Color Palette
 - **Primary**: Purple (#9d4edd), Deep Purple (#4a0e7a), Dark Purple (#1a0033)
 - **Secondary**: Pink (#ff6b9d), Cyan (#66ccff), Green (#52b788)
 - **Accent**: Light Purple (#e0aaff), Gold (#ffd60a)
+- **Rarity Colors**: White (common), Green (uncommon), Blue (rare), Purple (epic), Gold (legendary)
 
 ### Art Direction
-- Toon shader aesthetic with strong outlines
-- Particle-heavy effects for all magic
-- Glowing, bioluminescent elements
-- Contrast between dark environments and bright effects
+- **Toon Shader**: Cel-shaded aesthetic with strong black outlines (anime style)
+- **Particle-Heavy Effects**: Magic attacks with dramatic visual impact
+- **Glowing Elements**: Bioluminescent and energy-based lighting
+- **Contrast**: Dark environments with bright, saturated accent colors
+- **Motion**: Fluid animations with anime-style anticipation and follow-through
+
+### Character Animation Guidelines
+- **Idle**: Subtle breathing animation, hair/cloth physics
+- **Movement**: Anime-style run cycles with exaggerated motion
+- **Combat**: Multi-frame attack sequences with pose holds
+- **Hit Reactions**: Dramatic knockback with impact effects
+- **Victory**: Signature poses unique to each character
 
 ### UI Design
 - Minimalist HUD that doesn't obstruct gameplay
 - Semi-transparent panels with glowing borders
 - Gradient effects matching the purple dynasty theme
+- Anime-inspired health bars and status indicators
 - Responsive to player actions (pulse on damage, glow on level up)
+- Font choices inspired by Japanese visual novels
 
 ## 🎵 Audio Design (Future)
 
