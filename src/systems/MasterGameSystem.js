@@ -1,12 +1,13 @@
 /**
- * Master Game Integration System
+ * Master Game Integration System - THE BRAIN
  * Centralizes and coordinates ALL game systems (old + new)
  * Ensures everything is properly connected, updated, and synchronized
+ * Acts as the central intelligence for performance, optimization, and game management
  */
 
 export class MasterGameSystem {
     constructor() {
-        this.version = '2.0.0';
+        this.version = '2.1.0';
         this.initialized = false;
         this.systems = {};
         this.updateOrder = [];
@@ -14,6 +15,58 @@ export class MasterGameSystem {
         this.lastUpdateTime = Date.now();
         this.isPaused = false;
         this.state = 'loading'; // loading, running, paused, error
+        
+        // BRAIN: Central Intelligence Hub
+        this.brain = {
+            performance: null,           // Link to AdvancedAutoManagementSystem
+            decisionMaker: null,         // AI decision system
+            resourceAllocator: null,     // Dynamic resource allocation
+            predictiveSystem: null,      // Predictive analytics
+            learningSystem: null,        // Machine learning from player behavior
+            healthMonitor: null          // System health monitoring
+        };
+        
+        // Performance Intelligence
+        this.performanceIntelligence = {
+            currentFPS: 60,
+            targetFPS: 60,
+            fpsHistory: [],
+            memoryUsage: 0,
+            memoryLimit: 512 * 1024 * 1024, // 512MB
+            cpuLoad: 0,
+            networkQuality: 'good',
+            deviceCapabilities: this.detectDeviceCapabilities()
+        };
+        
+        // System Health Tracking
+        this.systemHealth = {
+            overall: 100,
+            systems: {},
+            warnings: [],
+            errors: [],
+            recoveryAttempts: 0,
+            lastHealthCheck: Date.now()
+        };
+        
+        // Optimization Strategy
+        this.optimizationStrategy = {
+            mode: 'balanced', // aggressive, balanced, conservative
+            priorities: ['fps', 'memory', 'network', 'quality'],
+            adaptiveEnabled: true,
+            learningEnabled: true,
+            autoRecoveryEnabled: true
+        };
+        
+        // Player Behavior Analytics (for optimization)
+        this.playerBehavior = {
+            sessionStart: Date.now(),
+            actionsPerMinute: 0,
+            preferredGameplay: 'combat', // combat, exploration, social
+            skillLevel: 50, // 0-100
+            loadedAreas: [],
+            frequentActions: {},
+            performancePreference: 'quality' // quality, performance, balanced
+        };
         
         // System registry with initialization order
         this.systemRegistry = {
@@ -143,16 +196,20 @@ export class MasterGameSystem {
             // Phase 3: Connect systems together
             await this.connectSystems();
             
-            // Phase 4: Verify all systems
+            // Phase 4: Initialize the Brain (connects to performance/optimization)
+            this.initializeBrain();
+            
+            // Phase 5: Verify all systems
             await this.verifySystems();
             
-            // Phase 5: Start game loop
+            // Phase 6: Start game loop
             this.startGameLoop();
             
             this.initialized = true;
             this.state = 'running';
             console.log('✅ Master Game System: Initialization complete!');
             console.log(`📊 Total Systems Active: ${Object.keys(this.systems).length}`);
+            console.log('🧠 Master Brain: Online and operational');
             
             return true;
         } catch (error) {
@@ -442,6 +499,9 @@ export class MasterGameSystem {
         if (this.isPaused) return;
 
         try {
+            // BRAIN UPDATE FIRST - Make intelligent decisions
+            this.brainUpdate(deltaTime);
+            
             // Update systems in order
             for (const systemName of this.updateOrder) {
                 const system = this.systems[systemName];
@@ -624,6 +684,341 @@ export class MasterGameSystem {
         }
 
         return health;
+    }
+    
+    // ==========================================
+    // BRAIN: Central Intelligence Methods
+    // ==========================================
+    
+    /**
+     * Initialize the Brain - Connect to performance and optimization systems
+     */
+    initializeBrain() {
+        console.log('🧠 Initializing Master Brain...');
+        
+        // Connect to AdvancedAutoManagementSystem
+        if (this.systems.AdvancedAutoManagementSystem) {
+            this.brain.performance = this.systems.AdvancedAutoManagementSystem;
+            console.log('  ✓ Brain connected to Performance System');
+        }
+        
+        // Initialize decision maker
+        this.brain.decisionMaker = {
+            makeOptimizationDecision: () => this.makeOptimizationDecision(),
+            allocateResources: () => this.allocateResources(),
+            predictNextFrame: () => this.predictNextFrame(),
+            learnFromPlayer: () => this.learnFromPlayer()
+        };
+        
+        // Initialize resource allocator
+        this.brain.resourceAllocator = {
+            cpuBudget: 100,
+            memoryBudget: this.performanceIntelligence.memoryLimit,
+            networkBudget: 1000, // ms
+            gpuBudget: 100
+        };
+        
+        // Initialize learning system
+        this.brain.learningSystem = {
+            patterns: {},
+            predictions: {},
+            adaptations: []
+        };
+        
+        console.log('✅ Master Brain initialized and operational');
+    }
+    
+    /**
+     * Brain Update Loop - Make intelligent decisions every frame
+     */
+    brainUpdate(deltaTime) {
+        // Update performance intelligence
+        this.updatePerformanceIntelligence();
+        
+        // Make optimization decisions based on current state
+        if (this.optimizationStrategy.adaptiveEnabled) {
+            this.makeOptimizationDecision();
+        }
+        
+        // Allocate resources dynamically
+        this.allocateResources();
+        
+        // Learn from player behavior
+        if (this.optimizationStrategy.learningEnabled) {
+            this.learnFromPlayer();
+        }
+        
+        // Health monitoring
+        this.monitorSystemHealth();
+        
+        // Auto-recovery if needed
+        if (this.optimizationStrategy.autoRecoveryEnabled) {
+            this.attemptAutoRecovery();
+        }
+    }
+    
+    /**
+     * Update performance intelligence metrics
+     */
+    updatePerformanceIntelligence() {
+        if (!this.brain.performance) return;
+        
+        // Get current FPS from performance system
+        const metrics = this.brain.performance.getPerformanceMetrics();
+        
+        this.performanceIntelligence.currentFPS = metrics.fps || 60;
+        this.performanceIntelligence.memoryUsage = metrics.memory || 0;
+        this.performanceIntelligence.cpuLoad = metrics.cpu || 0;
+        
+        // Track FPS history for trend analysis
+        this.performanceIntelligence.fpsHistory.push(this.performanceIntelligence.currentFPS);
+        if (this.performanceIntelligence.fpsHistory.length > 60) {
+            this.performanceIntelligence.fpsHistory.shift();
+        }
+    }
+    
+    /**
+     * Make optimization decision based on current performance
+     */
+    makeOptimizationDecision() {
+        const fps = this.performanceIntelligence.currentFPS;
+        const target = this.performanceIntelligence.targetFPS;
+        const memory = this.performanceIntelligence.memoryUsage;
+        const memoryLimit = this.performanceIntelligence.memoryLimit;
+        
+        // FPS too low - reduce quality
+        if (fps < target * 0.8) {
+            this.brain.performance?.reduceQuality();
+            this.systemHealth.warnings.push(`Low FPS: ${fps}, reducing quality`);
+        }
+        
+        // FPS stable and high - can increase quality
+        else if (fps > target * 1.1 && memory < memoryLimit * 0.7) {
+            this.brain.performance?.increaseQuality();
+        }
+        
+        // Memory pressure - cleanup
+        if (memory > memoryLimit * 0.9) {
+            this.brain.performance?.cleanupResources();
+            this.systemHealth.warnings.push(`High memory: ${Math.round(memory / 1024 / 1024)}MB, cleaning up`);
+        }
+    }
+    
+    /**
+     * Allocate resources dynamically based on gameplay
+     */
+    allocateResources() {
+        const gameplay = this.playerBehavior.preferredGameplay;
+        
+        // Allocate more resources to what player is doing
+        if (gameplay === 'combat') {
+            // Prioritize: Combat AI > Effects > World
+            this.brain.resourceAllocator.cpuBudget = {
+                ai: 40,
+                effects: 30,
+                world: 20,
+                ui: 10
+            };
+        } else if (gameplay === 'exploration') {
+            // Prioritize: World > Effects > AI
+            this.brain.resourceAllocator.cpuBudget = {
+                world: 40,
+                effects: 30,
+                ai: 20,
+                ui: 10
+            };
+        } else if (gameplay === 'social') {
+            // Prioritize: UI > Network > Effects
+            this.brain.resourceAllocator.cpuBudget = {
+                ui: 40,
+                network: 30,
+                effects: 20,
+                ai: 10
+            };
+        }
+    }
+    
+    /**
+     * Predict next frame requirements
+     */
+    predictNextFrame() {
+        // Analyze FPS history to predict trends
+        const history = this.performanceIntelligence.fpsHistory;
+        if (history.length < 10) return null;
+        
+        // Simple moving average prediction
+        const recent = history.slice(-10);
+        const average = recent.reduce((a, b) => a + b, 0) / recent.length;
+        
+        // Detect downward trend
+        const trend = recent[recent.length - 1] - recent[0];
+        
+        return {
+            predictedFPS: average + trend,
+            needsOptimization: average < this.performanceIntelligence.targetFPS,
+            trend: trend > 0 ? 'improving' : trend < 0 ? 'degrading' : 'stable'
+        };
+    }
+    
+    /**
+     * Learn from player behavior to optimize experience
+     */
+    learnFromPlayer() {
+        const sessionTime = Date.now() - this.playerBehavior.sessionStart;
+        
+        // Track session patterns every minute
+        if (sessionTime % 60000 < 100) {
+            this.brain.learningSystem.patterns[sessionTime] = {
+                fps: this.performanceIntelligence.currentFPS,
+                memory: this.performanceIntelligence.memoryUsage,
+                gameplay: this.playerBehavior.preferredGameplay,
+                areas: this.playerBehavior.loadedAreas.length
+            };
+        }
+        
+        // Adapt based on player's performance preference
+        if (this.performanceIntelligence.currentFPS < 45 && 
+            this.playerBehavior.performancePreference === 'quality') {
+            // Player prefers quality but FPS too low - find balance
+            this.optimizationStrategy.mode = 'balanced';
+        } else if (this.performanceIntelligence.currentFPS > 55 && 
+                   this.playerBehavior.performancePreference === 'performance') {
+            // Player wants performance and we're delivering - maintain
+            this.optimizationStrategy.mode = 'conservative';
+        }
+    }
+    
+    /**
+     * Monitor system health continuously
+     */
+    monitorSystemHealth() {
+        const now = Date.now();
+        if (now - this.systemHealth.lastHealthCheck < 5000) return; // Check every 5s
+        
+        this.systemHealth.lastHealthCheck = now;
+        
+        // Check each system
+        let healthyCount = 0;
+        let totalSystems = 0;
+        
+        for (const [name, system] of Object.entries(this.systems)) {
+            totalSystems++;
+            
+            if (system && typeof system.isHealthy === 'function') {
+                if (system.isHealthy()) {
+                    healthyCount++;
+                    this.systemHealth.systems[name] = 'healthy';
+                } else {
+                    this.systemHealth.systems[name] = 'unhealthy';
+                    this.systemHealth.warnings.push(`System unhealthy: ${name}`);
+                }
+            } else {
+                healthyCount++; // Assume healthy if no health check
+            }
+        }
+        
+        // Overall health percentage
+        this.systemHealth.overall = totalSystems > 0 ? 
+            (healthyCount / totalSystems) * 100 : 100;
+    }
+    
+    /**
+     * Attempt auto-recovery from issues
+     */
+    attemptAutoRecovery() {
+        // Check for critical issues
+        if (this.systemHealth.overall < 50) {
+            console.warn('🚨 System health critical! Attempting recovery...');
+            
+            this.systemHealth.recoveryAttempts++;
+            
+            // Recovery strategies
+            if (this.systemHealth.recoveryAttempts < 3) {
+                // 1. Reduce quality aggressively
+                this.brain.performance?.setQuality('LOW');
+                
+                // 2. Clear caches
+                this.brain.performance?.cleanupResources();
+                
+                // 3. Restart problematic systems
+                for (const [name, status] of Object.entries(this.systemHealth.systems)) {
+                    if (status === 'unhealthy') {
+                        const system = this.systems[name];
+                        if (system && typeof system.restart === 'function') {
+                            system.restart();
+                            console.log(`  ↻ Restarted ${name}`);
+                        }
+                    }
+                }
+                
+                console.log('✅ Recovery attempt complete');
+            } else {
+                // Too many recovery attempts - alert user
+                console.error('❌ Auto-recovery failed. Manual intervention needed.');
+                this.state = 'error';
+            }
+        } else {
+            // System recovering - reset counter
+            this.systemHealth.recoveryAttempts = 0;
+        }
+    }
+    
+    /**
+     * Detect device capabilities for optimization
+     */
+    detectDeviceCapabilities() {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+        
+        if (!gl) {
+            return {
+                tier: 'low',
+                webgl2: false,
+                maxTextureSize: 2048,
+                recommendedQuality: 'LOW'
+            };
+        }
+        
+        const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+        const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : '';
+        
+        // Detect mobile
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Estimate tier based on device
+        let tier = 'medium';
+        let recommendedQuality = 'MEDIUM';
+        
+        if (isMobile) {
+            tier = 'low';
+            recommendedQuality = 'LOW';
+        } else if (renderer.includes('NVIDIA') || renderer.includes('AMD Radeon')) {
+            tier = 'high';
+            recommendedQuality = 'HIGH';
+        }
+        
+        return {
+            tier,
+            webgl2: !!canvas.getContext('webgl2'),
+            maxTextureSize: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+            recommendedQuality,
+            renderer,
+            isMobile
+        };
+    }
+    
+    /**
+     * Get brain status report
+     */
+    getBrainStatus() {
+        return {
+            connected: !!this.brain.performance,
+            performanceIntelligence: this.performanceIntelligence,
+            systemHealth: this.systemHealth,
+            optimizationStrategy: this.optimizationStrategy,
+            playerBehavior: this.playerBehavior,
+            prediction: this.predictNextFrame()
+        };
     }
 }
 
