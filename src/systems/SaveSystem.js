@@ -69,9 +69,11 @@ export class SaveSystem {
         const audioSystem = this.engine.audioSystem;
         const skillTreeSystem = this.engine.skillTreeSystem;
         const characterCustomization = this.engine.characterCustomization;
+        const dailyRewards = this.engine.dailyRewards;
+        const tutorialSystem = this.engine.tutorialSystem;
         
         return {
-            version: '1.0.3',
+            version: '1.0.4',
             timestamp: Date.now(),
             saveType: 'auto',
             
@@ -137,6 +139,12 @@ export class SaveSystem {
             // Character customization data
             customization: characterCustomization ? characterCustomization.getSaveData() : { current: {}, unlockedOptions: {} },
             
+            // Daily rewards data
+            dailyRewards: dailyRewards ? dailyRewards.getSaveData() : {},
+            
+            // Tutorial data
+            tutorial: tutorialSystem ? tutorialSystem.getSaveData() : { completed: false },
+            
             // Dungeon state
             dungeon: {
                 biome: this.engine.currentDungeon?.biome || 'crystal_cavern'
@@ -191,6 +199,8 @@ export class SaveSystem {
         const audioSystem = this.engine.audioSystem;
         const skillTreeSystem = this.engine.skillTreeSystem;
         const characterCustomization = this.engine.characterCustomization;
+        const dailyRewards = this.engine.dailyRewards;
+        const tutorialSystem = this.engine.tutorialSystem;
         
         // Restore player stats
         Object.assign(player.stats, saveData.player.stats);
@@ -257,6 +267,21 @@ export class SaveSystem {
         // Restore character customization
         if (saveData.customization && characterCustomization) {
             characterCustomization.loadSaveData(saveData.customization);
+        }
+        
+        // Restore daily rewards
+        if (saveData.dailyRewards && dailyRewards) {
+            dailyRewards.loadSaveData(saveData.dailyRewards);
+        }
+        
+        // Restore tutorial
+        if (saveData.tutorial && tutorialSystem) {
+            tutorialSystem.loadSaveData(saveData.tutorial);
+            
+            // Start tutorial if not completed
+            if (!tutorialSystem.completed) {
+                setTimeout(() => tutorialSystem.start(), 2000);
+            }
         }
         
         // Update UI
