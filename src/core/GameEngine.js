@@ -46,6 +46,10 @@ import { EnhancedVisualsSystem } from '../systems/EnhancedVisualsSystem.js';
 import { ProgressTrackingSystem } from '../systems/ProgressTrackingSystem.js';
 import { AdvancedThemeSystem } from '../systems/AdvancedThemeSystem.js';
 import { Advanced3DGraphicsSystem } from '../systems/Advanced3DGraphicsSystem.js';
+import { WeatherSystem } from '../systems/WeatherSystem.js';
+import { PostProcessingSystem } from '../systems/PostProcessingSystem.js';
+import { AdvancedParticleSystem } from '../systems/AdvancedParticleSystem.js';
+import { DayNightCycleSystem } from '../systems/DayNightCycleSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -98,6 +102,10 @@ export class GameEngine {
         this.progressTrackingSystem = null;
         this.advancedThemeSystem = null;
         this.advanced3DGraphicsSystem = null;
+        this.weatherSystem = null;
+        this.postProcessingSystem = null;
+        this.advancedParticleSystem = null;
+        this.dayNightCycleSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -260,6 +268,14 @@ export class GameEngine {
             this.safeZoneSystem = new SafeZoneSystem(this);
             this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
             this.progressTrackingSystem = new ProgressTrackingSystem(this);
+            
+            // New Phase 1 Enhancement Systems - 3D Graphics & Atmosphere
+            this.weatherSystem = new WeatherSystem(this);
+            this.postProcessingSystem = new PostProcessingSystem(this);
+            this.advancedParticleSystem = new AdvancedParticleSystem(this.scene);
+            this.dayNightCycleSystem = new DayNightCycleSystem(this);
+            
+            console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -449,6 +465,19 @@ export class GameEngine {
             this.enhancedGameMechanics.update(delta);
         }
         
+        // Update Phase 1 Enhancement Systems
+        if (this.weatherSystem) {
+            this.weatherSystem.update(delta);
+        }
+        
+        if (this.advancedParticleSystem) {
+            this.advancedParticleSystem.update(delta);
+        }
+        
+        if (this.dayNightCycleSystem) {
+            this.dayNightCycleSystem.update(delta);
+        }
+        
         // Update performance optimizer
         if (this.performanceOptimizer) {
             this.performanceOptimizer.update(delta);
@@ -487,7 +516,13 @@ export class GameEngine {
     
     render() {
         if (this.renderer && this.scene && this.camera) {
-            this.renderer.render(this.scene, this.camera);
+            // Use post-processing if available, otherwise standard rendering
+            if (this.postProcessingSystem && this.postProcessingSystem.enabled) {
+                const delta = this.clock.getDelta();
+                this.postProcessingSystem.render(delta);
+            } else {
+                this.renderer.render(this.scene, this.camera);
+            }
         }
     }
     
