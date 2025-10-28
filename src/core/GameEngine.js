@@ -25,6 +25,9 @@ import { CraftingSystem } from '../systems/CraftingSystem.js';
 import { EconomySystem } from '../systems/EconomySystem.js';
 import { EnhancementSystem } from '../systems/EnhancementSystem.js';
 import { TradingSystem } from '../systems/TradingSystem.js';
+import { PetSystem } from '../systems/PetSystem.js';
+import { CompanionAI } from '../systems/CompanionAI.js';
+import { MountSystem } from '../systems/MountSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -56,6 +59,9 @@ export class GameEngine {
         this.economySystem = null;
         this.enhancementSystem = null;
         this.tradingSystem = null;
+        this.petSystem = null;
+        this.companionAI = null;
+        this.mountSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -152,6 +158,11 @@ export class GameEngine {
         this.economySystem = new EconomySystem(this);
         this.enhancementSystem = new EnhancementSystem(this);
         this.tradingSystem = new TradingSystem(this);
+        
+        // Phase 5: Pet/Companion Combat Systems
+        this.petSystem = new PetSystem(this);
+        this.companionAI = new CompanionAI(this);
+        this.mountSystem = new MountSystem(this);
         
         this.saveSystem = new SaveSystem(this);
         
@@ -269,6 +280,19 @@ export class GameEngine {
         
         if (this.tradingSystem) {
             this.tradingSystem.update(delta);
+        }
+        
+        // Update Phase 5 systems
+        if (this.petSystem) {
+            this.petSystem.update(delta);
+        }
+        
+        if (this.companionAI) {
+            this.companionAI.update(delta);
+        }
+        
+        if (this.mountSystem) {
+            this.mountSystem.update(delta);
         }
         
         // Update camera to follow player
