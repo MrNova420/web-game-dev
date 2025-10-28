@@ -71,6 +71,8 @@ import { BiomeSpecificEnemies } from '../systems/BiomeSpecificEnemies.js';
 import { BiomeWeatherEffects } from '../systems/BiomeWeatherEffects.js';
 import { BiomeResourcesSystem } from '../systems/BiomeResourcesSystem.js';
 import { BiomeDungeonsSystem } from '../systems/BiomeDungeonsSystem.js';
+import { DodgeAndParrySystem } from '../systems/DodgeAndParrySystem.js';
+import { ComboChainSystem } from '../systems/ComboChainSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -148,6 +150,8 @@ export class GameEngine {
         this.biomeWeatherEffects = null;
         this.biomeResourcesSystem = null;
         this.biomeDungeonsSystem = null;
+        this.dodgeAndParrySystem = null;
+        this.comboChainSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -354,6 +358,10 @@ export class GameEngine {
             this.biomeGenerationSystem.init();
             this.biomeWeatherEffects.init();
             
+            // Phase 5: Advanced Combat Mechanics (NEW)
+            this.dodgeAndParrySystem = new DodgeAndParrySystem(this);
+            this.comboChainSystem = new ComboChainSystem(this);
+            
             console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
             console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
             console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
@@ -361,6 +369,7 @@ export class GameEngine {
             console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
             console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
             console.log('🌲 Phase 4 Biome Expansion Systems initialized (5 systems: Generation, Enemies, Weather, Resources, Dungeons)');
+            console.log('⚔️ Phase 5 Combat Enhancement Systems initialized (Dodge & Parry, Combo Chains)');
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -648,6 +657,15 @@ export class GameEngine {
         
         if (this.biomeResourcesSystem) {
             this.biomeResourcesSystem.update(delta);
+        }
+        
+        // Update Phase 5 Combat Systems
+        if (this.dodgeAndParrySystem) {
+            this.dodgeAndParrySystem.update(delta);
+        }
+        
+        if (this.comboChainSystem) {
+            this.comboChainSystem.update(delta);
         }
         
         // Update performance optimizer
