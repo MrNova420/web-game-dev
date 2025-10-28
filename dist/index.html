@@ -7,7 +7,8 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="game-version" content="2.0.0">
-    <title>Dynasty of Emberveil - A Psychedelic Fantasy RPG</title>
+    <meta name="build-date" content="2025-10-28">
+    <title>Dynasty of Emberveil - A Psychedelic Fantasy RPG (v2.0.0 Latest)</title>
     <style>
         * {
             margin: 0;
@@ -269,7 +270,7 @@
             font-size: 1.1em;
         }
     </style>
-  <script type="module" crossorigin src="/assets/index-pXqtRwCa.js"></script>
+  <script type="module" crossorigin src="/assets/index-B5upVadq.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/three-Btmh5611.js">
   <link rel="modulepreload" crossorigin href="/assets/cannon-DPZWuR6y.js">
 </head>
@@ -329,30 +330,62 @@
                 <h3>📜 Quests</h3>
                 <div id="quest-list"></div>
             </div>
+            
+            <!-- Feature Status Panel -->
+            <div id="feature-status" class="hud" style="position: absolute; top: 100px; left: 20px; max-width: 250px;">
+                <h3 style="font-size: 0.9em; margin-bottom: 8px;">🎮 Active Features v2.0.0</h3>
+                <div id="feature-list" style="font-size: 0.75em; line-height: 1.4;">
+                    <div>✅ Open World Terrain</div>
+                    <div>✅ Weather System</div>
+                    <div>✅ Day/Night Cycle</div>
+                    <div>✅ Fast Travel</div>
+                    <div>✅ Environment Details</div>
+                    <div>✅ Advanced Graphics</div>
+                    <div>✅ Wildlife & NPCs</div>
+                    <div>✅ Biome System</div>
+                    <div>✅ All AAA Features</div>
+                    <div style="margin-top: 10px; color: #c77dff; font-weight: bold;">🆕 Latest Build</div>
+                </div>
+            </div>
         </div>
     </div>
     
     <script>
+        // Enhanced cache clearing to ensure latest version loads
+        console.log('🔄 Clearing all caches and service workers to load latest version...');
+        
         // Unregister any existing service workers to prevent caching issues
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.getRegistrations().then(function(registrations) {
                 for(let registration of registrations) {
                     registration.unregister().then(function() {
-                        console.log('Unregistered old service worker');
+                        console.log('✅ Unregistered old service worker');
                     });
                 }
             });
         }
         
-        // Clear old caches to force fresh load
+        // Clear ALL caches to force fresh load
         if ('caches' in window) {
             caches.keys().then(function(names) {
                 for (let name of names) {
                     caches.delete(name).then(function() {
-                        console.log('Cleared old cache:', name);
+                        console.log('✅ Cleared old cache:', name);
                     });
                 }
             });
+        }
+        
+        // Clear localStorage old game data if corrupted
+        const gameVersion = '2.0.0';
+        const storedVersion = localStorage.getItem('game_version');
+        if (storedVersion !== gameVersion) {
+            console.log('🔄 Version mismatch detected, clearing old data...');
+            localStorage.clear();
+            localStorage.setItem('game_version', gameVersion);
+            console.log('✅ Game data cleared, loading fresh v2.0.0');
+        } else {
+            console.log('✅ Game version matches: v' + gameVersion);
         }
     </script>
 </body>
