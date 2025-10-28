@@ -1,38 +1,93 @@
-# Dynasty of Emberveil
+# Dynasty of Emberveil 🌿
+## The Ultimate Psychedelic Cannabis Fantasy RPG
 
-A browser-based 2D/2.5D/3D psychedelic fantasy action RPG inspired by classic dungeon crawlers, built with modern web technologies.
+A browser-based 3D action RPG where reality dissolves into smoke-filled dreams. Dive into endless dungeons, master cannabis cultivation, collect legendary pets, and build your empire in the most trippy browser game ever created.
 
 ## 📊 Development Progress Tracker
 
-**Current Status**: Phase 3 Complete! ✅
+**Current Status**: Phase 6 In Progress! 🚀
 
 | Metric | Value | Progress |
 |--------|-------|----------|
-| **Lines of Code** | 10,510 | 52.6% to 20k target |
-| **Major Systems** | 14 | Production-ready |
-| **Current Phase** | Phase 3 Complete | Phase 4 Starting |
+| **Lines of Code** | 16,450+ | **82.3%** to 20k target |
+| **Major Systems** | 22 | Production-ready |
+| **Current Phase** | Phase 6 | Social & Leaderboards |
 | **Build Status** | ✅ 0 Errors | Stable |
 | **Security** | ✅ 0 Vulnerabilities | Verified |
 
 ### Development Phases
 - ✅ **Phase 1**: Core Game Engine (2,500 lines)
 - ✅ **Phase 2**: Progression Systems (5,300 lines)
-- ✅ **Phase 3**: Advanced Combat & AI (2,705 lines) - **COMPLETE!**
-- 🚧 **Phase 4**: Crafting & Economy (Next)
-- ⏳ **Phase 5-10**: See [DEVELOPMENT_ROADMAP.md](./DEVELOPMENT_ROADMAP.md)
+- ✅ **Phase 3**: Advanced Combat & AI (2,705 lines)
+- ✅ **Phase 4**: Crafting & Economy (3,093 lines)
+- ✅ **Phase 5**: Pet/Companion Combat (2,279 lines)
+- 🚧 **Phase 6**: Social & Leaderboards (585/2,000 lines)
+- ⏳ **Phase 7-13**: See [EXPANDED_ROADMAP.md](./EXPANDED_ROADMAP.md) for the complete vision!
 
-### Recent Commits (Session Progress)
-- ✅ Enemy AI System (347 lines)
-- ✅ Environmental Hazards (575 lines)
-- ✅ Advanced Boss Mechanics (566 lines)
-- ✅ Combat Enhancements (583 lines)
-- ✅ Status Effects System (634 lines)
+### Recent Implementation
+- ✅ Crafting System with 17 material types
+- ✅ Economy with 5 merchant types & events
+- ✅ Enhancement system (+1 to +15, sockets, gems)
+- ✅ Trading with NPC traders & quests
+- ✅ Pet System with 12+ pets & evolution chains
+- ✅ Companion AI with formations & synergies
+- ✅ Mount System with breeding & hybrids
+- ✅ Leaderboard System with 10 categories
 
-**Session Total**: +2,705 lines, 5 new systems
+**Total Added**: +5,957 lines across 8 major systems!
 
 ## 🎮 Game Overview
 
-**Dynasty of Emberveil** is a free-to-play web game set in a twilight kingdom where reality dissolves into overlapping "Vibespheres" - realms shaped by emotion, color, and intoxication. Players become **Wielders**, diving into procedurally generated dungeons to harvest **Essence** and battle corrupted creatures.
+**Dynasty of Emberveil** is a free-to-play psychedelic fantasy RPG set in a twilight kingdom where reality blends with cannabis-infused dreams. Players become **Smoke Wielders**, mastering mystical herbs, collecting legendary companions, and conquering infinite dungeons in the ultimate browser-based adventure.
+
+### 🌟 Core Features
+
+#### 🎯 Endless Progression
+- **Infinite Dungeons**: Floor 1 to 999+ with escalating difficulty
+- **Prestige System**: Ascend to gain cosmic powers and restart stronger
+- **Mastery Trees**: Max out weapon, strain, enemy, and biome masteries
+- **Collections**: 30+ pets, 25+ mounts, 500+ items to discover
+
+### 🌟 Core Features
+
+#### 🎯 Endless Progression
+- **Infinite Dungeons**: Floor 1 to 999+ with escalating difficulty
+- **Prestige System**: Ascend to gain cosmic powers and restart stronger
+- **Mastery Trees**: Max out weapon, strain, enemy, and biome masteries
+- **Collections**: 30+ pets, 25+ mounts, 500+ items to discover
+
+#### 🌿 Cannabis Culture Integration
+- **Strain System**: Every build based on real cannabis strains (Sativa/Indica/Hybrid)
+- **Cultivation Mini-Game**: Grow your own herbs for crafting and buffs
+- **Smoke Sessions**: Rhythm-based mini-game for bonus effects
+- **Cannabis Terminology**: "Toke" abilities, "Harvest" loot, "Dank" legendaries
+
+#### ⚔️ Deep Combat Systems
+- **Real-time Action Combat**: Fast-paced battles with skill-based mechanics
+- **Combo System**: Chain attacks for massive damage multipliers
+- **Pet Combat**: 12+ pets with evolution chains
+- **Companion AI**: 4 AI behaviors, 5 formations, 6 synergy systems
+- **Mount Combat**: Fight on legendary mounts with special abilities
+
+#### 🎨 Psychedelic Visuals
+- **Trippy Effects**: Smoke trails, particle explosions, screen distortions
+- **Dynamic Lighting**: Day/night cycles, weather effects
+- **Shader Magic**: Bloom, chromatic aberration, custom filters
+- **Photo Mode**: Capture your greatest moments
+
+#### 🏰 Social & Community
+- **Smoke Circles (Guilds)**: Form collectives with friends
+- **Clan Wars**: Territory control and guild battles
+- **Leaderboards**: 10 competitive categories
+- **Trading Hub**: Player-driven marketplace
+- **Community Events**: Server-wide challenges
+
+#### 🎲 Mini-Games & Activities
+- **Cannabis Cultivation**: Plant, grow, harvest your own strains
+- **Smoke Sessions**: Rhythm-based smoking game
+- **Alchemy**: Craft edibles and powerful potions
+- **Casino**: Games of chance for high rollers
+- **Puzzle Challenges**: Test your mind for rewards
 
 ### Features
 

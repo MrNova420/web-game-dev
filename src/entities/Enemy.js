@@ -218,6 +218,17 @@ export class Enemy {
         // Start fade-out animation (handled in update loop)
         this.fadeProgress = 1.0;
         
+        // Drop materials if crafting system exists (Phase 4)
+        if (this.scene && this.scene.userData && this.scene.userData.gameEngine) {
+            const gameEngine = this.scene.userData.gameEngine;
+            if (gameEngine.craftingSystem) {
+                const drops = gameEngine.craftingSystem.dropMaterialsFromEnemy(this);
+                if (drops && drops.length > 0) {
+                    console.log(`💎 Materials dropped: ${drops.map(d => `${d.material.name} x${d.amount}`).join(', ')}`);
+                }
+            }
+        }
+        
         return this.stats.exp;
     }
     

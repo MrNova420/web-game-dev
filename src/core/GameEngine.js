@@ -21,6 +21,25 @@ import { ComboSystem } from '../systems/ComboSystem.js';
 import { CharacterCustomization } from '../systems/CharacterCustomization.js';
 import { DailyRewards } from '../systems/DailyRewards.js';
 import { TutorialSystem } from '../systems/TutorialSystem.js';
+import { CraftingSystem } from '../systems/CraftingSystem.js';
+import { EconomySystem } from '../systems/EconomySystem.js';
+import { EnhancementSystem } from '../systems/EnhancementSystem.js';
+import { TradingSystem } from '../systems/TradingSystem.js';
+import { PetSystem } from '../systems/PetSystem.js';
+import { CompanionAI } from '../systems/CompanionAI.js';
+import { MountSystem } from '../systems/MountSystem.js';
+import { LeaderboardSystem } from '../systems/LeaderboardSystem.js';
+import { GuildSystem } from '../systems/GuildSystem.js';
+import { ChallengeMode } from '../systems/ChallengeMode.js';
+import { PrestigeSystem } from '../systems/PrestigeSystem.js';
+import { InfiniteDungeonSystem } from '../systems/InfiniteDungeonSystem.js';
+import { FantasyMagicSystem } from '../systems/FantasyMagicSystem.js';
+import { SeductiveBaddiesSystem } from '../systems/SeductiveBaddiesSystem.js';
+import { PowerLevelingSystem } from '../systems/PowerLevelingSystem.js';
+import { EndlessBattleSystem } from '../systems/EndlessBattleSystem.js';
+import { EnhancedGameMechanics } from '../systems/EnhancedGameMechanics.js';
+import { AutoSaveSystem } from '../systems/AutoSaveSystem.js';
+import { PerformanceOptimizer } from '../systems/PerformanceOptimizer.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -48,6 +67,25 @@ export class GameEngine {
         this.characterCustomization = null;
         this.dailyRewards = null;
         this.tutorialSystem = null;
+        this.craftingSystem = null;
+        this.economySystem = null;
+        this.enhancementSystem = null;
+        this.tradingSystem = null;
+        this.petSystem = null;
+        this.companionAI = null;
+        this.mountSystem = null;
+        this.leaderboardSystem = null;
+        this.guildSystem = null;
+        this.challengeMode = null;
+        this.prestigeSystem = null;
+        this.infiniteDungeonSystem = null;
+        this.fantasyMagicSystem = null;
+        this.seductiveBaddiesSystem = null;
+        this.powerLevelingSystem = null;
+        this.endlessBattleSystem = null;
+        this.enhancedGameMechanics = null;
+        this.autoSaveSystem = null;
+        this.performanceOptimizer = null;
         
         // Game state
         this.isRunning = false;
@@ -69,6 +107,9 @@ export class GameEngine {
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x1a0033);
         this.scene.fog = new THREE.FogExp2(0x2d0a4e, 0.02);
+        
+        // Store game engine reference in scene for systems to access
+        this.scene.userData.gameEngine = this;
         
         // Setup camera
         this.camera = new THREE.PerspectiveCamera(
@@ -135,6 +176,39 @@ export class GameEngine {
         this.characterCustomization = new CharacterCustomization(this);
         this.dailyRewards = new DailyRewards(this);
         this.tutorialSystem = new TutorialSystem(this);
+        
+        // Phase 4: Crafting & Economy Systems
+        this.craftingSystem = new CraftingSystem(this);
+        this.economySystem = new EconomySystem(this);
+        this.enhancementSystem = new EnhancementSystem(this);
+        this.tradingSystem = new TradingSystem(this);
+        
+        // Phase 5: Pet/Companion Combat Systems
+        this.petSystem = new PetSystem(this);
+        this.companionAI = new CompanionAI(this);
+        this.mountSystem = new MountSystem(this);
+        
+        // Phase 6: Social & Leaderboards (Complete)
+        this.leaderboardSystem = new LeaderboardSystem(this);
+        this.guildSystem = new GuildSystem(this);
+        this.challengeMode = new ChallengeMode(this);
+        
+        // Phase 7: Advanced Progression
+        this.prestigeSystem = new PrestigeSystem(this);
+        this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
+        
+        // Enhanced Fantasy RPG Systems
+        this.fantasyMagicSystem = new FantasyMagicSystem();
+        this.seductiveBaddiesSystem = new SeductiveBaddiesSystem();
+        this.powerLevelingSystem = new PowerLevelingSystem();
+        this.endlessBattleSystem = new EndlessBattleSystem();
+        
+        // Enhanced Game Mechanics & Optimizations
+        this.enhancedGameMechanics = new EnhancedGameMechanics();
+        this.autoSaveSystem = new AutoSaveSystem();
+        this.performanceOptimizer = new PerformanceOptimizer();
+        
+        // Make save system aware of all systems
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -234,6 +308,81 @@ export class GameEngine {
         // Update quest system
         if (this.questSystem) {
             this.questSystem.update(delta);
+        }
+        
+        // Update Phase 4 systems
+        if (this.craftingSystem) {
+            this.craftingSystem.update(delta);
+        }
+        
+        if (this.economySystem) {
+            this.economySystem.update(delta);
+        }
+        
+        if (this.enhancementSystem) {
+            this.enhancementSystem.update(delta);
+        }
+        
+        if (this.tradingSystem) {
+            this.tradingSystem.update(delta);
+        }
+        
+        // Update Phase 5 systems
+        if (this.petSystem) {
+            this.petSystem.update(delta);
+        }
+        
+        if (this.companionAI) {
+            this.companionAI.update(delta);
+        }
+        
+        if (this.mountSystem) {
+            this.mountSystem.update(delta);
+        }
+        
+        // Update Phase 6 systems
+        if (this.leaderboardSystem) {
+            this.leaderboardSystem.update(delta);
+        }
+        
+        if (this.guildSystem) {
+            this.guildSystem.update(delta);
+        }
+        
+        if (this.challengeMode) {
+            this.challengeMode.update(delta);
+        }
+        
+        // Update Phase 7 systems
+        if (this.prestigeSystem) {
+            this.prestigeSystem.update(delta);
+        }
+        
+        if (this.infiniteDungeonSystem) {
+            this.infiniteDungeonSystem.update(delta);
+        }
+        
+        // Update Enhanced Fantasy RPG systems
+        if (this.fantasyMagicSystem) {
+            this.fantasyMagicSystem.update(delta);
+        }
+        
+        if (this.powerLevelingSystem) {
+            this.powerLevelingSystem.update(delta);
+        }
+        
+        if (this.endlessBattleSystem) {
+            this.endlessBattleSystem.update(delta);
+        }
+        
+        // Update enhanced mechanics
+        if (this.enhancedGameMechanics) {
+            this.enhancedGameMechanics.update(delta);
+        }
+        
+        // Update performance optimizer
+        if (this.performanceOptimizer) {
+            this.performanceOptimizer.update(delta);
         }
         
         // Update camera to follow player
