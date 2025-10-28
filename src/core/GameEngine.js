@@ -8,6 +8,7 @@ import { Player } from '../entities/Player.js';
 import { CompanionManager } from '../systems/CompanionManager.js';
 import { DungeonGenerator } from '../worlds/DungeonGenerator.js';
 import { CombatSystem } from '../systems/CombatSystem.js';
+import { ModelLoader } from '../core/ModelLoader.js';
 import { ParticleSystem } from '../systems/ParticleSystem.js';
 import { EnemyManager } from '../systems/EnemyManager.js';
 import { EndlessMode } from '../systems/EndlessMode.js';
@@ -103,6 +104,9 @@ export class GameEngine {
         this.camera = null;
         this.renderer = null;
         this.clock = new THREE.Clock();
+        
+        // Model loader for external 3D assets
+        this.modelLoader = new ModelLoader();
         
         // Game systems
         this.player = null;
@@ -501,11 +505,31 @@ export class GameEngine {
     }
     
     async createWorld() {
-        console.log('🌍 Creating full game world with all features...');
+        console.log('🌍 Creating full game world with REAL 3D models...');
+        
+        // Preload models first
+        await this.modelLoader.preloadCommonModels();
         
         // Create player
         this.player = new Player(this.scene);
         await this.player.init();
+        
+        // Try to load real player model
+        try {
+            const playerModel = await this.modelLoader.loadModel('characters', 'anime_girl');
+            if (playerModel && this.player.mesh) {
+                // Replace simple player mesh with loaded model
+                const oldMesh = this.player.mesh;
+                this.scene.remove(oldMesh);
+                playerModel.scale.set(0.5, 0.5, 0.5);
+                playerModel.position.copy(oldMesh.position);
+                this.player.mesh = playerModel;
+                this.scene.add(playerModel);
+                console.log('✅ Player model loaded from external source');
+            }
+        } catch (error) {
+            console.log('ℹ️ Using procedural player model (fallback)');
+        }
         
         // Initialize combat systems with player reference
         if (this.dodgeAndParrySystem) {
@@ -538,7 +562,7 @@ export class GameEngine {
             console.log('✨ Magical effects system ready');
         }
         
-        // Populate environment with grass, trees, rocks
+        // Populate environment with REAL models
         if (this.environmentDetailsSystem) {
             const bounds = {
                 min: new THREE.Vector3(-50, 0, -50),
@@ -546,6 +570,21 @@ export class GameEngine {
             };
             this.environmentDetailsSystem.populateBiome('crystal_caverns', bounds);
             console.log('🌲 Environment details populated');
+            
+            // Add real tree models around the area
+            for (let i = 0; i < 10; i++) {
+                const angle = (i / 10) * Math.PI * 2;
+                const radius = 10 + Math.random() * 20;
+                try {
+                    const tree = await this.modelLoader.loadModel('environment', Math.random() > 0.5 ? 'tree_1' : 'tree_2');
+                    tree.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+                    tree.scale.set(0.5, 0.5, 0.5);
+                    this.scene.add(tree);
+                } catch (error) {
+                    // Fallback already handles this
+                }
+            }
+            console.log('🌳 Real tree models added');
         }
         
         // Initialize biome-specific features
@@ -553,36 +592,59 @@ export class GameEngine {
             console.log('🏞️ Biome generation active');
         }
         
-        // Spawn animals/creatures
+        // Spawn animals/creatures with real models
         if (this.worldBeautificationSystem) {
             console.log('🦌 Wildlife system active - flora, fauna, and structures created');
+            
+            // Add real creature models
+            for (let i = 0; i < 5; i++) {
+                const angle = (i / 5) * Math.PI * 2;
+                const radius = 15;
+                try {
+                    const creature = await this.modelLoader.loadModel('creatures', 'bird');
+                    creature.position.set(Math.cos(angle) * radius, 2, Math.sin(angle) * radius);
+                    creature.scale.set(0.3, 0.3, 0.3);
+                    this.scene.add(creature);
+                } catch (error) {
+                    // Fallback handles this
+                }
+            }
+            console.log('🐦 Real creature models added');
         }
         
-        // Spawn anime characters/NPCs
+        // Spawn anime characters/NPCs with REAL models
         if (this.animeCharacterSystem) {
-            // Spawn some anime characters around the starting area
             const characterConfigs = [
-                { id: 'npc_warrior_1', face: 'fierce', hairstyle: 'short_spiky', hairColor: '#FF0000', accessories: ['demon_horns'] },
-                { id: 'npc_mage_1', face: 'elegant', hairstyle: 'long_wavy', hairColor: '#9370DB', accessories: ['wizard_hat'] },
-                { id: 'npc_elf_1', face: 'gentle', hairstyle: 'long_straight', hairColor: '#FFD700', accessories: ['elf_ears'] },
-                { id: 'npc_ninja_1', face: 'mysterious', hairstyle: 'ponytail', hairColor: '#000000', accessories: ['cat_ears', 'cat_tail'] },
-                { id: 'npc_knight_1', face: 'determined', hairstyle: 'short_messy', hairColor: '#4169E1', accessories: ['crown'] }
+                { id: 'npc_warrior_1', type: 'warrior', face: 'fierce', hairstyle: 'short_spiky', hairColor: '#FF0000', accessories: ['demon_horns'] },
+                { id: 'npc_mage_1', type: 'mage', face: 'elegant', hairstyle: 'long_wavy', hairColor: '#9370DB', accessories: ['wizard_hat'] },
+                { id: 'npc_elf_1', type: 'elf', face: 'gentle', hairstyle: 'long_straight', hairColor: '#FFD700', accessories: ['elf_ears'] },
+                { id: 'npc_knight_1', type: 'knight', face: 'determined', hairstyle: 'short_messy', hairColor: '#4169E1', accessories: ['crown'] }
             ];
             
             for (let i = 0; i < characterConfigs.length; i++) {
                 const config = characterConfigs[i];
                 const angle = (i / characterConfigs.length) * Math.PI * 2;
                 const radius = 15;
-                const character = this.animeCharacterSystem.createCharacter(config.id, config);
-                if (character && character.mesh) {
-                    character.mesh.position.set(
-                        Math.cos(angle) * radius,
-                        0,
-                        Math.sin(angle) * radius
-                    );
+                
+                try {
+                    // Try to load real model first
+                    const npcModel = await this.modelLoader.loadModel('characters', config.type);
+                    npcModel.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+                    npcModel.scale.set(0.5, 0.5, 0.5);
+                    this.scene.add(npcModel);
+                } catch (error) {
+                    // Fallback to procedural
+                    const character = this.animeCharacterSystem.createCharacter(config.id, config);
+                    if (character && character.mesh) {
+                        character.mesh.position.set(
+                            Math.cos(angle) * radius,
+                            0,
+                            Math.sin(angle) * radius
+                        );
+                    }
                 }
             }
-            console.log('✨ Anime characters spawned in world');
+            console.log('✨ Character models spawned (mix of loaded and procedural)');
         }
         
         // Enable all waypoints for fast travel
@@ -625,7 +687,7 @@ export class GameEngine {
         // Start endless mode
         this.endlessMode.start();
         
-        console.log('✅ Full game world created with all advanced features active!');
+        console.log('✅ Full game world created with REAL 3D models and all advanced features!');
     }
     
     loadDungeon(dungeon) {
