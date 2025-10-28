@@ -319,9 +319,6 @@ These features are planned for future development phases:
 - Performance optimizations
 - Progressive Web App (PWA)
 - Cross-platform support
-- Crafting system
-- Quest system
-- Mobile touch controls
 
 ## 🎓 Development Approach (Enhanced)
 
@@ -358,8 +355,6 @@ These features are planned for future development phases:
 - Quest system integrated with all game events
 - Boss AI with multi-phase mechanics
 - Procedural loot generation with rarity tiers
-- Attack cooldown system prevents frame-rate dependent damage
-- Smooth animations using game loop instead of setTimeout
 - Accurate logging and debugging information
 
 ## 🎮 Play It Now!
