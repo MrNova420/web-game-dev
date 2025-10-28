@@ -17,6 +17,7 @@ import { QuestSystem } from '../systems/QuestSystem.js';
 import { AchievementSystem } from '../systems/AchievementSystem.js';
 import { AudioSystem } from '../systems/AudioSystem.js';
 import { SkillTreeSystem } from '../systems/SkillTreeSystem.js';
+import { ComboSystem } from '../systems/ComboSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -40,6 +41,7 @@ export class GameEngine {
         this.achievementSystem = null;
         this.audioSystem = null;
         this.skillTreeSystem = null;
+        this.comboSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -123,6 +125,7 @@ export class GameEngine {
         this.achievementSystem = new AchievementSystem(this);
         this.audioSystem = new AudioSystem(this);
         this.skillTreeSystem = new SkillTreeSystem(this);
+        this.comboSystem = new ComboSystem(this);
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -202,6 +205,11 @@ export class GameEngine {
         // Update combat system
         if (this.combatSystem) {
             this.combatSystem.update(delta);
+        }
+        
+        // Update combo system
+        if (this.comboSystem) {
+            this.comboSystem.update(delta);
         }
         
         // Update enemy manager
@@ -300,7 +308,20 @@ export class GameEngine {
         enemies.forEach(enemy => {
             const distance = enemy.mesh.position.distanceTo(this.player.mesh.position);
             if (distance < 5 && enemy.isAlive) {
-                const damage = enemy.takeDamage(25);
+                let damage = 25;
+                
+                // Apply combo multiplier
+                if (this.comboSystem) {
+                    damage = this.comboSystem.onHit(damage);
+                }
+                
+                enemy.takeDamage(damage);
+                
+                // Create hit effect
+                if (this.particleSystem) {
+                    this.particleSystem.createHitEffect(enemy.mesh.position);
+                }
+                
                 if (!enemy.isAlive) {
                     this.onEnemyKilled(enemy);
                 }
@@ -338,8 +359,22 @@ export class GameEngine {
         // Heal player and damage nearest enemy
         const nearestEnemy = this.findNearestEnemy();
         if (nearestEnemy) {
-            nearestEnemy.takeDamage(15);
+            let damage = 15;
+            
+            // Apply combo multiplier
+            if (this.comboSystem) {
+                damage = this.comboSystem.onHit(damage);
+            }
+            
+            nearestEnemy.takeDamage(damage);
             this.player.stats.hp = Math.min(this.player.stats.maxHp, this.player.stats.hp + 15);
+            
+            // Create heal effect on player
+            if (this.particleSystem) {
+                this.particleSystem.createHealEffect(this.player.mesh.position);
+                this.particleSystem.createHitEffect(nearestEnemy.mesh.position, 0x9d4edd);
+            }
+            
             if (!nearestEnemy.isAlive) {
                 this.onEnemyKilled(nearestEnemy);
             }
