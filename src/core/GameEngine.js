@@ -33,6 +33,10 @@ import { GuildSystem } from '../systems/GuildSystem.js';
 import { ChallengeMode } from '../systems/ChallengeMode.js';
 import { PrestigeSystem } from '../systems/PrestigeSystem.js';
 import { InfiniteDungeonSystem } from '../systems/InfiniteDungeonSystem.js';
+import { FantasyMagicSystem } from '../systems/FantasyMagicSystem.js';
+import { SeductiveBaddiesSystem } from '../systems/SeductiveBaddiesSystem.js';
+import { PowerLevelingSystem } from '../systems/PowerLevelingSystem.js';
+import { EndlessBattleSystem } from '../systems/EndlessBattleSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -72,6 +76,10 @@ export class GameEngine {
         this.challengeMode = null;
         this.prestigeSystem = null;
         this.infiniteDungeonSystem = null;
+        this.fantasyMagicSystem = null;
+        this.seductiveBaddiesSystem = null;
+        this.powerLevelingSystem = null;
+        this.endlessBattleSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -182,6 +190,12 @@ export class GameEngine {
         // Phase 7: Advanced Progression
         this.prestigeSystem = new PrestigeSystem(this);
         this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
+        
+        // Enhanced Fantasy RPG Systems
+        this.fantasyMagicSystem = new FantasyMagicSystem();
+        this.seductiveBaddiesSystem = new SeductiveBaddiesSystem();
+        this.powerLevelingSystem = new PowerLevelingSystem();
+        this.endlessBattleSystem = new EndlessBattleSystem();
         
         this.saveSystem = new SaveSystem(this);
         
@@ -334,6 +348,19 @@ export class GameEngine {
         
         if (this.infiniteDungeonSystem) {
             this.infiniteDungeonSystem.update(delta);
+        }
+        
+        // Update Enhanced Fantasy RPG systems
+        if (this.fantasyMagicSystem) {
+            this.fantasyMagicSystem.update(delta);
+        }
+        
+        if (this.powerLevelingSystem) {
+            this.powerLevelingSystem.update(delta);
+        }
+        
+        if (this.endlessBattleSystem) {
+            this.endlessBattleSystem.update(delta);
         }
         
         // Update camera to follow player
