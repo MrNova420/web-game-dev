@@ -37,6 +37,9 @@ import { FantasyMagicSystem } from '../systems/FantasyMagicSystem.js';
 import { SeductiveBaddiesSystem } from '../systems/SeductiveBaddiesSystem.js';
 import { PowerLevelingSystem } from '../systems/PowerLevelingSystem.js';
 import { EndlessBattleSystem } from '../systems/EndlessBattleSystem.js';
+import { EnhancedGameMechanics } from '../systems/EnhancedGameMechanics.js';
+import { AutoSaveSystem } from '../systems/AutoSaveSystem.js';
+import { PerformanceOptimizer } from '../systems/PerformanceOptimizer.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -80,6 +83,9 @@ export class GameEngine {
         this.seductiveBaddiesSystem = null;
         this.powerLevelingSystem = null;
         this.endlessBattleSystem = null;
+        this.enhancedGameMechanics = null;
+        this.autoSaveSystem = null;
+        this.performanceOptimizer = null;
         
         // Game state
         this.isRunning = false;
@@ -197,6 +203,12 @@ export class GameEngine {
         this.powerLevelingSystem = new PowerLevelingSystem();
         this.endlessBattleSystem = new EndlessBattleSystem();
         
+        // Enhanced Game Mechanics & Optimizations
+        this.enhancedGameMechanics = new EnhancedGameMechanics();
+        this.autoSaveSystem = new AutoSaveSystem();
+        this.performanceOptimizer = new PerformanceOptimizer();
+        
+        // Make save system aware of all systems
         this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
@@ -361,6 +373,16 @@ export class GameEngine {
         
         if (this.endlessBattleSystem) {
             this.endlessBattleSystem.update(delta);
+        }
+        
+        // Update enhanced mechanics
+        if (this.enhancedGameMechanics) {
+            this.enhancedGameMechanics.update(delta);
+        }
+        
+        // Update performance optimizer
+        if (this.performanceOptimizer) {
+            this.performanceOptimizer.update(delta);
         }
         
         // Update camera to follow player
