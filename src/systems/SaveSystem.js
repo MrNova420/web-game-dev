@@ -202,12 +202,26 @@ export class SaveSystem {
         const dailyRewards = this.engine.dailyRewards;
         const tutorialSystem = this.engine.tutorialSystem;
         
-        // Restore player stats
-        Object.assign(player.stats, saveData.player.stats);
+        // DO NOT restore base stats from save - always use current code values
+        // This ensures balance changes are always applied
+        // player.baseStats are already set correctly by Player constructor
         
-        // Restore base stats
-        if (saveData.player.baseStats) {
-            Object.assign(player.baseStats, saveData.player.baseStats);
+        // Force update stats from current baseStats (not from save file)
+        player.stats.maxHp = player.baseStats.maxHp;
+        player.stats.maxMp = player.baseStats.maxMp;
+        player.stats.attack = player.baseStats.attack;
+        player.stats.defense = player.baseStats.defense;
+        player.stats.speed = player.baseStats.speed;
+        
+        // Restore player stats (preserve level, exp, heal player to full with new maxHp)
+        if (saveData.player.stats) {
+            player.stats.level = saveData.player.stats.level || 1;
+            player.stats.exp = saveData.player.stats.exp || 0;
+            player.stats.expToNext = saveData.player.stats.expToNext || 100;
+            
+            // Heal player to full HP with new max (don't restore old HP values)
+            player.stats.hp = player.stats.maxHp;
+            player.stats.mp = player.stats.maxMp;
         }
         
         // Restore player position

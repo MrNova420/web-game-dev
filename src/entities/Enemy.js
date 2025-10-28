@@ -19,7 +19,7 @@ export class Enemy {
                 color: 0xffffff,
                 emissive: 0xff6b9d,
                 hp: 80,
-                attack: 20,
+                attack: 12,  // Reduced from 20
                 defense: 15,
                 speed: 3,
                 exp: 50
@@ -29,7 +29,7 @@ export class Enemy {
                 color: 0x52b788,
                 emissive: 0x2d6a4f,
                 hp: 120,
-                attack: 25,
+                attack: 15,  // Reduced from 25
                 defense: 25,
                 speed: 2,
                 exp: 75
@@ -39,7 +39,7 @@ export class Enemy {
                 color: 0x1a0033,
                 emissive: 0x9d4edd,
                 hp: 60,
-                attack: 30,
+                attack: 18,  // Reduced from 30
                 defense: 10,
                 speed: 5,
                 exp: 60
@@ -49,7 +49,7 @@ export class Enemy {
                 color: 0x7209b7,
                 emissive: 0xc77dff,
                 hp: 40,
-                attack: 15,
+                attack: 8,   // Reduced from 15
                 defense: 8,
                 speed: 6,
                 exp: 30
@@ -59,7 +59,7 @@ export class Enemy {
                 color: 0x4a0e7a,
                 emissive: 0xe0aaff,
                 hp: 70,
-                attack: 22,
+                attack: 13,  // Reduced from 22
                 defense: 12,
                 speed: 4,
                 exp: 55
@@ -71,7 +71,7 @@ export class Enemy {
         
         // Attack cooldown
         this.lastAttackTime = 0;
-        this.attackCooldown = 1.0; // seconds
+        this.attackCooldown = 2.0; // Increased from 1.0 seconds - enemies attack less frequently
         
         // Visual effects state
         this.isFlashing = false;
@@ -233,7 +233,7 @@ export class Enemy {
     }
     
     attackPlayer(player) {
-        if (!this.isAlive || !player) return;
+        if (!this.isAlive || !player || !player.mesh) return;
         
         const currentTime = Date.now() / 1000;
         if (currentTime - this.lastAttackTime < this.attackCooldown) {
@@ -241,9 +241,10 @@ export class Enemy {
         }
         
         const distance = this.mesh.position.distanceTo(player.mesh.position);
-        if (distance < 2) {
+        if (distance < 2.5) { // Slightly larger attack range
             player.takeDamage(this.stats.attack);
             this.lastAttackTime = currentTime;
+            console.log(`👾 ${this.stats.name} attacks player for ${this.stats.attack} damage!`);
         }
     }
 }
