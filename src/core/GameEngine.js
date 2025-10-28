@@ -44,6 +44,8 @@ import { MainMenuSystem } from '../systems/MainMenuSystem.js';
 import { SafeZoneSystem } from '../systems/SafeZoneSystem.js';
 import { EnhancedVisualsSystem } from '../systems/EnhancedVisualsSystem.js';
 import { ProgressTrackingSystem } from '../systems/ProgressTrackingSystem.js';
+import { AdvancedThemeSystem } from '../systems/AdvancedThemeSystem.js';
+import { Advanced3DGraphicsSystem } from '../systems/Advanced3DGraphicsSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -94,6 +96,8 @@ export class GameEngine {
         this.safeZoneSystem = null;
         this.enhancedVisualsSystem = null;
         this.progressTrackingSystem = null;
+        this.advancedThemeSystem = null;
+        this.advanced3DGraphicsSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -250,6 +254,8 @@ export class GameEngine {
             this.performanceOptimizer = new PerformanceOptimizer();
             
             // New Enhanced Systems
+            this.advancedThemeSystem = new AdvancedThemeSystem(this);
+            this.advanced3DGraphicsSystem = new Advanced3DGraphicsSystem(this);
             this.mainMenuSystem = new MainMenuSystem(this);
             this.safeZoneSystem = new SafeZoneSystem(this);
             this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
@@ -449,6 +455,14 @@ export class GameEngine {
         }
         
         // Update new enhanced systems
+        if (this.advancedThemeSystem) {
+            this.advancedThemeSystem.update(delta);
+        }
+        
+        if (this.advanced3DGraphicsSystem) {
+            this.advanced3DGraphicsSystem.update(delta);
+        }
+        
         if (this.safeZoneSystem) {
             this.safeZoneSystem.update(delta);
         }
