@@ -153,6 +153,11 @@ class Game {
         window.gameEngine = this.engine;
         window.gameEngine.inputManager = this.inputManager;
         
+        // Show main menu initially
+        if (this.engine.mainMenuSystem) {
+            this.engine.mainMenuSystem.show();
+        }
+        
         // Start game loop
         this.gameLoop();
     }

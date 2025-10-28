@@ -40,6 +40,10 @@ import { EndlessBattleSystem } from '../systems/EndlessBattleSystem.js';
 import { EnhancedGameMechanics } from '../systems/EnhancedGameMechanics.js';
 import { AutoSaveSystem } from '../systems/AutoSaveSystem.js';
 import { PerformanceOptimizer } from '../systems/PerformanceOptimizer.js';
+import { MainMenuSystem } from '../systems/MainMenuSystem.js';
+import { SafeZoneSystem } from '../systems/SafeZoneSystem.js';
+import { EnhancedVisualsSystem } from '../systems/EnhancedVisualsSystem.js';
+import { ProgressTrackingSystem } from '../systems/ProgressTrackingSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -86,9 +90,14 @@ export class GameEngine {
         this.enhancedGameMechanics = null;
         this.autoSaveSystem = null;
         this.performanceOptimizer = null;
+        this.mainMenuSystem = null;
+        this.safeZoneSystem = null;
+        this.enhancedVisualsSystem = null;
+        this.progressTrackingSystem = null;
         
         // Game state
         this.isRunning = false;
+        this.startFromSafeZone = false;
         this.currentDungeon = null;
         
         // UI references
@@ -239,6 +248,12 @@ export class GameEngine {
             this.enhancedGameMechanics = new EnhancedGameMechanics();
             this.autoSaveSystem = new AutoSaveSystem();
             this.performanceOptimizer = new PerformanceOptimizer();
+            
+            // New Enhanced Systems
+            this.mainMenuSystem = new MainMenuSystem(this);
+            this.safeZoneSystem = new SafeZoneSystem(this);
+            this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
+            this.progressTrackingSystem = new ProgressTrackingSystem(this);
         } catch (error) {
             console.error('Error initializing enhanced mechanics:', error);
             console.warn('Game will continue without some enhanced mechanics');
@@ -266,6 +281,13 @@ export class GameEngine {
         // Set initial companion
         this.companionManager.setActiveCompanion('smoke_siren');
         this.updateCompanionUI();
+        
+        // Check if starting from safe zone
+        if (this.startFromSafeZone) {
+            console.log('🏰 Starting from Safe Zone Hub...');
+            this.safeZoneSystem.createSafeZone();
+            return;
+        }
         
         // Check for existing save
         if (this.saveSystem.hasSaveData()) {
@@ -424,6 +446,19 @@ export class GameEngine {
         // Update performance optimizer
         if (this.performanceOptimizer) {
             this.performanceOptimizer.update(delta);
+        }
+        
+        // Update new enhanced systems
+        if (this.safeZoneSystem) {
+            this.safeZoneSystem.update(delta);
+        }
+        
+        if (this.enhancedVisualsSystem) {
+            this.enhancedVisualsSystem.update(delta);
+        }
+        
+        if (this.progressTrackingSystem) {
+            this.progressTrackingSystem.update(delta);
         }
         
         // Update camera to follow player
