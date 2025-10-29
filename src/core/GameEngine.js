@@ -99,6 +99,12 @@ import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
 import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
 // Phase 1 Session 1.1: Psychedelic Cel-Shading (ULTIMATE_AUTONOMOUS_ROADMAP.md)
 import { PsychedelicCelShadingSystem } from '../rendering/PsychedelicCelShadingSystem.js';
+// New Magical Background System
+import { MagicalBackgroundSystem } from '../systems/MagicalBackgroundSystem.js';
+// Phase 3 RPG Systems - Completion
+import { ReputationSystem } from '../systems/ReputationSystem.js';
+import { AttributeSystem } from '../systems/AttributeSystem.js';
+import { TalentSystem } from '../systems/TalentSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -253,12 +259,21 @@ export class GameEngine {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
-        // Add ambient lighting (purple twilight)
-        const ambientLight = new THREE.AmbientLight(0x9d4edd, 0.4);
+        // Add ambient lighting (vibrant magical)
+        const ambientLight = new THREE.AmbientLight(0xff00ff, 0.6); // Bright magenta
         this.scene.add(ambientLight);
         
-        // Add directional light (moon-like)
-        const dirLight = new THREE.DirectionalLight(0xc77dff, 0.6);
+        // Animate ambient light color for magical rainbow effect
+        const animateAmbient = () => {
+            const time = Date.now() * 0.0003;
+            const hue = (Math.sin(time) * 0.5 + 0.5) * 0.8; // Rainbow cycle
+            ambientLight.color.setHSL(hue, 1.0, 0.5);
+            requestAnimationFrame(animateAmbient);
+        };
+        animateAmbient();
+        
+        // Add directional light (bright magical sun)
+        const dirLight = new THREE.DirectionalLight(0xffff00, 0.8); // Bright yellow
         dirLight.position.set(10, 20, 10);
         dirLight.castShadow = true;
         dirLight.shadow.camera.near = 0.1;
@@ -271,15 +286,35 @@ export class GameEngine {
         dirLight.shadow.mapSize.height = 2048;
         this.scene.add(dirLight);
         
-        // Add atmospheric point lights (smoke magic effect)
-        for (let i = 0; i < 5; i++) {
-            const light = new THREE.PointLight(0x9d4edd, 0.5, 20);
+        // Animate directional light color for magical effect
+        const animateDirLight = () => {
+            const time = Date.now() * 0.0004;
+            const hue = (Math.cos(time) * 0.5 + 0.5) * 0.8 + 0.1; // Rainbow cycle
+            dirLight.color.setHSL(hue, 1.0, 0.6);
+            requestAnimationFrame(animateDirLight);
+        };
+        animateDirLight();
+        
+        // Add vibrant atmospheric point lights (magical sparkles)
+        const magicColors = [0xff00ff, 0x00ffff, 0xffff00, 0xff0066, 0x00ff00];
+        for (let i = 0; i < 8; i++) {
+            const light = new THREE.PointLight(magicColors[i % magicColors.length], 1.5, 25);
             light.position.set(
-                Math.random() * 20 - 10,
-                Math.random() * 5 + 2,
-                Math.random() * 20 - 10
+                Math.random() * 30 - 15,
+                Math.random() * 8 + 2,
+                Math.random() * 30 - 15
             );
             this.scene.add(light);
+            
+            // Animate point light colors
+            const animatePointLight = () => {
+                const time = Date.now() * 0.001 + i * 100;
+                const hue = (Math.sin(time) * 0.5 + 0.5);
+                light.color.setHSL(hue, 1.0, 0.5);
+                light.intensity = 1.0 + Math.sin(time * 2) * 0.5;
+                requestAnimationFrame(animatePointLight);
+            };
+            animatePointLight();
         }
         
         // Initialize game systems with error handling
@@ -368,6 +403,7 @@ export class GameEngine {
             this.mainMenuSystem = new MainMenuSystem(this);
             this.safeZoneSystem = new SafeZoneSystem(this);
             this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
+            this.magicalBackgroundSystem = new MagicalBackgroundSystem(this.scene);
             this.progressTrackingSystem = new ProgressTrackingSystem(this);
             
             // New Phase 1 Enhancement Systems - 3D Graphics & Atmosphere
@@ -386,6 +422,9 @@ export class GameEngine {
             
             // Phase 3+ Character & World Systems
             this.characterClassSystem = new CharacterClassSystem(this);
+            this.reputationSystem = new ReputationSystem(this);
+            this.attributeSystem = new AttributeSystem(this);
+            this.talentSystem = new TalentSystem(this);
             this.npcSystem = new NPCSystem(this);
             this.advancedInventorySystem = new AdvancedInventorySystem(this);
             
@@ -880,6 +919,18 @@ export class GameEngine {
             this.characterClassSystem.update(delta);
         }
         
+        if (this.reputationSystem) {
+            this.reputationSystem.update(delta);
+        }
+        
+        if (this.attributeSystem) {
+            this.attributeSystem.update(delta);
+        }
+        
+        if (this.talentSystem) {
+            this.talentSystem.update(delta);
+        }
+        
         if (this.npcSystem) {
             this.npcSystem.update(delta);
         }
@@ -1060,6 +1111,10 @@ export class GameEngine {
         
         if (this.enhancedVisualsSystem) {
             this.enhancedVisualsSystem.update(delta);
+        }
+        
+        if (this.magicalBackgroundSystem) {
+            this.magicalBackgroundSystem.update(delta);
         }
         
         if (this.progressTrackingSystem) {

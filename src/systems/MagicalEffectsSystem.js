@@ -47,12 +47,14 @@ export class MagicalEffectsSystem {
         return {
             fireball: {
                 particle: {
-                    color: new THREE.Color(0xff4500),
-                    size: 0.5,
-                    count: 100,
+                    color: new THREE.Color(0xff0066), // Bright pink-red
+                    secondaryColor: new THREE.Color(0xffff00), // Bright yellow
+                    size: 0.8,
+                    count: 150,
                     speed: 5,
                     lifetime: 1.0,
-                    trail: true
+                    trail: true,
+                    glow: true
                 },
                 impact: {
                     explosion: true,
@@ -64,12 +66,14 @@ export class MagicalEffectsSystem {
             },
             flameWall: {
                 particle: {
-                    color: new THREE.Color(0xff6600),
-                    size: 1.0,
-                    count: 500,
+                    color: new THREE.Color(0xff1493), // Bright pink
+                    secondaryColor: new THREE.Color(0xff6600), // Bright orange
+                    size: 1.2,
+                    count: 600,
                     speed: 2,
                     lifetime: 3.0,
-                    pattern: 'wall'
+                    pattern: 'wall',
+                    glow: true
                 },
                 aoe: {
                     shape: 'rectangle',
@@ -80,12 +84,16 @@ export class MagicalEffectsSystem {
             },
             inferno: {
                 particle: {
-                    color: new THREE.Color(0xff0000),
-                    size: 2.0,
-                    count: 1000,
+                    color: new THREE.Color(0xff00ff), // Magenta
+                    secondaryColor: new THREE.Color(0x00ffff), // Cyan
+                    tertiaryColor: new THREE.Color(0xffff00), // Yellow
+                    size: 2.5,
+                    count: 1500,
                     speed: 3,
                     lifetime: 2.0,
-                    pattern: 'vortex'
+                    pattern: 'vortex',
+                    glow: true,
+                    rainbow: true
                 },
                 aoe: {
                     shape: 'circle',
@@ -105,12 +113,15 @@ export class MagicalEffectsSystem {
         return {
             iceShards: {
                 particle: {
-                    color: new THREE.Color(0x00ffff),
-                    size: 0.3,
-                    count: 50,
+                    color: new THREE.Color(0x00ffff), // Bright cyan
+                    secondaryColor: new THREE.Color(0xffffff), // White sparkles
+                    size: 0.5,
+                    count: 80,
                     speed: 15,
                     lifetime: 0.5,
-                    shape: 'shard'
+                    shape: 'shard',
+                    sparkle: true,
+                    glow: true
                 },
                 impact: {
                     freeze: 0.5, // 50% slow
@@ -120,12 +131,16 @@ export class MagicalEffectsSystem {
             },
             blizzard: {
                 particle: {
-                    color: new THREE.Color(0xaaffff),
-                    size: 0.5,
-                    count: 2000,
+                    color: new THREE.Color(0x00ffff), // Bright cyan
+                    secondaryColor: new THREE.Color(0xffffff), // White
+                    tertiaryColor: new THREE.Color(0x66ffff), // Light cyan
+                    size: 0.8,
+                    count: 2500,
                     speed: 5,
                     lifetime: 5.0,
-                    pattern: 'storm'
+                    pattern: 'storm',
+                    sparkle: true,
+                    glow: true
                 },
                 aoe: {
                     shape: 'circle',
@@ -137,12 +152,15 @@ export class MagicalEffectsSystem {
             },
             iceShield: {
                 particle: {
-                    color: new THREE.Color(0x88ddff),
-                    size: 0.2,
-                    count: 300,
+                    color: new THREE.Color(0x00ffff), // Bright cyan
+                    secondaryColor: new THREE.Color(0xffffff), // White
+                    size: 0.4,
+                    count: 500,
                     speed: 1,
                     lifetime: 10.0,
-                    pattern: 'sphere'
+                    pattern: 'sphere',
+                    sparkle: true,
+                    glow: true
                 },
                 defense: {
                     absorb: 500,
@@ -160,13 +178,15 @@ export class MagicalEffectsSystem {
         return {
             lightningBolt: {
                 particle: {
-                    color: new THREE.Color(0xffff00),
+                    color: new THREE.Color(0xffff00), // Bright yellow
+                    secondaryColor: new THREE.Color(0x00ffff), // Cyan
                     glow: true,
-                    intensity: 2.0
+                    intensity: 3.0,
+                    sparkle: true
                 },
                 beam: {
                     segments: 10,
-                    width: 0.2,
+                    width: 0.3,
                     jitter: 0.5,
                     speed: 50,
                     duration: 0.2
@@ -180,11 +200,14 @@ export class MagicalEffectsSystem {
             chainLightning: {
                 beam: {
                     segments: 8,
-                    width: 0.15,
+                    width: 0.2,
                     jitter: 0.7,
                     chain: true,
                     maxTargets: 5,
-                    range: 10
+                    range: 10,
+                    color: new THREE.Color(0xffff00),
+                    secondaryColor: new THREE.Color(0xff00ff),
+                    glow: true
                 },
                 impact: {
                     stun: 0.5,

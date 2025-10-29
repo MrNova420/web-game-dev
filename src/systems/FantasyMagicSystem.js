@@ -21,7 +21,8 @@ export class FantasyMagicSystem {
         return {
             fire: {
                 name: 'Fire',
-                color: '#FF4500',
+                color: '#FF00FF', // Vibrant magenta-pink fire
+                secondaryColor: '#FFFF00', // Bright yellow
                 strengths: ['ice', 'nature'],
                 weaknesses: ['water', 'earth'],
                 spells: [
@@ -34,7 +35,8 @@ export class FantasyMagicSystem {
             },
             ice: {
                 name: 'Ice',
-                color: '#00BFFF',
+                color: '#00FFFF', // Bright cyan
+                secondaryColor: '#FFFFFF', // White sparkles
                 strengths: ['water', 'wind'],
                 weaknesses: ['fire', 'lightning'],
                 spells: [
@@ -47,7 +49,8 @@ export class FantasyMagicSystem {
             },
             lightning: {
                 name: 'Lightning',
-                color: '#FFD700',
+                color: '#FFFF00', // Bright yellow
+                secondaryColor: '#00FFFF', // Cyan
                 strengths: ['water', 'metal'],
                 weaknesses: ['earth', 'nature'],
                 spells: [
@@ -60,7 +63,8 @@ export class FantasyMagicSystem {
             },
             water: {
                 name: 'Water',
-                color: '#1E90FF',
+                color: '#00FFFF', // Bright cyan
+                secondaryColor: '#0099FF', // Blue
                 strengths: ['fire', 'earth'],
                 weaknesses: ['lightning', 'ice'],
                 spells: [
@@ -73,7 +77,8 @@ export class FantasyMagicSystem {
             },
             earth: {
                 name: 'Earth',
-                color: '#8B4513',
+                color: '#00FF00', // Bright green
+                secondaryColor: '#FFFF00', // Yellow
                 strengths: ['lightning', 'wind'],
                 weaknesses: ['water', 'ice'],
                 spells: [
@@ -86,7 +91,8 @@ export class FantasyMagicSystem {
             },
             wind: {
                 name: 'Wind',
-                color: '#E0E0E0',
+                color: '#FFFFFF', // Bright white
+                secondaryColor: '#00FFFF', // Cyan
                 strengths: ['earth', 'nature'],
                 weaknesses: ['fire', 'lightning'],
                 spells: [
@@ -99,7 +105,9 @@ export class FantasyMagicSystem {
             },
             nature: {
                 name: 'Nature',
-                color: '#228B22',
+                color: '#00FF00', // Bright green
+                secondaryColor: '#FFFF00', // Yellow
+                tertiaryColor: '#FF69B4', // Pink flowers
                 strengths: ['water', 'earth'],
                 weaknesses: ['fire', 'ice'],
                 spells: [
@@ -112,7 +120,9 @@ export class FantasyMagicSystem {
             },
             light: {
                 name: 'Light',
-                color: '#FFFACD',
+                color: '#FFFFFF', // Bright white
+                secondaryColor: '#FFFF00', // Golden yellow
+                tertiaryColor: '#FF00FF', // Magical magenta
                 strengths: ['dark', 'undead'],
                 weaknesses: ['void', 'shadow'],
                 spells: [
@@ -125,7 +135,9 @@ export class FantasyMagicSystem {
             },
             dark: {
                 name: 'Dark',
-                color: '#4B0082',
+                color: '#9900FF', // Bright purple
+                secondaryColor: '#FF00FF', // Magenta
+                tertiaryColor: '#000000', // Black shadows
                 strengths: ['light', 'living'],
                 weaknesses: ['holy', 'divine'],
                 spells: [
@@ -138,7 +150,9 @@ export class FantasyMagicSystem {
             },
             arcane: {
                 name: 'Arcane',
-                color: '#9370DB',
+                color: '#FF00FF', // Bright magenta
+                secondaryColor: '#00FFFF', // Cyan
+                tertiaryColor: '#FFFF00', // Yellow
                 strengths: ['all'],
                 weaknesses: ['none'],
                 spells: [

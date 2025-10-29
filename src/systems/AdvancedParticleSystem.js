@@ -35,9 +35,19 @@ export class AdvancedParticleSystem {
                 position.z + (Math.random() - 0.5) * 0.5
             );
             
-            // Fire colors (red to yellow to white)
-            const hue = 0.05 + Math.random() * 0.15; // Red to yellow range
-            const color = new THREE.Color().setHSL(hue, 1.0, 0.5 + Math.random() * 0.3);
+            // Fire colors (vibrant rainbow fire - red to yellow to white with magical hues)
+            const colorChoice = Math.random();
+            let color;
+            if (colorChoice < 0.3) {
+                color = new THREE.Color().setHSL(0.0, 1.0, 0.6 + Math.random() * 0.4); // Bright red
+            } else if (colorChoice < 0.6) {
+                color = new THREE.Color().setHSL(0.1, 1.0, 0.6 + Math.random() * 0.4); // Bright orange/yellow
+            } else if (colorChoice < 0.8) {
+                color = new THREE.Color().setHSL(0.15, 1.0, 0.7 + Math.random() * 0.3); // Bright yellow
+            } else {
+                // Add some magical blue and purple flames
+                color = new THREE.Color().setHSL(0.6 + Math.random() * 0.2, 1.0, 0.7); // Blue-purple flames
+            }
             colors.push(color.r, color.g, color.b);
             
             // Upward velocity with some spread
@@ -54,10 +64,10 @@ export class AdvancedParticleSystem {
         geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
         
         const material = new THREE.PointsMaterial({
-            size: 0.3,
+            size: 0.5,
             vertexColors: true,
             transparent: true,
-            opacity: 0.9,
+            opacity: 1.0,
             blending: THREE.AdditiveBlending,
             depthWrite: false
         });
@@ -90,9 +100,16 @@ export class AdvancedParticleSystem {
                 position.z + (Math.random() - 0.5) * 2
             );
             
-            // Ice colors (cyan to white)
-            const brightness = 0.7 + Math.random() * 0.3;
-            const color = new THREE.Color(brightness, brightness + 0.1, 1.0);
+            // Ice colors (bright cyan to white with magical sparkles)
+            const brightness = 0.8 + Math.random() * 0.2;
+            const color = new THREE.Color();
+            if (Math.random() < 0.7) {
+                // Bright cyan ice
+                color.setRGB(brightness * 0.5, brightness, 1.0);
+            } else {
+                // Add some magical purple-blue sparkles
+                color.setHSL(0.55 + Math.random() * 0.1, 1.0, 0.8);
+            }
             colors.push(color.r, color.g, color.b);
             
             // Outward and slightly upward
