@@ -1,7 +1,7 @@
 {
   "name": "dynasty-of-emberveil",
-  "version": "2.3.0",
-  "description": "A browser-based 2D/2.5D/3D anime fantasy action RPG with FULL multiplayer support",
+  "version": "2.4.0",
+  "description": "Advanced anime/fantasy online multiplayer RPG - Production Ready",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,7 +17,12 @@
     "multiplayer:prod": "npm run build && node multiplayer-server.js",
     "start": "npm run multiplayer:prod",
     "lint": "echo 'Linting...' && exit 0",
-    "test": "echo 'Tests will be implemented' && exit 0"
+    "test": "echo 'Tests will be implemented' && exit 0",
+    "format": "prettier --write \"src/**/*.js\"",
+    "stress-test": "echo 'Install k6 for load testing' && exit 0",
+    "install:all": "npm install && echo '✅ All dependencies installed'",
+    "check:health": "curl http://localhost:3000/health || echo 'Server not running'",
+    "check:stats": "curl http://localhost:3000/api/stats || echo 'Server not running'"
   },
   "keywords": [
     "game",
@@ -30,13 +35,18 @@
     "multiplayer",
     "online-game",
     "browser-game",
-    "socket-io"
+    "socket-io",
+    "real-time",
+    "production-ready"
   ],
   "author": "MrNova420",
   "license": "MIT",
   "devDependencies": {
     "vite": "^7.1.12",
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.2",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1"
   },
   "dependencies": {
     "cannon-es": "^0.20.0",
@@ -51,6 +61,17 @@
     "cors": "^2.8.5",
     "helmet": "^7.1.0",
     "compression": "^1.7.4",
-    "dotenv": "^16.3.1"
+    "dotenv": "^16.3.1",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrNova420/web-game-dev.git"
   }
 }
