@@ -33,9 +33,10 @@ export class SkillTreeSystem {
   /**
    * Update skill points for the player
    * Called when player levels up or completes achievements
+   * @note This is a placeholder - full implementation pending
    */
   updateSkillPoints() {
-    // Placeholder for skill point updates
+    // TODO: Implement skill point calculation and updates
   }
 
   /**
@@ -43,6 +44,7 @@ export class SkillTreeSystem {
    * @returns {{unlockedSkills: Array, skillPoints: number}} Save data object
    */
   getSaveData() {
+    // TODO: Track actual unlocked skills and points
     return {
       unlockedSkills: [],
       skillPoints: 0

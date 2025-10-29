@@ -28,8 +28,9 @@ export class TradingSystem {
   /**
    * Update trading system state
    * @param {number} delta - Time elapsed since last frame in seconds
+   * @note This is a placeholder - full implementation pending
    */
   update(delta) {
-    // Placeholder for trading system updates
+    // TODO: Implement trade timeout checks, NPC merchant updates, etc.
   }
 }
