@@ -101,9 +101,16 @@ class Game {
             clearTimeout(loadingTimeout);
             clearTimeout(criticalTimeout);
             
-            // Hide loading screen
+            // Hide loading screen and show UI
             setTimeout(() => {
                 this.loadingScreen.classList.add('hidden');
+                
+                // Show UI overlay now that game is loaded
+                const uiOverlay = document.getElementById('ui-overlay');
+                if (uiOverlay) {
+                    uiOverlay.classList.add('loaded');
+                }
+                
                 this.start();
                 
                 // Set up periodic health checks

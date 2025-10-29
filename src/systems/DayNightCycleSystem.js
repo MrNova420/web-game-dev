@@ -26,4 +26,9 @@ export class DayNightCycleSystem {
     if (this.currentTime < 18) return 'day';
     return 'dusk';
   }
+  
+  setTime(hour) {
+    this.currentTime = hour % 24;
+    console.log(`⏰ Time set to ${this.currentTime}:00`);
+  }
 }
