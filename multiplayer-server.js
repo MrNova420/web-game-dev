@@ -21,27 +21,40 @@ const app = express();
 
 // ============================================
 // SECURITY & OPTIMIZATION MIDDLEWARE
+// (Configured to NOT interfere with gameplay)
 // ============================================
 
 // Compression for faster responses
 app.use(compression());
 
-// Security headers
+// Security headers - PERMISSIVE for game functionality
 app.use(helmet({
-  contentSecurityPolicy: false, // Allow game assets
-  crossOriginEmbedderPolicy: false
+  contentSecurityPolicy: false, // Allow game assets from any source
+  crossOriginEmbedderPolicy: false, // Allow cross-origin resources
+  crossOriginResourcePolicy: false, // Allow cross-origin resources
+  crossOriginOpenerPolicy: false // Allow popups/windows
 }));
 
-// Rate limiting to prevent abuse
-const limiter = rateLimit({
+// Rate limiting ONLY on API endpoints (NOT on game traffic)
+// This prevents abuse of stats/health endpoints without affecting gameplay
+const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
-  message: 'Too many requests from this IP, please try again later.'
+  max: 500, // Higher limit to not interfere with legitimate use
+  message: 'Too many API requests, please try again later.',
+  skipSuccessfulRequests: true // Don't count successful requests
 });
-app.use('/api/', limiter);
+app.use('/api/', apiLimiter);
 
-// Parse JSON bodies
+// Parse JSON bodies with generous limit for game data
 app.use(express.json({ limit: '10mb' }));
+
+// CORS - Allow all origins for game connections
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 // ============================================
 // SERVER CONFIGURATION
@@ -73,17 +86,23 @@ class AntiCheat {
   constructor() {
     this.playerFlags = new Map(); // Track suspicious activity
     this.actionTimestamps = new Map(); // Rate limiting
+    this.enabled = process.env.ENABLE_ANTI_CHEAT !== 'false'; // Can be disabled
   }
   
   validateMovement(playerId, oldPos, newPos, deltaTime) {
+    if (!this.enabled) return true; // Skip if disabled
+    
     const distance = Math.sqrt(
       Math.pow(newPos.x - oldPos.x, 2) +
       Math.pow(newPos.z - oldPos.z, 2)
     );
-    const maxSpeed = 15; // units per second (allow some buffer)
+    
+    // VERY GENEROUS limits to not interfere with gameplay
+    const maxSpeed = 30; // Doubled from 15 - allows fast movement/dashing
     const maxDistance = maxSpeed * (deltaTime / 1000);
     
-    if (distance > maxDistance * 1.5) {
+    // Only flag if EXTREMELY excessive (3x normal max)
+    if (distance > maxDistance * 3) {
       this.flagPlayer(playerId, 'SPEED_HACK', `Distance: ${distance}, Max: ${maxDistance}`);
       return false;
     }
@@ -91,6 +110,8 @@ class AntiCheat {
   }
   
   validateAction(playerId, actionType) {
+    if (!this.enabled) return true; // Skip if disabled
+    
     const now = Date.now();
     if (!this.actionTimestamps.has(playerId)) {
       this.actionTimestamps.set(playerId, new Map());
@@ -100,8 +121,9 @@ class AntiCheat {
     const lastAction = playerActions.get(actionType) || 0;
     const timeSinceLastAction = now - lastAction;
     
-    // Minimum 50ms between same actions
-    if (timeSinceLastAction < 50) {
+    // VERY LENIENT - Only prevent extreme spam (20ms instead of 50ms)
+    // Allows rapid ability combos and fast gameplay
+    if (timeSinceLastAction < 20) {
       this.flagPlayer(playerId, 'ACTION_SPAM', `${actionType} spam detected`);
       return false;
     }
@@ -111,14 +133,19 @@ class AntiCheat {
   }
   
   validateDamage(damage, attackerLevel) {
-    const maxDamage = attackerLevel * 50; // Scale with level
-    if (damage > maxDamage) {
-      return maxDamage; // Cap damage
+    if (!this.enabled) return damage; // Skip if disabled
+    
+    // VERY GENEROUS damage cap - allows for critical hits and buffs
+    const maxDamage = attackerLevel * 100; // Doubled from 50
+    if (damage > maxDamage * 2) { // Allow 2x for crits
+      return maxDamage * 2; // Cap at reasonable amount
     }
     return damage;
   }
   
   flagPlayer(playerId, reason, details) {
+    if (!this.enabled) return false; // Skip if disabled
+    
     if (!this.playerFlags.has(playerId)) {
       this.playerFlags.set(playerId, []);
     }
@@ -132,8 +159,9 @@ class AntiCheat {
     
     console.warn(`⚠️  Anti-Cheat: Player ${playerId} flagged for ${reason}: ${details}`);
     
-    // Auto-kick after 3 flags
-    if (flags.length >= 3) {
+    // LENIENT - Auto-kick after 10 flags (not 3)
+    // Gives benefit of doubt for lag, fast gameplay, etc.
+    if (flags.length >= 10) {
       console.error(`🚫 Player ${playerId} kicked for multiple anti-cheat violations`);
       return true; // Signal to kick player
     }
