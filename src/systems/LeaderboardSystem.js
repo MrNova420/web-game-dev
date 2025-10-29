@@ -26,7 +26,7 @@ export class LeaderboardSystem {
   /**
    * Update leaderboard system state
    * @param {number} delta - Time elapsed since last frame in seconds
-   * @note This is a placeholder - full implementation pending
+   * @todo Implement periodic leaderboard fetches, rank updates, etc.
    */
   update(delta) {
     // TODO: Implement periodic leaderboard fetches, rank updates, etc.
