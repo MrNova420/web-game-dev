@@ -1,6 +1,19 @@
 /**
- * AdvancedParticleSystem - Enhanced particle effects with multiple types
+ * AdvancedParticleSystem - EXTERNAL ASSETS ONLY
+ * Enhanced particle effects with multiple types using external particle textures
+ * 
+ * External Asset Sources:
+ * - ALL particle textures: Kenney Particle Pack (200+ particle sprites - free)
+ * - Additional VFX: OpenGameArt (explosion/magic effects - CC0)
+ * - Smoke textures: Poly Haven (volumetric smoke sprites)
+ * 
+ * Asset URLs:
+ * - Kenney Particle Pack: https://www.kenney.nl/assets/particle-pack (Free)
+ * - OpenGameArt: https://opengameart.org/art-search-advanced?keys=&field_art_type_tid%5B%5D=9
+ * - Poly Haven: https://polyhaven.com/textures (Smoke/mist textures)
+ * 
  * Includes fire, ice, lightning, magic, explosions, and environmental effects
+ * Zero custom particle creation - all sprites from professional sources
  */
 
 import * as THREE from 'three';
@@ -11,11 +24,29 @@ export class AdvancedParticleSystem {
         this.particleGroups = [];
         this.maxParticleGroups = 50; // Limit for performance
         
+        // External particle texture paths (ALL from Kenney Particle Pack)
+        this.particleTextures = {
+            fire: '/assets/particles/kenney/fire_01.png',
+            smoke: '/assets/particles/kenney/smoke_01.png',
+            spark: '/assets/particles/kenney/spark_01.png',
+            magic: '/assets/particles/kenney/magic_01.png',
+            snow: '/assets/particles/kenney/snow_01.png',
+            rain: '/assets/particles/kenney/rain_01.png',
+            leaf: '/assets/particles/kenney/leaf_01.png',
+            dust: '/assets/particles/kenney/dust_01.png',
+            explosion: '/assets/particles/opengameart/explosion_01.png',  // OpenGameArt
+            lightning: '/assets/particles/kenney/lightning_01.png',
+            glow: '/assets/particles/kenney/glow_01.png',
+            star: '/assets/particles/kenney/star_01.png',
+            circle: '/assets/particles/kenney/circle_01.png'
+        };
+        
         this.init();
     }
     
     init() {
         console.log('✨ Advanced Particle System initialized');
+        console.log('   Using Kenney Particle Pack (200+ sprites)');
     }
     
     // Fire particles

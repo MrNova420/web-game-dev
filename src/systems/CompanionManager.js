@@ -1,6 +1,12 @@
 /**
  * CompanionManager - Manages companion characters (waifus)
  * Based on the Dynasty of Emberveil lore
+ * 
+ * External Assets Used:
+ * - Character models: Mixamo (free anime-style characters)
+ * - Animations: Mixamo (free animation library)
+ * - Textures: Poly Haven (PBR character textures)
+ * - Icons: game-icons.net (companion portraits)
  */
 
 export class CompanionManager {
@@ -16,6 +22,14 @@ export class CompanionManager {
                 name: 'Smoke Siren',
                 type: 'charm',
                 description: 'A charm-based sorceress who clouds enemies\' minds with enchanting smoke',
+                // External 3D model from Mixamo
+                model: '/assets/models/companions/smoke_siren.glb',
+                animations: {
+                    idle: '/assets/animations/female_idle.fbx',
+                    attack: '/assets/animations/spellcast.fbx',
+                    walk: '/assets/animations/female_walk.fbx'
+                },
+                portrait: '/assets/ui/portraits/smoke_siren.png', // game-icons.net
                 stats: {
                     power: 85,
                     defense: 60,
@@ -36,6 +50,14 @@ export class CompanionManager {
                 name: 'Blade Muse',
                 type: 'fighter',
                 description: 'An acrobatic fighter powered by rhythm and motion',
+                // External 3D model from Mixamo
+                model: '/assets/models/companions/blade_muse.glb',
+                animations: {
+                    idle: '/assets/animations/sword_idle.fbx',
+                    attack: '/assets/animations/sword_slash.fbx',
+                    walk: '/assets/animations/female_walk_2.fbx'
+                },
+                portrait: '/assets/ui/portraits/blade_muse.png', // game-icons.net
                 stats: {
                     power: 90,
                     defense: 70,
@@ -56,6 +78,14 @@ export class CompanionManager {
                 name: 'Herb Witch',
                 type: 'alchemist',
                 description: 'An alchemist cultivating greenfire crystals and healing herbs',
+                // External 3D model from Mixamo
+                model: '/assets/models/companions/herb_witch.glb',
+                animations: {
+                    idle: '/assets/animations/witch_idle.fbx',
+                    attack: '/assets/animations/herb_cast.fbx',
+                    walk: '/assets/animations/female_walk_3.fbx'
+                },
+                portrait: '/assets/ui/portraits/herb_witch.png', // game-icons.net
                 stats: {
                     power: 70,
                     defense: 65,
@@ -76,6 +106,14 @@ export class CompanionManager {
                 name: 'Cyber Dryad',
                 type: 'techno-mage',
                 description: 'A forest spirit laced with luminous tech veins, bridging nature and technology',
+                // External 3D model from Mixamo
+                model: '/assets/models/companions/cyber_dryad.glb',
+                animations: {
+                    idle: '/assets/animations/cyber_idle.fbx',
+                    attack: '/assets/animations/tech_cast.fbx',
+                    walk: '/assets/animations/female_walk_4.fbx'
+                },
+                portrait: '/assets/ui/portraits/cyber_dryad.png', // game-icons.net
                 stats: {
                     power: 88,
                     defense: 75,

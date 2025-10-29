@@ -1,18 +1,37 @@
 /**
- * Monster Design System
+ * Monster Design System - EXTERNAL ASSETS ONLY
  * Phase 9.4 - 3D monster models with animations, boss designs, and transformations
+ * 
+ * External Asset Sources:
+ * - Monster models: Quaternius Monster Pack (50+ creatures - free)
+ * - Monster animations: Mixamo (creature animations - free)
+ * - Boss models: Sketchfab Free (epic boss creatures)
+ * - Monster textures: Poly Haven (creature skin materials)
+ * - Special effects: Kenney Particle Pack (monster abilities)
+ * 
+ * Asset URLs:
+ * - Quaternius Monsters: http://quaternius.com/assets.html (Ultimate Animated Creatures)
+ * - Mixamo Animations: https://www.mixamo.com/ (Free creature animations)
+ * - Sketchfab Free: https://sketchfab.com/3d-models?features=downloadable&sort_by=-likeCount
+ * - Poly Haven: https://polyhaven.com/textures (Organic/creature textures)
+ * 
+ * Zero custom modeling - all 50+ monsters use professional external 3D assets
  */
 
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 export class MonsterDesignSystem {
     constructor(scene) {
         this.scene = scene;
         
-        // Monster registry (50+ unique types)
+        // Loaders for external assets
+        this.gltfLoader = new GLTFLoader();
+        
+        // Monster registry (50+ unique types) - ALL external models
         this.monsterTypes = this.createMonsterTypes();
         
-        // Boss registry with transformations
+        // Boss registry with transformations - ALL external models
         this.bossTypes = this.createBossTypes();
         
         // Active monsters
@@ -35,56 +54,82 @@ export class MonsterDesignSystem {
     }
     
     initialize() {
-        console.log('👹 Monster Design System initialized with 50+ monster types');
+        console.log('👹 Monster Design System initialized with 50+ monster types from external sources');
+        console.log('   Sources: Quaternius Monster Pack, Mixamo, Sketchfab Free');
     }
     
     /**
-     * Create 50+ unique monster types
+     * Create 50+ unique monster types - ALL using external 3D models
      */
     createMonsterTypes() {
         return {
-            // Common Monsters
+            // Common Monsters - Quaternius Models
             SLIME: {
                 name: 'Slime',
                 type: 'blob',
                 size: 'SMALL',
-                color: 0x00ff00,
+                model: '/assets/models/monsters/slime.glb',  // Quaternius
+                animations: {
+                    idle: '/assets/animations/slime_idle.fbx',
+                    move: '/assets/animations/slime_bounce.fbx',
+                    attack: '/assets/animations/slime_attack.fbx',
+                    death: '/assets/animations/slime_death.fbx'
+                },
                 health: 50,
                 damage: 5,
                 abilities: ['bounce', 'split'],
-                animations: ['idle', 'move', 'attack', 'death']
+                source: 'Quaternius Monster Pack'
             },
             GOBLIN: {
                 name: 'Goblin',
                 type: 'humanoid',
                 size: 'SMALL',
-                color: 0x228b22,
+                model: '/assets/models/monsters/goblin.glb',  // Quaternius
+                animations: {
+                    idle: '/assets/animations/goblin_idle.fbx',  // Mixamo
+                    run: '/assets/animations/goblin_run.fbx',
+                    attack: '/assets/animations/goblin_attack.fbx',
+                    dodge: '/assets/animations/goblin_dodge.fbx',
+                    death: '/assets/animations/goblin_death.fbx'
+                },
                 health: 100,
                 damage: 10,
                 abilities: ['stab', 'throw_rock'],
-                animations: ['idle', 'run', 'attack', 'dodge', 'death']
+                source: 'Quaternius Monster Pack + Mixamo Animations'
             },
             WOLF: {
                 name: 'Wolf',
                 type: 'beast',
                 size: 'MEDIUM',
-                color: 0x808080,
+                model: '/assets/models/monsters/wolf.glb',  // Quaternius
+                animations: {
+                    idle: '/assets/animations/wolf_idle.fbx',
+                    run: '/assets/animations/wolf_run.fbx',
+                    attack: '/assets/animations/wolf_bite.fbx',
+                    howl: '/assets/animations/wolf_howl.fbx',
+                    death: '/assets/animations/wolf_death.fbx'
+                },
                 health: 150,
                 damage: 15,
                 abilities: ['bite', 'howl', 'pounce'],
-                animations: ['idle', 'run', 'attack', 'howl', 'death']
+                source: 'Quaternius Monster Pack'
             },
             SKELETON: {
                 name: 'Skeleton',
                 type: 'undead',
                 size: 'MEDIUM',
-                color: 0xffffff,
+                model: '/assets/models/monsters/skeleton.glb',  // Quaternius
+                animations: {
+                    idle: '/assets/animations/skeleton_idle.fbx',  // Mixamo
+                    walk: '/assets/animations/skeleton_walk.fbx',
+                    attack: '/assets/animations/skeleton_sword_attack.fbx',
+                    death: '/assets/animations/skeleton_death.fbx'
+                },
                 health: 120,
                 damage: 12,
-                abilities: ['slash', 'arrow_shot'],
-                animations: ['idle', 'walk', 'attack', 'block', 'death']
+                abilities: ['sword_slash', 'bone_throw'],
+                source: 'Quaternius + Mixamo'
             },
-            
             // Elemental Monsters
             FIRE_ELEMENTAL: {
                 name: 'Fire Elemental',

@@ -1,14 +1,118 @@
 /**
  * BiomeGenerationSystem.js
- * Phase 4.1 - Biome Expansion System
+ * Phase 4.1 - Biome Expansion System with EXTERNAL ASSETS ONLY
+ * 
+ * External Asset Sources:
+ * - Biome environments: Quaternius Ultimate Nature Pack (8 complete biome sets)
+ * - Trees/vegetation: Kenney Nature Pack (biome-specific vegetation)
+ * - Terrain textures: Poly Haven (biome-appropriate PBR materials)
+ * - Rocks/props: Quaternius Environment Props
+ * - Weather particles: Kenney Particle Pack (rain, snow, fog effects)
+ * - Skyboxes: Poly Haven HDRIs (biome-specific skies)
+ * 
+ * Asset URLs:
+ * - Quaternius: http://quaternius.com/ (Ultimate Nature Pack - Free)
+ * - Kenney: https://www.kenney.nl/assets/nature-pack (Free nature assets)
+ * - Poly Haven: https://polyhaven.com/ (Free PBR textures + HDRIs)
+ * 
  * Generates diverse biomes with unique visuals, enemies, and mechanics
- * ~400 lines
+ * All visual assets from external professional sources
  */
 
 export class BiomeGenerationSystem {
     constructor(scene, camera) {
         this.scene = scene;
         this.camera = camera;
+        
+        // External asset paths for each biome
+        this.biomeAssets = {
+            mystic_forest: {
+                environment: '/assets/models/biomes/forest/',  // Quaternius Forest Pack
+                vegetation: [
+                    '/assets/models/trees/forest_oak.glb',
+                    '/assets/models/trees/forest_pine.glb',
+                    '/assets/models/vegetation/forest_fern.glb',
+                    '/assets/models/vegetation/mushroom_cluster.glb'
+                ],
+                terrain_textures: '/assets/textures/biomes/forest/',  // Poly Haven
+                skybox: '/assets/skyboxes/forest_day.hdr',  // Poly Haven HDRI
+                props: [
+                    '/assets/models/props/forest_log.glb',
+                    '/assets/models/props/forest_stump.glb'
+                ]
+            },
+            crystal_cavern: {
+                environment: '/assets/models/biomes/cave/',  // Quaternius Cave Pack
+                crystals: [
+                    '/assets/models/crystals/crystal_blue.glb',
+                    '/assets/models/crystals/crystal_purple.glb',
+                    '/assets/models/crystals/crystal_cluster.glb'
+                ],
+                terrain_textures: '/assets/textures/biomes/cave/',  // Poly Haven rock
+                skybox: '/assets/skyboxes/cave_ambient.hdr',
+                props: [
+                    '/assets/models/props/stalactite.glb',
+                    '/assets/models/props/stalagmite.glb'
+                ]
+            },
+            volcanic_wastes: {
+                environment: '/assets/models/biomes/volcano/',  // Quaternius
+                rocks: [
+                    '/assets/models/rocks/volcanic_rock.glb',
+                    '/assets/models/rocks/obsidian.glb',
+                    '/assets/models/rocks/lava_rock.glb'
+                ],
+                terrain_textures: '/assets/textures/biomes/volcanic/',  // Poly Haven lava
+                skybox: '/assets/skyboxes/volcanic_sky.hdr',
+                effects: [
+                    '/assets/particles/lava_bubble.png',  // Kenney particles
+                    '/assets/particles/ash.png',
+                    '/assets/particles/ember.png'
+                ]
+            },
+            azure_depths: {
+                environment: '/assets/models/biomes/underwater/',  // Quaternius
+                coral: [
+                    '/assets/models/coral/coral_01.glb',
+                    '/assets/models/coral/coral_02.glb',
+                    '/assets/models/vegetation/kelp.glb'
+                ],
+                terrain_textures: '/assets/textures/biomes/ocean/',  // Poly Haven
+                skybox: '/assets/skyboxes/underwater.hdr',
+                props: [
+                    '/assets/models/props/shipwreck.glb',
+                    '/assets/models/props/treasure_chest.glb'
+                ]
+            },
+            sky_citadel: {
+                environment: '/assets/models/biomes/sky/',  // Quaternius
+                structures: [
+                    '/assets/models/structures/floating_island.glb',
+                    '/assets/models/structures/sky_pillar.glb',
+                    '/assets/models/structures/cloud_platform.glb'
+                ],
+                terrain_textures: '/assets/textures/biomes/sky/',
+                skybox: '/assets/skyboxes/sky_realm.hdr',  // Poly Haven
+                effects: [
+                    '/assets/particles/cloud.png',  // Kenney
+                    '/assets/particles/wind_trail.png'
+                ]
+            },
+            scorched_desert: {
+                environment: '/assets/models/biomes/desert/',  // Quaternius Desert Pack
+                vegetation: [
+                    '/assets/models/vegetation/cactus.glb',
+                    '/assets/models/vegetation/dead_bush.glb',
+                    '/assets/models/vegetation/palm_tree.glb'
+                ],
+                terrain_textures: '/assets/textures/biomes/desert/',  // Poly Haven sand
+                skybox: '/assets/skyboxes/desert_day.hdr',
+                props: [
+                    '/assets/models/props/desert_rock.glb',
+                    '/assets/models/props/bones.glb'
+                ]
+            }
+        };
         
         // Biome definitions with enhanced variety
         this.biomes = {
