@@ -99,6 +99,8 @@ import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
 import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
 // Phase 1 Session 1.1: Psychedelic Cel-Shading (ULTIMATE_AUTONOMOUS_ROADMAP.md)
 import { PsychedelicCelShadingSystem } from '../rendering/PsychedelicCelShadingSystem.js';
+// New Magical Background System
+import { MagicalBackgroundSystem } from '../systems/MagicalBackgroundSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -397,6 +399,7 @@ export class GameEngine {
             this.mainMenuSystem = new MainMenuSystem(this);
             this.safeZoneSystem = new SafeZoneSystem(this);
             this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
+            this.magicalBackgroundSystem = new MagicalBackgroundSystem(this.scene);
             this.progressTrackingSystem = new ProgressTrackingSystem(this);
             
             // New Phase 1 Enhancement Systems - 3D Graphics & Atmosphere
@@ -1089,6 +1092,10 @@ export class GameEngine {
         
         if (this.enhancedVisualsSystem) {
             this.enhancedVisualsSystem.update(delta);
+        }
+        
+        if (this.magicalBackgroundSystem) {
+            this.magicalBackgroundSystem.update(delta);
         }
         
         if (this.progressTrackingSystem) {
