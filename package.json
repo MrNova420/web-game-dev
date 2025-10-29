@@ -1,7 +1,7 @@
 {
   "name": "dynasty-of-emberveil",
-  "version": "2.2.0",
-  "description": "A browser-based 2D/2.5D/3D anime fantasy action RPG with multiplayer support",
+  "version": "2.3.0",
+  "description": "A browser-based 2D/2.5D/3D anime fantasy action RPG with FULL multiplayer support",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,6 +12,10 @@
     "serve": "node serve.cjs 3000 dev",
     "serve:prod": "npm run build && node serve.cjs 8000 prod",
     "serve:wifi": "npm run build && node local-wifi-server.js",
+    "multiplayer": "node multiplayer-server.js",
+    "multiplayer:dev": "concurrently \"npm run dev\" \"npm run multiplayer\"",
+    "multiplayer:prod": "npm run build && node multiplayer-server.js",
+    "start": "npm run multiplayer:prod",
     "lint": "echo 'Linting...' && exit 0",
     "test": "echo 'Tests will be implemented' && exit 0"
   },
@@ -24,16 +28,20 @@
     "fantasy",
     "anime",
     "multiplayer",
-    "browser-game"
+    "online-game",
+    "browser-game",
+    "socket-io"
   ],
   "author": "MrNova420",
   "license": "MIT",
   "devDependencies": {
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "concurrently": "^8.2.0"
   },
   "dependencies": {
     "cannon-es": "^0.20.0",
-    "three": "^0.160.0"
+    "three": "^0.160.0",
+    "socket.io-client": "^4.6.0"
   },
   "optionalDependencies": {
     "express": "^4.18.0",
