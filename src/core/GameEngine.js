@@ -97,6 +97,8 @@ import { AddictiveGameplaySystem } from '../systems/AddictiveGameplaySystem.js';
 import { PlayerControlSettingsSystem } from '../systems/PlayerControlSettingsSystem.js';
 import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
 import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
+// Phase 1 Session 1.1: Psychedelic Cel-Shading (ULTIMATE_AUTONOMOUS_ROADMAP.md)
+import { PsychedelicCelShadingSystem } from '../rendering/PsychedelicCelShadingSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
