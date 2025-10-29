@@ -25,6 +25,10 @@ export class TradingSystem {
     this.activeTrades.delete(tradeId);
   }
 
+  /**
+   * Update trading system state
+   * @param {number} delta - Time elapsed since last frame in seconds
+   */
   update(delta) {
     // Placeholder for trading system updates
   }

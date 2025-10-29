@@ -30,10 +30,18 @@ export class SkillTreeSystem {
     console.log(`  Icon: ${this.icons.node_unlocked}`);
   }
 
+  /**
+   * Update skill points for the player
+   * Called when player levels up or completes achievements
+   */
   updateSkillPoints() {
     // Placeholder for skill point updates
   }
 
+  /**
+   * Get save data for the skill tree system
+   * @returns {{unlockedSkills: Array, skillPoints: number}} Save data object
+   */
   getSaveData() {
     return {
       unlockedSkills: [],

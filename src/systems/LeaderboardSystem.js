@@ -23,6 +23,10 @@ export class LeaderboardSystem {
     console.log(`${playerId} ranked in ${category}: ${score}`);
   }
 
+  /**
+   * Update leaderboard system state
+   * @param {number} delta - Time elapsed since last frame in seconds
+   */
   update(delta) {
     // Placeholder for leaderboard updates
   }
