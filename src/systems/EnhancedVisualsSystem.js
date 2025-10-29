@@ -51,8 +51,22 @@ export class EnhancedVisualsSystem {
     }
     
     setupFog() {
-        // Add atmospheric fog
-        this.scene.fog = new THREE.FogExp2(0x1a0033, 0.02);
+        // Add vibrant atmospheric fog with magical colors
+        this.scene.fog = new THREE.FogExp2(0xff00ff, 0.015); // Magenta fog
+        
+        // Animate fog color for magical effect
+        this.animateFog();
+    }
+    
+    animateFog() {
+        const animate = () => {
+            const time = Date.now() * 0.0005;
+            const hue = (Math.sin(time) * 0.5 + 0.5) * 0.8; // Cycle through colors
+            const color = new THREE.Color().setHSL(hue, 1.0, 0.5);
+            this.scene.fog.color = color;
+            requestAnimationFrame(animate);
+        };
+        animate();
     }
     
     setupGlowEffects() {
@@ -60,7 +74,7 @@ export class EnhancedVisualsSystem {
         this.glowObjects = [];
     }
     
-    addGlowToObject(object, color, intensity = 1.0) {
+    addGlowToObject(object, color, intensity = 2.0) {
         if (object.material) {
             object.material.emissive = new THREE.Color(color);
             object.material.emissiveIntensity = intensity;
@@ -72,15 +86,17 @@ export class EnhancedVisualsSystem {
         }
     }
     
-    createHitEffect(position, color = 0xff0000) {
-        // Create impact particle burst
-        const particleCount = 20;
+    createHitEffect(position, color = 0xff00ff) {
+        // Create vibrant impact particle burst
+        const particleCount = 40;
         const particles = [];
         
         for (let i = 0; i < particleCount; i++) {
-            const geometry = new THREE.SphereGeometry(0.1, 4, 4);
+            const geometry = new THREE.SphereGeometry(0.15, 6, 6);
+            // Create rainbow colors for each particle
+            const particleColor = new THREE.Color().setHSL(Math.random(), 1.0, 0.6);
             const material = new THREE.MeshBasicMaterial({
-                color,
+                color: particleColor,
                 transparent: true,
                 opacity: 1
             });
@@ -90,11 +106,11 @@ export class EnhancedVisualsSystem {
             
             // Random velocity
             particle.userData.velocity = new THREE.Vector3(
-                (Math.random() - 0.5) * 2,
-                (Math.random() - 0.5) * 2,
-                (Math.random() - 0.5) * 2
+                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3
             );
-            particle.userData.lifetime = 1.0;
+            particle.userData.lifetime = 1.5;
             
             this.scene.add(particle);
             particles.push(particle);

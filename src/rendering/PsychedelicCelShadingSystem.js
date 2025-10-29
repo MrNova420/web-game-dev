@@ -11,12 +11,16 @@ export class PsychedelicCelShadingSystem {
         this.scene = scene;
         this.renderer = renderer;
         
-        // Cannabis theme colors (purple, pink, cyan)
+        // Cannabis theme colors (vibrant anime-style fantasy colors)
         this.cannabisColors = {
-            purple: new THREE.Color(0x9d4edd),
-            lightPurple: new THREE.Color(0xc77dff),
-            pink: new THREE.Color(0xe0aaff),
-            cyan: new THREE.Color(0x7dd3fc)
+            purple: new THREE.Color(0xff00ff),      // Bright magenta
+            lightPurple: new THREE.Color(0xff66ff), // Vibrant light purple
+            pink: new THREE.Color(0xff1493),        // Deep pink
+            cyan: new THREE.Color(0x00ffff),        // Bright cyan
+            yellow: new THREE.Color(0xffff00),      // Bright yellow
+            green: new THREE.Color(0x00ff00),       // Bright green
+            orange: new THREE.Color(0xff6600),      // Vibrant orange
+            red: new THREE.Color(0xff0066)          // Bright red
         };
         
         // Psychedelic state
