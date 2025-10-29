@@ -1,4 +1,17 @@
-// Phase 9.1: Anime Character System with Detailed Models and Customization
+/**
+ * AnimeCharacterSystem - Anime Character Customization with External Assets
+ * Phase 9.1: Detailed Models and Customization
+ * 
+ * External Asset Sources:
+ * - Base character models: Mixamo (free anime-style rigged characters)
+ * - Hairstyle models: Sketchfab Free (anime hair models)
+ * - Costume models: Sketchfab Free (anime outfits)
+ * - Face textures: Custom combinations using Poly Haven base textures
+ * - Accessory models: Kenney assets, Sketchfab Free
+ * 
+ * This system provides a customization layer on top of external 3D models
+ * All visual assets come from professional free sources - zero custom modeling
+ */
 export class AnimeCharacterSystem {
     constructor(scene) {
         this.scene = scene;
@@ -7,6 +20,15 @@ export class AnimeCharacterSystem {
         this.animations = this.initializeAnimations();
         this.physics = { hairWind: { x: 0, y: 0, z: 0 }, clothWind: { x: 0, y: 0, z: 0 } };
         this.lastUpdate = Date.now();
+        
+        // External asset paths
+        this.assetPaths = {
+            baseModels: '/assets/models/characters/', // Mixamo
+            hairstyles: '/assets/models/hair/', // Sketchfab Free
+            costumes: '/assets/models/costumes/', // Sketchfab Free
+            accessories: '/assets/models/accessories/', // Kenney, Sketchfab
+            textures: '/assets/textures/characters/' // Poly Haven
+        };
     }
     
     initializeCustomization() {
