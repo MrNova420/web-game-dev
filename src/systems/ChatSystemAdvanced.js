@@ -1,5 +1,5 @@
 /**
- * ChatSystemAdvanced.js - Phase 5 Social
+ * ChatSystemAdvanced.js - Phase 5
  */
 export class ChatSystemAdvanced {
   constructor() {
