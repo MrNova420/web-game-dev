@@ -398,6 +398,127 @@ export class ModernUISystem {
             pointer-events: none;
         `;
         document.body.appendChild(this.notificationContainer);
+        
+        // Setup panel management
+        this.setupPanelManagement();
+    }
+    
+    setupPanelManagement() {
+        // Make all panels collapsible
+        const panels = document.querySelectorAll('.game-panel');
+        panels.forEach(panel => {
+            this.makePanelCollapsible(panel);
+        });
+        
+        // Setup keyboard shortcuts
+        this.setupKeyboardShortcuts();
+        
+        // Load saved panel states
+        this.loadPanelStates();
+    }
+    
+    makePanelCollapsible(panel) {
+        const header = panel.querySelector('.panel-header');
+        if (!header) return;
+        
+        const controls = header.querySelector('.panel-controls');
+        if (!controls) return;
+        
+        const closeBtn = controls.querySelector('.panel-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.togglePanel(panel);
+            });
+        }
+        
+        // Double-click header to minimize
+        header.addEventListener('dblclick', () => {
+            this.togglePanel(panel);
+        });
+    }
+    
+    togglePanel(panel) {
+        if (typeof panel === 'string') {
+            panel = document.getElementById(panel);
+        }
+        if (!panel) return;
+        
+        if (panel.classList.contains('panel-hidden')) {
+            panel.classList.remove('panel-hidden', 'panel-minimized');
+        } else if (panel.classList.contains('panel-minimized')) {
+            panel.classList.remove('panel-minimized');
+        } else {
+            panel.classList.add('panel-minimized');
+        }
+        
+        this.savePanelState(panel.id);
+        this.updateIconState(panel.id);
+    }
+    
+    showPanel(panelId) {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        
+        panel.classList.remove('panel-hidden', 'panel-minimized');
+        this.savePanelState(panelId);
+        this.updateIconState(panelId);
+    }
+    
+    hidePanel(panelId) {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        
+        panel.classList.add('panel-hidden');
+        this.savePanelState(panelId);
+        this.updateIconState(panelId);
+    }
+    
+    savePanelState(panelId) {
+        const panel = document.getElementById(panelId);
+        if (!panel) return;
+        
+        localStorage.setItem(`panel_${panelId}_state`, panel.className);
+    }
+    
+    loadPanelStates() {
+        const panels = document.querySelectorAll('.game-panel');
+        panels.forEach(panel => {
+            const saved = localStorage.getItem(`panel_${panel.id}_state`);
+            if (saved) {
+                panel.className = saved;
+            }
+        });
+    }
+    
+    setupKeyboardShortcuts() {
+        // Setup icon bar click handlers
+        window.togglePanel = (panelId) => this.togglePanel(panelId);
+        window.showPanel = (panelId) => this.showPanel(panelId);
+        window.hidePanel = (panelId) => this.hidePanel(panelId);
+    }
+    
+    updateIconState(panelId) {
+        const panelToIcon = {
+            'player-stats': 'icon-character',
+            'inventory-panel': 'icon-inventory',
+            'quest-panel': 'icon-quests',
+            'companion-panel': 'icon-companion'
+        };
+        
+        const iconId = panelToIcon[panelId];
+        if (!iconId) return;
+        
+        const icon = document.getElementById(iconId);
+        const panel = document.getElementById(panelId);
+        
+        if (icon && panel) {
+            if (!panel.classList.contains('panel-hidden') && !panel.classList.contains('panel-minimized')) {
+                icon.classList.add('active');
+            } else {
+                icon.classList.remove('active');
+            }
+        }
     }
     
     showNotification(message, type = 'info', duration = 3000) {

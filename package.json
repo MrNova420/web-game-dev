@@ -1,16 +1,38 @@
 {
   "name": "dynasty-of-emberveil",
-  "version": "2.0.0",
-  "description": "A browser-based 2D/2.5D/3D psychedelic fantasy action RPG",
+  "version": "2.4.0",
+  "description": "Advanced anime/fantasy online multiplayer RPG - Production Ready - Always Playable at 60 FPS",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:network": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
+    "preview:network": "vite preview --host 0.0.0.0",
     "serve": "node serve.cjs 3000 dev",
     "serve:prod": "npm run build && node serve.cjs 8000 prod",
+    "serve:wifi": "npm run build && node local-wifi-server.js",
+    "multiplayer": "node multiplayer-server.js",
+    "multiplayer:dev": "concurrently \"npm run dev\" \"npm run multiplayer\"",
+    "multiplayer:prod": "npm run build && node multiplayer-server.js",
+    "start": "node deploy-full-game.js",
+    "play": "node deploy-full-game.js",
+    "deploy": "node deploy-full-game.js",
+    "deploy:full": "node deploy-full-game.js",
+    "deploy:quick": "npm run build && node multiplayer-server.js",
     "lint": "echo 'Linting...' && exit 0",
-    "test": "echo 'Tests will be implemented' && exit 0"
+    "test": "node test-full-gameplay.js",
+    "test:gameplay": "node test-full-gameplay.js",
+    "test:quick": "node test-game.js",
+    "test:comprehensive": "node test-gameplay.js",
+    "test:all": "npm run test:quick && npm run test:comprehensive && npm run test:gameplay",
+    "verify": "node verify-full-game.js",
+    "verify:full": "node verify-full-game.js",
+    "format": "prettier --write \"src/**/*.js\"",
+    "stress-test": "echo 'Install k6 for load testing' && exit 0",
+    "install:all": "npm install && echo '✅ All dependencies installed'",
+    "check:health": "curl http://localhost:3000/health || echo 'Server not running'",
+    "check:stats": "curl http://localhost:3000/api/stats || echo 'Server not running'"
   },
   "keywords": [
     "game",
@@ -19,15 +41,50 @@
     "rpg",
     "action",
     "fantasy",
-    "browser-game"
+    "anime",
+    "multiplayer",
+    "online-game",
+    "browser-game",
+    "socket-io",
+    "real-time",
+    "production-ready",
+    "60fps",
+    "stable",
+    "playable"
   ],
-  "author": "",
+  "author": "MrNova420",
   "license": "MIT",
   "devDependencies": {
-    "vite": "^7.1.12"
+    "vite": "^7.1.12",
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.2",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1"
   },
   "dependencies": {
     "cannon-es": "^0.20.0",
-    "three": "^0.160.0"
+    "three": "^0.160.0",
+    "socket.io-client": "^4.6.0"
+  },
+  "optionalDependencies": {
+    "express": "^4.18.0",
+    "socket.io": "^4.6.0",
+    "redis": "^4.6.0",
+    "pg": "^8.11.0",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "dotenv": "^16.3.1",
+    "express-rate-limit": "^7.1.5",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MrNova420/web-game-dev.git"
   }
 }

@@ -61,6 +61,10 @@ export class PerformanceOptimizer {
             memoryWarning: 400 * 1024 * 1024, // 400 MB
             memoryCritical: 500 * 1024 * 1024 // 500 MB
         };
+        
+        // Cooldown for optimization attempts
+        this.lastOptimizationTime = 0;
+        this.optimizationCooldown = 5000; // 5 seconds between optimization attempts
 
         // Start monitoring
         this.startMonitoring();
@@ -210,6 +214,14 @@ export class PerformanceOptimizer {
 
     onLowPerformance() {
         if (!this.adaptiveQuality) return;
+        
+        // Check cooldown to prevent spam
+        const now = performance.now();
+        if (now - this.lastOptimizationTime < this.optimizationCooldown) {
+            return; // Still in cooldown, skip optimization
+        }
+        
+        this.lastOptimizationTime = now;
 
         // Automatically reduce quality
         if (this.optimizationLevel === 'ultra') {

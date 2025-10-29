@@ -24,4 +24,13 @@ export class TradingSystem {
     console.log(`Trade ${tradeId} completed successfully`);
     this.activeTrades.delete(tradeId);
   }
+
+  /**
+   * Update trading system state
+   * @param {number} delta - Time elapsed since last frame in seconds
+   * @todo Implement trade timeout checks, NPC merchant updates, etc.
+   */
+  update(delta) {
+    // TODO: Implement trade timeout checks, NPC merchant updates, etc.
+  }
 }

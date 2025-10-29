@@ -22,4 +22,13 @@ export class LeaderboardSystem {
   updateRanking(playerId, category, score) {
     console.log(`${playerId} ranked in ${category}: ${score}`);
   }
+
+  /**
+   * Update leaderboard system state
+   * @param {number} delta - Time elapsed since last frame in seconds
+   * @todo Implement periodic leaderboard fetches, rank updates, etc.
+   */
+  update(delta) {
+    // TODO: Implement periodic leaderboard fetches, rank updates, etc.
+  }
 }

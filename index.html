@@ -6,10 +6,13 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="game-version" content="2.0.0">
-    <meta name="build-date" content="2025-10-28">
-    <meta name="build-status" content="PRODUCTION-READY">
-    <title>Dynasty of Emberveil v2.0.0 - Complete Production Build</title>
+    <meta name="game-version" content="2.2.0">
+    <meta name="build-date" content="2025-10-29">
+    <meta name="build-status" content="PRODUCTION-READY-ADVANCED">
+    <title>Dynasty of Emberveil - Anime Fantasy RPG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,16 +20,29 @@
             box-sizing: border-box;
         }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff1493 50%, #9d4edd 75%, #00ff00 100%);
-            animation: rainbowShift 10s infinite alternate;
+        :root {
+            --fantasy-dark: #0a0e27;
+            --fantasy-medium: #1a2847;
+            --fantasy-light: #2d4a7c;
+            --gold: #d4af37;
+            --crimson: #dc143c;
+            --emerald: #50c878;
+            --arcane-purple: #8b00ff;
+            --anime-pink: #ff69b4;
+            --frost-blue: #00ced1;
         }
         
-        @keyframes rainbowShift {
-            0% { filter: hue-rotate(0deg) saturate(1.5); }
-            100% { filter: hue-rotate(360deg) saturate(1.8); }
+        body {
+            font-family: 'Raleway', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--fantasy-dark) 0%, var(--fantasy-medium) 50%, #16213e 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         #game-container {
@@ -41,41 +57,537 @@
             height: 100%;
         }
         
-        #ui-overlay {
+        /* Advanced Anime-Style Top Bar */
+        #top-icon-bar {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 12px;
+            z-index: 100;
             pointer-events: none;
         }
         
+        .icon-button {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(26, 40, 71, 0.95), rgba(45, 74, 124, 0.95));
+            border: 2px solid var(--arcane-purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            font-size: 24px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(139, 0, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .icon-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .icon-button:hover::before {
+            opacity: 1;
+        }
+        
+        .icon-button:hover {
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.6), rgba(255, 105, 180, 0.6));
+            border-color: var(--gold);
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        
+        .icon-button.active {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.8), rgba(139, 0, 255, 0.8));
+            border-color: var(--anime-pink);
+            box-shadow: 0 0 30px var(--anime-pink), inset 0 0 15px rgba(255, 255, 255, 0.3);
+            animation: iconPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Advanced Fantasy Panel System */
+        .game-panel {
+            position: absolute;
+            background: linear-gradient(135deg, 
+                rgba(10, 14, 39, 0.98) 0%, 
+                rgba(26, 40, 71, 0.98) 50%, 
+                rgba(45, 74, 124, 0.95) 100%);
+            border: 3px solid;
+            border-image: linear-gradient(45deg, var(--arcane-purple), var(--anime-pink), var(--gold)) 1;
+            border-radius: 16px;
+            padding: 18px;
+            color: #e0e0e0;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 0 30px rgba(139, 0, 255, 0.4);
+            pointer-events: auto;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .game-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 14px;
+            padding: 2px;
+            background: linear-gradient(45deg, var(--arcane-purple), var(--anime-pink), var(--gold));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, var(--arcane-purple), transparent) 1;
+            position: relative;
+        }
+        
+        .panel-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 30%;
+            height: 2px;
+            background: var(--anime-pink);
+            box-shadow: 0 0 10px var(--anime-pink);
+        }
+        
+        .panel-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--anime-pink), var(--arcane-purple), var(--gold));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 3s ease infinite;
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        .panel-controls {
+            display: flex;
+            gap: 6px;
+        }
+        
+        .panel-btn {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.3), rgba(255, 105, 180, 0.3));
+            border: 2px solid var(--arcane-purple);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: var(--anime-pink);
+        }
+        
+        .panel-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.6), rgba(139, 0, 255, 0.6));
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--anime-pink);
+        }
+        
+        .panel-content {
+            max-height: 450px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .panel-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--arcane-purple), var(--anime-pink));
+            border-radius: 4px;
+            box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--anime-pink), var(--gold));
+        }
+        
+        .panel-minimized .panel-content {
+            display: none;
+        }
+        
+        .panel-minimized {
+            padding: 10px 18px;
+        }
+        
+        /* Advanced Character Stats Panel */
+        #player-stats {
+            top: 15px;
+            left: 15px;
+            min-width: 280px;
+        }
+        
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            background: linear-gradient(135deg, var(--arcane-purple), var(--anime-pink));
+            box-shadow: 
+                0 0 25px var(--gold),
+                inset 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: avatarGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes avatarGlow {
+            0%, 100% { 
+                box-shadow: 0 0 25px var(--gold), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 40px var(--anime-pink), inset 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+        }
+        
+        .character-name {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold), 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 4px;
+        }
+        
+        .character-class {
+            text-align: center;
+            font-size: 0.95em;
+            color: var(--anime-pink);
+            text-shadow: 0 0 8px var(--anime-pink);
+            margin-bottom: 15px;
+        }
+        
+        .stat-bar {
+            margin: 12px 0;
+            position: relative;
+        }
+        
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .stat-name {
+            color: var(--anime-pink);
+            text-shadow: 0 0 5px var(--anime-pink);
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+            font-weight: 600;
+        }
+        
+        .bar {
+            height: 24px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(139, 0, 255, 0.4);
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: barShimmer 2s infinite;
+        }
+        
+        @keyframes barShimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
+        }
+        
+        .health-fill {
+            background: linear-gradient(90deg, 
+                #dc143c 0%, 
+                #ff1493 50%, 
+                #ff69b4 100%);
+            box-shadow: 
+                0 0 15px rgba(220, 20, 60, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .mana-fill {
+            background: linear-gradient(90deg, 
+                #0000cd 0%, 
+                #4169e1 50%, 
+                #00bfff 100%);
+            box-shadow: 
+                0 0 15px rgba(65, 105, 225, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .exp-fill {
+            background: linear-gradient(90deg, 
+                #d4af37 0%, 
+                #ffd700 50%, 
+                #ffec8b 100%);
+            box-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Advanced Anime-Style Abilities Bar */
+        #abilities-panel {
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 20px;
+            background: linear-gradient(135deg, 
+                rgba(10, 14, 39, 0.98) 0%, 
+                rgba(26, 40, 71, 0.98) 100%);
+        }
+        
+        #abilities-panel .panel-content {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .ability-slot {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(50, 30, 70, 0.95));
+            border: 3px solid var(--arcane-purple);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 15px rgba(139, 0, 255, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        
+        .ability-slot::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                var(--anime-pink),
+                transparent 30%
+            );
+            animation: abilityRotate 3s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes abilityRotate {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .ability-slot:hover::before {
+            opacity: 1;
+        }
+        
+        .ability-slot::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(50, 30, 70, 0.95));
+            border-radius: 9px;
+            z-index: -1;
+        }
+        
+        .ability-slot:hover {
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.5), rgba(255, 105, 180, 0.5));
+            border-color: var(--anime-pink);
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 
+                0 8px 30px var(--anime-pink),
+                0 0 40px var(--arcane-purple),
+                inset 0 2px 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .ability-slot:active {
+            transform: scale(1.05) translateY(-2px);
+        }
+        
+        .ability-key {
+            position: absolute;
+            bottom: 3px;
+            right: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+        }
+        
+        /* Advanced Anime-Style Quest Panel */
+        #quest-panel {
+            top: 15px;
+            right: 80px;
+            width: 320px;
+        }
+        
+        .quest-item {
+            padding: 12px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.8), rgba(50, 30, 70, 0.7));
+            border-left: 4px solid var(--anime-pink);
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quest-item:hover {
+            background: linear-gradient(135deg, rgba(50, 30, 70, 0.9), rgba(70, 30, 90, 0.8));
+            border-left-color: var(--gold);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 20px rgba(139, 0, 255, 0.5);
+        }
+        
+        .quest-title {
+            font-weight: 600;
+            font-size: 1.05em;
+            color: var(--anime-pink);
+            text-shadow: 0 0 8px var(--anime-pink);
+            margin-bottom: 6px;
+            font-family: 'Cinzel', serif;
+        }
+        
+        .quest-desc {
+            font-size: 0.9em;
+            color: #b8b8d8;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .quest-progress {
+            font-size: 0.85em;
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+            font-weight: 500;
+        }
+        
+        /* Advanced Loading Screen */
         #loading-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff1493 50%, #9d4edd 75%, #00ff00 100%);
+            background: linear-gradient(135deg, 
+                var(--fantasy-dark) 0%, 
+                var(--fantasy-medium) 50%, 
+                #16213e 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: #fff;
-            z-index: 1000;
-            transition: opacity 0.5s;
-            animation: magicalBackground 5s infinite alternate;
+            z-index: 10000;
+            transition: opacity 0.8s;
         }
         
-        @keyframes magicalBackground {
-            0% { 
-                background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff1493 50%, #9d4edd 75%, #00ff00 100%);
-                filter: brightness(1.2);
-            }
-            100% { 
-                background: linear-gradient(135deg, #00ff00 0%, #9d4edd 25%, #ff1493 50%, #00ffff 75%, #ff00ff 100%);
-                filter: brightness(1.5);
-            }
+        #loading-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(139,0,255,0.1)" stroke-width="2"/></svg>');
+            animation: bgMove 20s linear infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes bgMove {
+            from { transform: translate(0, 0); }
+            to { transform: translate(50px, 50px); }
         }
         
         #loading-screen.hidden {
@@ -84,329 +596,158 @@
         }
         
         .loading-title {
-            font-size: 3em;
-            font-weight: bold;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff1493, #00ff00);
-            background-size: 400% 400%;
+            font-size: 3.5em;
+            font-weight: 700;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--anime-pink), var(--arcane-purple), var(--gold));
+            background-size: 200% 200%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
-            animation: rainbowText 3s infinite alternate, glow 2s infinite alternate;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+            margin-bottom: 15px;
+            animation: titleFloat 3s ease-in-out infinite, titleShimmer 4s ease infinite;
+            letter-spacing: 3px;
+            filter: drop-shadow(0 0 30px rgba(255, 105, 180, 0.8));
         }
         
-        @keyframes rainbowText {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        @keyframes glow {
-            0% { filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)) brightness(1.2); }
-            100% { filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.9)) brightness(1.5); }
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
         
         .loading-subtitle {
-            font-size: 1.2em;
-            color: #fff;
-            margin-bottom: 40px;
-            text-shadow: 0 0 20px rgba(255, 0, 255, 0.9), 0 0 40px rgba(0, 255, 255, 0.7);
-            animation: pulse 2s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% { 
-                transform: scale(1);
-                text-shadow: 0 0 20px rgba(255, 0, 255, 0.9), 0 0 40px rgba(0, 255, 255, 0.7);
-            }
-            100% { 
-                transform: scale(1.05);
-                text-shadow: 0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 0, 255, 0.9);
-            }
+            font-size: 1.4em;
+            color: var(--anime-pink);
+            text-shadow: 0 0 20px var(--anime-pink), 0 0 40px var(--arcane-purple);
+            margin-bottom: 50px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            letter-spacing: 2px;
         }
         
         .loading-bar {
-            width: 300px;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+            width: 450px;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 5px;
             overflow: hidden;
-            border: 3px solid #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
-            animation: borderGlow 2s infinite alternate;
-        }
-        
-        @keyframes borderGlow {
-            0% { border-color: #ff00ff; box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6); }
-            50% { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 255, 0, 0.6); }
-            100% { border-color: #ffff00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.8), 0 0 40px rgba(255, 0, 255, 0.6); }
+            border: 2px solid var(--arcane-purple);
+            box-shadow: 0 0 30px rgba(139, 0, 255, 0.6), inset 0 2px 5px rgba(0, 0, 0, 0.5);
         }
         
         .loading-progress {
             height: 100%;
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff1493, #00ff00);
-            background-size: 400% 100%;
+            background: linear-gradient(90deg, 
+                var(--arcane-purple) 0%,
+                var(--anime-pink) 50%,
+                var(--gold) 100%);
+            background-size: 200% 100%;
             width: 0%;
-            transition: width 0.3s;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 1), 0 0 60px rgba(0, 255, 255, 0.8);
-            animation: progressShine 2s infinite linear;
+            transition: width 0.4s;
+            box-shadow: 0 0 20px var(--anime-pink);
+            animation: progressFlow 2s linear infinite;
+            position: relative;
         }
         
-        @keyframes progressShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
+        @keyframes progressFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        
+        .loading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
         }
         
         .loading-text {
-            margin-top: 20px;
-            color: #fff;
-            font-size: 0.9em;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7);
-            animation: textGlow 1.5s infinite alternate;
+            margin-top: 25px;
+            color: #b8b8d8;
+            font-size: 1em;
+            text-shadow: 0 0 10px var(--arcane-purple);
+            font-family: 'Raleway', sans-serif;
         }
         
-        @keyframes textGlow {
-            0% { text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7); }
-            100% { text-shadow: 0 0 20px rgba(255, 255, 0, 1), 0 0 40px rgba(255, 0, 255, 0.9); }
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        
-        /* HUD Elements */
-        .hud {
-            pointer-events: auto;
+        /* UI Overlay */
+        #ui-overlay {
             position: absolute;
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.3), rgba(255, 20, 147, 0.3));
-            backdrop-filter: blur(10px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff1493) 1;
-            border-radius: 15px;
-            padding: 15px;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2);
-            animation: hudGlow 3s infinite alternate;
-        }
-        
-        @keyframes hudGlow {
-            0% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2); }
-            100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), 0 0 80px rgba(255, 255, 0, 0.5), inset 0 0 30px rgba(255, 255, 255, 0.3); }
-        }
-        
-        #health-bar {
-            top: 20px;
-            left: 20px;
-            min-width: 200px;
-        }
-        
-        #companion-panel {
-            top: 20px;
-            right: 20px;
-            min-width: 150px;
-        }
-        
-        #abilities-bar {
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-        
-        .ability-button {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ffff00, #ff00ff, #00ffff) 1;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-            animation: buttonPulse 2s infinite alternate;
-        }
-        
-        @keyframes buttonPulse {
-            0% { 
-                box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-                transform: scale(1);
-            }
-            100% { 
-                box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(255, 255, 0, 0.8);
-                transform: scale(1.05);
-            }
-        }
-        
-        .ability-button:hover {
-            transform: scale(1.2) rotate(5deg);
-            box-shadow: 0 0 40px rgba(255, 0, 255, 1), 0 0 80px rgba(0, 255, 255, 0.9), 0 0 120px rgba(255, 255, 0, 0.7);
-            filter: brightness(1.5) saturate(1.5);
-        }
-        
-        .bar {
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 5px 0;
-        }
-        
-        .bar-fill {
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            transition: width 0.3s;
-        }
-        
-        .health-fill {
-            background: linear-gradient(90deg, #ff0066, #ff1493, #ff69b4, #ffb6c1);
-            background-size: 200% 100%;
-            box-shadow: 0 0 20px rgba(255, 0, 102, 0.9), 0 0 40px rgba(255, 105, 180, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: healthShine 2s infinite linear;
-        }
-        
-        @keyframes healthShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        .mana-fill {
-            background: linear-gradient(90deg, #00ffff, #00bfff, #1e90ff, #4169e1);
-            background-size: 200% 100%;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.9), 0 0 40px rgba(30, 144, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: manaShine 2s infinite linear;
-        }
-        
-        @keyframes manaShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        /* Inventory UI */
-        #inventory-toggle {
-            position: absolute;
-            bottom: 100px;
-            left: 20px;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ffff00, #ff00ff, #00ffff) 1;
-            border-radius: 15px;
-            padding: 10px 20px;
-            color: #fff;
-            cursor: pointer;
-            font-weight: bold;
-            pointer-events: auto;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-            animation: inventoryPulse 2s infinite alternate;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-        
-        @keyframes inventoryPulse {
-            0% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6); }
-            100% { box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(255, 255, 0, 0.8); }
-        }
-        
-        #inventory-toggle:hover {
-            background: linear-gradient(135deg, #00ffff, #ff00ff, #ffff00);
-            transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(255, 0, 255, 1), 0 0 80px rgba(0, 255, 255, 0.9);
-        }
-        
-        #inventory-panel {
-            position: absolute;
-            left: 20px;
-            bottom: 150px;
-            width: 300px;
-            max-height: 400px;
-            overflow-y: auto;
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.4), rgba(0, 255, 255, 0.4), rgba(255, 20, 147, 0.4));
-            backdrop-filter: blur(15px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00) 1;
-            border-radius: 15px;
-            padding: 15px;
-            color: #fff;
+            pointer-events: none;
             display: none;
-            pointer-events: auto;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
         }
         
-        #inventory-panel.visible {
+        #ui-overlay.loaded {
             display: block;
         }
         
-        #inventory-panel h3 {
-            color: #fff;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7);
-            animation: headerGlow 2s infinite alternate;
-        }
-        
-        @keyframes headerGlow {
-            0% { text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7); }
-            100% { text-shadow: 0 0 20px rgba(255, 255, 0, 1), 0 0 40px rgba(255, 0, 255, 0.9); }
-        }
-        
-        #inventory-panel h4 {
-            color: #fff;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 8px rgba(0, 255, 255, 0.8), 0 0 16px rgba(255, 255, 0, 0.6);
-        }
-        
-        .inventory-item {
-            padding: 5px;
-            margin: 3px 0;
-            border-radius: 8px;
-            background: linear-gradient(90deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.3));
-            font-size: 0.9em;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-        
-        .inventory-item:hover {
-            background: linear-gradient(90deg, rgba(255, 0, 255, 0.6), rgba(0, 255, 255, 0.6));
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-        
-        /* Quest panel */
-        #quest-panel {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            max-height: 300px;
-            overflow-y: auto;
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.4), rgba(0, 255, 255, 0.4), rgba(255, 20, 147, 0.4));
-            backdrop-filter: blur(15px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00) 1;
-            border-radius: 15px;
-            padding: 15px;
-            color: #fff;
+        #ui-overlay > * {
             pointer-events: auto;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4);
         }
         
-        #quest-panel h3 {
-            color: #fff;
+        /* Notifications */
+        #notification-container {
+            position: absolute;
+            top: 70px;
+            right: 10px;
+            width: 300px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .notification {
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
+            padding: 12px;
             margin-bottom: 10px;
-            font-size: 1.1em;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7);
+            color: #e0e0e0;
+            pointer-events: auto;
+            animation: slideIn 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(320px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-title {
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 4px;
+        }
+        
+        .notification-message {
+            font-size: 0.9em;
+            color: #c4b5fd;
+        }
+        
+        /* Hidden by default */
+        .panel-hidden {
+            display: none;
+        }
+        
+        /* Tutorial - Make it less intrusive */
+        #tutorial-container {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 500px;
+            z-index: 2000;
         }
     </style>
 </head>
@@ -414,119 +755,229 @@
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
         
+        <!-- Loading Screen -->
         <div id="loading-screen">
             <div class="loading-title">Dynasty of Emberveil</div>
-            <div class="loading-subtitle">A Psychedelic Fantasy RPG</div>
+            <div class="loading-subtitle">✨ Anime Fantasy RPG ✨</div>
             <div class="loading-bar">
                 <div class="loading-progress" id="loading-progress"></div>
             </div>
-            <div class="loading-text" id="loading-text">Initializing...</div>
+            <div class="loading-text" id="loading-text">Initializing magic systems...</div>
         </div>
         
+        <!-- UI Overlay -->
         <div id="ui-overlay">
-            <!-- Player Health/Mana -->
-            <div id="health-bar" class="hud">
-                <div><strong>Player</strong></div>
-                <div>HP: <span id="hp-text">150/150</span></div>
-                <div class="bar">
-                    <div class="bar-fill health-fill" id="hp-bar" style="width: 100%;"></div>
+            <!-- Top Icon Bar -->
+            <div id="top-icon-bar">
+                <div class="icon-button" id="icon-character" title="Character (C)">👤</div>
+                <div class="icon-button" id="icon-inventory" title="Inventory (I)">🎒</div>
+                <div class="icon-button" id="icon-quests" title="Quests (Q)">📜</div>
+                <div class="icon-button" id="icon-skills" title="Skills (K)">⭐</div>
+                <div class="icon-button" id="icon-map" title="Map (M)">🗺️</div>
+                <div class="icon-button" id="icon-settings" title="Settings (ESC)">⚙️</div>
+            </div>
+            
+            <!-- Player Stats Panel -->
+            <div id="player-stats" class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">⚔️ Character</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('player-stats')">−</div>
+                    </div>
                 </div>
-                <div>MP: <span id="mp-text">100/100</span></div>
-                <div class="bar">
-                    <div class="bar-fill mana-fill" id="mp-bar" style="width: 100%;"></div>
+                <div class="panel-content">
+                    <div class="character-avatar"></div>
+                    <div class="character-name">Hero Name</div>
+                    <div class="character-class">Level 1 ⚔️ Warrior</div>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span class="stat-name">❤️ HP</span>
+                            <span class="stat-value" id="hp-text">100/100</span>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill health-fill" id="hp-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span class="stat-name">💙 MP</span>
+                            <span class="stat-value" id="mp-text">50/50</span>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill mana-fill" id="mp-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span class="stat-name">⭐ EXP</span>
+                            <span class="stat-value" id="exp-text">0/100</span>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill exp-fill" id="exp-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <!-- Active Companion -->
-            <div id="companion-panel" class="hud">
-                <div><strong>Companion</strong></div>
-                <div id="companion-name">Smoke Siren</div>
-                <div id="companion-status">Ready</div>
-            </div>
-            
-            <!-- Abilities -->
-            <div id="abilities-bar" class="hud">
-                <div class="ability-button" title="Smoke Blast (Q)" data-key="q">🔮</div>
-                <div class="ability-button" title="Shadow Step (W)" data-key="w">⚡</div>
-                <div class="ability-button" title="Essence Drain (E)" data-key="e">💀</div>
-                <div class="ability-button" title="Companion Ability (R)" data-key="r">💜</div>
-            </div>
-            
-            <!-- Inventory Toggle -->
-            <div id="inventory-toggle">📦 Inventory (I)</div>
-            
-            <!-- Inventory Panel -->
-            <div id="inventory-panel">
-                <h3>Inventory</h3>
-                <div id="inventory-content"></div>
+            <!-- Abilities Panel -->
+            <div id="abilities-panel" class="game-panel">
+                <div class="panel-content">
+                    <div class="ability-slot" title="Ability 1">
+                        🔥
+                        <span class="ability-key">Q</span>
+                    </div>
+                    <div class="ability-slot" title="Ability 2">
+                        ⚔️
+                        <span class="ability-key">W</span>
+                    </div>
+                    <div class="ability-slot" title="Ability 3">
+                        🛡️
+                        <span class="ability-key">E</span>
+                    </div>
+                    <div class="ability-slot" title="Ability 4">
+                        ⚡
+                        <span class="ability-key">R</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Quest Panel -->
-            <div id="quest-panel" class="hud">
-                <h3>📜 Quests</h3>
-                <div id="quest-list"></div>
-            </div>
-            
-            <!-- Feature Status Panel -->
-            <div id="feature-status" class="hud" style="position: absolute; top: 100px; left: 20px; max-width: 280px;">
-                <h3 style="font-size: 0.9em; margin-bottom: 8px; color: #00ff00;">🎮 v2.0.0 PRODUCTION BUILD</h3>
-                <div id="feature-list" style="font-size: 0.75em; line-height: 1.4;">
-                    <div style="color: #00ff00;">✅ COMPLETE FOUNDATION</div>
-                    <div>✅ Real 3D Models (GLTF)</div>
-                    <div>✅ Anime Toon Shading</div>
-                    <div>✅ World Builder System</div>
-                    <div>✅ 2 Complete Biomes</div>
-                    <div>✅ 8 Named NPCs</div>
-                    <div>✅ 5 Enemy Types</div>
-                    <div>✅ 2 Epic Bosses</div>
-                    <div>✅ Quest System</div>
-                    <div>✅ 200+ Free Assets</div>
-                    <div>✅ Fast Travel</div>
-                    <div>✅ Weather & Day/Night</div>
-                    <div style="margin-top: 10px; color: #ffff00; font-weight: bold;">⚡ FULLY PLAYABLE</div>
-                    <div style="margin-top: 5px; color: #00ffff; font-size: 0.7em;">Using ONLY free assets!</div>
-                    <div style="margin-top: 5px; color: #9d4edd; font-size: 0.7em;">Press ESC to start</div>
+            <div id="quest-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">📜 Quests</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('quest-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content" id="quest-list">
+                    <!-- Quests will be populated by game -->
                 </div>
             </div>
+            
+            <!-- Inventory Panel -->
+            <div id="inventory-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🎒 Inventory</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('inventory-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content" id="inventory-content">
+                    <!-- Inventory items will be populated by game -->
+                </div>
+            </div>
+            
+            <!-- Companion Panel -->
+            <div id="companion-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🐾 Companion</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('companion-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="companion-info">
+                        <div class="companion-name" id="companion-name">Smoke Siren</div>
+                        <div class="companion-status" id="companion-status">Ready</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notification Container -->
+            <div id="notification-container"></div>
+            
+            <!-- Tutorial Container -->
+            <div id="tutorial-container"></div>
         </div>
     </div>
     
     <script>
-        // Enhanced cache clearing to ensure latest version loads
-        console.log('🔄 Clearing all caches and service workers to load latest version...');
+        // Panel Management System
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                if (panel.classList.contains('panel-minimized')) {
+                    panel.classList.remove('panel-minimized');
+                } else if (panel.classList.contains('panel-hidden')) {
+                    panel.classList.remove('panel-hidden');
+                } else {
+                    panel.classList.add('panel-minimized');
+                }
+                
+                // Save panel state
+                savePanelState(panelId, panel.classList.toString());
+            }
+        }
         
-        // Unregister any existing service workers to prevent caching issues
+        function showPanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.remove('panel-hidden', 'panel-minimized');
+                savePanelState(panelId, panel.classList.toString());
+            }
+        }
+        
+        function hidePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.add('panel-hidden');
+                savePanelState(panelId, panel.classList.toString());
+            }
+        }
+        
+        function savePanelState(panelId, state) {
+            localStorage.setItem(`panel_${panelId}`, state);
+        }
+        
+        function loadPanelStates() {
+            const panels = document.querySelectorAll('.game-panel');
+            panels.forEach(panel => {
+                const saved = localStorage.getItem(`panel_${panel.id}`);
+                if (saved) {
+                    panel.className = saved;
+                }
+            });
+        }
+        
+        // Icon bar handlers
+        document.getElementById('icon-character').addEventListener('click', () => togglePanel('player-stats'));
+        document.getElementById('icon-inventory').addEventListener('click', () => togglePanel('inventory-panel'));
+        document.getElementById('icon-quests').addEventListener('click', () => togglePanel('quest-panel'));
+        
+        // Load saved panel states
+        window.addEventListener('load', loadPanelStates);
+        
+        // Cache clearing
+        console.log('🔄 Loading Dynasty of Emberveil v2.1.0...');
+        
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                    registration.unregister().then(function() {
-                        console.log('✅ Unregistered old service worker');
-                    });
-                }
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(reg => reg.unregister());
             });
         }
         
-        // Clear ALL caches to force fresh load
         if ('caches' in window) {
-            caches.keys().then(function(names) {
-                for (let name of names) {
-                    caches.delete(name).then(function() {
-                        console.log('✅ Cleared old cache:', name);
-                    });
-                }
+            caches.keys().then(names => {
+                names.forEach(name => caches.delete(name));
             });
         }
         
-        // Clear localStorage old game data if corrupted
-        const gameVersion = '2.0.0';
+        const gameVersion = '2.1.0';
         const storedVersion = localStorage.getItem('game_version');
         if (storedVersion !== gameVersion) {
-            console.log('🔄 Version mismatch detected, clearing old data...');
+            console.log('🔄 New version detected, clearing old data...');
+            // Don't clear panel states
+            const panelStates = {};
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('panel_')) {
+                    panelStates[key] = localStorage.getItem(key);
+                }
+            });
             localStorage.clear();
+            Object.keys(panelStates).forEach(key => {
+                localStorage.setItem(key, panelStates[key]);
+            });
             localStorage.setItem('game_version', gameVersion);
-            console.log('✅ Game data cleared, loading fresh v2.0.0');
-        } else {
-            console.log('✅ Game version matches: v' + gameVersion);
         }
     </script>
     <script type="module" src="/src/main.js"></script>

@@ -97,6 +97,8 @@ import { AddictiveGameplaySystem } from '../systems/AddictiveGameplaySystem.js';
 import { PlayerControlSettingsSystem } from '../systems/PlayerControlSettingsSystem.js';
 import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
 import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
+import { ContentIntegrationSystem } from '../systems/ContentIntegrationSystem.js';
+import { MascotBrandingSystem } from '../systems/MascotBrandingSystem.js';
 // Phase 1 Session 1.1: Psychedelic Cel-Shading (ULTIMATE_AUTONOMOUS_ROADMAP.md)
 import { PsychedelicCelShadingSystem } from '../rendering/PsychedelicCelShadingSystem.js';
 // New Magical Background System
@@ -213,6 +215,8 @@ export class GameEngine {
         this.playerControlSettingsSystem = null;
         this.cloudSaveSystem = null;
         this.advancedAutoManagementSystem = null;
+        this.contentIntegrationSystem = null;
+        this.mascotBrandingSystem = null;
         
         // Game state
         this.isRunning = false;
@@ -431,6 +435,10 @@ export class GameEngine {
             // Production Polish Systems
             this.animeStyleRenderingSystem = new AnimeStyleRenderingSystem(this);
             this.productionReadinessSystem = new ProductionReadinessSystem(this);
+            
+            // Content Integration & Branding Systems
+            this.mascotBrandingSystem = new MascotBrandingSystem();
+            this.contentIntegrationSystem = new ContentIntegrationSystem(this);
             
             // Multiplayer & Social Systems
             this.multiplayerSocialSystem = new MultiplayerSocialSystem(this);
