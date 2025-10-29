@@ -1,7 +1,7 @@
 {
   "name": "dynasty-of-emberveil",
   "version": "2.4.0",
-  "description": "Advanced anime/fantasy online multiplayer RPG - Production Ready",
+  "description": "Advanced anime/fantasy online multiplayer RPG - Production Ready - Always Playable at 60 FPS",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,9 +15,12 @@
     "multiplayer": "node multiplayer-server.js",
     "multiplayer:dev": "concurrently \"npm run dev\" \"npm run multiplayer\"",
     "multiplayer:prod": "npm run build && node multiplayer-server.js",
-    "start": "npm run multiplayer:prod",
+    "start": "node deploy-full-game.js",
+    "play": "node deploy-full-game.js",
+    "deploy": "node deploy-full-game.js",
     "lint": "echo 'Linting...' && exit 0",
-    "test": "echo 'Tests will be implemented' && exit 0",
+    "test": "node test-gameplay.js",
+    "test:quick": "node test-game.js",
     "format": "prettier --write \"src/**/*.js\"",
     "stress-test": "echo 'Install k6 for load testing' && exit 0",
     "install:all": "npm install && echo '✅ All dependencies installed'",
@@ -37,7 +40,10 @@
     "browser-game",
     "socket-io",
     "real-time",
-    "production-ready"
+    "production-ready",
+    "60fps",
+    "stable",
+    "playable"
   ],
   "author": "MrNova420",
   "license": "MIT",
