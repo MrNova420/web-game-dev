@@ -6,10 +6,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="game-version" content="2.0.0">
-    <meta name="build-date" content="2025-10-28">
+    <meta name="game-version" content="2.1.0">
+    <meta name="build-date" content="2025-10-29">
     <meta name="build-status" content="PRODUCTION-READY">
-    <title>Dynasty of Emberveil v2.0.0 - Complete Production Build</title>
+    <title>Dynasty of Emberveil - A Dark Fantasy RPG</title>
     <style>
         * {
             margin: 0;
@@ -20,13 +20,7 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff1493 50%, #9d4edd 75%, #00ff00 100%);
-            animation: rainbowShift 10s infinite alternate;
-        }
-        
-        @keyframes rainbowShift {
-            0% { filter: hue-rotate(0deg) saturate(1.5); }
-            100% { filter: hue-rotate(360deg) saturate(1.8); }
+            background: #0a0a0a;
         }
         
         #game-container {
@@ -41,46 +35,287 @@
             height: 100%;
         }
         
-        #ui-overlay {
+        /* Top Icon Bar - Minimalist */
+        #top-icon-bar {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+            z-index: 100;
             pointer-events: none;
-            display: none; /* Hide until game is loaded */
         }
         
-        #ui-overlay.loaded {
-            display: block;
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            background: rgba(20, 20, 30, 0.9);
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            pointer-events: auto;
+            font-size: 20px;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
         }
         
+        .icon-button:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .icon-button.active {
+            background: rgba(139, 92, 246, 0.5);
+            border-color: rgba(139, 92, 246, 1);
+        }
+        
+        /* Panel System - Collapsible */
+        .game-panel {
+            position: absolute;
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 12px;
+            padding: 15px;
+            color: #e0e0e0;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+            transition: all 0.3s;
+        }
+        
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .panel-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #a78bfa;
+        }
+        
+        .panel-controls {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .panel-btn {
+            width: 24px;
+            height: 24px;
+            background: rgba(139, 92, 246, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        
+        .panel-btn:hover {
+            background: rgba(139, 92, 246, 0.4);
+        }
+        
+        .panel-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .panel-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .panel-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.5);
+            border-radius: 3px;
+        }
+        
+        .panel-minimized .panel-content {
+            display: none;
+        }
+        
+        .panel-minimized {
+            padding: 8px 15px;
+        }
+        
+        /* Player Stats Panel - Top Left */
+        #player-stats {
+            top: 10px;
+            left: 10px;
+            min-width: 200px;
+        }
+        
+        .stat-bar {
+            margin: 8px 0;
+        }
+        
+        .stat-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+            margin-bottom: 4px;
+            color: #c4b5fd;
+        }
+        
+        .bar {
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .bar-fill {
+            height: 100%;
+            transition: width 0.3s;
+            border-radius: 10px;
+        }
+        
+        .health-fill {
+            background: linear-gradient(90deg, #dc2626, #ef4444);
+        }
+        
+        .mana-fill {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        
+        .exp-fill {
+            background: linear-gradient(90deg, #ca8a04, #eab308);
+        }
+        
+        /* Abilities Bar - Bottom Center */
+        #abilities-panel {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px;
+        }
+        
+        #abilities-panel .panel-content {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .ability-slot {
+            width: 50px;
+            height: 50px;
+            background: rgba(30, 30, 40, 0.8);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .ability-slot:hover {
+            background: rgba(139, 92, 246, 0.3);
+            border-color: rgba(139, 92, 246, 0.8);
+            transform: scale(1.1);
+        }
+        
+        .ability-key {
+            position: absolute;
+            bottom: 2px;
+            right: 4px;
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        /* Quest Panel - Right Side */
+        #quest-panel {
+            top: 10px;
+            right: 60px;
+            width: 300px;
+        }
+        
+        .quest-item {
+            padding: 10px;
+            margin: 8px 0;
+            background: rgba(30, 30, 40, 0.6);
+            border-left: 3px solid #a78bfa;
+            border-radius: 4px;
+        }
+        
+        .quest-title {
+            font-weight: bold;
+            color: #c4b5fd;
+            margin-bottom: 4px;
+        }
+        
+        .quest-desc {
+            font-size: 0.85em;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+        
+        .quest-progress {
+            font-size: 0.8em;
+            color: #fbbf24;
+        }
+        
+        /* Inventory Panel - Left Side */
+        #inventory-panel {
+            top: 200px;
+            left: 10px;
+            width: 280px;
+        }
+        
+        /* Companion Panel */
+        #companion-panel {
+            top: 10px;
+            right: 60px;
+            min-width: 180px;
+        }
+        
+        .companion-info {
+            text-align: center;
+        }
+        
+        .companion-name {
+            font-size: 1em;
+            color: #c4b5fd;
+            margin-bottom: 4px;
+        }
+        
+        .companion-status {
+            font-size: 0.85em;
+            color: #34d399;
+        }
+        
+        /* Loading Screen */
         #loading-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff1493 50%, #9d4edd 75%, #00ff00 100%);
+            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: #fff;
-            z-index: 1000;
+            z-index: 10000;
             transition: opacity 0.5s;
-            animation: magicalBackground 5s infinite alternate;
-        }
-        
-        @keyframes magicalBackground {
-            0% { 
-                background: linear-gradient(135deg, #ff00ff 0%, #00ffff 25%, #ff1493 50%, #9d4edd 75%, #00ff00 100%);
-                filter: brightness(1.2);
-            }
-            100% { 
-                background: linear-gradient(135deg, #00ff00 0%, #9d4edd 25%, #ff1493 50%, #00ffff 75%, #ff00ff 100%);
-                filter: brightness(1.5);
-            }
         }
         
         #loading-screen.hidden {
@@ -91,327 +326,115 @@
         .loading-title {
             font-size: 3em;
             font-weight: bold;
-            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff1493, #00ff00);
-            background-size: 400% 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #a78bfa;
             margin-bottom: 20px;
-            text-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
-            animation: rainbowText 3s infinite alternate, glow 2s infinite alternate;
-            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
-        }
-        
-        @keyframes rainbowText {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        @keyframes glow {
-            0% { filter: drop-shadow(0 0 10px rgba(255, 0, 255, 0.8)) brightness(1.2); }
-            100% { filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.9)) brightness(1.5); }
+            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
         }
         
         .loading-subtitle {
             font-size: 1.2em;
-            color: #fff;
+            color: #c4b5fd;
             margin-bottom: 40px;
-            text-shadow: 0 0 20px rgba(255, 0, 255, 0.9), 0 0 40px rgba(0, 255, 255, 0.7);
-            animation: pulse 2s infinite alternate;
-        }
-        
-        @keyframes pulse {
-            0% { 
-                transform: scale(1);
-                text-shadow: 0 0 20px rgba(255, 0, 255, 0.9), 0 0 40px rgba(0, 255, 255, 0.7);
-            }
-            100% { 
-                transform: scale(1.05);
-                text-shadow: 0 0 30px rgba(255, 255, 0, 1), 0 0 60px rgba(255, 0, 255, 0.9);
-            }
         }
         
         .loading-bar {
-            width: 300px;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+            width: 400px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
             overflow: hidden;
-            border: 3px solid #ff00ff;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.3);
-            animation: borderGlow 2s infinite alternate;
-        }
-        
-        @keyframes borderGlow {
-            0% { border-color: #ff00ff; box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6); }
-            50% { border-color: #00ffff; box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(255, 255, 0, 0.6); }
-            100% { border-color: #ffff00; box-shadow: 0 0 20px rgba(255, 255, 0, 0.8), 0 0 40px rgba(255, 0, 255, 0.6); }
+            border: 1px solid rgba(167, 139, 250, 0.3);
         }
         
         .loading-progress {
             height: 100%;
-            background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00, #ff1493, #00ff00);
-            background-size: 400% 100%;
+            background: linear-gradient(90deg, #7c3aed, #a78bfa);
             width: 0%;
             transition: width 0.3s;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 1), 0 0 60px rgba(0, 255, 255, 0.8);
-            animation: progressShine 2s infinite linear;
-        }
-        
-        @keyframes progressShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
         }
         
         .loading-text {
             margin-top: 20px;
-            color: #fff;
+            color: #9ca3af;
             font-size: 0.9em;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7);
-            animation: textGlow 1.5s infinite alternate;
         }
         
-        @keyframes textGlow {
-            0% { text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7); }
-            100% { text-shadow: 0 0 20px rgba(255, 255, 0, 1), 0 0 40px rgba(255, 0, 255, 0.9); }
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        
-        /* HUD Elements */
-        .hud {
-            pointer-events: auto;
+        /* UI Overlay */
+        #ui-overlay {
             position: absolute;
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.3), rgba(255, 20, 147, 0.3));
-            backdrop-filter: blur(10px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00, #ff1493) 1;
-            border-radius: 15px;
-            padding: 15px;
-            color: #fff;
-            font-size: 14px;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2);
-            animation: hudGlow 3s infinite alternate;
-        }
-        
-        @keyframes hudGlow {
-            0% { box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4), inset 0 0 20px rgba(255, 255, 255, 0.2); }
-            100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.8), 0 0 80px rgba(255, 255, 0, 0.5), inset 0 0 30px rgba(255, 255, 255, 0.3); }
-        }
-        
-        #health-bar {
-            top: 20px;
-            left: 20px;
-            min-width: 200px;
-        }
-        
-        #companion-panel {
-            top: 20px;
-            right: 20px;
-            min-width: 150px;
-        }
-        
-        #abilities-bar {
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-        }
-        
-        .ability-button {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ffff00, #ff00ff, #00ffff) 1;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-            animation: buttonPulse 2s infinite alternate;
-        }
-        
-        @keyframes buttonPulse {
-            0% { 
-                box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-                transform: scale(1);
-            }
-            100% { 
-                box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(255, 255, 0, 0.8);
-                transform: scale(1.05);
-            }
-        }
-        
-        .ability-button:hover {
-            transform: scale(1.2) rotate(5deg);
-            box-shadow: 0 0 40px rgba(255, 0, 255, 1), 0 0 80px rgba(0, 255, 255, 0.9), 0 0 120px rgba(255, 255, 0, 0.7);
-            filter: brightness(1.5) saturate(1.5);
-        }
-        
-        .bar {
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 5px 0;
-        }
-        
-        .bar-fill {
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            transition: width 0.3s;
-        }
-        
-        .health-fill {
-            background: linear-gradient(90deg, #ff0066, #ff1493, #ff69b4, #ffb6c1);
-            background-size: 200% 100%;
-            box-shadow: 0 0 20px rgba(255, 0, 102, 0.9), 0 0 40px rgba(255, 105, 180, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: healthShine 2s infinite linear;
-        }
-        
-        @keyframes healthShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        .mana-fill {
-            background: linear-gradient(90deg, #00ffff, #00bfff, #1e90ff, #4169e1);
-            background-size: 200% 100%;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.9), 0 0 40px rgba(30, 144, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.5);
-            animation: manaShine 2s infinite linear;
-        }
-        
-        @keyframes manaShine {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 100% 50%; }
-        }
-        
-        /* Inventory UI */
-        #inventory-toggle {
-            position: absolute;
-            bottom: 100px;
-            left: 20px;
-            background: linear-gradient(135deg, #ff00ff, #00ffff, #ff1493);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ffff00, #ff00ff, #00ffff) 1;
-            border-radius: 15px;
-            padding: 10px 20px;
-            color: #fff;
-            cursor: pointer;
-            font-weight: bold;
-            pointer-events: auto;
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6);
-            animation: inventoryPulse 2s infinite alternate;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-        }
-        
-        @keyframes inventoryPulse {
-            0% { box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), 0 0 40px rgba(0, 255, 255, 0.6); }
-            100% { box-shadow: 0 0 30px rgba(0, 255, 255, 1), 0 0 60px rgba(255, 255, 0, 0.8); }
-        }
-        
-        #inventory-toggle:hover {
-            background: linear-gradient(135deg, #00ffff, #ff00ff, #ffff00);
-            transform: scale(1.1);
-            box-shadow: 0 0 40px rgba(255, 0, 255, 1), 0 0 80px rgba(0, 255, 255, 0.9);
-        }
-        
-        #inventory-panel {
-            position: absolute;
-            left: 20px;
-            bottom: 150px;
-            width: 300px;
-            max-height: 400px;
-            overflow-y: auto;
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.4), rgba(0, 255, 255, 0.4), rgba(255, 20, 147, 0.4));
-            backdrop-filter: blur(15px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00) 1;
-            border-radius: 15px;
-            padding: 15px;
-            color: #fff;
+            pointer-events: none;
             display: none;
-            pointer-events: auto;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
         }
         
-        #inventory-panel.visible {
+        #ui-overlay.loaded {
             display: block;
         }
         
-        #inventory-panel h3 {
-            color: #fff;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7);
-            animation: headerGlow 2s infinite alternate;
-        }
-        
-        @keyframes headerGlow {
-            0% { text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7); }
-            100% { text-shadow: 0 0 20px rgba(255, 255, 0, 1), 0 0 40px rgba(255, 0, 255, 0.9); }
-        }
-        
-        #inventory-panel h4 {
-            color: #fff;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            text-shadow: 0 0 8px rgba(0, 255, 255, 0.8), 0 0 16px rgba(255, 255, 0, 0.6);
-        }
-        
-        .inventory-item {
-            padding: 5px;
-            margin: 3px 0;
-            border-radius: 8px;
-            background: linear-gradient(90deg, rgba(255, 0, 255, 0.3), rgba(0, 255, 255, 0.3));
-            font-size: 0.9em;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px rgba(255, 0, 255, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.1);
-            transition: all 0.3s;
-        }
-        
-        .inventory-item:hover {
-            background: linear-gradient(90deg, rgba(255, 0, 255, 0.6), rgba(0, 255, 255, 0.6));
-            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8), inset 0 0 15px rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-        
-        /* Quest panel */
-        #quest-panel {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            max-height: 300px;
-            overflow-y: auto;
-            background: linear-gradient(135deg, rgba(255, 0, 255, 0.4), rgba(0, 255, 255, 0.4), rgba(255, 20, 147, 0.4));
-            backdrop-filter: blur(15px);
-            border: 3px solid;
-            border-image: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00) 1;
-            border-radius: 15px;
-            padding: 15px;
-            color: #fff;
+        #ui-overlay > * {
             pointer-events: auto;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.4);
         }
         
-        #quest-panel h3 {
-            color: #fff;
+        /* Notifications */
+        #notification-container {
+            position: absolute;
+            top: 70px;
+            right: 10px;
+            width: 300px;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        
+        .notification {
+            background: rgba(15, 15, 25, 0.95);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
+            padding: 12px;
             margin-bottom: 10px;
-            font-size: 1.1em;
-            text-shadow: 0 0 10px rgba(255, 0, 255, 0.9), 0 0 20px rgba(0, 255, 255, 0.7);
+            color: #e0e0e0;
+            pointer-events: auto;
+            animation: slideIn 0.3s;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(320px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification-title {
+            font-weight: bold;
+            color: #a78bfa;
+            margin-bottom: 4px;
+        }
+        
+        .notification-message {
+            font-size: 0.9em;
+            color: #c4b5fd;
+        }
+        
+        /* Hidden by default */
+        .panel-hidden {
+            display: none;
+        }
+        
+        /* Tutorial - Make it less intrusive */
+        #tutorial-container {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 500px;
+            z-index: 2000;
         }
     </style>
 </head>
@@ -419,119 +442,230 @@
     <div id="game-container">
         <canvas id="game-canvas"></canvas>
         
+        <!-- Loading Screen -->
         <div id="loading-screen">
             <div class="loading-title">Dynasty of Emberveil</div>
-            <div class="loading-subtitle">A Psychedelic Fantasy RPG</div>
+            <div class="loading-subtitle">A Dark Fantasy RPG</div>
             <div class="loading-bar">
                 <div class="loading-progress" id="loading-progress"></div>
             </div>
             <div class="loading-text" id="loading-text">Initializing...</div>
         </div>
         
+        <!-- UI Overlay -->
         <div id="ui-overlay">
-            <!-- Player Health/Mana -->
-            <div id="health-bar" class="hud">
-                <div><strong>Player</strong></div>
-                <div>HP: <span id="hp-text">150/150</span></div>
-                <div class="bar">
-                    <div class="bar-fill health-fill" id="hp-bar" style="width: 100%;"></div>
+            <!-- Top Icon Bar -->
+            <div id="top-icon-bar">
+                <div class="icon-button" id="icon-character" title="Character (C)">👤</div>
+                <div class="icon-button" id="icon-inventory" title="Inventory (I)">🎒</div>
+                <div class="icon-button" id="icon-quests" title="Quests (Q)">📜</div>
+                <div class="icon-button" id="icon-skills" title="Skills (K)">⭐</div>
+                <div class="icon-button" id="icon-map" title="Map (M)">🗺️</div>
+                <div class="icon-button" id="icon-settings" title="Settings (ESC)">⚙️</div>
+            </div>
+            
+            <!-- Player Stats Panel -->
+            <div id="player-stats" class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">⚔️ Character</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('player-stats')">−</div>
+                    </div>
                 </div>
-                <div>MP: <span id="mp-text">100/100</span></div>
-                <div class="bar">
-                    <div class="bar-fill mana-fill" id="mp-bar" style="width: 100%;"></div>
+                <div class="panel-content">
+                    <div style="text-align: center; margin-bottom: 12px;">
+                        <div style="font-size: 1.1em; color: #a78bfa;">Hero Name</div>
+                        <div style="font-size: 0.9em; color: #fbbf24;">Level 1 Warrior</div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span>HP</span>
+                            <span id="hp-text">100/100</span>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill health-fill" id="hp-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span>MP</span>
+                            <span id="mp-text">50/50</span>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill mana-fill" id="mp-bar" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                    <div class="stat-bar">
+                        <div class="stat-label">
+                            <span>EXP</span>
+                            <span id="exp-text">0/100</span>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill exp-fill" id="exp-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <!-- Active Companion -->
-            <div id="companion-panel" class="hud">
-                <div><strong>Companion</strong></div>
-                <div id="companion-name">Smoke Siren</div>
-                <div id="companion-status">Ready</div>
-            </div>
-            
-            <!-- Abilities -->
-            <div id="abilities-bar" class="hud">
-                <div class="ability-button" title="Smoke Blast (Q)" data-key="q">🔮</div>
-                <div class="ability-button" title="Shadow Step (W)" data-key="w">⚡</div>
-                <div class="ability-button" title="Essence Drain (E)" data-key="e">💀</div>
-                <div class="ability-button" title="Companion Ability (R)" data-key="r">💜</div>
-            </div>
-            
-            <!-- Inventory Toggle -->
-            <div id="inventory-toggle">📦 Inventory (I)</div>
-            
-            <!-- Inventory Panel -->
-            <div id="inventory-panel">
-                <h3>Inventory</h3>
-                <div id="inventory-content"></div>
+            <!-- Abilities Panel -->
+            <div id="abilities-panel" class="game-panel">
+                <div class="panel-content">
+                    <div class="ability-slot" title="Ability 1">
+                        🔥
+                        <span class="ability-key">Q</span>
+                    </div>
+                    <div class="ability-slot" title="Ability 2">
+                        ⚔️
+                        <span class="ability-key">W</span>
+                    </div>
+                    <div class="ability-slot" title="Ability 3">
+                        🛡️
+                        <span class="ability-key">E</span>
+                    </div>
+                    <div class="ability-slot" title="Ability 4">
+                        ⚡
+                        <span class="ability-key">R</span>
+                    </div>
+                </div>
             </div>
             
             <!-- Quest Panel -->
-            <div id="quest-panel" class="hud">
-                <h3>📜 Quests</h3>
-                <div id="quest-list"></div>
-            </div>
-            
-            <!-- Feature Status Panel -->
-            <div id="feature-status" class="hud" style="position: absolute; top: 100px; left: 20px; max-width: 280px;">
-                <h3 style="font-size: 0.9em; margin-bottom: 8px; color: #00ff00;">🎮 v2.0.0 PRODUCTION BUILD</h3>
-                <div id="feature-list" style="font-size: 0.75em; line-height: 1.4;">
-                    <div style="color: #00ff00;">✅ COMPLETE FOUNDATION</div>
-                    <div>✅ Real 3D Models (GLTF)</div>
-                    <div>✅ Anime Toon Shading</div>
-                    <div>✅ World Builder System</div>
-                    <div>✅ 2 Complete Biomes</div>
-                    <div>✅ 8 Named NPCs</div>
-                    <div>✅ 5 Enemy Types</div>
-                    <div>✅ 2 Epic Bosses</div>
-                    <div>✅ Quest System</div>
-                    <div>✅ 200+ Free Assets</div>
-                    <div>✅ Fast Travel</div>
-                    <div>✅ Weather & Day/Night</div>
-                    <div style="margin-top: 10px; color: #ffff00; font-weight: bold;">⚡ FULLY PLAYABLE</div>
-                    <div style="margin-top: 5px; color: #00ffff; font-size: 0.7em;">Using ONLY free assets!</div>
-                    <div style="margin-top: 5px; color: #9d4edd; font-size: 0.7em;">Press ESC to start</div>
+            <div id="quest-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">📜 Quests</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('quest-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content" id="quest-list">
+                    <!-- Quests will be populated by game -->
                 </div>
             </div>
+            
+            <!-- Inventory Panel -->
+            <div id="inventory-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🎒 Inventory</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('inventory-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content" id="inventory-content">
+                    <!-- Inventory items will be populated by game -->
+                </div>
+            </div>
+            
+            <!-- Companion Panel -->
+            <div id="companion-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🐾 Companion</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('companion-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <div class="companion-info">
+                        <div class="companion-name" id="companion-name">Smoke Siren</div>
+                        <div class="companion-status" id="companion-status">Ready</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Notification Container -->
+            <div id="notification-container"></div>
+            
+            <!-- Tutorial Container -->
+            <div id="tutorial-container"></div>
         </div>
     </div>
     
     <script>
-        // Enhanced cache clearing to ensure latest version loads
-        console.log('🔄 Clearing all caches and service workers to load latest version...');
+        // Panel Management System
+        function togglePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                if (panel.classList.contains('panel-minimized')) {
+                    panel.classList.remove('panel-minimized');
+                } else if (panel.classList.contains('panel-hidden')) {
+                    panel.classList.remove('panel-hidden');
+                } else {
+                    panel.classList.add('panel-minimized');
+                }
+                
+                // Save panel state
+                savePanelState(panelId, panel.classList.toString());
+            }
+        }
         
-        // Unregister any existing service workers to prevent caching issues
+        function showPanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.remove('panel-hidden', 'panel-minimized');
+                savePanelState(panelId, panel.classList.toString());
+            }
+        }
+        
+        function hidePanel(panelId) {
+            const panel = document.getElementById(panelId);
+            if (panel) {
+                panel.classList.add('panel-hidden');
+                savePanelState(panelId, panel.classList.toString());
+            }
+        }
+        
+        function savePanelState(panelId, state) {
+            localStorage.setItem(`panel_${panelId}`, state);
+        }
+        
+        function loadPanelStates() {
+            const panels = document.querySelectorAll('.game-panel');
+            panels.forEach(panel => {
+                const saved = localStorage.getItem(`panel_${panel.id}`);
+                if (saved) {
+                    panel.className = saved;
+                }
+            });
+        }
+        
+        // Icon bar handlers
+        document.getElementById('icon-character').addEventListener('click', () => togglePanel('player-stats'));
+        document.getElementById('icon-inventory').addEventListener('click', () => togglePanel('inventory-panel'));
+        document.getElementById('icon-quests').addEventListener('click', () => togglePanel('quest-panel'));
+        
+        // Load saved panel states
+        window.addEventListener('load', loadPanelStates);
+        
+        // Cache clearing
+        console.log('🔄 Loading Dynasty of Emberveil v2.1.0...');
+        
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                for(let registration of registrations) {
-                    registration.unregister().then(function() {
-                        console.log('✅ Unregistered old service worker');
-                    });
-                }
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(reg => reg.unregister());
             });
         }
         
-        // Clear ALL caches to force fresh load
         if ('caches' in window) {
-            caches.keys().then(function(names) {
-                for (let name of names) {
-                    caches.delete(name).then(function() {
-                        console.log('✅ Cleared old cache:', name);
-                    });
-                }
+            caches.keys().then(names => {
+                names.forEach(name => caches.delete(name));
             });
         }
         
-        // Clear localStorage old game data if corrupted
-        const gameVersion = '2.0.0';
+        const gameVersion = '2.1.0';
         const storedVersion = localStorage.getItem('game_version');
         if (storedVersion !== gameVersion) {
-            console.log('🔄 Version mismatch detected, clearing old data...');
+            console.log('🔄 New version detected, clearing old data...');
+            // Don't clear panel states
+            const panelStates = {};
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('panel_')) {
+                    panelStates[key] = localStorage.getItem(key);
+                }
+            });
             localStorage.clear();
+            Object.keys(panelStates).forEach(key => {
+                localStorage.setItem(key, panelStates[key]);
+            });
             localStorage.setItem('game_version', gameVersion);
-            console.log('✅ Game data cleared, loading fresh v2.0.0');
-        } else {
-            console.log('✅ Game version matches: v' + gameVersion);
         }
     </script>
     <script type="module" src="/src/main.js"></script>
