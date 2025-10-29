@@ -6,10 +6,13 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <meta name="game-version" content="2.1.0">
+    <meta name="game-version" content="2.2.0">
     <meta name="build-date" content="2025-10-29">
-    <meta name="build-status" content="PRODUCTION-READY">
-    <title>Dynasty of Emberveil - A Dark Fantasy RPG</title>
+    <meta name="build-status" content="PRODUCTION-READY-ADVANCED">
+    <title>Dynasty of Emberveil - Anime Fantasy RPG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,10 +20,29 @@
             box-sizing: border-box;
         }
         
+        :root {
+            --fantasy-dark: #0a0e27;
+            --fantasy-medium: #1a2847;
+            --fantasy-light: #2d4a7c;
+            --gold: #d4af37;
+            --crimson: #dc143c;
+            --emerald: #50c878;
+            --arcane-purple: #8b00ff;
+            --anime-pink: #ff69b4;
+            --frost-blue: #00ced1;
+        }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Raleway', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            background: #0a0a0a;
+            background: linear-gradient(135deg, var(--fantasy-dark) 0%, var(--fantasy-medium) 50%, #16213e 100%);
+            background-size: 200% 200%;
+            animation: gradientShift 15s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         #game-container {
@@ -35,113 +57,201 @@
             height: 100%;
         }
         
-        /* Top Icon Bar - Minimalist */
+        /* Advanced Anime-Style Top Bar */
         #top-icon-bar {
             position: absolute;
-            top: 10px;
-            right: 10px;
+            top: 15px;
+            right: 15px;
             display: flex;
-            gap: 8px;
+            gap: 12px;
             z-index: 100;
             pointer-events: none;
         }
         
         .icon-button {
-            width: 40px;
-            height: 40px;
-            background: rgba(20, 20, 30, 0.9);
-            border: 2px solid rgba(139, 92, 246, 0.5);
-            border-radius: 8px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, rgba(26, 40, 71, 0.95), rgba(45, 74, 124, 0.95));
+            border: 2px solid var(--arcane-purple);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             pointer-events: auto;
-            font-size: 20px;
-            transition: all 0.3s;
+            font-size: 24px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(139, 0, 255, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .icon-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .icon-button:hover::before {
+            opacity: 1;
         }
         
         .icon-button:hover {
-            background: rgba(139, 92, 246, 0.3);
-            border-color: rgba(139, 92, 246, 0.8);
-            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.6), rgba(255, 105, 180, 0.6));
+            border-color: var(--gold);
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.2);
         }
         
         .icon-button.active {
-            background: rgba(139, 92, 246, 0.5);
-            border-color: rgba(139, 92, 246, 1);
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.8), rgba(139, 0, 255, 0.8));
+            border-color: var(--anime-pink);
+            box-shadow: 0 0 30px var(--anime-pink), inset 0 0 15px rgba(255, 255, 255, 0.3);
+            animation: iconPulse 2s ease-in-out infinite;
         }
         
-        /* Panel System - Collapsible */
+        @keyframes iconPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Advanced Fantasy Panel System */
         .game-panel {
             position: absolute;
-            background: rgba(15, 15, 25, 0.95);
-            border: 2px solid rgba(139, 92, 246, 0.4);
-            border-radius: 12px;
-            padding: 15px;
+            background: linear-gradient(135deg, 
+                rgba(10, 14, 39, 0.98) 0%, 
+                rgba(26, 40, 71, 0.98) 50%, 
+                rgba(45, 74, 124, 0.95) 100%);
+            border: 3px solid;
+            border-image: linear-gradient(45deg, var(--arcane-purple), var(--anime-pink), var(--gold)) 1;
+            border-radius: 16px;
+            padding: 18px;
             color: #e0e0e0;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 10px 40px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15),
+                0 0 30px rgba(139, 0, 255, 0.4);
             pointer-events: auto;
-            transition: all 0.3s;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Raleway', sans-serif;
+        }
+        
+        .game-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 14px;
+            padding: 2px;
+            background: linear-gradient(45deg, var(--arcane-purple), var(--anime-pink), var(--gold));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.7;
+            pointer-events: none;
         }
         
         .panel-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, var(--arcane-purple), transparent) 1;
+            position: relative;
+        }
+        
+        .panel-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 30%;
+            height: 2px;
+            background: var(--anime-pink);
+            box-shadow: 0 0 10px var(--anime-pink);
         }
         
         .panel-title {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #a78bfa;
+            font-size: 1.3em;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--anime-pink), var(--arcane-purple), var(--gold));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleShimmer 3s ease infinite;
+            text-shadow: 0 0 20px rgba(255, 105, 180, 0.5);
+            letter-spacing: 1px;
+        }
+        
+        @keyframes titleShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         .panel-controls {
             display: flex;
-            gap: 5px;
+            gap: 6px;
         }
         
         .panel-btn {
-            width: 24px;
-            height: 24px;
-            background: rgba(139, 92, 246, 0.2);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            border-radius: 4px;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.3), rgba(255, 105, 180, 0.3));
+            border: 2px solid var(--arcane-purple);
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+            color: var(--anime-pink);
         }
         
         .panel-btn:hover {
-            background: rgba(139, 92, 246, 0.4);
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.6), rgba(139, 0, 255, 0.6));
+            transform: scale(1.1);
+            box-shadow: 0 0 15px var(--anime-pink);
         }
         
         .panel-content {
-            max-height: 400px;
+            max-height: 450px;
             overflow-y: auto;
+            overflow-x: hidden;
         }
         
         .panel-content::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         
         .panel-content::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
         }
         
         .panel-content::-webkit-scrollbar-thumb {
-            background: rgba(139, 92, 246, 0.5);
-            border-radius: 3px;
+            background: linear-gradient(135deg, var(--arcane-purple), var(--anime-pink));
+            border-radius: 4px;
+            box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.3);
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--anime-pink), var(--gold));
         }
         
         .panel-minimized .panel-content {
@@ -149,173 +259,335 @@
         }
         
         .panel-minimized {
-            padding: 8px 15px;
+            padding: 10px 18px;
         }
         
-        /* Player Stats Panel - Top Left */
+        /* Advanced Character Stats Panel */
         #player-stats {
-            top: 10px;
-            left: 10px;
-            min-width: 200px;
+            top: 15px;
+            left: 15px;
+            min-width: 280px;
+        }
+        
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            border: 4px solid var(--gold);
+            background: linear-gradient(135deg, var(--arcane-purple), var(--anime-pink));
+            box-shadow: 
+                0 0 25px var(--gold),
+                inset 0 0 20px rgba(255, 255, 255, 0.3);
+            animation: avatarGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes avatarGlow {
+            0%, 100% { 
+                box-shadow: 0 0 25px var(--gold), inset 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+            50% { 
+                box-shadow: 0 0 40px var(--anime-pink), inset 0 0 30px rgba(255, 255, 255, 0.5);
+            }
+        }
+        
+        .character-name {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: 600;
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            text-shadow: 0 0 10px var(--gold), 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 4px;
+        }
+        
+        .character-class {
+            text-align: center;
+            font-size: 0.95em;
+            color: var(--anime-pink);
+            text-shadow: 0 0 8px var(--anime-pink);
+            margin-bottom: 15px;
         }
         
         .stat-bar {
-            margin: 8px 0;
+            margin: 12px 0;
+            position: relative;
         }
         
         .stat-label {
             display: flex;
             justify-content: space-between;
-            font-size: 0.9em;
-            margin-bottom: 4px;
-            color: #c4b5fd;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .stat-name {
+            color: var(--anime-pink);
+            text-shadow: 0 0 5px var(--anime-pink);
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+            font-weight: 600;
         }
         
         .bar {
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 12px;
             overflow: hidden;
-            border: 1px solid rgba(139, 92, 246, 0.3);
+            border: 2px solid rgba(139, 0, 255, 0.4);
+            position: relative;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+            border-radius: 12px 12px 0 0;
         }
         
         .bar-fill {
             height: 100%;
-            transition: width 0.3s;
-            border-radius: 10px;
+            transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            animation: barShimmer 2s infinite;
+        }
+        
+        @keyframes barShimmer {
+            0% { left: -100%; }
+            100% { left: 200%; }
         }
         
         .health-fill {
-            background: linear-gradient(90deg, #dc2626, #ef4444);
+            background: linear-gradient(90deg, 
+                #dc143c 0%, 
+                #ff1493 50%, 
+                #ff69b4 100%);
+            box-shadow: 
+                0 0 15px rgba(220, 20, 60, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
         .mana-fill {
-            background: linear-gradient(90deg, #2563eb, #3b82f6);
+            background: linear-gradient(90deg, 
+                #0000cd 0%, 
+                #4169e1 50%, 
+                #00bfff 100%);
+            box-shadow: 
+                0 0 15px rgba(65, 105, 225, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
         .exp-fill {
-            background: linear-gradient(90deg, #ca8a04, #eab308);
+            background: linear-gradient(90deg, 
+                #d4af37 0%, 
+                #ffd700 50%, 
+                #ffec8b 100%);
+            box-shadow: 
+                0 0 15px rgba(255, 215, 0, 0.8),
+                inset 0 0 10px rgba(255, 255, 255, 0.3);
         }
         
-        /* Abilities Bar - Bottom Center */
+        /* Advanced Anime-Style Abilities Bar */
         #abilities-panel {
-            bottom: 20px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            padding: 10px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, 
+                rgba(10, 14, 39, 0.98) 0%, 
+                rgba(26, 40, 71, 0.98) 100%);
         }
         
         #abilities-panel .panel-content {
             display: flex;
-            gap: 10px;
+            gap: 15px;
         }
         
         .ability-slot {
-            width: 50px;
-            height: 50px;
-            background: rgba(30, 30, 40, 0.8);
-            border: 2px solid rgba(139, 92, 246, 0.4);
-            border-radius: 8px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(50, 30, 70, 0.95));
+            border: 3px solid var(--arcane-purple);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 28px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 4px 15px rgba(139, 0, 255, 0.5),
+                inset 0 2px 5px rgba(255, 255, 255, 0.1);
+        }
+        
+        .ability-slot::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent,
+                var(--anime-pink),
+                transparent 30%
+            );
+            animation: abilityRotate 3s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes abilityRotate {
+            100% { transform: rotate(360deg); }
+        }
+        
+        .ability-slot:hover::before {
+            opacity: 1;
+        }
+        
+        .ability-slot::after {
+            content: '';
+            position: absolute;
+            inset: 3px;
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.95), rgba(50, 30, 70, 0.95));
+            border-radius: 9px;
+            z-index: -1;
         }
         
         .ability-slot:hover {
-            background: rgba(139, 92, 246, 0.3);
-            border-color: rgba(139, 92, 246, 0.8);
-            transform: scale(1.1);
+            background: linear-gradient(135deg, rgba(139, 0, 255, 0.5), rgba(255, 105, 180, 0.5));
+            border-color: var(--anime-pink);
+            transform: scale(1.15) translateY(-5px);
+            box-shadow: 
+                0 8px 30px var(--anime-pink),
+                0 0 40px var(--arcane-purple),
+                inset 0 2px 10px rgba(255, 255, 255, 0.2);
+        }
+        
+        .ability-slot:active {
+            transform: scale(1.05) translateY(-2px);
         }
         
         .ability-key {
             position: absolute;
-            bottom: 2px;
-            right: 4px;
-            font-size: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 2px 4px;
-            border-radius: 3px;
+            bottom: 3px;
+            right: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 5px;
+            border-radius: 4px;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
         }
         
-        /* Quest Panel - Right Side */
+        /* Advanced Anime-Style Quest Panel */
         #quest-panel {
-            top: 10px;
-            right: 60px;
-            width: 300px;
+            top: 15px;
+            right: 80px;
+            width: 320px;
         }
         
         .quest-item {
-            padding: 10px;
-            margin: 8px 0;
-            background: rgba(30, 30, 40, 0.6);
-            border-left: 3px solid #a78bfa;
-            border-radius: 4px;
+            padding: 12px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, rgba(30, 30, 50, 0.8), rgba(50, 30, 70, 0.7));
+            border-left: 4px solid var(--anime-pink);
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .quest-item:hover {
+            background: linear-gradient(135deg, rgba(50, 30, 70, 0.9), rgba(70, 30, 90, 0.8));
+            border-left-color: var(--gold);
+            transform: translateX(-5px);
+            box-shadow: 0 4px 20px rgba(139, 0, 255, 0.5);
         }
         
         .quest-title {
-            font-weight: bold;
-            color: #c4b5fd;
-            margin-bottom: 4px;
+            font-weight: 600;
+            font-size: 1.05em;
+            color: var(--anime-pink);
+            text-shadow: 0 0 8px var(--anime-pink);
+            margin-bottom: 6px;
+            font-family: 'Cinzel', serif;
         }
         
         .quest-desc {
-            font-size: 0.85em;
-            color: #9ca3af;
-            margin-bottom: 6px;
+            font-size: 0.9em;
+            color: #b8b8d8;
+            margin-bottom: 8px;
+            line-height: 1.4;
         }
         
         .quest-progress {
-            font-size: 0.8em;
-            color: #fbbf24;
-        }
-        
-        /* Inventory Panel - Left Side */
-        #inventory-panel {
-            top: 200px;
-            left: 10px;
-            width: 280px;
-        }
-        
-        /* Companion Panel */
-        #companion-panel {
-            top: 10px;
-            right: 60px;
-            min-width: 180px;
-        }
-        
-        .companion-info {
-            text-align: center;
-        }
-        
-        .companion-name {
-            font-size: 1em;
-            color: #c4b5fd;
-            margin-bottom: 4px;
-        }
-        
-        .companion-status {
             font-size: 0.85em;
-            color: #34d399;
+            color: var(--gold);
+            text-shadow: 0 0 5px var(--gold);
+            font-weight: 500;
         }
         
-        /* Loading Screen */
+        /* Advanced Loading Screen */
         #loading-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, 
+                var(--fantasy-dark) 0%, 
+                var(--fantasy-medium) 50%, 
+                #16213e 100%);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             color: #fff;
             z-index: 10000;
-            transition: opacity 0.5s;
+            transition: opacity 0.8s;
+        }
+        
+        #loading-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(139,0,255,0.1)" stroke-width="2"/></svg>');
+            animation: bgMove 20s linear infinite;
+            opacity: 0.3;
+        }
+        
+        @keyframes bgMove {
+            from { transform: translate(0, 0); }
+            to { transform: translate(50px, 50px); }
         }
         
         #loading-screen.hidden {
@@ -324,39 +596,80 @@
         }
         
         .loading-title {
-            font-size: 3em;
-            font-weight: bold;
-            color: #a78bfa;
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(167, 139, 250, 0.5);
+            font-size: 3.5em;
+            font-weight: 700;
+            font-family: 'Cinzel', serif;
+            background: linear-gradient(135deg, var(--anime-pink), var(--arcane-purple), var(--gold));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            animation: titleFloat 3s ease-in-out infinite, titleShimmer 4s ease infinite;
+            letter-spacing: 3px;
+            filter: drop-shadow(0 0 30px rgba(255, 105, 180, 0.8));
+        }
+        
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
         
         .loading-subtitle {
-            font-size: 1.2em;
-            color: #c4b5fd;
-            margin-bottom: 40px;
+            font-size: 1.4em;
+            color: var(--anime-pink);
+            text-shadow: 0 0 20px var(--anime-pink), 0 0 40px var(--arcane-purple);
+            margin-bottom: 50px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 300;
+            letter-spacing: 2px;
         }
         
         .loading-bar {
-            width: 400px;
-            height: 8px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 4px;
+            width: 450px;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 5px;
             overflow: hidden;
-            border: 1px solid rgba(167, 139, 250, 0.3);
+            border: 2px solid var(--arcane-purple);
+            box-shadow: 0 0 30px rgba(139, 0, 255, 0.6), inset 0 2px 5px rgba(0, 0, 0, 0.5);
         }
         
         .loading-progress {
             height: 100%;
-            background: linear-gradient(90deg, #7c3aed, #a78bfa);
+            background: linear-gradient(90deg, 
+                var(--arcane-purple) 0%,
+                var(--anime-pink) 50%,
+                var(--gold) 100%);
+            background-size: 200% 100%;
             width: 0%;
-            transition: width 0.3s;
+            transition: width 0.4s;
+            box-shadow: 0 0 20px var(--anime-pink);
+            animation: progressFlow 2s linear infinite;
+            position: relative;
+        }
+        
+        @keyframes progressFlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 200% 0%; }
+        }
+        
+        .loading-progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
         }
         
         .loading-text {
-            margin-top: 20px;
-            color: #9ca3af;
-            font-size: 0.9em;
+            margin-top: 25px;
+            color: #b8b8d8;
+            font-size: 1em;
+            text-shadow: 0 0 10px var(--arcane-purple);
+            font-family: 'Raleway', sans-serif;
         }
         
         /* UI Overlay */
@@ -448,11 +761,11 @@
         <!-- Loading Screen -->
         <div id="loading-screen">
             <div class="loading-title">Dynasty of Emberveil</div>
-            <div class="loading-subtitle">A Dark Fantasy RPG</div>
+            <div class="loading-subtitle">✨ Anime Fantasy RPG ✨</div>
             <div class="loading-bar">
                 <div class="loading-progress" id="loading-progress"></div>
             </div>
-            <div class="loading-text" id="loading-text">Initializing...</div>
+            <div class="loading-text" id="loading-text">Initializing magic systems...</div>
         </div>
         
         <!-- UI Overlay -->
@@ -476,14 +789,13 @@
                     </div>
                 </div>
                 <div class="panel-content">
-                    <div style="text-align: center; margin-bottom: 12px;">
-                        <div style="font-size: 1.1em; color: #a78bfa;">Hero Name</div>
-                        <div style="font-size: 0.9em; color: #fbbf24;">Level 1 Warrior</div>
-                    </div>
+                    <div class="character-avatar"></div>
+                    <div class="character-name">Hero Name</div>
+                    <div class="character-class">Level 1 ⚔️ Warrior</div>
                     <div class="stat-bar">
                         <div class="stat-label">
-                            <span>HP</span>
-                            <span id="hp-text">100/100</span>
+                            <span class="stat-name">❤️ HP</span>
+                            <span class="stat-value" id="hp-text">100/100</span>
                         </div>
                         <div class="bar">
                             <div class="bar-fill health-fill" id="hp-bar" style="width: 100%;"></div>
@@ -491,8 +803,8 @@
                     </div>
                     <div class="stat-bar">
                         <div class="stat-label">
-                            <span>MP</span>
-                            <span id="mp-text">50/50</span>
+                            <span class="stat-name">💙 MP</span>
+                            <span class="stat-value" id="mp-text">50/50</span>
                         </div>
                         <div class="bar">
                             <div class="bar-fill mana-fill" id="mp-bar" style="width: 100%;"></div>
@@ -500,8 +812,8 @@
                     </div>
                     <div class="stat-bar">
                         <div class="stat-label">
-                            <span>EXP</span>
-                            <span id="exp-text">0/100</span>
+                            <span class="stat-name">⭐ EXP</span>
+                            <span class="stat-value" id="exp-text">0/100</span>
                         </div>
                         <div class="bar">
                             <div class="bar-fill exp-fill" id="exp-bar" style="width: 0%;"></div>
