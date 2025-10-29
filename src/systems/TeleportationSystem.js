@@ -166,14 +166,14 @@ export class TeleportationSystem {
     }
     
     setupTeleportUI() {
-        // Create teleport menu button
+        // Create teleport menu button - positioned to avoid conflict with companion panel
         const button = document.createElement('button');
         button.id = 'teleport-button';
         button.innerHTML = '🌀 Fast Travel';
         button.style.cssText = `
             position: fixed;
             top: 20px;
-            right: 20px;
+            right: 200px;
             padding: 12px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -185,6 +185,7 @@ export class TeleportationSystem {
             z-index: 1000;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
             transition: transform 0.2s;
+            pointer-events: auto;
         `;
         
         button.addEventListener('mouseenter', () => {

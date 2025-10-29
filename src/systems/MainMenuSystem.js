@@ -14,7 +14,20 @@ export class MainMenuSystem {
     
     init() {
         this.createMenuUI();
+        this.setupKeyboardShortcuts();
         console.log('🎮 Main Menu System initialized');
+    }
+    
+    setupKeyboardShortcuts() {
+        // Add ESC key listener to close menu
+        this.escapeHandler = (e) => {
+            if (e.key === 'Escape' && this.menuVisible) {
+                console.log('ESC pressed, starting game...');
+                this.startNewGame();
+            }
+        };
+        
+        document.addEventListener('keydown', this.escapeHandler);
     }
     
     createMenuUI() {
@@ -73,6 +86,7 @@ export class MainMenuSystem {
         
         // Create menu buttons
         const buttons = [
+            { text: '▶️ Start Game', action: () => this.startNewGame(), primary: true },
             { text: '⚔️ New Game', action: () => this.startNewGame() },
             { text: '📂 Load Game', action: () => this.loadGame() },
             { text: '🏰 Safe Zone Hub', action: () => this.enterSafeZone() },
@@ -83,26 +97,30 @@ export class MainMenuSystem {
         buttons.forEach(btn => {
             const button = document.createElement('button');
             button.textContent = btn.text;
+            
+            // Primary button gets special styling
+            const isPrimary = btn.primary;
             button.style.cssText = `
-                padding: 15px 30px;
-                font-size: 1.2em;
-                background: linear-gradient(135deg, #2d0a4e, #4a0e7a);
-                border: 2px solid #9d4edd;
+                padding: ${isPrimary ? '20px 40px' : '15px 30px'};
+                font-size: ${isPrimary ? '1.4em' : '1.2em'};
+                background: ${isPrimary ? 'linear-gradient(135deg, #9d4edd, #c77dff)' : 'linear-gradient(135deg, #2d0a4e, #4a0e7a)'};
+                border: ${isPrimary ? '3px' : '2px'} solid #9d4edd;
                 border-radius: 10px;
                 color: #fff;
                 cursor: pointer;
                 transition: all 0.3s;
-                box-shadow: 0 0 20px rgba(157, 78, 221, 0.3);
+                box-shadow: 0 0 ${isPrimary ? '30px' : '20px'} rgba(157, 78, 221, ${isPrimary ? '0.6' : '0.3'});
+                font-weight: ${isPrimary ? 'bold' : 'normal'};
             `;
             
             button.addEventListener('mouseenter', () => {
                 button.style.transform = 'scale(1.05)';
-                button.style.boxShadow = '0 0 30px rgba(157, 78, 221, 0.8)';
+                button.style.boxShadow = `0 0 ${isPrimary ? '40px' : '30px'} rgba(157, 78, 221, 0.8)`;
             });
             
             button.addEventListener('mouseleave', () => {
                 button.style.transform = 'scale(1)';
-                button.style.boxShadow = '0 0 20px rgba(157, 78, 221, 0.3)';
+                button.style.boxShadow = `0 0 ${isPrimary ? '30px' : '20px'} rgba(157, 78, 221, ${isPrimary ? '0.6' : '0.3'})`;
             });
             
             button.addEventListener('click', btn.action);
@@ -118,7 +136,22 @@ export class MainMenuSystem {
             color: #7b2cbf;
             font-size: 0.9em;
         `;
-        version.textContent = 'v1.1.0 - Enhanced Edition';
+        version.textContent = 'v2.0.0 - Enhanced Edition';
+        
+        // Instructions
+        const instructions = document.createElement('div');
+        instructions.style.cssText = `
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #9d4edd;
+            font-size: 0.9em;
+            text-align: left;
+        `;
+        instructions.innerHTML = `
+            <div>Press <strong>ESC</strong> to close menu</div>
+            <div style="margin-top: 5px;">Auto-starts in 5 seconds</div>
+        `;
         
         // Add gradient animation
         const style = document.createElement('style');
@@ -135,6 +168,7 @@ export class MainMenuSystem {
         menuContainer.appendChild(subtitle);
         menuContainer.appendChild(buttonsContainer);
         menuContainer.appendChild(version);
+        menuContainer.appendChild(instructions);
         
         document.getElementById('game-container').appendChild(menuContainer);
         this.menuContainer = menuContainer;
@@ -144,6 +178,14 @@ export class MainMenuSystem {
         if (this.menuContainer) {
             this.menuContainer.style.display = 'flex';
             this.menuVisible = true;
+            
+            // Auto-hide after 5 seconds if user doesn't interact
+            this.autoHideTimeout = setTimeout(() => {
+                if (this.menuVisible) {
+                    console.log('Auto-starting game after menu timeout...');
+                    this.startNewGame();
+                }
+            }, 5000);
         }
     }
     
@@ -151,6 +193,12 @@ export class MainMenuSystem {
         if (this.menuContainer) {
             this.menuContainer.style.display = 'none';
             this.menuVisible = false;
+            
+            // Clear auto-hide timeout
+            if (this.autoHideTimeout) {
+                clearTimeout(this.autoHideTimeout);
+                this.autoHideTimeout = null;
+            }
         }
     }
     

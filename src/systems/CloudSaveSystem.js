@@ -735,7 +735,11 @@ export class CloudSaveSystem {
     }
     
     generateUserId() {
-        const userId = `user_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        // Use crypto.randomUUID if available (modern browsers), otherwise timestamp-based
+        const randomPart = typeof crypto !== 'undefined' && crypto.randomUUID 
+            ? crypto.randomUUID()
+            : `${Date.now()}-${Date.now() * Math.random()}`.replace('.', '');
+        const userId = `user_${randomPart}`;
         localStorage.setItem('userId', userId);
         return userId;
     }
