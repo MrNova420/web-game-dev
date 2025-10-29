@@ -273,7 +273,8 @@ export class EvolutionSystem {
         
         // For player evolutions
         if (entityType === 'player' && this.gameEngine.player) {
-            const classData = db[this.gameEngine.player.class];
+            const playerClass = this.gameEngine.player.class || 'warrior';
+            const classData = db[playerClass];
             return classData ? classData[tier] : null;
         }
         
@@ -411,7 +412,10 @@ export class EvolutionSystem {
         
         // Get pet from pet system
         const pet = this.gameEngine.petSystem?.getPet(petId);
-        if (!pet) return false;
+        if (!pet || !pet.stats) {
+            console.log('Invalid pet or missing stats');
+            return false;
+        }
         
         // Apply evolution
         pet.name = evolutionData.name;
@@ -438,7 +442,10 @@ export class EvolutionSystem {
         
         // Get weapon from inventory
         const weapon = this.gameEngine.inventorySystem?.getItem(weaponId);
-        if (!weapon) return false;
+        if (!weapon || typeof weapon.damage === 'undefined') {
+            console.log('Invalid weapon or missing damage property');
+            return false;
+        }
         
         // Consume materials if required
         if (evolutionData.requirements?.material) {

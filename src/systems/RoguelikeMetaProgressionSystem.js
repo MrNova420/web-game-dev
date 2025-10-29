@@ -9,6 +9,9 @@ export class RoguelikeMetaProgressionSystem {
     constructor(gameEngine) {
         this.gameEngine = gameEngine;
         
+        // Constants
+        this.HOUR_IN_MS = 3600000;
+        
         // Meta-progression currencies
         this.metaCurrency = {
             souls: 0, // Earned from runs
@@ -272,7 +275,14 @@ export class RoguelikeMetaProgressionSystem {
             const upgrade = this.upgradeDatabase[upgradeId];
             if (upgrade) {
                 const effect = upgrade.effect(level);
-                Object.assign(stats, effect);
+                // Merge effects intelligently
+                for (const [key, value] of Object.entries(effect)) {
+                    if (typeof value === 'number' && typeof stats[key] === 'number') {
+                        stats[key] = value; // Replace with upgrade value
+                    } else {
+                        stats[key] = value;
+                    }
+                }
             }
         }
         
@@ -409,8 +419,7 @@ export class RoguelikeMetaProgressionSystem {
         essence += this.currentRun.bossKills;
         
         // Speed bonus
-        const hourlyRate = 3600000; // 1 hour in ms
-        if (this.currentRun.duration < hourlyRate) {
+        if (this.currentRun.duration < this.HOUR_IN_MS) {
             souls = Math.floor(souls * 1.5);
         }
         

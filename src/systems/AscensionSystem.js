@@ -17,7 +17,7 @@ export class AscensionSystem {
         
         // Ascended abilities
         this.ascendedAbilities = new Set();
-        this.divinePerks = new Set();
+        this.learnedPerks = new Set(); // Perks that have been learned
         
         // Ascension tiers
         this.ascensionTiers = [
@@ -37,7 +37,7 @@ export class AscensionSystem {
         this.divineAbilities = this.createDivineAbilities();
         
         // Divine perks database
-        this.divinePerks = this.createDivinePerks();
+        this.divinePerksDatabase = this.createDivinePerks();
         
         // Planar realms
         this.unlockedPlanes = new Set(['material']);
@@ -331,7 +331,7 @@ export class AscensionSystem {
      * Learn divine perk
      */
     learnPerk(perkId) {
-        const perk = this.divinePerks[perkId];
+        const perk = this.divinePerksDatabase[perkId];
         if (!perk) return false;
         
         // Check tier requirement
@@ -349,7 +349,7 @@ export class AscensionSystem {
         
         // Learn perk
         this.celestialFragments -= cost;
-        this.divinePerks.add(perkId);
+        this.learnedPerks.add(perkId);
         
         // Apply perk effects
         this.applyPerkEffect(perk);
@@ -543,7 +543,7 @@ export class AscensionSystem {
             divineEssence: this.divineEssence,
             celestialFragments: this.celestialFragments,
             unlockedAbilities: Array.from(this.ascendedAbilities),
-            learnedPerks: Array.from(this.divinePerks),
+            learnedPerks: Array.from(this.learnedPerks),
             unlockedPlanes: Array.from(this.unlockedPlanes),
             currentPlane: this.currentPlane
         };
@@ -622,12 +622,19 @@ export class AscensionSystem {
      * Cooldown management
      */
     isOnCooldown(abilityId) {
-        // Implement cooldown tracking
-        return false; // Placeholder
+        if (!this.abilityCooldowns) {
+            this.abilityCooldowns = new Map();
+        }
+        const cooldownEnd = this.abilityCooldowns.get(abilityId);
+        if (!cooldownEnd) return false;
+        return Date.now() < cooldownEnd;
     }
     
     setCooldown(abilityId, duration) {
-        // Implement cooldown setting
+        if (!this.abilityCooldowns) {
+            this.abilityCooldowns = new Map();
+        }
+        this.abilityCooldowns.set(abilityId, Date.now() + (duration * 1000));
     }
     
     /**
@@ -639,7 +646,7 @@ export class AscensionSystem {
             divineEssence: this.divineEssence,
             celestialFragments: this.celestialFragments,
             ascendedAbilities: Array.from(this.ascendedAbilities),
-            divinePerks: Array.from(this.divinePerks),
+            learnedPerks: Array.from(this.learnedPerks),
             unlockedPlanes: Array.from(this.unlockedPlanes)
         };
         
@@ -659,7 +666,7 @@ export class AscensionSystem {
             this.divineEssence = data.divineEssence || 0;
             this.celestialFragments = data.celestialFragments || 0;
             this.ascendedAbilities = new Set(data.ascendedAbilities || []);
-            this.divinePerks = new Set(data.divinePerks || []);
+            this.learnedPerks = new Set(data.learnedPerks || []);
             this.unlockedPlanes = new Set(data.unlockedPlanes || ['material']);
         } catch (error) {
             console.error('Failed to load ascension data:', error);
