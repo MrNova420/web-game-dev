@@ -264,7 +264,7 @@ export class ReputationSystem {
         this.playerReputation[factionId] += amount;
         const newRep = this.playerReputation[factionId];
         
-        const oldRank = this.getReputation Rank(oldRep);
+        const oldRank = this.getReputationRank(oldRep);
         const newRank = this.getReputationRank(newRep);
         
         // Check if rank changed

@@ -101,6 +101,10 @@ import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementS
 import { PsychedelicCelShadingSystem } from '../rendering/PsychedelicCelShadingSystem.js';
 // New Magical Background System
 import { MagicalBackgroundSystem } from '../systems/MagicalBackgroundSystem.js';
+// Phase 3 RPG Systems - Completion
+import { ReputationSystem } from '../systems/ReputationSystem.js';
+import { AttributeSystem } from '../systems/AttributeSystem.js';
+import { TalentSystem } from '../systems/TalentSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -418,6 +422,9 @@ export class GameEngine {
             
             // Phase 3+ Character & World Systems
             this.characterClassSystem = new CharacterClassSystem(this);
+            this.reputationSystem = new ReputationSystem(this);
+            this.attributeSystem = new AttributeSystem(this);
+            this.talentSystem = new TalentSystem(this);
             this.npcSystem = new NPCSystem(this);
             this.advancedInventorySystem = new AdvancedInventorySystem(this);
             
@@ -910,6 +917,18 @@ export class GameEngine {
         // Update Phase 3+ Systems
         if (this.characterClassSystem) {
             this.characterClassSystem.update(delta);
+        }
+        
+        if (this.reputationSystem) {
+            this.reputationSystem.update(delta);
+        }
+        
+        if (this.attributeSystem) {
+            this.attributeSystem.update(delta);
+        }
+        
+        if (this.talentSystem) {
+            this.talentSystem.update(delta);
         }
         
         if (this.npcSystem) {
