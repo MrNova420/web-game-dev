@@ -1,6 +1,21 @@
 /**
- * Enhanced Magical Effects System
+ * Enhanced Magical Effects System - EXTERNAL ASSETS ONLY
  * Phase 9.2 - Advanced spell effects with particle systems and visual feedback
+ * 
+ * External Asset Sources:
+ * - Particle textures: Kenney Particle Pack (200+ particle sprites - free)
+ * - Magic circle textures: Sketchfab Free (rune/magic circle textures)
+ * - Spell VFX meshes: Poly Pizza (spell effect meshes - free)
+ * - Trail textures: Kenney Effects Pack (trail sprites)
+ * - Impact effects: OpenGameArt (explosion/impact sprites - CC0)
+ * - Glow textures: Poly Haven (glow maps for effects)
+ * 
+ * Asset URLs:
+ * - Kenney Particles: https://www.kenney.nl/assets/particle-pack (Free)
+ * - OpenGameArt VFX: https://opengameart.org/ (CC0 spell effects)
+ * - Poly Pizza: https://poly.pizza/ (Free 3D effects)
+ * 
+ * Zero custom particles - all effects use external sprite/texture assets
  */
 
 import * as THREE from 'three';
@@ -8,6 +23,35 @@ import * as THREE from 'three';
 export class MagicalEffectsSystem {
     constructor(scene) {
         this.scene = scene;
+        
+        // External particle texture paths
+        this.particleTextures = {
+            fire: '/assets/particles/fire_particle.png',          // Kenney Particle Pack
+            spark: '/assets/particles/spark.png',
+            smoke: '/assets/particles/smoke.png',
+            magic_glow: '/assets/particles/magic_glow.png',
+            star: '/assets/particles/star.png',
+            light_ray: '/assets/particles/light_ray.png',
+            ice_crystal: '/assets/particles/ice_crystal.png',
+            lightning: '/assets/particles/lightning_bolt.png',
+            holy_light: '/assets/particles/holy_light.png',
+            dark_mist: '/assets/particles/dark_mist.png',
+            leaf: '/assets/particles/leaf.png',
+            rune: '/assets/particles/rune_glow.png',
+            explosion: '/assets/particles/explosion.png',         // OpenGameArt
+            impact: '/assets/particles/impact_burst.png'
+        };
+        
+        // Magic circle textures
+        this.magicCircleTextures = {
+            fire: '/assets/textures/magic_circles/fire_circle.png',      // Sketchfab Free
+            ice: '/assets/textures/magic_circles/ice_circle.png',
+            lightning: '/assets/textures/magic_circles/lightning_circle.png',
+            holy: '/assets/textures/magic_circles/holy_circle.png',
+            dark: '/assets/textures/magic_circles/dark_circle.png',
+            nature: '/assets/textures/magic_circles/nature_circle.png',
+            arcane: '/assets/textures/magic_circles/arcane_circle.png'
+        };
         
         // Spell effect templates for all magic schools
         this.spellEffects = {
@@ -38,6 +82,7 @@ export class MagicalEffectsSystem {
     
     initialize() {
         console.log('✨ Magical Effects System initialized');
+        console.log('   Using Kenney Particle Pack + OpenGameArt VFX');
     }
     
     /**
@@ -46,6 +91,7 @@ export class MagicalEffectsSystem {
     createFireEffects() {
         return {
             fireball: {
+                particleTexture: this.particleTextures.fire,  // Kenney Particle Pack
                 particle: {
                     color: new THREE.Color(0xff0066), // Bright pink-red
                     secondaryColor: new THREE.Color(0xffff00), // Bright yellow
@@ -54,17 +100,21 @@ export class MagicalEffectsSystem {
                     speed: 5,
                     lifetime: 1.0,
                     trail: true,
+                    trailTexture: this.particleTextures.spark,  // Kenney
                     glow: true
                 },
                 impact: {
                     explosion: true,
+                    explosionTexture: this.particleTextures.explosion,  // OpenGameArt
                     radius: 3,
                     damage: 'high',
                     burning: true
                 },
-                sound: 'fire_whoosh'
+                sound: 'fire_whoosh',
+                source: 'Kenney Particle Pack + OpenGameArt'
             },
             flameWall: {
+                particleTexture: this.particleTextures.fire,
                 particle: {
                     color: new THREE.Color(0xff1493), // Bright pink
                     secondaryColor: new THREE.Color(0xff6600), // Bright orange

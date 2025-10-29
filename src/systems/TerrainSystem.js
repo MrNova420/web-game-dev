@@ -1,16 +1,25 @@
 /**
  * TerrainSystem.js
  * 
- * Procedural terrain generation and rendering system
- * Uses heightmap-based terrain with LOD (Level of Detail)
- * Integrates Poly Haven textures for realistic surfaces
+ * Procedural terrain generation with EXTERNAL ASSETS ONLY
+ * 
+ * External Asset Sources:
+ * - Terrain textures: Poly Haven (4K PBR terrain materials - grass, rock, dirt, snow, sand)
+ * - Detail meshes: Quaternius (rocks, boulders, cliff meshes)
+ * - Vegetation: Kenney Nature Pack (trees, bushes, grass clusters)
+ * - Ground scatter: Poly Pizza (small rocks, twigs, foliage)
+ * 
+ * Asset URLs:
+ * - Poly Haven: https://polyhaven.com/textures (CC0 PBR textures)
+ * - Quaternius: http://quaternius.com/assets.html (Free low-poly nature pack)
+ * - Kenney: https://www.kenney.nl/assets/nature-pack (Free 3D assets)
  * 
  * Features:
- * - Procedural heightmap generation
+ * - Procedural heightmap generation (geometry only - textures external)
  * - Multiple terrain types (plains, hills, mountains, valleys, canyons)
  * - LOD system for performance
- * - Texture blending based on height/slope
- * - Grass, rocks, and detail objects
+ * - PBR texture blending based on height/slope (all from Poly Haven)
+ * - Detail objects using external 3D models (Quaternius/Kenney)
  * - Collision mesh generation
  * - Biome-based terrain modification
  * - Chunked terrain for infinite worlds
@@ -53,11 +62,51 @@ export class TerrainSystem {
             snow: null
         };
         
-        // Detail objects
+        // Detail objects - ALL from external sources
         this.detailObjects = {
-            grass: [],
-            rocks: [],
-            trees: []
+            grass: {
+                models: [
+                    '/assets/models/vegetation/grass_clump_01.glb',  // Kenney Nature Pack
+                    '/assets/models/vegetation/grass_clump_02.glb',
+                    '/assets/models/vegetation/grass_tall.glb'
+                ],
+                loaded: []
+            },
+            rocks: {
+                models: [
+                    '/assets/models/rocks/rock_small_01.glb',  // Quaternius
+                    '/assets/models/rocks/rock_medium_01.glb',
+                    '/assets/models/rocks/boulder_large.glb',
+                    '/assets/models/rocks/cliff_section.glb'
+                ],
+                loaded: []
+            },
+            trees: {
+                models: [
+                    '/assets/models/trees/pine_01.glb',  // Kenney Nature Pack
+                    '/assets/models/trees/oak_01.glb',
+                    '/assets/models/trees/birch_01.glb',
+                    '/assets/models/trees/dead_tree.glb'
+                ],
+                loaded: []
+            },
+            bushes: {
+                models: [
+                    '/assets/models/vegetation/bush_01.glb',  // Kenney
+                    '/assets/models/vegetation/shrub_01.glb'
+                ],
+                loaded: []
+            }
+        };
+        
+        // Poly Haven terrain texture paths
+        this.polyHavenTextures = {
+            grass: '/assets/textures/terrain/grass_poly_haven/',  // From Poly Haven
+            rock: '/assets/textures/terrain/rock_poly_haven/',
+            dirt: '/assets/textures/terrain/dirt_poly_haven/',
+            snow: '/assets/textures/terrain/snow_poly_haven/',
+            sand: '/assets/textures/terrain/sand_poly_haven/',
+            mud: '/assets/textures/terrain/mud_poly_haven/'
         };
         
         this.initialize();
