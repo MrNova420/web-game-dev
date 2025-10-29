@@ -22,4 +22,8 @@ export class LeaderboardSystem {
   updateRanking(playerId, category, score) {
     console.log(`${playerId} ranked in ${category}: ${score}`);
   }
+
+  update(delta) {
+    // Placeholder for leaderboard updates
+  }
 }

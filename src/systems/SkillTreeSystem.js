@@ -29,4 +29,15 @@ export class SkillTreeSystem {
     console.log(`${playerId} unlocked ${nodeId} in ${tree} tree`);
     console.log(`  Icon: ${this.icons.node_unlocked}`);
   }
+
+  updateSkillPoints() {
+    // Placeholder for skill point updates
+  }
+
+  getSaveData() {
+    return {
+      unlockedSkills: [],
+      skillPoints: 0
+    };
+  }
 }

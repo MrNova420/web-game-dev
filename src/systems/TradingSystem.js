@@ -24,4 +24,8 @@ export class TradingSystem {
     console.log(`Trade ${tradeId} completed successfully`);
     this.activeTrades.delete(tradeId);
   }
+
+  update(delta) {
+    // Placeholder for trading system updates
+  }
 }
