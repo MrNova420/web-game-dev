@@ -1,761 +1,527 @@
-# Dynasty of Emberveil - Deployment Guide
+# Dynasty of Emberveil - Complete Deployment & Multiplayer Guide
 
-## Table of Contents
-1. [Local Development](#local-development)
-2. [Building for Production](#building-for-production)
-3. [Deployment Methods](#deployment-methods)
-4. [Server Configuration](#server-configuration)
-5. [Environment Variables](#environment-variables)
-6. [Performance Optimization](#performance-optimization)
-7. [Monitoring & Maintenance](#monitoring--maintenance)
+## 🎮 Quick Navigation
+- [Local Development](#local-development)
+- [Local WiFi/Network Deployment](#local-wifinetwork-deployment) ⭐ NEW
+- [Production Deployment](#production-deployment)
+- [Multiplayer Infrastructure](#multiplayer-infrastructure) ⭐ NEW
+- [Stress Testing 15,000 Players](#stress-testing) ⭐ NEW
 
 ---
 
 ## Local Development
 
 ### Prerequisites
-- Node.js 18+ (LTS recommended)
+- Node.js 18+ (LTS)
 - npm 9+ or yarn 1.22+
-- Modern web browser (Chrome 90+, Firefox 88+, Edge 90+, Safari 14+)
-- 2GB RAM minimum, 4GB recommended
-- Git (for version control)
+- Modern browser (Chrome 120+, Firefox 121+, Edge 120+)
 
-### Quick Start (Fastest Method)
-
+### Quick Start
 ```bash
-# Clone the repository
-git clone https://github.com/MrNova420/web-game-dev.git
-cd web-game-dev
-
-# Install dependencies
 npm install
-
-# Start development server
 npm run dev
-
-# Game runs at http://localhost:5173
+# Access at http://localhost:5173
 ```
 
-### Alternative: Python Simple Server
+---
+
+## Local WiFi/Network Deployment
+
+### Method 1: Vite Dev Server (Recommended)
+
+The vite.config.js has been updated to support local network access by default.
+
+**Start server:**
+```bash
+npm run dev
+```
+
+**Access from any device on your network:**
+1. Server will display network URLs automatically:
+   ```
+   VITE v5.x.x  ready in xxx ms
+
+   ➜  Local:   http://localhost:5173/
+   ➜  Network: http://192.168.1.100:5173/
+   ```
+2. Use the Network URL on any device connected to the same WiFi
+3. Example: `http://192.168.1.100:5173`
+
+**Find your IP manually:**
+```bash
+# Windows
+ipconfig
+
+# macOS/Linux
+ifconfig
+# or
+hostname -I
+```
+
+### Method 2: Production Build with http-server
 
 ```bash
-# Build the game first
+# Build game
 npm run build
 
-# Serve from dist folder
-cd dist
-python3 -m http.server 8000
-
-# Open http://localhost:8000
-```
-
-### Alternative: Node.js HTTP Server
-
-```bash
-# Install http-server globally
+# Install http-server globally (one time)
 npm install -g http-server
 
-# Build and serve
-npm run build
+# Serve on network
 cd dist
-http-server -p 8000
+http-server -p 8080 -a 0.0.0.0
 
-# Open http://localhost:8000
+# Access at http://YOUR_LOCAL_IP:8080
 ```
 
-### Development Commands
+### Method 3: Node.js Express Server
 
-```bash
-# Start dev server with hot reload
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build locally
-npm run preview
-
-# Lint code
-npm run lint
-
-# Run tests (when implemented)
-npm run test
-```
-
-### Development Configuration
-
-**vite.config.js**:
+Create `local-server.js`:
 ```javascript
-import { defineConfig } from 'vite';
+const express = require('express');
+const path = require('path');
+const os = require('os');
 
-export default defineConfig({
-  base: '/', // Change for subdirectory deployment
-  build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: false, // Enable for debugging
-    minify: 'terser', // or 'esbuild' for faster builds
-    target: 'es2015',
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Code splitting for better performance
-          three: ['three'],
-          cannon: ['cannon-es']
-        }
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+app.use(express.static(path.join(__dirname, 'dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🎮 Dynasty of Emberveil`);
+  console.log(`   Local:    http://localhost:${PORT}`);
+  
+  const nets = os.networkInterfaces();
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      if (net.family === 'IPv4' && !net.internal) {
+        console.log(`   Network:  http://${net.address}:${PORT}`);
       }
     }
-  },
-  server: {
-    port: 5173,
-    host: true, // Listen on all addresses
-    open: true // Auto-open browser
   }
 });
 ```
 
----
-
-## Building for Production
-
-### Standard Build
-
+Run:
 ```bash
-# Clean build
-rm -rf dist
-npm run build
-
-# Output in dist/ folder
-# - index.html
-# - assets/ (JS, CSS, images)
+npm install express
+node local-server.js
 ```
 
-### Optimized Build
+### Firewall Configuration
 
+**Windows:**
+```powershell
+New-NetFirewallRule -DisplayName "Dynasty Game" -Direction Inbound -LocalPort 5173,8080 -Protocol TCP -Action Allow
+```
+
+**macOS:**
+- System Preferences → Security & Privacy → Firewall → Allow incoming connections
+
+**Linux (ufw):**
 ```bash
-# Build with source maps for debugging
-VITE_SOURCEMAP=true npm run build
-
-# Build with specific base URL
-VITE_BASE_URL=/game npm run build
-```
-
-### Build Output Structure
-
-```
-dist/
-├── index.html
-├── assets/
-│   ├── index-[hash].js      # Main bundle
-│   ├── three-[hash].js      # Three.js chunk
-│   ├── cannon-[hash].js     # Cannon-es chunk
-│   ├── index-[hash].css     # Styles
-│   └── [images/models]      # Static assets
-└── favicon.ico
-```
-
-### Build Verification
-
-```bash
-# Preview production build locally
-npm run preview
-
-# Or use http-server
-cd dist
-http-server -p 8080 -c-1
-
-# Test in different browsers
-# - Chrome/Edge: http://localhost:8080
-# - Firefox: http://localhost:8080
-# - Safari: http://localhost:8080
+sudo ufw allow 5173/tcp
+sudo ufw allow 8080/tcp
+sudo ufw reload
 ```
 
 ---
 
-## Deployment Methods
+## Production Deployment
 
-### Method 1: Static Hosting (Recommended)
+### Static Hosting (Single-Player)
 
 #### Netlify
-
-1. **Via CLI**:
 ```bash
-# Install Netlify CLI
 npm install -g netlify-cli
-
-# Build and deploy
 npm run build
 netlify deploy --prod --dir=dist
 ```
 
-2. **Via Git Integration**:
-- Connect GitHub repository to Netlify
-- Build command: `npm run build`
-- Publish directory: `dist`
-- Auto-deploys on git push
-
-**netlify.toml**:
-```toml
-[build]
-  command = "npm run build"
-  publish = "dist"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-```
-
 #### Vercel
-
 ```bash
-# Install Vercel CLI
 npm install -g vercel
-
-# Build and deploy
+npm run build
 vercel --prod
 ```
 
-**vercel.json**:
-```json
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}
-```
-
 #### GitHub Pages
-
 ```bash
-# Install gh-pages
-npm install -D gh-pages
-
-# Add to package.json scripts:
-# "deploy": "npm run build && gh-pages -d dist"
-
-# Deploy
-npm run deploy
-```
-
-**Update vite.config.js** for GitHub Pages:
-```javascript
-base: '/web-game-dev/', // Your repo name
-```
-
-### Method 2: Cloud Platforms
-
-#### AWS S3 + CloudFront
-
-```bash
-# Build
+npm install -g gh-pages
 npm run build
-
-# Upload to S3
-aws s3 sync dist/ s3://your-bucket-name --delete
-
-# Invalidate CloudFront cache
-aws cloudfront create-invalidation \
-  --distribution-id YOUR_DIST_ID \
-  --paths "/*"
-```
-
-#### Google Cloud Storage
-
-```bash
-# Build
-npm run build
-
-# Upload
-gsutil -m rsync -r -d dist/ gs://your-bucket-name
-
-# Set cache control
-gsutil -m setmeta -h "Cache-Control:public,max-age=31536000" \
-  gs://your-bucket-name/assets/**
-```
-
-#### Azure Static Web Apps
-
-```bash
-# Install Azure CLI
-npm install -g @azure/static-web-apps-cli
-
-# Deploy
-swa deploy --env production
-```
-
-### Method 3: Docker Container
-
-**Dockerfile**:
-```dockerfile
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-**Build and run**:
-```bash
-# Build Docker image
-docker build -t dynasty-of-emberveil .
-
-# Run container
-docker run -d -p 8080:80 dynasty-of-emberveil
-
-# Open http://localhost:8080
-```
-
-### Method 4: Traditional VPS/Server
-
-```bash
-# SSH into your server
-ssh user@your-server.com
-
-# Install Node.js (if not installed)
-curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-sudo apt-get install -y nodejs
-
-# Clone and build
-git clone https://github.com/MrNova420/web-game-dev.git
-cd web-game-dev
-npm install
-npm run build
-
-# Serve with Nginx (see Server Configuration)
+gh-pages -d dist
 ```
 
 ---
 
-## Server Configuration
+## Multiplayer Infrastructure
 
-### Nginx Configuration
+### Architecture
 
-**/etc/nginx/sites-available/dynasty-of-emberveil**:
-```nginx
-server {
-    listen 80;
-    listen [::]:80;
-    server_name yourdomain.com www.yourdomain.com;
+```
+┌─────────────┐
+│   Clients   │ (15,000+ concurrent players)
+└──────┬──────┘
+       │ WebSocket/HTTP
+┌──────▼──────┐
+│Load Balancer│ (NGINX/HAProxy)
+└──────┬──────┘
+   ┌───┴───┐
+┌──▼──┐ ┌──▼──┐ ┌──▼──┐
+│Node │ │Node │ │Node │ (Game Servers)
+│ 1   │ │ 2   │ │ 3   │
+└──┬──┘ └──┬──┘ └──┬──┘
+   └───┬───┴───┬───┘
+┌──────▼───────▼──────┐
+│       Redis         │ (Sessions)
+└──────┬──────────────┘
+┌──────▼──────┐
+│ PostgreSQL  │ (Player Data)
+└─────────────┘
+```
 
-    root /var/www/dynasty-of-emberveil/dist;
-    index index.html;
+### Quick Setup (Docker Compose)
 
-    # Gzip compression
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_types
-        text/plain
-        text/css
-        text/javascript
-        application/javascript
-        application/json
-        application/x-javascript
-        application/xml
-        application/xml+rss
-        image/svg+xml;
+**Create docker-compose.yml:**
+```yaml
+version: '3.8'
 
-    # Cache static assets
-    location /assets/ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-    }
+services:
+  game-server-1:
+    build: .
+    ports:
+      - "3001:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/dynasty
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
 
-    # SPA fallback
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
+  game-server-2:
+    build: .
+    ports:
+      - "3002:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@postgres:5432/dynasty
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - postgres
+      - redis
 
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - game-server-1
+      - game-server-2
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: dynasty
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3050:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+
+volumes:
+  postgres_data:
+  redis_data:
+```
+
+**Start:**
+```bash
+docker-compose up -d
+```
+
+### Game Server Implementation
+
+**Install dependencies:**
+```bash
+npm install express socket.io redis pg dotenv cors helmet compression
+```
+
+**Create server/gameServer.js** - See full implementation in `/docs/MULTIPLAYER_SETUP.md`
+
+---
+
+## Stress Testing
+
+### Test 15,000 Concurrent Players
+
+**Install k6:**
+```bash
+# macOS
+brew install k6
+
+# Windows
+choco install k6
+
+# Linux
+snap install k6
+```
+
+**Create stress-test.js:**
+```javascript
+import { check, sleep } from 'k6';
+import ws from 'k6/ws';
+
+export let options = {
+  stages: [
+    { duration: '2m', target: 1000 },
+    { duration: '5m', target: 5000 },
+    { duration: '10m', target: 10000 },
+    { duration: '15m', target: 15000 },
+    { duration: '10m', target: 15000 }, // Hold at 15k
+    { duration: '5m', target: 0 },
+  ],
+  thresholds: {
+    'ws_connecting': ['p(95)<500'],
+    'ws_msgs_received': ['rate>1000'],
+  }
+};
+
+export default function() {
+  const url = 'ws://localhost:80/socket.io/';
+  
+  ws.connect(url, {}, function(socket) {
+    socket.on('open', () => {
+      socket.send(JSON.stringify({
+        type: 'join_game',
+        playerId: `player_${__VU}_${__ITER}`,
+        username: `Player${__VU}`
+      }));
+    });
+    
+    socket.on('message', (msg) => {
+      // Handle messages
+    });
+    
+    socket.setInterval(() => {
+      socket.send(JSON.stringify({
+        type: 'move',
+        position: {
+          x: Math.random() * 100,
+          y: 0,
+          z: Math.random() * 100
+        }
+      }));
+    }, 1000);
+    
+    socket.setTimeout(() => socket.close(), 60000);
+  });
+  
+  sleep(1);
 }
 ```
 
-Enable site:
+**Run test:**
 ```bash
-sudo ln -s /etc/nginx/sites-available/dynasty-of-emberveil \
-            /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl reload nginx
+k6 run stress-test.js
 ```
 
-### Apache Configuration
+**Monitor during test:**
+- Grafana: `http://localhost:3050` (admin/admin)
+- Prometheus: `http://localhost:9090`
+- Health: `http://localhost:80/health`
 
-**.htaccess**:
-```apache
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  RewriteRule ^index\.html$ - [L]
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule . /index.html [L]
-</IfModule>
+### Performance Targets
 
-# Compression
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css
-  AddOutputFilterByType DEFLATE application/javascript application/json
-</IfModule>
+For 15,000 concurrent players:
+- Connection time: p95 < 500ms
+- Message latency: p95 < 100ms
+- Server CPU: < 80%
+- Memory: < 16GB
+- Network: Stable throughput
 
-# Caching
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType image/jpg "access plus 1 year"
-  ExpiresByType image/jpeg "access plus 1 year"
-  ExpiresByType image/png "access plus 1 year"
-  ExpiresByType application/javascript "access plus 1 year"
-  ExpiresByType text/css "access plus 1 year"
-</IfModule>
-```
+### Scaling Recommendations
 
-### SSL/HTTPS Setup (Let's Encrypt)
+| Players | Servers | CPU | RAM | Redis | DB |
+|---------|---------|-----|-----|-------|-----|
+| 0-1K    | 1       | 2   | 4GB | 1     | 1   |
+| 1K-5K   | 2-3     | 4   | 8GB | 1     | 1   |
+| 5K-10K  | 5-8     | 8   | 16GB| 3     | 2   |
+| 10K-15K | 10-15   | 16  | 32GB| 5     | 3   |
+| 15K+    | 20+     | 32  | 64GB| 10    | 5   |
 
-```bash
-# Install Certbot
-sudo apt install certbot python3-certbot-nginx
+---
 
-# Get certificate
-sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+## Monitoring
 
-# Auto-renewal (already set up)
-sudo certbot renew --dry-run
+### Key Metrics
+
+1. **Players**: Active connections, joins/leaves per second
+2. **Latency**: WebSocket ping, message round-trip time
+3. **Throughput**: Messages/sec, bandwidth usage
+4. **Resources**: CPU, memory, disk I/O
+5. **Errors**: Connection failures, timeouts, crashes
+
+### Grafana Dashboards
+
+Access: `http://localhost:3050`
+
+Pre-configured panels:
+- Active Players Over Time
+- Message Latency (p50, p95, p99)
+- Server Resource Usage
+- Error Rate
+- Database Query Performance
+
+---
+
+## Database Schema
+
+**Create tables:**
+```sql
+CREATE TABLE players (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE,
+  level INTEGER DEFAULT 1,
+  experience BIGINT DEFAULT 0,
+  class VARCHAR(50),
+  position JSONB,
+  stats JSONB,
+  inventory JSONB,
+  created_at TIMESTAMP DEFAULT NOW(),
+  last_login TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_players_level ON players(level DESC);
+CREATE INDEX idx_players_exp ON players(experience DESC);
+
+CREATE TABLE game_sessions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  player_id UUID REFERENCES players(id),
+  started_at TIMESTAMP DEFAULT NOW(),
+  ended_at TIMESTAMP,
+  actions_count INTEGER DEFAULT 0
+);
+
+CREATE TABLE player_actions (
+  id BIGSERIAL PRIMARY KEY,
+  player_id UUID REFERENCES players(id),
+  action_type VARCHAR(50),
+  action_data JSONB,
+  timestamp TIMESTAMP DEFAULT NOW()
+);
+
+CREATE INDEX idx_actions_player ON player_actions(player_id, timestamp DESC);
 ```
 
 ---
 
 ## Environment Variables
 
-Create **.env** file (for future backend integration):
-
+Create `.env`:
 ```env
-# API Configuration
-VITE_API_URL=https://api.yourdomain.com
-VITE_WS_URL=wss://api.yourdomain.com
-
-# Feature Flags
-VITE_ENABLE_CLOUD_SYNC=false
-VITE_ENABLE_MULTIPLAYER=false
-VITE_ENABLE_ANALYTICS=true
-
-# CDN Configuration
-VITE_CDN_URL=https://cdn.yourdomain.com
-
-# Environment
-VITE_ENVIRONMENT=production
-VITE_VERSION=1.0.0
-```
-
-Access in code:
-```javascript
-const apiUrl = import.meta.env.VITE_API_URL;
-const isProduction = import.meta.env.VITE_ENVIRONMENT === 'production';
+NODE_ENV=production
+PORT=3000
+DATABASE_URL=postgresql://postgres:password@localhost:5432/dynasty
+REDIS_URL=redis://localhost:6379
+JWT_SECRET=your-secret-key
+SESSION_SECRET=your-session-secret
+CLIENT_URL=http://localhost:5173
+ENABLE_METRICS=true
 ```
 
 ---
 
-## Performance Optimization
+## Security Checklist
 
-### Build Optimization
-
-1. **Enable Minification**:
-```javascript
-// vite.config.js
-build: {
-  minify: 'terser',
-  terserOptions: {
-    compress: {
-      drop_console: true, // Remove console.logs
-      drop_debugger: true
-    }
-  }
-}
-```
-
-2. **Code Splitting**:
-```javascript
-build: {
-  rollupOptions: {
-    output: {
-      manualChunks: {
-        'three': ['three'],
-        'cannon': ['cannon-es'],
-        'game-core': [
-          './src/core/GameEngine.js',
-          './src/core/Player.js'
-        ],
-        'game-systems': [
-          './src/systems/CraftingSystem.js',
-          './src/systems/EconomySystem.js'
-        ]
-      }
-    }
-  }
-}
-```
-
-3. **Asset Optimization**:
-```bash
-# Install image optimization
-npm install -D vite-plugin-imagemin
-
-# Update vite.config.js
-import viteImagemin from 'vite-plugin-imagemin';
-
-plugins: [
-  viteImagemin({
-    gifsicle: { optimizationLevel: 7 },
-    optipng: { optimizationLevel: 7 },
-    mozjpeg: { quality: 80 },
-    pngquant: { quality: [0.8, 0.9], speed: 4 },
-    svgo: {
-      plugins: [
-        { name: 'removeViewBox' },
-        { name: 'removeEmptyAttrs', active: false }
-      ]
-    }
-  })
-]
-```
-
-### CDN Integration
-
-Use CDN for static assets:
-
-```javascript
-// vite.config.js
-build: {
-  rollupOptions: {
-    external: ['three', 'cannon-es'], // If using CDN
-    output: {
-      globals: {
-        three: 'THREE',
-        'cannon-es': 'CANNON'
-      }
-    }
-  }
-}
-```
-
-**index.html**:
-```html
-<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/cannon-es@0.20.0/dist/cannon-es.min.js"></script>
-```
-
-### Caching Strategy
-
-**Service Worker** (for PWA):
-```javascript
-// public/sw.js
-const CACHE_NAME = 'dynasty-v1.0.0';
-const urlsToCache = [
-  '/',
-  '/index.html',
-  '/assets/index.js',
-  '/assets/index.css'
-];
-
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
-  );
-});
-
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => response || fetch(event.request))
-  );
-});
-```
+- [ ] Use HTTPS in production
+- [ ] Implement rate limiting
+- [ ] Validate all user inputs
+- [ ] Use JWT for authentication
+- [ ] Configure CORS properly
+- [ ] Keep dependencies updated
+- [ ] Enable firewall rules
+- [ ] Use environment variables for secrets
+- [ ] Implement DDoS protection
+- [ ] Regular security audits
 
 ---
 
-## Monitoring & Maintenance
+## Troubleshooting
 
-### Health Checks
-
-Create **/health** endpoint:
-```javascript
-// health.js
-export function getHealthStatus() {
-  return {
-    status: 'healthy',
-    version: '1.0.0',
-    timestamp: new Date().toISOString(),
-    uptime: performance.now(),
-    memory: performance.memory
-  };
-}
-```
-
-### Error Tracking
-
-Integrate Sentry:
+### Can't connect from other devices
 ```bash
-npm install @sentry/browser
+# Check if server is listening on 0.0.0.0
+netstat -an | grep 5173
+
+# Check firewall
+sudo ufw status
+
+# Verify network connectivity
+ping YOUR_LOCAL_IP
 ```
 
-```javascript
-import * as Sentry from '@sentry/browser';
-
-Sentry.init({
-  dsn: 'YOUR_SENTRY_DSN',
-  environment: import.meta.env.VITE_ENVIRONMENT,
-  release: import.meta.env.VITE_VERSION
-});
-```
-
-### Analytics
-
-```javascript
-// Google Analytics
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'GA_MEASUREMENT_ID');
-```
-
-### Logging
-
-```javascript
-class Logger {
-  static log(message, data = {}) {
-    if (import.meta.env.DEV) {
-      console.log(message, data);
-    }
-    // Send to logging service in production
-  }
-
-  static error(message, error) {
-    console.error(message, error);
-    // Send to error tracking service
-  }
-}
-```
-
-### Backup Strategy
-
-1. **Code**: Git repository (GitHub)
-2. **User Data**: Auto-save system with cloud sync
-3. **Database**: Daily backups (when backend implemented)
-4. **Assets**: CDN with redundancy
-
-### Update Strategy
-
-1. **Versioning**: Use semantic versioning (1.0.0)
-2. **Changelog**: Maintain CHANGELOG.md
-3. **Rolling Updates**: Deploy to staging first
-4. **Cache Busting**: Build hashes handle this automatically
-5. **Rollback Plan**: Keep previous version available
-
+### Port already in use
 ```bash
-# Tag release
-git tag -a v1.0.0 -m "Release 1.0.0"
-git push origin v1.0.0
+# Find process
+lsof -i :5173
 
-# Create release branch
-git checkout -b release/v1.0.0
+# Kill process
+kill -9 PID
 ```
+
+### High latency
+- Check network bandwidth
+- Monitor server resources
+- Review database queries
+- Check Redis connection pool
+
+### Memory leaks
+- Monitor heap size
+- Use Node.js --inspect
+- Review event listeners
+- Check for circular references
 
 ---
 
-## Troubleshooting Deployment
+## Support & Resources
 
-### Build Errors
-
-```bash
-# Clear cache and rebuild
-rm -rf node_modules dist
-npm install
-npm run build
-```
-
-### CORS Issues
-
-If using external APIs:
-```javascript
-// vite.config.js
-server: {
-  proxy: {
-    '/api': {
-      target: 'https://api.yourdomain.com',
-      changeOrigin: true,
-      rewrite: (path) => path.replace(/^\/api/, '')
-    }
-  }
-}
-```
-
-### Memory Issues
-
-```bash
-# Increase Node.js memory limit
-NODE_OPTIONS=--max-old-space-size=4096 npm run build
-```
-
-### Large Bundle Size
-
-1. Analyze bundle:
-```bash
-npm install -D rollup-plugin-visualizer
-
-# Add to vite.config.js
-import { visualizer } from 'rollup-plugin-visualizer';
-
-plugins: [
-  visualizer({ open: true })
-]
-```
-
-2. Implement lazy loading:
-```javascript
-const HeavyComponent = () => import('./HeavyComponent.js');
-```
+- **GitHub**: https://github.com/MrNova420/web-game-dev
+- **Issues**: Report bugs and feature requests
+- **Docs**: `/docs` folder for detailed guides
+- **Health Check**: `http://localhost:3000/health`
 
 ---
 
-## Quick Deployment Checklist
+## Latest Updates
 
-- [ ] Run `npm install`
-- [ ] Run `npm run build`
-- [ ] Test build with `npm run preview`
-- [ ] Verify all assets load correctly
-- [ ] Test in multiple browsers
-- [ ] Check mobile responsiveness
-- [ ] Verify HTTPS is working
-- [ ] Configure caching headers
-- [ ] Set up monitoring/analytics
-- [ ] Configure error tracking
-- [ ] Document deployment process
-- [ ] Set up CI/CD pipeline
-- [ ] Create backup strategy
-- [ ] Test rollback procedure
-
----
-
-## Support
-
-For deployment issues:
-- Check build logs
-- Review browser console
-- Check server logs
-- Verify environment variables
-- Test locally first
-
-**Happy Deploying!** 🚀
+✅ Local WiFi deployment support
+✅ Multiplayer infrastructure guide
+✅ Stress testing for 15,000 players
+✅ Production-ready configuration
+✅ Comprehensive monitoring setup
