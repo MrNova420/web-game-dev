@@ -12,6 +12,10 @@ export class MagicalBackgroundSystem {
         this.sparkleParticles = [];
         this.floatingMagicParticles = [];
         this.magicalAuras = [];
+        this.sparkBurstParticles = []; // Track burst particles for cleanup
+        
+        // Constants
+        this.POINT_SIZE_SCALE = 300.0;
         
         this.init();
     }
@@ -75,7 +79,7 @@ export class MagicalBackgroundSystem {
                     
                     // Twinkle effect
                     float twinkle = sin(time * 2.0 + position.x * 10.0) * 0.5 + 0.5;
-                    gl_PointSize = size * twinkle * 20.0 * (300.0 / -mvPosition.z);
+                    gl_PointSize = size * twinkle * 20.0 * (${this.POINT_SIZE_SCALE} / -mvPosition.z);
                     gl_Position = projectionMatrix * mvPosition;
                 }
             `,
@@ -316,14 +320,43 @@ export class MagicalBackgroundSystem {
             const pulse = Math.sin(time * data.pulseSpeed) * 0.2 + 1.0;
             aura.scale.set(pulse, pulse, pulse);
         });
+        
+        // Update and cleanup spark burst particles
+        const particlesToRemove = [];
+        this.sparkBurstParticles.forEach((particle, index) => {
+            const data = particle.userData;
+            data.lifetime -= deltaTime;
+            
+            if (data.lifetime <= 0) {
+                // Mark for removal
+                particlesToRemove.push(index);
+                this.scene.remove(particle);
+                particle.geometry.dispose();
+                particle.material.dispose();
+            } else {
+                // Update particle
+                particle.position.add(
+                    data.velocity.clone().multiplyScalar(deltaTime)
+                );
+                data.velocity.y -= 9.8 * deltaTime; // Gravity
+                
+                // Fade out
+                particle.material.opacity = data.lifetime / data.maxLifetime;
+            }
+        });
+        
+        // Remove dead particles from array (in reverse to maintain indices)
+        for (let i = particlesToRemove.length - 1; i >= 0; i--) {
+            this.sparkBurstParticles.splice(particlesToRemove[i], 1);
+        }
     }
     
     /**
      * Create a burst of magical sparkles at a position
+     * Note: Uses individual meshes for simplicity. For production, consider using
+     * instanced rendering or BufferGeometry-based particle system for better performance.
      */
     createSparkBurst(position, color = 0xff00ff, count = 50) {
-        const particles = [];
-        
         for (let i = 0; i < count; i++) {
             const geometry = new THREE.SphereGeometry(0.1, 8, 8);
             const material = new THREE.MeshBasicMaterial({
@@ -350,9 +383,7 @@ export class MagicalBackgroundSystem {
             };
             
             this.scene.add(particle);
-            particles.push(particle);
+            this.sparkBurstParticles.push(particle);
         }
-        
-        return particles;
     }
 }
