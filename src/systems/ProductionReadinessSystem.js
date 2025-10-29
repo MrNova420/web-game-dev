@@ -25,6 +25,10 @@ export class ProductionReadinessSystem {
         
         this.autoFixEnabled = true;
         
+        // Add cooldown for optimization
+        this.lastOptimizationTime = 0;
+        this.optimizationCooldown = 10000; // 10 seconds between optimizations
+        
         this.init();
     }
     
@@ -201,6 +205,14 @@ export class ProductionReadinessSystem {
     }
     
     optimizePerformance() {
+        // Check cooldown to prevent spam
+        const now = Date.now();
+        if (now - this.lastOptimizationTime < this.optimizationCooldown) {
+            return; // Still in cooldown, skip optimization
+        }
+        
+        this.lastOptimizationTime = now;
+        
         if (this.gameEngine.postProcessingSystem) {
             // Reduce post-processing quality
             this.gameEngine.postProcessingSystem.setQualityPreset('medium');
