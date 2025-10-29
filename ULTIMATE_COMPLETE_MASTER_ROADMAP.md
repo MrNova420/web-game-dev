@@ -9,6 +9,32 @@
 
 ---
 
+## ⚠️ CRITICAL: ASSET USAGE STRATEGY
+
+**🎨 WE USE FREE EXTERNAL ASSETS - NOT SELF-CREATED**
+
+This game is built by **INTEGRATING** free external assets, NOT by creating visual assets from scratch.
+
+### Asset Sources (All FREE):
+- **3D Models**: Mixamo, Sketchfab (Free), Quaternius, Poly Pizza, Kenney
+- **Textures**: Poly Haven, CC0 Textures
+- **Audio**: Freesound, Incompetech, OpenGameArt
+- **UI/Icons**: Game-icons.net, Kenney UI Packs
+
+### Our Role:
+✅ **DOWNLOAD** free assets from external sources  
+✅ **INTEGRATE** assets into game systems via code  
+✅ **REFERENCE** assets by file paths  
+✅ **CREDIT** original creators  
+
+❌ **DON'T** create 3D models ourselves  
+❌ **DON'T** create textures ourselves  
+❌ **DON'T** create audio ourselves  
+
+**See ASSET_INTEGRATION_PLAN.md for complete details**
+
+---
+
 ## 📊 COMPLETE EXTRACTION SUMMARY
 
 ### Documentation Files Analyzed (Top 15 by size):
@@ -557,10 +583,22 @@ Each school has:
 **Lines**: 2,456
 **Systems**: 10 (WeatherSystem, PostProcessingSystem, AdvancedParticleSystem, DayNightCycleSystem, ModernUISystem, EnvironmentDetailsSystem, OpenWorldSystem, VolumetricLightingSystem, CinematicCameraSystem, PhysicsSystem)
 
+**🎨 Assets Needed (Use FREE External Sources):**
+- Skybox textures (Poly Haven)
+- Particle textures (Kenney)
+- Environment models (Quaternius, Poly Pizza)
+- Weather effects (particle sprites from Kenney)
+
 ### ✅ PHASE 2: AAA OPEN WORLD (COMPLETE)
 **Status**: 100% ✅
 **Lines**: 1,611
 **Systems**: 5 (CharacterClassSystem, NPCSystem, AdvancedInventorySystem, AnimeStyleRenderingSystem, Enhanced3DGraphicsSystem)
+
+**🎨 Assets Needed (Use FREE External Sources):**
+- Character models (Mixamo - FREE with Adobe account)
+- NPC models (Mixamo, Sketchfab Free)
+- Terrain textures (Poly Haven)
+- Building models (Quaternius, Poly Pizza)
 
 ### 📝 PHASE 3: ADVANCED GAMEPLAY SYSTEMS
 **Status**: 0% 📝
@@ -577,16 +615,34 @@ Each school has:
 9. Weapon Skill System (~500 lines)
 10. Tactical Combat AI (~600 lines)
 
+**🎨 Assets Needed (Use FREE External Sources):**
+- Weapon models (Sketchfab Free, Poly Pizza)
+- Effect sprites/particles (Kenney)
+- Combat animations (Mixamo)
+- Impact sounds (Freesound)
+
 ### ✅ PHASE 4: CRAFTING & ECONOMY (COMPLETE)
 **Status**: 100% ✅
 **Lines**: 3,093
 **Systems**: 8 existing
+
+**🎨 Assets Needed (Use FREE External Sources):**
+- Crafting station models (Quaternius)
+- Material item icons (Game-icons.net)
+- UI elements (Kenney UI Pack)
+- Crafting sounds (Freesound)
 
 ### 🔄 PHASE 5: PET/COMPANION COMBAT (PARTIAL)
 **Status**: 50% 🔄
 **Current Lines**: 2,279
 **Remaining Lines**: 1,200
 **Systems**: 3 complete, 3 needed
+
+**🎨 Assets Needed (Use FREE External Sources):**
+- Companion character models (Mixamo female characters)
+- Pet/creature models (Quaternius creature pack)
+- Mount models (Sketchfab Free horses/dragons)
+- Pet animations (Mixamo)
 
 ### 🔄 PHASE 6: SOCIAL & LEADERBOARDS (PARTIAL)
 **Status**: 40% 🔄
