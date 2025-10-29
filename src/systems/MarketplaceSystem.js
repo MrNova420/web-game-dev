@@ -1,0 +1,7 @@
+/**
+ * MarketplaceSystem.js - Phase 6 Economy
+ */
+export class MarketplaceSystem {
+  constructor() { this.shops = { vendor: { model: '/assets/models/shops/marketplace.glb' } }; this.ui = { shop: '/assets/ui/shop/shop_window.png' }; }  // Quaternius + Kenney
+  buyItem(playerId, itemId) { console.log(`${playerId} bought ${itemId}`); }
+}

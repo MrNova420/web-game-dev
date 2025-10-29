@@ -1,0 +1,7 @@
+/**
+ * RankingSystemGlobal.js - Phase 5
+ */
+export class RankingSystemGlobal {
+  constructor() { this.rankings = new Map(); this.ui = { leaderboard: '/assets/ui/ranking/leaderboard.png' }; }  // Kenney
+  updateRank(playerId, score) { console.log(`${playerId} rank updated: ${score}`); }
+}
