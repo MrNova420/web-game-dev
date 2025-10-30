@@ -80,18 +80,18 @@ export class ModelLoader {
                 pebble: '/assets/models/nature/Pebble_Round_1.gltf'
             },
             
-            // Buildings - Medieval Village MegaKit
+            // Buildings - Using props for now (buildings directory doesn't exist yet)
             buildings: {
-                house: '/assets/models/buildings/House_Small_1.gltf',
-                house_large: '/assets/models/buildings/House_Large_1.gltf',
-                tower: '/assets/models/buildings/Tower_1.gltf',
-                castle_wall: '/assets/models/buildings/Castle_Wall_1.gltf',
-                windmill: '/assets/models/buildings/Windmill.gltf',
+                house: '/assets/models/props/Barrel.gltf', // Placeholder
+                house_large: '/assets/models/props/Barrel.gltf', // Placeholder
+                tower: '/assets/models/props/Barrel.gltf', // Placeholder
+                castle_wall: '/assets/models/props/Barrel.gltf', // Placeholder
+                windmill: '/assets/models/props/Barrel.gltf', // Placeholder
                 well: '/assets/models/props/Well.gltf',
-                bridge: '/assets/models/buildings/Bridge_1.gltf',
-                gate: '/assets/models/buildings/Gate_1.gltf',
-                barn: '/assets/models/buildings/Barn_1.gltf',
-                shop: '/assets/models/buildings/Shop_1.gltf'
+                bridge: '/assets/models/props/Barrel.gltf', // Placeholder
+                gate: '/assets/models/props/Barrel.gltf', // Placeholder
+                barn: '/assets/models/props/Barrel.gltf', // Placeholder
+                shop: '/assets/models/props/Barrel.gltf' // Placeholder
             },
             
             // Props & Items - Fantasy Props MegaKit (94 models!)

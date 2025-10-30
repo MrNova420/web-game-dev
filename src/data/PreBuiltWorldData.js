@@ -438,8 +438,23 @@ export async function quickLoadWorld(scene, modelLoader) {
         if (biome.trees) {
             for (const tree of biome.trees) {
                 try {
-                    const treeModel = await modelLoader.loadModel('nature', tree.type.toLowerCase());
-                    if (treeModel) {
+                    // Normalize tree type name to match actual files
+                    // "Tree_Common_1" -> "commontree_1" or "Tree_Pine_1" -> "twistedtree_1" (use twisted as pine fallback)
+                    let modelType = tree.type.toLowerCase().replace('tree_', '').replace('_', 'tree_');
+                    
+                    // Map specific types to available models
+                    if (modelType.includes('pine')) {
+                        modelType = 'twistedtree_1';
+                    } else if (modelType.includes('common')) {
+                        modelType = 'commontree_1';
+                    } else if (modelType.includes('dead')) {
+                        modelType = 'deadtree_1';
+                    } else {
+                        modelType = 'commontree_1'; // Default fallback
+                    }
+                    
+                    const treeModel = await modelLoader.loadModel('nature', modelType);
+                    if (treeModel && treeModel.children && treeModel.children.length > 0) {
                         treeModel.position.set(
                             biome.position.x + tree.x,
                             biome.position.y + tree.y,
@@ -450,6 +465,8 @@ export async function quickLoadWorld(scene, modelLoader) {
                         treeModel.castShadow = true;
                         scene.add(treeModel);
                         loadedObjects.push(treeModel);
+                    } else {
+                        throw new Error('Model empty');
                     }
                 } catch (error) {
                     // Fallback: create simple tree shape
@@ -485,8 +502,22 @@ export async function quickLoadWorld(scene, modelLoader) {
         if (biome.rocks) {
             for (const rock of biome.rocks) {
                 try {
-                    const rockModel = await modelLoader.loadModel('nature', rock.type.toLowerCase());
-                    if (rockModel) {
+                    // Normalize rock type name
+                    let modelType = rock.type.toLowerCase();
+                    
+                    // Map to available models
+                    if (modelType.includes('large')) {
+                        modelType = 'rock_medium_1'; // Use medium as large replacement
+                    } else if (modelType.includes('small')) {
+                        modelType = 'pebble_round_1';
+                    } else if (modelType.includes('medium')) {
+                        modelType = 'rock_medium_1';
+                    } else {
+                        modelType = 'rock_medium_1'; // Default
+                    }
+                    
+                    const rockModel = await modelLoader.loadModel('nature', modelType);
+                    if (rockModel && rockModel.children && rockModel.children.length > 0) {
                         rockModel.position.set(
                             biome.position.x + rock.x,
                             biome.position.y + rock.y,
@@ -497,6 +528,8 @@ export async function quickLoadWorld(scene, modelLoader) {
                         rockModel.castShadow = true;
                         scene.add(rockModel);
                         loadedObjects.push(rockModel);
+                    } else {
+                        throw new Error('Model empty');
                     }
                 } catch (error) {
                     // Fallback: create simple rock
