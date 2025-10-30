@@ -239,7 +239,8 @@ export class GameEngine {
         
         // Create Three.js scene
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x1a0033);
+        // Light blue/grey background so 3D objects are visible
+        this.scene.background = new THREE.Color(0x87CEEB); // Sky blue
         this.scene.fog = new THREE.FogExp2(0x2d0a4e, 0.02);
         this.scene.userData.gameEngine = this;
         
@@ -258,11 +259,11 @@ export class GameEngine {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
-        // Add basic lighting
-        const ambientLight = new THREE.AmbientLight(0xff00ff, 0.6);
+        // Add STRONG lighting to ensure world is visible
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); // Bright white light
         this.scene.add(ambientLight);
         
-        const dirLight = new THREE.DirectionalLight(0xffff00, 0.8);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 2.0); // Bright white directional light
         dirLight.position.set(10, 20, 10);
         dirLight.castShadow = true;
         this.scene.add(dirLight);
