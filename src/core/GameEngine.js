@@ -235,21 +235,16 @@ export class GameEngine {
     }
     
     async init() {
+        console.log('🎮 Initializing game engine...');
+        
         // Create Three.js scene
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(0x1a0033);
         this.scene.fog = new THREE.FogExp2(0x2d0a4e, 0.02);
-        
-        // Store game engine reference in scene for systems to access
         this.scene.userData.gameEngine = this;
         
         // Setup camera
-        this.camera = new THREE.PerspectiveCamera(
-            75,
-            window.innerWidth / window.innerHeight,
-            0.1,
-            1000
-        );
+        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         this.camera.position.set(0, 10, 15);
         this.camera.lookAt(0, 0, 0);
         
@@ -263,43 +258,33 @@ export class GameEngine {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         
-        // Add ambient lighting (vibrant magical)
-        const ambientLight = new THREE.AmbientLight(0xff00ff, 0.6); // Bright magenta
+        // Add basic lighting
+        const ambientLight = new THREE.AmbientLight(0xff00ff, 0.6);
         this.scene.add(ambientLight);
         
-        // Animate ambient light color for magical rainbow effect
+        const dirLight = new THREE.DirectionalLight(0xffff00, 0.8);
+        dirLight.position.set(10, 20, 10);
+        dirLight.castShadow = true;
+        this.scene.add(dirLight);
+        
+        // Animate lights
         const animateAmbient = () => {
             const time = Date.now() * 0.0003;
-            const hue = (Math.sin(time) * 0.5 + 0.5) * 0.8; // Rainbow cycle
+            const hue = (Math.sin(time) * 0.5 + 0.5) * 0.8;
             ambientLight.color.setHSL(hue, 1.0, 0.5);
             requestAnimationFrame(animateAmbient);
         };
         animateAmbient();
         
-        // Add directional light (bright magical sun)
-        const dirLight = new THREE.DirectionalLight(0xffff00, 0.8); // Bright yellow
-        dirLight.position.set(10, 20, 10);
-        dirLight.castShadow = true;
-        dirLight.shadow.camera.near = 0.1;
-        dirLight.shadow.camera.far = 100;
-        dirLight.shadow.camera.left = -20;
-        dirLight.shadow.camera.right = 20;
-        dirLight.shadow.camera.top = 20;
-        dirLight.shadow.camera.bottom = -20;
-        dirLight.shadow.mapSize.width = 2048;
-        dirLight.shadow.mapSize.height = 2048;
-        this.scene.add(dirLight);
-        
-        // Animate directional light color for magical effect
         const animateDirLight = () => {
             const time = Date.now() * 0.0004;
-            const hue = (Math.cos(time) * 0.5 + 0.5) * 0.8 + 0.1; // Rainbow cycle
+            const hue = (Math.cos(time) * 0.5 + 0.5) * 0.8 + 0.1;
             dirLight.color.setHSL(hue, 1.0, 0.6);
             requestAnimationFrame(animateDirLight);
         };
         animateDirLight();
         
-        // Add vibrant atmospheric point lights (magical sparkles)
+        // Add point lights
         const magicColors = [0xff00ff, 0x00ffff, 0xffff00, 0xff0066, 0x00ff00];
         for (let i = 0; i < 8; i++) {
             const light = new THREE.PointLight(magicColors[i % magicColors.length], 1.5, 25);
@@ -310,7 +295,6 @@ export class GameEngine {
             );
             this.scene.add(light);
             
-            // Animate point light colors
             const animatePointLight = () => {
                 const time = Date.now() * 0.001 + i * 100;
                 const hue = (Math.sin(time) * 0.5 + 0.5);
@@ -321,7 +305,9 @@ export class GameEngine {
             animatePointLight();
         }
         
-        // Initialize game systems with error handling
+        console.log('✅ Scene and renderer ready');
+        
+        // Initialize essential systems only
         try {
             this.companionManager = new CompanionManager();
             this.dungeonGenerator = new DungeonGenerator();
@@ -338,262 +324,167 @@ export class GameEngine {
             this.characterCustomization = new CharacterCustomization(this);
             this.dailyRewards = new DailyRewards(this);
             this.tutorialSystem = new TutorialSystem(this);
+            
+            console.log('✅ Essential systems initialized');
         } catch (error) {
-            console.error('Error initializing core systems:', error);
-            throw new Error('Failed to initialize core game systems: ' + error.message);
+            console.error('Error initializing essential systems:', error);
+            throw error;
         }
         
-        // Phase 4: Crafting & Economy Systems
-        try {
-            this.craftingSystem = new CraftingSystem(this);
-            this.economySystem = new EconomySystem(this);
-            this.enhancementSystem = new EnhancementSystem(this);
-            this.tradingSystem = new TradingSystem(this);
-        } catch (error) {
-            console.error('Error initializing Phase 4 systems:', error);
-            // Continue with degraded functionality
-            console.warn('Game will continue without some Phase 4 features');
-        }
+        // Initialize other systems with error handling (non-blocking)
+        this.initOptionalSystems();
         
-        // Phase 5: Pet/Companion Combat Systems
-        try {
-            this.petSystem = new PetSystem(this);
-            this.companionAI = new CompanionAI(this);
-            this.mountSystem = new MountSystem(this);
-        } catch (error) {
-            console.error('Error initializing Phase 5 systems:', error);
-            console.warn('Game will continue without some Phase 5 features');
-        }
-        
-        // Phase 6: Social & Leaderboards (Complete)
-        try {
-            this.leaderboardSystem = new LeaderboardSystem(this);
-            this.guildSystem = new GuildSystem(this);
-            this.challengeMode = new ChallengeMode(this);
-        } catch (error) {
-            console.error('Error initializing Phase 6 systems:', error);
-            console.warn('Game will continue without some Phase 6 features');
-        }
-        
-        // Phase 7: Advanced Progression
-        try {
-            this.prestigeSystem = new PrestigeSystem(this);
-            this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
-        } catch (error) {
-            console.error('Error initializing Phase 7 systems:', error);
-            console.warn('Game will continue without some Phase 7 features');
-        }
-        
-        // Enhanced Fantasy RPG Systems
-        try {
-            this.fantasyMagicSystem = new FantasyMagicSystem();
-            this.seductiveBaddiesSystem = new SeductiveBaddiesSystem();
-            this.powerLevelingSystem = new PowerLevelingSystem();
-            this.endlessBattleSystem = new EndlessBattleSystem();
-        } catch (error) {
-            console.error('Error initializing enhanced RPG systems:', error);
-            console.warn('Game will continue without some enhanced RPG features');
-        }
-        
-        // Enhanced Game Mechanics & Optimizations
-        try {
-            this.enhancedGameMechanics = new EnhancedGameMechanics();
-            this.autoSaveSystem = new AutoSaveSystem();
-            this.performanceOptimizer = new PerformanceOptimizer();
-            
-            // New Enhanced Systems
-            this.advancedThemeSystem = new AdvancedThemeSystem(this);
-            this.advanced3DGraphicsSystem = new Advanced3DGraphicsSystem(this);
-            this.mainMenuSystem = new MainMenuSystem(this);
-            this.safeZoneSystem = new SafeZoneSystem(this);
-            this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
-            this.magicalBackgroundSystem = new MagicalBackgroundSystem(this.scene);
-            this.progressTrackingSystem = new ProgressTrackingSystem(this);
-            
-            // New Phase 1 Enhancement Systems - 3D Graphics & Atmosphere
-            this.weatherSystem = new WeatherSystem(this);
-            this.postProcessingSystem = new PostProcessingSystem(this);
-            this.advancedParticleSystem = new AdvancedParticleSystem(this.scene);
-            this.dayNightCycleSystem = new DayNightCycleSystem(this);
-            this.modernUISystem = new ModernUISystem(this);
-            this.environmentDetailsSystem = new EnvironmentDetailsSystem(this);
-            
-            // Phase 2+ AAA Systems - Open World & Cinematic
-            this.openWorldSystem = new OpenWorldSystem(this);
-            this.volumetricLightingSystem = new VolumetricLightingSystem(this);
-            this.cinematicCameraSystem = new CinematicCameraSystem(this);
-            this.physicsSystem = new PhysicsSystem(this);
-            
-            // Phase 3+ Character & World Systems
-            this.characterClassSystem = new CharacterClassSystem(this);
-            this.reputationSystem = new ReputationSystem(this);
-            this.attributeSystem = new AttributeSystem(this);
-            this.talentSystem = new TalentSystem(this);
-            this.npcSystem = new NPCSystem(this);
-            this.advancedInventorySystem = new AdvancedInventorySystem(this);
-            
-            // Production Polish Systems
-            this.animeStyleRenderingSystem = new AnimeStyleRenderingSystem(this);
-            this.productionReadinessSystem = new ProductionReadinessSystem(this);
-            
-            // Content Integration & Branding Systems
-            this.mascotBrandingSystem = new MascotBrandingSystem();
-            this.contentIntegrationSystem = new ContentIntegrationSystem(this);
-            
-            // Multiplayer & Social Systems
-            this.multiplayerSocialSystem = new MultiplayerSocialSystem(this);
-            this.teleportationSystem = new TeleportationSystem(this);
-            this.startingZoneSystem = new StartingZoneSystem(this);
-            
-            // Advanced Visuals & UI Systems
-            this.advanced3DModelSystem = new Advanced3DModelSystem(this.scene);
-            this.advancedUIInterfaceSystem = new AdvancedUIInterfaceSystem();
-            
-            // Phase 4: Biome Expansion Systems (NEW)
-            this.biomeGenerationSystem = new BiomeGenerationSystem(this.scene, this.camera);
-            this.biomeSpecificEnemies = new BiomeSpecificEnemies(this.scene);
-            this.biomeWeatherEffects = new BiomeWeatherEffects(this.scene, this.camera);
-            this.biomeResourcesSystem = new BiomeResourcesSystem(this.scene);
-            this.biomeDungeonsSystem = new BiomeDungeonsSystem(this.scene);
-            
-            // Initialize Phase 4 systems
-            this.biomeGenerationSystem.init();
-            this.biomeWeatherEffects.init();
-            
-            // Phase 5: Advanced Combat Mechanics (NEW)
-            this.dodgeAndParrySystem = new DodgeAndParrySystem(this);
-            this.comboChainSystem = new ComboChainSystem(this);
-            this.weaponSkillSystem = new WeaponSkillSystem(this);
-            this.tacticalCombatAI = new TacticalCombatAI(this);
-            
-            // Phase 5.2: PvP Systems
-            this.pvpArenaSystem = new PvPArenaSystem(this);
-            
-            // Phase 6: Social & Community Features
-            this.guildAndHousingSystem = new GuildAndHousingSystem(this);
-            this.matchmakingAndEventsSystem = new MatchmakingAndEventsSystem();
-            this.advancedGraphicsSystem = new AdvancedGraphicsSystem(this.scene, this.renderer);
-            
-            // Phase 6+: Procedural Generation & Enhanced Graphics
-            this.proceduralGenerationSystem = new ProceduralGenerationSystem(this);
-            this.enhanced3DGraphicsSystem = new Enhanced3DGraphicsSystem(this.scene, this.renderer, this.camera);
-            this.storylineAndLoreSystem = new StorylineAndLoreSystem(this);
-            
-            // Phase 8-9: Intelligent AI & Anime Character Systems
-            this.intelligentEnemyAI = new IntelligentEnemyAI();
-            this.animeCharacterSystem = new AnimeCharacterSystem(this.scene);
-            
-            // Phase 8-9: Advanced Game Systems
-            this.intelligentAISystem = new IntelligentAISystem(this);
-            this.dynamicDifficultySystem = new DynamicDifficultySystem(this);
-            this.progressiveWorldSystem = new ProgressiveWorldSystem(this);
-            this.magicalEffectsSystem = new MagicalEffectsSystem(this);
-            this.worldBeautificationSystem = new WorldBeautificationSystem(this.scene);
-            this.monsterDesignSystem = new MonsterDesignSystem(this);
-            this.addictiveGameplaySystem = new AddictiveGameplaySystem(this);
-            this.playerControlSettingsSystem = new PlayerControlSettingsSystem(this);
-            this.cloudSaveSystem = new CloudSaveSystem(this);
-            this.advancedAutoManagementSystem = new AdvancedAutoManagementSystem(this);
-            
-            // Initialize new systems
-            this.enhanced3DGraphicsSystem.init();
-            this.storylineAndLoreSystem.init(1); // Start at level 1
-            
-            // Initialize Phase 8-9 systems
-            await this.intelligentAISystem.init();
-            await this.dynamicDifficultySystem.init();
-            await this.progressiveWorldSystem.init();
-            await this.magicalEffectsSystem.init();
-            await this.worldBeautificationSystem.init();
-            await this.monsterDesignSystem.init();
-            await this.addictiveGameplaySystem.init();
-            await this.playerControlSettingsSystem.init();
-            await this.cloudSaveSystem.init();
-            await this.advancedAutoManagementSystem.init();
-            
-            console.log('🎨 Phase 1 Enhancement Systems initialized (Weather, Post-Processing, Advanced Particles, Day/Night, Modern UI, Environment Details)');
-            console.log('🌍 Phase 2+ AAA Systems initialized (Open World, Volumetric Lighting, Cinematic Camera, Physics)');
-            console.log('👤 Phase 3+ Character & World Systems initialized (Character Classes, NPCs, Advanced Inventory)');
-            console.log('✨ Production Polish Systems initialized (Anime Style Rendering, Production Readiness)');
-            console.log('👥 Multiplayer & Social Systems initialized (Social, Teleportation, Starting Zone)');
-            console.log('🎮 Advanced Visuals Systems initialized (3D Models, UI Interface)');
-            console.log('🌲 Phase 4 Biome Expansion Systems initialized (5 systems: Generation, Enemies, Weather, Resources, Dungeons)');
-            console.log('⚔️ Phase 5 Combat Enhancement Systems initialized (4 systems: Dodge & Parry, Combo Chains, Weapon Skills, Tactical AI)');
-            console.log('🏟️ Phase 5.2 PvP Systems initialized (Arena, Matchmaking, Duels, Rankings)');
-            console.log('🏰 Phase 6 Social Systems initialized (Guilds, Housing, Marketplace, Matchmaking, Events)');
-            console.log('🎲 Procedural Generation System initialized (Endless content generation)');
-            console.log('🎨 Enhanced 3D Graphics System initialized (Amazing visuals & models)');
-            console.log('🌊 Advanced Graphics System initialized (Terrain, Water, Lighting, Animations)');
-            console.log('📖 Storyline & Lore System initialized (Deep narrative integration)');
-            console.log('🧠 Phase 8 Intelligent Enemy AI initialized (Behavior trees, learning, pack tactics)');
-            console.log('✨ Phase 9 Anime Character System initialized (Detailed models, customization, physics)');
-            console.log('🎯 Phase 8-9 Advanced Systems COMPLETE:');
-            console.log('  ✅ Intelligent AI System - Advanced enemy behaviors');
-            console.log('  ✅ Dynamic Difficulty System - Adaptive challenge');
-            console.log('  ✅ Progressive World System - Evolving environment');
-            console.log('  ✅ Magical Effects System - 8 magic schools with effects');
-            console.log('  ✅ World Beautification System - Flora, fauna, atmosphere');
-            console.log('  ✅ Monster Design System - 50+ unique monsters');
-            console.log('  ✅ Addictive Gameplay System - Daily activities, battle pass');
-            console.log('  ✅ Player Control Settings - Complete customization');
-            console.log('  ✅ Cloud Save System - Auto-sync with recovery');
-            console.log('  ✅ Advanced Auto Management - Performance optimization');
-        } catch (error) {
-            console.error('Error initializing enhanced mechanics:', error);
-            console.warn('Game will continue without some enhanced mechanics');
-        }
-        
-        // Make save system aware of all systems
-        try {
-            this.saveSystem = new SaveSystem(this);
-        } catch (error) {
-            console.error('Error initializing save system:', error);
-            throw new Error('Failed to initialize save system: ' + error.message);
-        }
-        
-        // Initialize WorldBuilder after all systems are ready
+        // Initialize WorldBuilder
         this.worldBuilder = new WorldBuilder(this);
-        console.log('🏗️ WorldBuilder ready to create immersive worlds!');
+        
+        // Initialize SaveSystem
+        this.saveSystem = new SaveSystem(this);
         
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
         
+        console.log('✅ Game engine initialized');
         return true;
     }
     
+    // Initialize optional systems in background (non-blocking)
+    initOptionalSystems() {
+        setTimeout(() => {
+            try {
+                // Initialize additional systems asynchronously
+                this.craftingSystem = new CraftingSystem(this);
+                this.economySystem = new EconomySystem(this);
+                this.enhancementSystem = new EnhancementSystem(this);
+                this.tradingSystem = new TradingSystem(this);
+                this.petSystem = new PetSystem(this);
+                this.companionAI = new CompanionAI(this);
+                this.mountSystem = new MountSystem(this);
+                this.leaderboardSystem = new LeaderboardSystem(this);
+                this.guildSystem = new GuildSystem(this);
+                this.challengeMode = new ChallengeMode(this);
+                this.prestigeSystem = new PrestigeSystem(this);
+                this.infiniteDungeonSystem = new InfiniteDungeonSystem(this);
+                this.fantasyMagicSystem = new FantasyMagicSystem();
+                this.seductiveBaddiesSystem = new SeductiveBaddiesSystem();
+                this.powerLevelingSystem = new PowerLevelingSystem();
+                this.endlessBattleSystem = new EndlessBattleSystem();
+                this.enhancedGameMechanics = new EnhancedGameMechanics();
+                this.autoSaveSystem = new AutoSaveSystem();
+                this.performanceOptimizer = new PerformanceOptimizer();
+                this.advancedThemeSystem = new AdvancedThemeSystem(this);
+                this.advanced3DGraphicsSystem = new Advanced3DGraphicsSystem(this);
+                this.mainMenuSystem = new MainMenuSystem(this);
+                this.safeZoneSystem = new SafeZoneSystem(this);
+                this.enhancedVisualsSystem = new EnhancedVisualsSystem(this);
+                this.magicalBackgroundSystem = new MagicalBackgroundSystem(this.scene);
+                this.progressTrackingSystem = new ProgressTrackingSystem(this);
+                this.weatherSystem = new WeatherSystem(this);
+                this.postProcessingSystem = new PostProcessingSystem(this);
+                this.advancedParticleSystem = new AdvancedParticleSystem(this.scene);
+                this.dayNightCycleSystem = new DayNightCycleSystem(this);
+                this.modernUISystem = new ModernUISystem(this);
+                this.environmentDetailsSystem = new EnvironmentDetailsSystem(this);
+                this.openWorldSystem = new OpenWorldSystem(this);
+                this.volumetricLightingSystem = new VolumetricLightingSystem(this);
+                this.cinematicCameraSystem = new CinematicCameraSystem(this);
+                this.physicsSystem = new PhysicsSystem(this);
+                this.characterClassSystem = new CharacterClassSystem(this);
+                this.reputationSystem = new ReputationSystem(this);
+                this.attributeSystem = new AttributeSystem(this);
+                this.talentSystem = new TalentSystem(this);
+                this.npcSystem = new NPCSystem(this);
+                this.advancedInventorySystem = new AdvancedInventorySystem(this);
+                this.animeStyleRenderingSystem = new AnimeStyleRenderingSystem(this);
+                this.productionReadinessSystem = new ProductionReadinessSystem(this);
+                this.mascotBrandingSystem = new MascotBrandingSystem();
+                this.contentIntegrationSystem = new ContentIntegrationSystem(this);
+                this.multiplayerSocialSystem = new MultiplayerSocialSystem(this);
+                this.teleportationSystem = new TeleportationSystem(this);
+                this.startingZoneSystem = new StartingZoneSystem(this);
+                this.advanced3DModelSystem = new Advanced3DModelSystem(this.scene);
+                this.advancedUIInterfaceSystem = new AdvancedUIInterfaceSystem();
+                this.biomeGenerationSystem = new BiomeGenerationSystem(this.scene, this.camera);
+                this.biomeSpecificEnemies = new BiomeSpecificEnemies(this.scene);
+                this.biomeWeatherEffects = new BiomeWeatherEffects(this.scene, this.camera);
+                this.biomeResourcesSystem = new BiomeResourcesSystem(this.scene);
+                this.biomeDungeonsSystem = new BiomeDungeonsSystem(this.scene);
+                this.biomeGenerationSystem.init();
+                this.biomeWeatherEffects.init();
+                this.dodgeAndParrySystem = new DodgeAndParrySystem(this);
+                this.comboChainSystem = new ComboChainSystem(this);
+                this.weaponSkillSystem = new WeaponSkillSystem(this);
+                this.tacticalCombatAI = new TacticalCombatAI(this);
+                this.pvpArenaSystem = new PvPArenaSystem(this);
+                this.guildAndHousingSystem = new GuildAndHousingSystem(this);
+                this.matchmakingAndEventsSystem = new MatchmakingAndEventsSystem();
+                this.advancedGraphicsSystem = new AdvancedGraphicsSystem(this.scene, this.renderer);
+                this.proceduralGenerationSystem = new ProceduralGenerationSystem(this);
+                this.enhanced3DGraphicsSystem = new Enhanced3DGraphicsSystem(this.scene, this.renderer, this.camera);
+                this.storylineAndLoreSystem = new StorylineAndLoreSystem(this);
+                this.intelligentEnemyAI = new IntelligentEnemyAI();
+                this.animeCharacterSystem = new AnimeCharacterSystem(this.scene);
+                this.intelligentAISystem = new IntelligentAISystem(this);
+                this.dynamicDifficultySystem = new DynamicDifficultySystem(this);
+                this.progressiveWorldSystem = new ProgressiveWorldSystem(this);
+                this.magicalEffectsSystem = new MagicalEffectsSystem(this);
+                this.worldBeautificationSystem = new WorldBeautificationSystem(this.scene);
+                this.monsterDesignSystem = new MonsterDesignSystem(this);
+                this.addictiveGameplaySystem = new AddictiveGameplaySystem(this);
+                this.playerControlSettingsSystem = new PlayerControlSettingsSystem(this);
+                this.cloudSaveSystem = new CloudSaveSystem(this);
+                this.advancedAutoManagementSystem = new AdvancedAutoManagementSystem(this);
+                
+                // Initialize async systems
+                if (this.enhanced3DGraphicsSystem) this.enhanced3DGraphicsSystem.init();
+                if (this.storylineAndLoreSystem) this.storylineAndLoreSystem.init(1);
+                if (this.intelligentAISystem) this.intelligentAISystem.init();
+                if (this.dynamicDifficultySystem) this.dynamicDifficultySystem.init();
+                if (this.progressiveWorldSystem) this.progressiveWorldSystem.init();
+                if (this.magicalEffectsSystem) this.magicalEffectsSystem.init();
+                if (this.worldBeautificationSystem) this.worldBeautificationSystem.init();
+                if (this.monsterDesignSystem) this.monsterDesignSystem.init();
+                if (this.addictiveGameplaySystem) this.addictiveGameplaySystem.init();
+                if (this.playerControlSettingsSystem) this.playerControlSettingsSystem.init();
+                if (this.cloudSaveSystem) this.cloudSaveSystem.init();
+                if (this.advancedAutoManagementSystem) this.advancedAutoManagementSystem.init();
+                
+                console.log('✅ Optional advanced systems loaded in background');
+            } catch (error) {
+                console.warn('Some optional systems failed to load:', error);
+            }
+        }, 1000); // Load after 1 second delay
+    }
+    
     async createWorld() {
-        console.log('🌍 Creating COMPLETE immersive world using already-made assets...');
+        console.log('🌍 Creating world...');
         
-        // Preload models first
+        // Preload models
         await this.modelLoader.preloadCommonModels();
         
-        // === BUILD WORLD FROM PRESET ===
-        // Use WorldBuilder to create a complete immersive world!
-        const playerLevel = 1; // Could be loaded from save
-        const currentPreset = 'crystal_caverns'; // Start with Crystal Caverns
+        // Build world from preset
+        const playerLevel = 1;
+        const currentPreset = 'crystal_caverns';
         
-        console.log('🏗️ Building world using WorldBuilder system...');
         await this.worldBuilder.buildWorld(currentPreset, playerLevel);
         
         // Create player
         this.player = new Player(this.scene);
         await this.player.init();
         
-        // Try to load real player model
+        // Try to load player model
         try {
             const playerModel = await this.modelLoader.loadModel('characters', 'anime_girl');
             if (playerModel && this.player.mesh) {
-                // Replace simple player mesh with loaded model
                 const oldMesh = this.player.mesh;
                 this.scene.remove(oldMesh);
                 playerModel.scale.set(0.5, 0.5, 0.5);
                 playerModel.position.copy(oldMesh.position);
                 this.player.mesh = playerModel;
                 this.scene.add(playerModel);
-                console.log('✅ Player model loaded from external source');
+                console.log('✅ Player model loaded');
             }
         } catch (error) {
-            console.log('ℹ️ Using procedural player model (fallback)');
+            console.log('ℹ️ Using procedural player model');
         }
         
         // Initialize combat systems with player reference
@@ -605,29 +496,21 @@ export class GameEngine {
         this.companionManager.setActiveCompanion('smoke_siren');
         this.updateCompanionUI();
         
-        // Activate open world terrain
+        // Activate systems that depend on world
         if (this.openWorldSystem && this.openWorldSystem.terrain) {
             console.log('✅ Open world terrain active');
         }
         
-        // Start weather effects with visible rain
         if (this.weatherSystem) {
             this.weatherSystem.setWeather('rain', 0.3);
-            console.log('🌦️ Weather system active - rain enabled');
+            console.log('🌦️ Weather system active');
         }
         
-        // Start day/night cycle
         if (this.dayNightCycleSystem) {
-            this.dayNightCycleSystem.setTime(12); // Start at noon
+            this.dayNightCycleSystem.setTime(12);
             console.log('☀️ Day/night cycle active');
         }
         
-        // Magical effects system ready
-        if (this.magicalEffectsSystem) {
-            console.log('✨ Magical effects system ready');
-        }
-        
-        // Populate environment with REAL models
         if (this.environmentDetailsSystem) {
             const bounds = {
                 min: new THREE.Vector3(-50, 0, -50),
@@ -636,7 +519,6 @@ export class GameEngine {
             this.environmentDetailsSystem.populateBiome('crystal_caverns', bounds);
             console.log('🌲 Environment details populated');
             
-            // Add real tree models around the area
             for (let i = 0; i < 10; i++) {
                 const angle = (i / 10) * Math.PI * 2;
                 const radius = 10 + Math.random() * 20;

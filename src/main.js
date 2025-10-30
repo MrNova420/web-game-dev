@@ -44,90 +44,53 @@ class Game {
     }
     
     async init() {
-        // Set a timeout to detect if loading is stuck
-        const loadingTimeout = setTimeout(() => {
-            console.error('Loading timeout detected - game may be stuck');
-            this.loadingText.textContent = 'Loading is taking longer than expected...';
-            this.loadingText.style.color = '#ffaa00';
-        }, 10000); // 10 second warning
-        
-        const criticalTimeout = setTimeout(() => {
-            console.error('Critical loading timeout - stopping load attempt');
-            this.handleLoadError(new Error('Loading timeout - game did not load within 30 seconds'));
-        }, 30000); // 30 second failure
-        
         try {
-            // Update loading screen
-            this.updateLoading(10, 'Initializing game engine...');
+            console.log('🎮 Starting optimized game loading...');
             
-            // Initialize game engine with timeout protection
+            // Simple, fast loading - no complex timeouts
+            this.updateLoading(10, 'Initializing...');
+            
+            // Create game engine
             this.engine = new GameEngine(this.canvas);
-            await Promise.race([
-                this.engine.init(),
-                this.createTimeout(10000, 'Game engine initialization')
-            ]);
+            await this.engine.init();
             
-            this.updateLoading(30, 'Loading assets...');
+            this.updateLoading(40, 'Loading assets...');
             
-            // Load game assets with timeout protection
-            await Promise.race([
-                this.assetLoader.loadAll((progress, assetName) => {
-                    const percent = Math.floor(progress * 100);
-                    const loadingPercent = 30 + progress * 50;
-                    this.updateLoading(
-                        loadingPercent, 
-                        `Loading assets: ${percent}% ${assetName ? `(${assetName})` : ''}`
-                    );
-                }),
-                this.createTimeout(15000, 'Asset loading')
-            ]);
+            // Load assets quickly
+            await this.assetLoader.loadAll((progress, assetName) => {
+                const percent = Math.floor(progress * 100);
+                const loadingPercent = 40 + progress * 30;
+                this.updateLoading(loadingPercent, `Loading: ${percent}%`);
+            });
             
-            this.updateLoading(80, 'Initializing controls...');
+            this.updateLoading(70, 'Creating world...');
             
-            // Initialize input manager
+            // Create world
+            await this.engine.createWorld();
+            
+            this.updateLoading(85, 'Setting up controls...');
+            
+            // Initialize controls
             this.inputManager = new InputManager(this.canvas, this.engine);
-            
-            this.updateLoading(90, 'Creating world...');
-            
-            // Create initial game world with timeout protection
-            await Promise.race([
-                this.engine.createWorld(),
-                this.createTimeout(10000, 'World creation')
-            ]);
             
             this.updateLoading(100, 'Ready!');
             
-            // Clear timeouts since loading succeeded
-            clearTimeout(loadingTimeout);
-            clearTimeout(criticalTimeout);
-            
-            // Hide loading screen and show UI
+            // Hide loading screen and show game
             setTimeout(() => {
                 this.loadingScreen.classList.add('hidden');
                 
-                // Show UI overlay now that game is loaded
                 const uiOverlay = document.getElementById('ui-overlay');
                 if (uiOverlay) {
                     uiOverlay.classList.add('loaded');
                 }
                 
                 this.start();
-                
-                // Set up periodic health checks
-                this.setupHealthChecks();
             }, 500);
             
         } catch (error) {
-            clearTimeout(loadingTimeout);
-            clearTimeout(criticalTimeout);
+            console.error('Failed to initialize game:', error);
             this.handleLoadError(error);
         }
-    }
-    
-    createTimeout(ms, operation) {
-        return new Promise((_, reject) => {
-            setTimeout(() => reject(new Error(`${operation} timed out after ${ms}ms`)), ms);
-        });
     }
     
     handleLoadError(error) {
