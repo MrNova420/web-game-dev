@@ -9,6 +9,7 @@ import * as THREE from 'three';
 import { WorldPresets } from './WorldPresets.js';
 import { FreeAssetLibrary } from './FreeAssetLibrary.js';
 import { ModelLoader } from './ModelLoader.js';
+import { PreBuiltWorldData } from '../data/PreBuiltWorldData.js';
 
 export class WorldBuilder {
     constructor(gameEngine) {
@@ -20,6 +21,9 @@ export class WorldBuilder {
         this.worldPresets = new WorldPresets();
         this.assetLibrary = new FreeAssetLibrary();
         
+        // Store reference to PreBuiltWorldData
+        this.preBuiltWorldData = PreBuiltWorldData;
+        
         // Track built content
         this.builtNPCs = new Map();
         this.builtEnemies = new Map();
@@ -28,6 +32,7 @@ export class WorldBuilder {
         this.activeQuests = new Map();
         
         console.log('🏗️ WorldBuilder initialized - Ready to build immersive worlds!');
+        console.log(`   📦 PreBuiltWorldData available: ${this.preBuiltWorldData.builtBiomes} biomes ready`);
     }
     
     /**

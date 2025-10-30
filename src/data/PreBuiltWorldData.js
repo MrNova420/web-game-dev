@@ -15,6 +15,8 @@
  * The game just loads this data and renders it immediately.
  */
 
+import * as THREE from 'three';
+
 export const PreBuiltWorldData = {
     version: '1.0.0',
     generatedAt: '2025-10-30',
@@ -392,52 +394,309 @@ export const PreBuiltWorldData = {
 /**
  * Quick load function - loads everything instantly
  */
-export function quickLoadWorld(scene, modelLoader) {
+export async function quickLoadWorld(scene, modelLoader) {
     console.log('⚡ QUICK LOAD: Loading pre-built world data...');
     console.log('   Everything is already generated - just rendering!');
     
     const data = PreBuiltWorldData;
     const loadedObjects = [];
     
-    // Load all biomes instantly
-    Object.values(data.biomes).forEach(biome => {
-        console.log(`   Loading ${biome.name}...`);
+    // Load all biomes with their positioned objects
+    for (const [biomeKey, biome] of Object.entries(data.biomes)) {
+        console.log(`   📍 Loading ${biome.name}...`);
         
-        // Trees
-        biome.trees?.forEach(tree => {
-            // Load and position tree instantly
-            // (model loading happens async but position is pre-known)
-        });
+        // Create terrain for biome
+        if (biome.terrain) {
+            const terrainSize = 1000;
+            const terrainGeometry = new THREE.PlaneGeometry(terrainSize, terrainSize, 50, 50);
+            
+            // Apply simple elevation based on terrain type
+            const vertices = terrainGeometry.attributes.position.array;
+            for (let i = 0; i < vertices.length; i += 3) {
+                if (biome.terrain.elevation === 'high') {
+                    vertices[i + 2] = Math.random() * 30;
+                } else {
+                    vertices[i + 2] = Math.random() * 5;
+                }
+            }
+            terrainGeometry.computeVertexNormals();
+            
+            const terrainMaterial = new THREE.MeshStandardMaterial({
+                color: biome.terrain.type === 'mountain' ? 0x8b4513 : 0x7cb342,
+                roughness: 0.8
+            });
+            
+            const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
+            terrain.rotation.x = -Math.PI / 2;
+            terrain.position.set(biome.position.x, biome.position.y, biome.position.z);
+            terrain.receiveShadow = true;
+            scene.add(terrain);
+            loadedObjects.push(terrain);
+        }
         
-        // Rocks
-        biome.rocks?.forEach(rock => {
-            // Load and position rock
-        });
+        // Load trees (with fallback to basic shapes)
+        if (biome.trees) {
+            for (const tree of biome.trees) {
+                try {
+                    // Normalize tree type name to match actual files
+                    // "Tree_Common_1" -> "commontree_1" or "Tree_Pine_1" -> "twistedtree_1" (use twisted as pine fallback)
+                    let modelType = tree.type.toLowerCase().replace('tree_', '').replace('_', 'tree_');
+                    
+                    // Map specific types to available models
+                    if (modelType.includes('pine')) {
+                        modelType = 'twistedtree_1';
+                    } else if (modelType.includes('common')) {
+                        modelType = 'commontree_1';
+                    } else if (modelType.includes('dead')) {
+                        modelType = 'deadtree_1';
+                    } else {
+                        modelType = 'commontree_1'; // Default fallback
+                    }
+                    
+                    const treeModel = await modelLoader.loadModel('nature', modelType);
+                    if (treeModel && treeModel.children && treeModel.children.length > 0) {
+                        treeModel.position.set(
+                            biome.position.x + tree.x,
+                            biome.position.y + tree.y,
+                            biome.position.z + tree.z
+                        );
+                        treeModel.scale.setScalar(tree.scale);
+                        treeModel.rotation.y = tree.rotation * Math.PI / 180;
+                        treeModel.castShadow = true;
+                        scene.add(treeModel);
+                        loadedObjects.push(treeModel);
+                    } else {
+                        throw new Error('Model empty');
+                    }
+                } catch (error) {
+                    // Fallback: create simple tree shape
+                    const trunkGeo = new THREE.CylinderGeometry(0.3, 0.4, 2, 8);
+                    const trunkMat = new THREE.MeshStandardMaterial({ color: 0x8b4513 });
+                    const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+                    
+                    const leavesGeo = new THREE.ConeGeometry(1.5, 3, 8);
+                    const leavesMat = new THREE.MeshStandardMaterial({ color: 0x228b22 });
+                    const leaves = new THREE.Mesh(leavesGeo, leavesMat);
+                    leaves.position.y = 2.5;
+                    
+                    const treeGroup = new THREE.Group();
+                    treeGroup.add(trunk);
+                    treeGroup.add(leaves);
+                    treeGroup.position.set(
+                        biome.position.x + tree.x,
+                        biome.position.y + tree.y,
+                        biome.position.z + tree.z
+                    );
+                    treeGroup.scale.setScalar(tree.scale);
+                    treeGroup.rotation.y = tree.rotation * Math.PI / 180;
+                    trunk.castShadow = true;
+                    leaves.castShadow = true;
+                    scene.add(treeGroup);
+                    loadedObjects.push(treeGroup);
+                }
+            }
+            console.log(`      ✅ Loaded ${biome.trees.length} trees`);
+        }
         
-        // Plants
-        biome.plants?.forEach(plant => {
-            // Load and position plant
-        });
-    });
+        // Load rocks
+        if (biome.rocks) {
+            for (const rock of biome.rocks) {
+                try {
+                    // Normalize rock type name
+                    let modelType = rock.type.toLowerCase();
+                    
+                    // Map to available models
+                    if (modelType.includes('large')) {
+                        modelType = 'rock_medium_1'; // Use medium as large replacement
+                    } else if (modelType.includes('small')) {
+                        modelType = 'pebble_round_1';
+                    } else if (modelType.includes('medium')) {
+                        modelType = 'rock_medium_1';
+                    } else {
+                        modelType = 'rock_medium_1'; // Default
+                    }
+                    
+                    const rockModel = await modelLoader.loadModel('nature', modelType);
+                    if (rockModel && rockModel.children && rockModel.children.length > 0) {
+                        rockModel.position.set(
+                            biome.position.x + rock.x,
+                            biome.position.y + rock.y,
+                            biome.position.z + rock.z
+                        );
+                        rockModel.scale.setScalar(rock.scale);
+                        rockModel.rotation.y = rock.rotation * Math.PI / 180;
+                        rockModel.castShadow = true;
+                        scene.add(rockModel);
+                        loadedObjects.push(rockModel);
+                    } else {
+                        throw new Error('Model empty');
+                    }
+                } catch (error) {
+                    // Fallback: create simple rock
+                    const rockGeo = new THREE.DodecahedronGeometry(1, 0);
+                    const rockMat = new THREE.MeshStandardMaterial({ color: 0x808080 });
+                    const rockMesh = new THREE.Mesh(rockGeo, rockMat);
+                    rockMesh.position.set(
+                        biome.position.x + rock.x,
+                        biome.position.y + rock.y + 0.5,
+                        biome.position.z + rock.z
+                    );
+                    rockMesh.scale.setScalar(rock.scale);
+                    rockMesh.rotation.y = rock.rotation * Math.PI / 180;
+                    rockMesh.castShadow = true;
+                    scene.add(rockMesh);
+                    loadedObjects.push(rockMesh);
+                }
+            }
+            console.log(`      ✅ Loaded ${biome.rocks.length} rocks`);
+        }
+        
+        // Load plants (fallback only)
+        if (biome.plants) {
+            for (const plant of biome.plants) {
+                const plantGeo = new THREE.ConeGeometry(0.3, 0.8, 6);
+                const plantMat = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+                const plantMesh = new THREE.Mesh(plantGeo, plantMat);
+                plantMesh.position.set(
+                    biome.position.x + plant.x,
+                    biome.position.y + plant.y + 0.4,
+                    biome.position.z + plant.z
+                );
+                plantMesh.scale.setScalar(plant.scale);
+                scene.add(plantMesh);
+                loadedObjects.push(plantMesh);
+            }
+            console.log(`      ✅ Loaded ${biome.plants.length} plants`);
+        }
+        
+        // Spawn enemies from pre-positioned spawn points
+        if (biome.enemySpawns) {
+            for (const spawn of biome.enemySpawns) {
+                // Create simple enemy placeholder (actual enemy will be spawned by EnemyManager)
+                const enemyGeo = new THREE.BoxGeometry(1, 2, 1);
+                const enemyMat = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+                const enemyMesh = new THREE.Mesh(enemyGeo, enemyMat);
+                enemyMesh.position.set(
+                    biome.position.x + spawn.x,
+                    biome.position.y + spawn.y + 1,
+                    biome.position.z + spawn.z
+                );
+                enemyMesh.castShadow = true;
+                enemyMesh.userData.enemySpawn = spawn;
+                scene.add(enemyMesh);
+                loadedObjects.push(enemyMesh);
+            }
+            console.log(`      ✅ Spawned ${biome.enemySpawns.length} enemies`);
+        }
+    }
     
     // Load villages
-    Object.values(data.villages).forEach(village => {
-        console.log(`   Loading ${village.name}...`);
-        // All buildings already positioned
-    });
+    for (const [villageKey, village] of Object.entries(data.villages)) {
+        console.log(`   🏘️ Loading ${village.name}...`);
+        
+        // Load buildings
+        if (village.buildings) {
+            for (const building of village.buildings) {
+                // Create simple building placeholder
+                const buildingGeo = new THREE.BoxGeometry(
+                    building.size.width,
+                    building.size.height,
+                    building.size.depth
+                );
+                const buildingMat = new THREE.MeshStandardMaterial({ color: building.color });
+                const buildingMesh = new THREE.Mesh(buildingGeo, buildingMat);
+                buildingMesh.position.set(
+                    building.position.x,
+                    building.position.y + building.size.height / 2,
+                    building.position.z
+                );
+                buildingMesh.castShadow = true;
+                buildingMesh.receiveShadow = true;
+                buildingMesh.userData.buildingData = building;
+                scene.add(buildingMesh);
+                loadedObjects.push(buildingMesh);
+            }
+            console.log(`      ✅ Built ${village.buildings.length} buildings`);
+        }
+        
+        // Spawn NPCs
+        if (village.npcs) {
+            for (const npc of village.npcs) {
+                // Create simple NPC placeholder
+                const npcGeo = new THREE.CapsuleGeometry(0.4, 1.2, 8, 16);
+                const npcMat = new THREE.MeshStandardMaterial({ color: 0x4169e1 });
+                const npcMesh = new THREE.Mesh(npcGeo, npcMat);
+                npcMesh.position.set(npc.x, npc.y + 1, npc.z);
+                npcMesh.castShadow = true;
+                npcMesh.userData.npcData = npc;
+                scene.add(npcMesh);
+                loadedObjects.push(npcMesh);
+            }
+            console.log(`      ✅ Spawned ${village.npcs.length} NPCs`);
+        }
+    }
     
     // Load dungeons
-    Object.values(data.dungeons).forEach(dungeon => {
-        console.log(`   Loading ${dungeon.name}...`);
-        // All rooms already built
-    });
+    for (const [dungeonKey, dungeon] of Object.entries(data.dungeons)) {
+        console.log(`   🏛️ Loading ${dungeon.name}...`);
+        
+        // Create dungeon rooms
+        if (dungeon.rooms) {
+            for (const room of dungeon.rooms) {
+                const roomFloor = new THREE.BoxGeometry(
+                    room.size.width,
+                    0.2,
+                    room.size.depth
+                );
+                const floorMat = new THREE.MeshStandardMaterial({ color: 0x4a4a4a });
+                const floorMesh = new THREE.Mesh(roomFloor, floorMat);
+                floorMesh.position.set(
+                    room.position.x,
+                    room.position.y,
+                    room.position.z
+                );
+                floorMesh.receiveShadow = true;
+                scene.add(floorMesh);
+                loadedObjects.push(floorMesh);
+                
+                // Add walls
+                const wallHeight = room.size.height;
+                const wallThickness = 0.5;
+                
+                // Create 4 walls
+                const walls = [
+                    { w: room.size.width, h: wallHeight, d: wallThickness, x: 0, z: room.size.depth/2 },
+                    { w: room.size.width, h: wallHeight, d: wallThickness, x: 0, z: -room.size.depth/2 },
+                    { w: wallThickness, h: wallHeight, d: room.size.depth, x: room.size.width/2, z: 0 },
+                    { w: wallThickness, h: wallHeight, d: room.size.depth, x: -room.size.width/2, z: 0 }
+                ];
+                
+                walls.forEach(wall => {
+                    const wallGeo = new THREE.BoxGeometry(wall.w, wall.h, wall.d);
+                    const wallMat = new THREE.MeshStandardMaterial({ color: 0x2a2a2a });
+                    const wallMesh = new THREE.Mesh(wallGeo, wallMat);
+                    wallMesh.position.set(
+                        room.position.x + wall.x,
+                        room.position.y + wall.h / 2,
+                        room.position.z + wall.z
+                    );
+                    wallMesh.castShadow = true;
+                    scene.add(wallMesh);
+                    loadedObjects.push(wallMesh);
+                });
+            }
+            console.log(`      ✅ Built ${dungeon.rooms.length} rooms`);
+        }
+    }
     
     console.log('✅ QUICK LOAD: Complete! Game ready instantly!');
+    console.log(`   Total objects loaded: ${loadedObjects.length}`);
     
     return {
         biomes: data.biomes,
         villages: data.villages,
         dungeons: data.dungeons,
-        quests: data.quests
+        quests: data.quests,
+        loadedObjects: loadedObjects
     };
 }
