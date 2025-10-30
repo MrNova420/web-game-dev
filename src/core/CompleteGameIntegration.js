@@ -87,8 +87,7 @@ export class CompleteGameIntegration {
             
             // Step 4: Initialize Combat System
             console.log('   ⚔️ Step 4/5: Initializing Combat...');
-            this.combat = new CombatEnemySystem(this.scene, this.modelLoader);
-            await this.combat.initialize();
+            this.combat = new CombatEnemySystem(this.scene, this.modelLoader, this.player);
             
             // Spawn enemies in the world
             const biomes = this.world.biomes || [];

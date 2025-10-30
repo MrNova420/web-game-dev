@@ -1,7 +1,7 @@
 {
   "name": "dynasty-of-emberveil",
-  "version": "3.0.0",
-  "description": "Advanced anime/fantasy online multiplayer RPG - Latest Production Version - Always Playable at 60 FPS",
+  "version": "4.0.0",
+  "description": "Complete MMORPG - 13 Systems, Massive Open World, 532+ Assets, Universal Input - LATEST FULL GAME",
   "type": "module",
   "scripts": {
     "dev": "vite",
