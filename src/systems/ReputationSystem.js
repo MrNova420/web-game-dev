@@ -17,4 +17,8 @@ export class ReputationSystem {
   gainReputation(playerId, faction, amount) {
     console.log(`${playerId} gained ${amount} reputation with ${faction}`);
   }
+
+  update(delta) {
+    // Modernized for v3.0.0
+  }
 }

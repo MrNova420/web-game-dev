@@ -799,4 +799,8 @@ export class CloudSaveSystem {
         // Final save
         this.saveToCloud();
     }
+
+  update(delta) {
+    // Updated for v3.0.0 - modernized system
+  }
 }

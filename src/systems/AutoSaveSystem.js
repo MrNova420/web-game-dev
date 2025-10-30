@@ -617,4 +617,8 @@ export class AutoSaveSystem {
             this.db.close();
         }
     }
+
+  update(delta) {
+    // Updated for v3.0.0 - modernized system
+  }
 }
