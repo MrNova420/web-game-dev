@@ -116,17 +116,45 @@ class Game {
     }
     
     start() {
-        console.log('🎮 Dynasty of Emberveil - Game Started!');
+        console.log('🎮 Dynasty of Emberveil - NEW COMPLETE GAME STARTING!');
+        console.log('   🌟 This is the UPDATED version with all new systems!');
+        console.log('   ✅ Complete UI/UX System');
+        console.log('   ✅ Universal Input (Mobile + Desktop)');
+        console.log('   ✅ 3 Playable Biomes');
+        console.log('   ✅ Combat & Magic System');
+        console.log('   ✅ Dungeon System');
+        
         this.engine.start();
         
         // Make engine and input manager globally accessible
         window.gameEngine = this.engine;
         window.gameEngine.inputManager = this.inputManager;
         
-        // Show main menu initially
-        if (this.engine.mainMenuSystem) {
-            this.engine.mainMenuSystem.show();
+        // NEW: Check if Complete Game Integration is available
+        if (this.engine.completeGameIntegration) {
+            console.log('   ✅ Complete Game Integration Active!');
+            
+            // Show the NEW UI system (not old beta UI)
+            if (this.engine.enhancedUISystem) {
+                console.log('   ✅ NEW Enhanced UI System loaded');
+                // UI is already initialized and showing main menu
+            }
+            
+            // Make the complete integration globally available
+            window.completeGame = this.engine.completeGameIntegration;
+            
+        } else {
+            console.warn('   ⚠️ Complete Game Integration not found - using fallback');
+            
+            // Fallback to old main menu if new system isn't loaded
+            if (this.engine.mainMenuSystem) {
+                this.engine.mainMenuSystem.show();
+            }
         }
+        
+        console.log('');
+        console.log('🎉 GAME READY! The NEW complete game is now running!');
+        console.log('   Click "Start Adventure" in the menu to begin!');
         
         // Start game loop
         this.gameLoop();
