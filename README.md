@@ -1058,8 +1058,44 @@ Each class has a primary skill tree with 12-15 skills. Skills unlock at specific
 
 ## 📥 Installation & Setup
 
+### 🚀 AUTO-INSTALLER (Recommended - Easiest Way!)
+
+**For Mac/Linux:**
+```bash
+# Clone repository
+git clone https://github.com/MrNova420/web-game-dev.git
+cd web-game-dev
+
+# Run auto-installer (does everything for you!)
+./auto-install-and-play.sh
+```
+
+**For Windows:**
+```cmd
+REM Clone repository
+git clone https://github.com/MrNova420/web-game-dev.git
+cd web-game-dev
+
+REM Run auto-installer (does everything for you!)
+auto-install-and-play.bat
+```
+
+**What the auto-installer does:**
+- ✅ Checks system requirements
+- ✅ Verifies Node.js installation
+- ✅ Installs all dependencies
+- ✅ Builds the game
+- ✅ Starts the server
+- ✅ Opens game in your browser automatically
+
+**Time:** ~2 minutes for first-time setup
+
+---
+
+### Manual Installation (Alternative Method)
+
 ### Prerequisites
-- Node.js 16+ and npm
+- Node.js 18+ and npm
 - Modern web browser (Chrome, Firefox, Edge)
 - 2GB RAM minimum
 - WebGL 2.0 support

@@ -1,6 +1,31 @@
 # Quick Start Guide - Dynasty of Emberveil
 
-## Fastest Way to Play (3 Options)
+## 🚀 NEW: Auto-Installer (Recommended!)
+
+### The Easiest Way to Play:
+
+**Mac/Linux:**
+```bash
+./auto-install-and-play.sh
+```
+
+**Windows:**
+```cmd
+auto-install-and-play.bat
+```
+
+**What it does:**
+- ✅ Checks system requirements
+- ✅ Installs dependencies automatically
+- ✅ Builds the game
+- ✅ Starts the server
+- ✅ Opens in your browser
+
+**Time:** ~2 minutes (first time only)
+
+---
+
+## Fastest Way to Play (3 Manual Options)
 
 ### ⚡ Option 1: Quick Play (No Build) - FASTEST!
 ```bash

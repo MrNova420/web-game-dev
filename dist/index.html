@@ -759,7 +759,7 @@
             font-size: 0.9em;
         }
     </style>
-  <script type="module" crossorigin src="/assets/index-CPFMG1mK.js"></script>
+  <script type="module" crossorigin src="/assets/index-B7Ej4eO3.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/three-nqoIw8Ck.js">
   <link rel="modulepreload" crossorigin href="/assets/cannon-DPZWuR6y.js">
 </head>
@@ -786,6 +786,16 @@
                 <div class="icon-button" id="icon-quests" title="Quests (Q)">📜</div>
                 <div class="icon-button" id="icon-skills" title="Skills (K)">⭐</div>
                 <div class="icon-button" id="icon-map" title="Map (M)">🗺️</div>
+                <!-- NEW: Major Feature Buttons -->
+                <div class="icon-button" id="icon-guild" title="Guild (G)">🏰</div>
+                <div class="icon-button" id="icon-arena" title="PvP Arena (P)">⚔️</div>
+                <div class="icon-button" id="icon-dungeons" title="Dungeons (D)">🏛️</div>
+                <div class="icon-button" id="icon-housing" title="Housing (H)">🏠</div>
+                <div class="icon-button" id="icon-crafting" title="Crafting (R)">🔨</div>
+                <div class="icon-button" id="icon-pets" title="Pets (T)">🐾</div>
+                <div class="icon-button" id="icon-minigames" title="Mini-Games (N)">🎮</div>
+                <div class="icon-button" id="icon-marketplace" title="Marketplace (B)">🏪</div>
+                <div class="icon-button" id="icon-raids" title="Raids (Y)">💀</div>
                 <div class="icon-button" id="icon-settings" title="Settings (ESC)">⚙️</div>
             </div>
             
@@ -895,6 +905,180 @@
                 </div>
             </div>
             
+            <!-- NEW: Guild Panel -->
+            <div id="guild-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🏰 Guild</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('guild-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Guild System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Create or join guilds (100 members)<br>
+                        • Guild wars and territory control<br>
+                        • Shared guild bank and perks<br>
+                        • Customizable guild halls
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: PvP Arena Panel -->
+            <div id="arena-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">⚔️ PvP Arena</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('arena-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Arena System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Ranked PvP battles<br>
+                        • 1v1, 2v2, 3v3, 5v5 arenas<br>
+                        • Seasonal rewards and titles<br>
+                        • Competitive leaderboards
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Dungeons Panel -->
+            <div id="dungeons-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🏛️ Dungeons</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('dungeons-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Dungeon System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Procedurally generated dungeons<br>
+                        • Mythic+ difficulty scaling<br>
+                        • Epic loot and rewards<br>
+                        • 5-player cooperative content
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Housing Panel -->
+            <div id="housing-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🏠 Housing</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('housing-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Housing System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Customizable player homes<br>
+                        • Furniture and decorations<br>
+                        • Invite friends to visit<br>
+                        • Property trading system
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Crafting Panel -->
+            <div id="crafting-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🔨 Crafting</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('crafting-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Crafting System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Blacksmithing, Alchemy, Enchanting<br>
+                        • Complex recipes and quality tiers<br>
+                        • Gather resources from the world<br>
+                        • Craft legendary equipment
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Pets Panel -->
+            <div id="pets-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🐾 Pets</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('pets-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Pet System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Collect and battle pets<br>
+                        • 20+ battle pets with evolution<br>
+                        • Type advantages system<br>
+                        • Turn-based pet combat
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Mini-Games Panel -->
+            <div id="minigames-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🎮 Mini-Games</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('minigames-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">13 Mini-Games Available</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Rhythm Game • Puzzle Games<br>
+                        • Racing Game • Card Game<br>
+                        • Tower Defense • Idle Game<br>
+                        • Boss Rush • Platformer<br>
+                        • Survival Mode • Archery Range<br>
+                        • Horde Defense • Dice Games<br>
+                        • Pet Battles
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Marketplace Panel -->
+            <div id="marketplace-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">🏪 Marketplace</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('marketplace-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Marketplace System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • Global auction house<br>
+                        • Buy and sell items 24/48 hours<br>
+                        • Price history tracking<br>
+                        • Player-to-player trading
+                    </p>
+                </div>
+            </div>
+            
+            <!-- NEW: Raids Panel -->
+            <div id="raids-panel" class="game-panel panel-hidden">
+                <div class="panel-header">
+                    <div class="panel-title">💀 Raids</div>
+                    <div class="panel-controls">
+                        <div class="panel-btn" onclick="togglePanel('raids-panel')">✕</div>
+                    </div>
+                </div>
+                <div class="panel-content">
+                    <p style="color: var(--anime-pink); margin: 10px;">Raid System Active</p>
+                    <p style="color: var(--gold); font-size: 0.9em; margin: 10px;">
+                        • 10+ player cooperative raids<br>
+                        • Multiple raid tiers and bosses<br>
+                        • Legendary loot drops<br>
+                        • World boss events
+                    </p>
+                </div>
+            </div>
+            
             <!-- Notification Container -->
             <div id="notification-container"></div>
             
@@ -955,6 +1139,17 @@
         document.getElementById('icon-character').addEventListener('click', () => togglePanel('player-stats'));
         document.getElementById('icon-inventory').addEventListener('click', () => togglePanel('inventory-panel'));
         document.getElementById('icon-quests').addEventListener('click', () => togglePanel('quest-panel'));
+        
+        // NEW: Major feature icon handlers
+        document.getElementById('icon-guild').addEventListener('click', () => togglePanel('guild-panel'));
+        document.getElementById('icon-arena').addEventListener('click', () => togglePanel('arena-panel'));
+        document.getElementById('icon-dungeons').addEventListener('click', () => togglePanel('dungeons-panel'));
+        document.getElementById('icon-housing').addEventListener('click', () => togglePanel('housing-panel'));
+        document.getElementById('icon-crafting').addEventListener('click', () => togglePanel('crafting-panel'));
+        document.getElementById('icon-pets').addEventListener('click', () => togglePanel('pets-panel'));
+        document.getElementById('icon-minigames').addEventListener('click', () => togglePanel('minigames-panel'));
+        document.getElementById('icon-marketplace').addEventListener('click', () => togglePanel('marketplace-panel'));
+        document.getElementById('icon-raids').addEventListener('click', () => togglePanel('raids-panel'));
         
         // Load saved panel states
         window.addEventListener('load', loadPanelStates);
