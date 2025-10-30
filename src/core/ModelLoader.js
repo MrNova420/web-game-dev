@@ -39,18 +39,23 @@ export class ModelLoader {
                 soldier: '/assets/models/characters/Superhero_Male.gltf'
             },
             
-            // Monsters & Enemies - KayKit Skeletons and other packs
+            // Monsters & Enemies - Using ACTUAL skeleton models you have!
             monsters: {
-                skeleton: '/assets/models/enemies/Skeleton_Warrior.gltf',
-                skeleton_archer: '/assets/models/enemies/Skeleton_Archer.gltf',
-                skeleton_mage: '/assets/models/enemies/Skeleton_Mage.gltf',
-                goblin: '/assets/models/enemies/Skeleton_Minion.gltf',
-                orc: '/assets/models/characters/Superhero_Male.gltf',
-                demon: '/assets/models/characters/Superhero_Male.gltf',
-                wolf: '/assets/models/characters/Superhero_Male.gltf',
-                bear: '/assets/models/characters/Superhero_Male.gltf',
-                spider: '/assets/models/enemies/Skeleton_Warrior.gltf',
-                dragon: '/assets/models/characters/Superhero_Male.gltf',
+                skeleton: '/assets/models/enemies/Skeleton_Blade.gltf',
+                skeleton_warrior: '/assets/models/enemies/Skeleton_Blade.gltf',
+                skeleton_archer: '/assets/models/enemies/Skeleton_Arrow.gltf',
+                skeleton_mage: '/assets/models/enemies/Skeleton_Staff.gltf',
+                skeleton_axe: '/assets/models/enemies/Skeleton_Axe.gltf',
+                skeleton_crossbow: '/assets/models/enemies/Skeleton_Crossbow.gltf',
+                skeleton_shield_large: '/assets/models/enemies/Skeleton_Shield_Large_A.gltf',
+                skeleton_shield_small: '/assets/models/enemies/Skeleton_Shield_Small_A.gltf',
+                goblin: '/assets/models/enemies/Skeleton_Blade.gltf',
+                orc: '/assets/models/enemies/Skeleton_Axe.gltf',
+                demon: '/assets/models/enemies/Skeleton_Staff.gltf',
+                wolf: '/assets/models/enemies/Skeleton_Blade.gltf',
+                bear: '/assets/models/enemies/Skeleton_Axe.gltf',
+                spider: '/assets/models/enemies/Skeleton_Blade.gltf',
+                dragon: '/assets/models/enemies/Skeleton_Shield_Large_A.gltf',
                 slime: '/assets/models/props/Barrel.gltf'
             },
             
@@ -96,48 +101,107 @@ export class ModelLoader {
             
             // Props & Items - Fantasy Props MegaKit (94 models!)
             props: {
-                // Weapons
+                // Weapons - Using ACTUAL weapon models you have!
                 sword: '/assets/models/weapons/sword_1handed.gltf',
                 sword_2h: '/assets/models/weapons/sword_2handed.gltf',
+                sword_2h_color: '/assets/models/weapons/sword_2handed_color.gltf',
                 axe: '/assets/models/weapons/axe_1handed.gltf',
                 axe_2h: '/assets/models/weapons/axe_2handed.gltf',
                 staff: '/assets/models/weapons/staff.gltf',
                 wand: '/assets/models/weapons/wand.gltf',
                 bow: '/assets/models/weapons/bow.gltf',
-                crossbow: '/assets/models/weapons/crossbow_2handed.gltf',
+                bow_string: '/assets/models/weapons/bow_withString.gltf',
+                crossbow: '/assets/models/weapons/crossbow_1handed.gltf',
+                crossbow_2h: '/assets/models/weapons/crossbow_2handed.gltf',
                 dagger: '/assets/models/weapons/dagger.gltf',
+                smokebomb: '/assets/models/weapons/smokebomb.gltf',
                 
-                // Shields
+                // Arrows and Ammo
+                arrow_bow: '/assets/models/weapons/arrow_bow.gltf',
+                arrow_bow_bundle: '/assets/models/weapons/arrow_bow_bundle.gltf',
+                arrow_crossbow: '/assets/models/weapons/arrow_crossbow.gltf',
+                arrow_crossbow_bundle: '/assets/models/weapons/arrow_crossbow_bundle.gltf',
+                quiver: '/assets/models/weapons/quiver.gltf',
+                
+                // Shields - Using ACTUAL shield models!
                 shield: '/assets/models/weapons/shield_round.gltf',
+                shield_round: '/assets/models/weapons/shield_round.gltf',
+                shield_round_color: '/assets/models/weapons/shield_round_color.gltf',
+                shield_round_barbarian: '/assets/models/weapons/shield_round_barbarian.gltf',
                 shield_square: '/assets/models/weapons/shield_square.gltf',
+                shield_square_color: '/assets/models/weapons/shield_square_color.gltf',
                 shield_spikes: '/assets/models/weapons/shield_spikes.gltf',
+                shield_spikes_color: '/assets/models/weapons/shield_spikes_color.gltf',
+                shield_badge: '/assets/models/weapons/shield_badge.gltf',
                 
-                // Consumables & Items
+                // Magic items
+                spellbook: '/assets/models/weapons/spellbook_closed.gltf',
+                spellbook_open: '/assets/models/weapons/spellbook_open.gltf',
+                
+                // Consumables & Items - Using ACTUAL prop models!
                 potion_red: '/assets/models/props/Potion_1.gltf',
                 potion_blue: '/assets/models/props/Potion_2.gltf',
-                mug: '/assets/models/props/Mug.gltf',
+                mug: '/assets/models/weapons/mug_empty.gltf',
+                mug_full: '/assets/models/weapons/mug_full.gltf',
                 chalice: '/assets/models/props/Chalice.gltf',
+                bottle: '/assets/models/props/Bottle_1.gltf',
+                
+                // Books
                 book: '/assets/models/props/Book_5.gltf',
-                spellbook: '/assets/models/weapons/spellbook_closed.gltf',
+                book_7: '/assets/models/props/Book_7.gltf',
+                book_single: '/assets/models/props/Book_Simplified_Single.gltf',
+                book_stack_1: '/assets/models/props/Book_Stack_1.gltf',
+                book_stack_2: '/assets/models/props/Book_Stack_2.gltf',
+                book_group_small_1: '/assets/models/props/BookGroup_Small_1.gltf',
+                book_group_medium_1: '/assets/models/props/BookGroup_Medium_1.gltf',
+                bookstand: '/assets/models/props/BookStand.gltf',
+                bookcase: '/assets/models/props/Bookcase_2.gltf',
                 scroll: '/assets/models/props/Scroll_1.gltf',
                 
                 // Containers
                 chest: '/assets/models/props/Chest_Wood.gltf',
                 chest_gold: '/assets/models/props/Chest_Gold.gltf',
                 barrel: '/assets/models/props/Barrel.gltf',
+                barrel_apples: '/assets/models/props/Barrel_Apples.gltf',
+                barrel_holder: '/assets/models/props/Barrel_Holder.gltf',
                 bag: '/assets/models/props/Bag.gltf',
+                bucket_metal: '/assets/models/props/Bucket_Metal.gltf',
+                bucket_wooden: '/assets/models/props/Bucket_Wooden_1.gltf',
+                cage_small: '/assets/models/props/Cage_Small.gltf',
                 
                 // Furniture
                 table: '/assets/models/props/Table_Large.gltf',
                 chair: '/assets/models/props/Chair_1.gltf',
                 bed: '/assets/models/props/Bed_Twin1.gltf',
+                bed_2: '/assets/models/props/Bed_Twin2.gltf',
                 bench: '/assets/models/props/Bench.gltf',
+                cabinet: '/assets/models/props/Cabinet.gltf',
+                
+                // Lighting & Decoration
+                candle_1: '/assets/models/props/Candle_1.gltf',
+                candle_2: '/assets/models/props/Candle_2.gltf',
+                candlestick: '/assets/models/props/CandleStick.gltf',
+                candlestick_stand: '/assets/models/props/CandleStick_Stand.gltf',
+                candlestick_triple: '/assets/models/props/CandleStick_Triple.gltf',
+                banner_1: '/assets/models/props/Banner_1.gltf',
+                banner_1_cloth: '/assets/models/props/Banner_1_Cloth.gltf',
+                banner_2: '/assets/models/props/Banner_2.gltf',
+                banner_2_cloth: '/assets/models/props/Banner_2_Cloth.gltf',
                 
                 // Tools & Crafting
                 anvil: '/assets/models/props/Anvil.gltf',
+                anvil_log: '/assets/models/props/Anvil_Log.gltf',
                 hammer: '/assets/models/props/Hammer.gltf',
                 pickaxe: '/assets/models/props/Pickaxe_Bronze.gltf',
-                axe_tool: '/assets/models/props/Axe_Bronze.gltf'
+                axe_tool: '/assets/models/props/Axe_Bronze.gltf',
+                cauldron: '/assets/models/props/Cauldron.gltf',
+                
+                // Food
+                carrot: '/assets/models/props/Carrot.gltf',
+                
+                // Misc
+                chain_coil: '/assets/models/props/Chain_Coil.gltf',
+                well: '/assets/models/props/Well.gltf'
             },
             
             // Creatures - Using character bases for now

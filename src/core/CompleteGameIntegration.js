@@ -19,6 +19,11 @@ import { UniversalInputSystem } from '../systems/UniversalInputSystem.js';
 import { CombatEnemySystem } from '../systems/CombatEnemySystem.js';
 import { DungeonBuilder } from '../worlds/DungeonBuilder.js';
 import { assetRegistry } from '../core/AssetRegistry.js';
+import { PreBuiltWorldData, quickLoadWorld } from '../data/PreBuiltWorldData.js';
+// IMPORT THE COMPLETE BIOME FILES!
+import { MysticForestBiome } from '../worlds/MysticForestBiome.js';
+import { CrimsonPeaksBiome } from '../worlds/CrimsonPeaksBiome.js';
+import { MoonlitGladeVillage } from '../worlds/MoonlitGladeVillage.js';
 
 export class CompleteGameIntegration {
     constructor(scene, camera, renderer, modelLoader) {
@@ -80,10 +85,44 @@ export class CompleteGameIntegration {
             console.log('   🎮 Step 2/5: Initializing Input...');
             this.input = new UniversalInputSystem(this.camera, this.player);
             
-            // Step 3: Initialize World
-            console.log('   🌍 Step 3/5: Initializing World...');
-            this.world = new MassiveOpenWorld(this.scene, this.modelLoader);
-            await this.world.initialize();
+            // Step 3: Initialize World - BUILD THE COMPLETE BIOMES!
+            console.log('   🌍 Step 3/5: Building COMPLETE GAME WORLD...');
+            console.log('   ⚡ Loading ALL pre-built biomes with assets!');
+            
+            // Create world container
+            this.world = {
+                biomes: {},
+                villages: {},
+                dungeons: {},
+                quests: PreBuiltWorldData.quests || []
+            };
+            
+            // Build Mystic Forest with Moonlit Glade Village!
+            console.log('   🌲 Building Mystic Forest Biome (complete with village)...');
+            const mysticForest = new MysticForestBiome(this.scene, this.modelLoader);
+            await mysticForest.build();
+            this.world.biomes.mysticForest = mysticForest;
+            console.log('   ✅ Mystic Forest + Moonlit Glade Village complete!');
+            
+            // Build Crimson Peaks!
+            console.log('   🏔️ Building Crimson Peaks Biome...');
+            const crimsonPeaks = new CrimsonPeaksBiome(this.scene, this.modelLoader);
+            await crimsonPeaks.build();
+            this.world.biomes.crimsonPeaks = crimsonPeaks;
+            console.log('   ✅ Crimson Peaks complete!');
+            
+            // Also load PreBuiltWorldData for additional content
+            const preBuiltWorld = await quickLoadWorld(this.scene, this.modelLoader);
+            if (preBuiltWorld) {
+                // Merge pre-built content
+                Object.assign(this.world.villages, preBuiltWorld.villages || {});
+                Object.assign(this.world.dungeons, preBuiltWorld.dungeons || {});
+            }
+            
+            console.log('   ✅ COMPLETE WORLD LOADED!');
+            console.log(`   📦 ${Object.keys(this.world.biomes).length} full biomes built`);
+            console.log(`   🏘️ ${Object.keys(this.world.villages).length} villages loaded`);
+            console.log(`   🏛️ ${Object.keys(this.world.dungeons).length} dungeons loaded`);
             
             // Step 4: Initialize Combat System
             console.log('   ⚔️ Step 4/5: Initializing Combat...');
