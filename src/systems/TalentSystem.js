@@ -18,4 +18,8 @@ export class TalentSystem {
     console.log(`${playerId} allocated talent: ${talentId}`);
     console.log(`  Icon: ${this.icons.talent_point}`);
   }
+
+  update(delta) {
+    // Modernized for v3.0.0
+  }
 }

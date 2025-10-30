@@ -35,7 +35,7 @@ export class MagicalBackgroundSystem {
      * Create floating sparkle particles throughout the world
      */
     createFloatingSparkles() {
-        const particleCount = 500;
+        const particleCount = 100; // Reduced from 500 for better performance
         const geometry = new THREE.BufferGeometry();
         const positions = [];
         const colors = [];
@@ -55,7 +55,7 @@ export class MagicalBackgroundSystem {
             colors.push(color.r, color.g, color.b);
             
             // Varying sizes
-            sizes.push(Math.random() * 0.5 + 0.2);
+            sizes.push(Math.random() * 0.3 + 0.1); // Smaller particles
         }
         
         geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -114,7 +114,7 @@ export class MagicalBackgroundSystem {
      * Create magical floating stars
      */
     createMagicalStars() {
-        const starCount = 200;
+        const starCount = 50; // Reduced from 200 for better performance
         const geometry = new THREE.BufferGeometry();
         const positions = [];
         const colors = [];
@@ -145,10 +145,10 @@ export class MagicalBackgroundSystem {
         geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
         
         const material = new THREE.PointsMaterial({
-            size: 0.8,
+            size: 0.6, // Smaller stars
             vertexColors: true,
             transparent: true,
-            opacity: 0.9,
+            opacity: 0.8, // Slightly more transparent
             blending: THREE.AdditiveBlending,
             depthWrite: false,
             sizeAttenuation: true

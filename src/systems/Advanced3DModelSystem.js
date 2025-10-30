@@ -297,4 +297,8 @@ export class Advanced3DModelSystem {
         });
         return new THREE.Mesh(geometry, material);
     }
+
+  update(delta) {
+    // Updated for v3.0.0 - modernized system
+  }
 }

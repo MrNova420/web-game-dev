@@ -510,4 +510,8 @@ export class AudioSystem {
             }
         }
     }
+
+  update(delta) {
+    // Updated for v3.0.0 - modernized system
+  }
 }

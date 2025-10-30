@@ -72,54 +72,26 @@ export class Advanced3DGraphicsSystem {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
         
-        // Enable additional renderer features
+        // Enable additional renderer features - Updated for Three.js r160+
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.0;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     }
     
     setupFog() {
-        // Atmospheric fog
-        const fogColor = new THREE.Color(0x1a2847);
-        this.scene.fog = new THREE.FogExp2(fogColor, 0.015);
-        this.scene.background = fogColor;
+        // Atmospheric fog - DISABLED for better visibility
+        // const fogColor = new THREE.Color(0x1a2847);
+        // this.scene.fog = new THREE.FogExp2(fogColor, 0.015);
+        // KEEP SKY BLUE BACKGROUND FOR VISIBILITY
+        // this.scene.background = fogColor;
+        console.log('⚠️ Fog disabled for better 3D world visibility');
     }
     
     createSkybox() {
-        // Create a gradient skybox
-        const skyGeo = new THREE.SphereGeometry(400, 32, 32);
-        const skyMat = new THREE.ShaderMaterial({
-            uniforms: {
-                topColor: { value: new THREE.Color(0x0a1e3f) },
-                bottomColor: { value: new THREE.Color(0x1a2847) },
-                offset: { value: 33 },
-                exponent: { value: 0.6 }
-            },
-            vertexShader: `
-                varying vec3 vWorldPosition;
-                void main() {
-                    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
-                    vWorldPosition = worldPosition.xyz;
-                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-            `,
-            fragmentShader: `
-                uniform vec3 topColor;
-                uniform vec3 bottomColor;
-                uniform float offset;
-                uniform float exponent;
-                varying vec3 vWorldPosition;
-                void main() {
-                    float h = normalize(vWorldPosition + offset).y;
-                    gl_FragColor = vec4(mix(bottomColor, topColor, max(pow(max(h, 0.0), exponent), 0.0)), 1.0);
-                }
-            `,
-            side: THREE.BackSide
-        });
-        
-        const sky = new THREE.Mesh(skyGeo, skyMat);
-        this.scene.add(sky);
-        this.skybox = sky;
+        // Skybox DISABLED for better visibility - was blocking 3D world view
+        console.log('⚠️ Skybox disabled for better 3D world visibility');
+        // The original dark skybox was preventing players from seeing the 3D world
+        // Keeping scene.background = sky blue (set in GameEngine.js) for visibility
     }
     
     createEnhancedPlayerModel(player) {

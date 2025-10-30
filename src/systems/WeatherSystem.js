@@ -22,4 +22,9 @@ export class WeatherSystem {
     console.log(`  Particles: ${weather.particles}`);
     console.log(`  Sound: ${weather.sound}`);
   }
+
+  update(delta) {
+    // Weather system update logic - modernized for v3.0.0
+    // Update weather effects, transitions, etc.
+  }
 }

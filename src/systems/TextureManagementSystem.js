@@ -122,12 +122,12 @@ export class TextureManagementSystem {
                 aoMapIntensity: 1.0
             });
             
-            // Configure texture wrapping and filtering
+            // Configure texture wrapping and filtering - Updated for Three.js r160+
             [albedo, normal, roughness, metallic, ao].forEach(tex => {
                 if (tex) {
                     tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
                     tex.anisotropy = this.settings.anisotropy;
-                    tex.encoding = tex === albedo ? THREE.sRGBEncoding : THREE.LinearEncoding;
+                    tex.colorSpace = tex === albedo ? THREE.SRGBColorSpace : THREE.LinearSRGBColorSpace;
                 }
             });
             

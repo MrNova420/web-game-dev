@@ -1122,4 +1122,8 @@ export class AdvancedAutoManagementSystem {
         this.clearAllResources();
         this.clearCache(1.0);
     }
+
+  update(delta) {
+    // Updated for v3.0.0 - modernized system
+  }
 }

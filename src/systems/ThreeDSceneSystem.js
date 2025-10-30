@@ -98,7 +98,7 @@ export class ThreeDSceneSystem {
         this.renderer.setPixelRatio(this.settings.pixelRatio);
         this.renderer.shadowMap.enabled = this.settings.shadowsEnabled;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.0;
         
