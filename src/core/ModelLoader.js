@@ -174,6 +174,38 @@ export class ModelLoader {
     }
     
     /**
+     * Load a model from a direct path (used by world builders)
+     * This is what AssetRegistry returns
+     */
+    async load(modelPath) {
+        // Check cache first
+        if (this.modelCache.has(modelPath)) {
+            const cached = this.modelCache.get(modelPath).clone();
+            return cached;
+        }
+        
+        try {
+            console.log(`📦 Loading model from path: ${modelPath}`);
+            const gltf = await this.loadGLTF(modelPath);
+            
+            if (gltf && gltf.scene) {
+                console.log(`✅ Successfully loaded: ${modelPath}`);
+                
+                // Cache the model
+                this.modelCache.set(modelPath, gltf.scene);
+                return gltf.scene.clone();
+            } else {
+                console.error(`❌ Model loaded but no scene: ${modelPath}`);
+                return null;
+            }
+            
+        } catch (error) {
+            console.error(`❌ Failed to load model ${modelPath}:`, error.message);
+            return null;
+        }
+    }
+    
+    /**
      * Load a model from the library with anime shader
      */
     async loadModel(category, modelName, useAnimeShader = true) {
