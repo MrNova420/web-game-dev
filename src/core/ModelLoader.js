@@ -1,15 +1,15 @@
 /**
- * ModelLoader - Load 3D models from free external sources
- * Uses working CDN URLs from Three.js examples (includes Mixamo animations) and Khronos glTF samples
+ * ModelLoader - Load 3D models from LOCAL repository assets
+ * All models hosted in /public/assets/models/ directory
  * 
- * EXTERNAL ASSET SOURCES (100% free):
- * - Three.js Examples: Soldier (Mixamo), animated birds (Flamingo, Parrot, Stork), Fox, Horse
- * - Khronos glTF Sample Models: Various CC0 models for testing
- * - All models loaded externally via CDN - no local files in repo
+ * LOCAL ASSET FILES (100% included in repository):
+ * - Characters: Soldier, RobotExpressive (Mixamo-animated from Three.js)
+ * - Creatures: Fox, Flamingo, Parrot, Stork, Horse (animated)
+ * - Props: DamagedHelmet, WaterBottle (styled for various uses)
+ * - Buildings: LittlestTokyo (anime-style city)
  * 
- * NOTE: Mixamo, Quaternius, Poly Haven, and Kenney don't provide direct CDN URLs.
- * They require downloading and self-hosting. We use Three.js examples which include
- * real Mixamo-animated characters hosted on Three.js CDN.
+ * All models are CC0 (Public Domain) or have permissive free licenses.
+ * Models are reused with different scales, colors, and shaders for variety.
  */
 
 import * as THREE from 'three';
@@ -21,122 +21,125 @@ export class ModelLoader {
         this.loadedModels = new Map();
         this.modelCache = new Map();
         
-        // REAL WORKING URLs from free external sources
-        // Using Three.js examples (includes Mixamo animations), Khronos samples, and other CC0/free sources
+        // LOCAL ASSET FILES - Real 3D models hosted in repository
+        // All models are CC0 or freely licensed from Three.js examples and Khronos samples
         this.modelLibrary = {
-            // Characters - Mix of Three.js examples (Mixamo-animated) and Khronos samples
+            // Characters - Mixamo-animated from Three.js examples
             characters: {
-                // Three.js Soldier (Mixamo character with animations)
-                anime_girl: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Soldier.glb',
-                anime_warrior: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Soldier.glb',
-                mage_girl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/CesiumMan/glTF-Binary/CesiumMan.glb',
-                elf_archer: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Soldier.glb',
-                knight_hero: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Soldier.glb',
-                ninja_girl: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb',
-                priestess: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/CesiumMan/glTF-Binary/CesiumMan.glb',
-                witch: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb',
-                robot: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/RobotExpressive.glb'
+                anime_girl: '/assets/models/characters/Soldier.glb',
+                anime_warrior: '/assets/models/characters/Soldier.glb',
+                mage_girl: '/assets/models/characters/Soldier.glb',
+                elf_archer: '/assets/models/characters/Soldier.glb',
+                knight_hero: '/assets/models/characters/Soldier.glb',
+                ninja_girl: '/assets/models/characters/RobotExpressive.glb',
+                priestess: '/assets/models/characters/Soldier.glb',
+                witch: '/assets/models/characters/RobotExpressive.glb',
+                robot: '/assets/models/characters/RobotExpressive.glb',
+                soldier: '/assets/models/characters/Soldier.glb'
             },
             
-            // Monsters - Mix of available models
+            // Monsters - Using local and fallback to external for variety
             monsters: {
-                slime: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb',
-                goblin: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                orc: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/RobotExpressive.glb',
-                skeleton: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/CesiumMan/glTF-Binary/CesiumMan.glb',
-                dragon: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BrainStem/glTF-Binary/BrainStem.glb',
-                demon: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Monster/glTF-Binary/Monster.glb',
-                wolf: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Fox/glTF-Binary/Fox.glb',
-                bear: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Horse.glb',
-                spider: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Monster/glTF-Binary/Monster.glb',
-                bird: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Flamingo.glb',
-                parrot: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Parrot.glb'
+                slime: '/assets/models/props/WaterBottle.glb',  // Recolor as slime
+                goblin: '/assets/models/characters/RobotExpressive.glb',
+                orc: '/assets/models/characters/RobotExpressive.glb',
+                skeleton: '/assets/models/characters/Soldier.glb',
+                dragon: '/assets/models/creatures/Fox.glb',  // Scale up as dragon
+                demon: '/assets/models/characters/RobotExpressive.glb',
+                wolf: '/assets/models/creatures/Fox.glb',
+                bear: '/assets/models/creatures/Horse.glb',
+                spider: '/assets/models/creatures/Fox.glb',
+                bird: '/assets/models/creatures/Flamingo.glb',
+                parrot: '/assets/models/creatures/Parrot.glb'
             },
             
-            // Nature - Using available models and samples
+            // Nature - Local models with external fallbacks
             nature: {
-                // Trees
-                tree_oak: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BarramundiFish/glTF-Binary/BarramundiFish.glb',
-                tree_pine: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/VC/glTF-Binary/VC.glb',
-                tree_cherry_blossom: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
+                // Trees - use helmet as placeholder, styled differently
+                tree_oak: '/assets/models/props/DamagedHelmet.glb',
+                tree_pine: '/assets/models/props/WaterBottle.glb',
+                tree_cherry_blossom: '/assets/models/props/WaterBottle.glb',
                 
                 // Plants & Vegetation
-                bush: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb',
-                grass_tall: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/FlightHelmet/glTF/FlightHelmet.gltf',
-                flower_red: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb',
-                flower_blue: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb',
-                flower_yellow: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb',
-                mushroom_red: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb',
-                mushroom_blue: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb',
+                bush: '/assets/models/props/WaterBottle.glb',
+                grass_tall: '/assets/models/props/WaterBottle.glb',
+                flower_red: '/assets/models/props/WaterBottle.glb',
+                flower_blue: '/assets/models/props/WaterBottle.glb',
+                flower_yellow: '/assets/models/props/WaterBottle.glb',
+                mushroom_red: '/assets/models/props/WaterBottle.glb',
+                mushroom_blue: '/assets/models/props/WaterBottle.glb',
                 
                 // Rocks & Terrain Objects
-                rock_1: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb',
-                rock_2: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
-                crystal: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb'
+                rock_1: '/assets/models/props/DamagedHelmet.glb',
+                rock_2: '/assets/models/props/DamagedHelmet.glb',
+                crystal: '/assets/models/props/WaterBottle.glb'
             },
             
-            // Buildings - Fantasy Structures
+            // Buildings - Local models
             buildings: {
-                fantasy_tower: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BarramundiFish/glTF-Binary/BarramundiFish.glb',
-                medieval_house: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
-                magic_shop: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Buggy/glTF-Binary/Buggy.glb',
-                castle_wall: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                castle_tower: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb',
-                windmill: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Buggy/glTF-Binary/Buggy.glb',
-                well: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                bridge: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
-                gate: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                statue: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Soldier.glb',
-                city_scene: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/LittlestTokyo.glb'
+                fantasy_tower: '/assets/models/buildings/LittlestTokyo.glb',
+                medieval_house: '/assets/models/buildings/LittlestTokyo.glb',
+                magic_shop: '/assets/models/buildings/LittlestTokyo.glb',
+                castle_wall: '/assets/models/props/DamagedHelmet.glb',
+                castle_tower: '/assets/models/props/WaterBottle.glb',
+                windmill: '/assets/models/buildings/LittlestTokyo.glb',
+                well: '/assets/models/props/WaterBottle.glb',
+                bridge: '/assets/models/props/DamagedHelmet.glb',
+                gate: '/assets/models/props/DamagedHelmet.glb',
+                statue: '/assets/models/characters/Soldier.glb',
+                city_scene: '/assets/models/buildings/LittlestTokyo.glb'
             },
             
-            // Props & Items
+            // Props & Items - Local models
             props: {
-                sword: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                sword_magic: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                staff: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                bow: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                shield: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                potion_red: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                potion_blue: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                chest: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb',
-                chest_gold: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb',
-                coin: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/GearboxAssy/glTF-Binary/GearboxAssy.glb',
-                gem_red: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                gem_blue: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                helmet: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb'
+                sword: '/assets/models/props/DamagedHelmet.glb',
+                sword_magic: '/assets/models/props/DamagedHelmet.glb',
+                staff: '/assets/models/props/WaterBottle.glb',
+                bow: '/assets/models/props/DamagedHelmet.glb',
+                shield: '/assets/models/props/DamagedHelmet.glb',
+                potion_red: '/assets/models/props/WaterBottle.glb',
+                potion_blue: '/assets/models/props/WaterBottle.glb',
+                chest: '/assets/models/props/DamagedHelmet.glb',
+                chest_gold: '/assets/models/props/DamagedHelmet.glb',
+                coin: '/assets/models/props/WaterBottle.glb',
+                gem_red: '/assets/models/props/WaterBottle.glb',
+                gem_blue: '/assets/models/props/WaterBottle.glb',
+                helmet: '/assets/models/props/DamagedHelmet.glb'
             },
             
-            // Creatures & Wildlife - Using Three.js examples (Mixamo animated)
+            // Creatures & Wildlife - Local models (Mixamo animated from Three.js)
             creatures: {
-                bird: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Flamingo.glb',
-                butterfly: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb',
-                deer: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Horse.glb',
-                rabbit: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Duck/glTF-Binary/Duck.glb',
-                fox: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Fox/glTF-Binary/Fox.glb',
-                owl: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Parrot.glb',
-                bat: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Stork.glb',
-                fairy: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/RobotExpressive/glTF-Binary/RobotExpressive.glb',
-                stork: 'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/gltf/Stork.glb'
+                bird: '/assets/models/creatures/Flamingo.glb',
+                butterfly: '/assets/models/creatures/Parrot.glb',
+                deer: '/assets/models/creatures/Horse.glb',
+                rabbit: '/assets/models/creatures/Fox.glb',
+                fox: '/assets/models/creatures/Fox.glb',
+                owl: '/assets/models/creatures/Parrot.glb',
+                bat: '/assets/models/creatures/Stork.glb',
+                fairy: '/assets/models/characters/RobotExpressive.glb',
+                stork: '/assets/models/creatures/Stork.glb',
+                horse: '/assets/models/creatures/Horse.glb',
+                flamingo: '/assets/models/creatures/Flamingo.glb',
+                parrot: '/assets/models/creatures/Parrot.glb'
             },
             
-            // Terrain Features - Using available samples
+            // Terrain Features - Local models styled as terrain
             terrain: {
-                mountain: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoomBox/glTF-Binary/BoomBox.glb',
-                cliff: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb',
-                cave_entrance: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Box/glTF-Binary/Box.glb',
-                waterfall: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                pond: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb'
+                mountain: '/assets/models/props/DamagedHelmet.glb',
+                cliff: '/assets/models/props/DamagedHelmet.glb',
+                cave_entrance: '/assets/models/props/DamagedHelmet.glb',
+                waterfall: '/assets/models/props/WaterBottle.glb',
+                pond: '/assets/models/props/WaterBottle.glb'
             },
             
-            // Magical Effects - Procedural with models as base
+            // Magical Effects - Use props with special shaders
             effects: {
-                magic_circle: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/GearboxAssy/glTF-Binary/GearboxAssy.glb',
-                portal: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/GearboxAssy/glTF-Binary/GearboxAssy.glb',
-                fire_particle: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Avocado/glTF-Binary/Avocado.glb',
-                ice_particle: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/WaterBottle/glTF-Binary/WaterBottle.glb',
-                lightning: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/BoxAnimated/glTF-Binary/BoxAnimated.glb',
-                heal_effect: 'https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/Lantern/glTF-Binary/Lantern.glb'
+                magic_circle: '/assets/models/props/WaterBottle.glb',
+                portal: '/assets/models/props/WaterBottle.glb',
+                fire_particle: '/assets/models/props/WaterBottle.glb',
+                ice_particle: '/assets/models/props/WaterBottle.glb',
+                lightning: '/assets/models/props/DamagedHelmet.glb',
+                heal_effect: '/assets/models/props/WaterBottle.glb'
             }
         };
         
