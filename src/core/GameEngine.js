@@ -98,7 +98,7 @@ import { PlayerControlSettingsSystem } from '../systems/PlayerControlSettingsSys
 import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
 import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
 import { ContentIntegrationSystem } from '../systems/ContentIntegrationSystem.js';
-import { MysticForestBiome } from '../worlds/MysticForestBiome.js';
+import { MassiveOpenWorld } from '../worlds/MassiveOpenWorld.js';
 import { assetRegistry } from './AssetRegistry.js';
 import { MascotBrandingSystem } from '../systems/MascotBrandingSystem.js';
 // Phase 1 Session 1.1: Psychedelic Cel-Shading (ULTIMATE_AUTONOMOUS_ROADMAP.md)
@@ -124,8 +124,8 @@ export class GameEngine {
         // World builder for creating immersive worlds from presets
         this.worldBuilder = null; // Initialized after scene is created
         
-        // Current active biome
-        this.currentBiome = null;
+        // MASSIVE OPEN WORLD System
+        this.massiveWorld = null;
         this.assetRegistry = assetRegistry;
         
         // Game systems
@@ -464,14 +464,16 @@ export class GameEngine {
     }
     
     async createWorld() {
-        console.log('🌍 Creating Dynasty of Emberveil world...');
-        console.log('📍 Starting Zone: Mystic Forest (Level 1-15)');
+        console.log('🌍 ============================================');
+        console.log('   CREATING DYNASTY OF EMBERVEIL');
+        console.log('   Massive Multiplayer Open World');
+        console.log('============================================\n');
         
-        // Build the Mystic Forest biome - the first complete zone
-        this.currentBiome = new MysticForestBiome(this.scene, this.modelLoader);
-        await this.currentBiome.build();
+        // Initialize the MASSIVE OPEN WORLD
+        this.massiveWorld = new MassiveOpenWorld(this.scene, this.modelLoader);
+        await this.massiveWorld.initialize();
         
-        console.log('✅ Mystic Forest biome loaded successfully!');
+        console.log('✅ WORLD INITIALIZATION COMPLETE!\n');
         
         // Create player with real character model
         this.player = new Player(this.scene);
