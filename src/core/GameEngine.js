@@ -109,6 +109,15 @@ import { MagicalBackgroundSystem } from '../systems/MagicalBackgroundSystem.js';
 import { ReputationSystem } from '../systems/ReputationSystem.js';
 import { AttributeSystem } from '../systems/AttributeSystem.js';
 import { TalentSystem } from '../systems/TalentSystem.js';
+// Phase 7-9: NEW COMPLETE SYSTEMS
+import { EnhancedUISystem } from '../systems/EnhancedUISystem.js';
+import { UniversalInputSystem } from '../systems/UniversalInputSystem.js';
+import { CombatEnemySystem } from '../systems/CombatEnemySystem.js';
+import { DungeonBuilder } from '../worlds/DungeonBuilder.js';
+import { MysticForestBiome } from '../worlds/MysticForestBiome.js';
+import { MoonlitGladeVillage } from '../worlds/MoonlitGladeVillage.js';
+import { CrimsonPeaksBiome } from '../worlds/CrimsonPeaksBiome.js';
+import { CompleteGameIntegration } from './CompleteGameIntegration.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -224,6 +233,16 @@ export class GameEngine {
         this.contentIntegrationSystem = null;
         this.mascotBrandingSystem = null;
         
+        // Phase 7-9: NEW COMPLETE GAME SYSTEMS
+        this.completeGameIntegration = null;
+        this.enhancedUISystem = null;
+        this.universalInputSystem = null;
+        this.combatEnemySystem = null;
+        this.dungeonBuilderSystem = null;
+        this.mysticForestBiome = null;
+        this.moonlitGladeVillage = null;
+        this.crimsonPeaksBiome = null;
+        
         // Game state
         this.isRunning = false;
         this.startFromSafeZone = false;
@@ -332,6 +351,34 @@ export class GameEngine {
             this.characterCustomization = new CharacterCustomization(this);
             this.dailyRewards = new DailyRewards(this);
             this.tutorialSystem = new TutorialSystem(this);
+            
+            // ========================================
+            // Phase 7-9: COMPLETE GAME INTEGRATION
+            // Initialize ALL new systems for full gameplay
+            // ========================================
+            console.log('🎮 Initializing Complete Game Integration...');
+            
+            // Initialize Complete Game Integration (this connects everything)
+            this.completeGameIntegration = new CompleteGameIntegration(
+                this.scene,
+                this.camera,
+                this.renderer,
+                this.modelLoader
+            );
+            await this.completeGameIntegration.initialize();
+            
+            // Store references to integrated systems
+            this.enhancedUISystem = this.completeGameIntegration.ui;
+            this.universalInputSystem = this.completeGameIntegration.input;
+            this.combatEnemySystem = this.completeGameIntegration.combat;
+            this.dungeonBuilderSystem = this.completeGameIntegration.dungeonBuilder;
+            
+            console.log('✅ Complete Game Integration finished!');
+            console.log('   🌍 World loaded with 3 biomes');
+            console.log('   🎨 UI system active');
+            console.log('   🎮 Input system ready (keyboard/mouse/touch/gamepad)');
+            console.log('   ⚔️ Combat system active');
+            console.log('   🏛️ Dungeon system ready');
             
             console.log('✅ Essential systems initialized');
         } catch (error) {
@@ -749,6 +796,13 @@ export class GameEngine {
         // Update Phase 7 systems
         if (this.prestigeSystem) {
             this.prestigeSystem.update(delta);
+        }
+        
+        // ========================================
+        // Phase 7-9: UPDATE NEW COMPLETE SYSTEMS
+        // ========================================
+        if (this.completeGameIntegration && this.completeGameIntegration.update) {
+            this.completeGameIntegration.update(delta);
         }
         
         if (this.infiniteDungeonSystem) {
