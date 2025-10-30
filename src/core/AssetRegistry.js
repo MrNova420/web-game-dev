@@ -197,7 +197,7 @@ export class AssetRegistry {
      */
     getRandomTree() {
         const tree = this.trees[Math.floor(Math.random() * this.trees.length)];
-        return `${this.assetBase}/environment/nature/${tree}`;
+        return `${this.assetBase}/nature/${tree}`;
     }
     
     /**
@@ -205,7 +205,7 @@ export class AssetRegistry {
      */
     getRandomRock() {
         const rock = this.rocks[Math.floor(Math.random() * this.rocks.length)];
-        return `${this.assetBase}/environment/nature/${rock}`;
+        return `${this.assetBase}/nature/${rock}`;
     }
     
     /**
@@ -213,7 +213,7 @@ export class AssetRegistry {
      */
     getRandomPlant() {
         const plant = this.plants[Math.floor(Math.random() * this.plants.length)];
-        return `${this.assetBase}/environment/nature/${plant}`;
+        return `${this.assetBase}/nature/${plant}`;
     }
     
     /**
@@ -224,7 +224,7 @@ export class AssetRegistry {
         const items = this.props[category];
         const item = index !== null ? items[index % items.length] : 
                      items[Math.floor(Math.random() * items.length)];
-        return `${this.assetBase}/environment/props/${item}`;
+        return `${this.assetBase}/props/${item}`;
     }
     
     /**
@@ -235,7 +235,7 @@ export class AssetRegistry {
         const items = this.dungeon[category];
         const item = index !== null ? items[index % items.length] :
                      items[Math.floor(Math.random() * items.length)];
-        return `${this.assetBase}/dungeon/${item}`;
+        return `${this.assetBase}/props/${item}`;
     }
     
     /**
