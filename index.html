@@ -54,9 +54,13 @@
         }
         
         #game-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
             display: block;
             width: 100%;
             height: 100%;
+            z-index: 1; /* Behind UI but above body background */
         }
         
         /* Advanced Anime-Style Top Bar */
