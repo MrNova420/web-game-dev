@@ -24,7 +24,7 @@ fi
 
 # Test 2: Check dist files
 echo "Test 2: Check dist files..."
-if [ -f "dist/index.html" ] && [ -f "dist/assets/index-"*.js ]; then
+if [ -f "dist/index.html" ] && [ -n "$(ls dist/assets/index-*.js 2>/dev/null)" ]; then
     echo -e "${GREEN}✅ Dist files: PASS${NC}"
 else
     echo -e "${RED}❌ Dist files: FAIL${NC}"
@@ -49,29 +49,35 @@ else
     test_result=1
 fi
 
-# Test 5: Dev server (5 second test)
+# Test 5: Dev server (wait longer and check port)
 echo "Test 5: Dev server start..."
-timeout 5 npm run dev > /dev/null 2>&1 &
+timeout 8 npm run dev > /tmp/dev_test.log 2>&1 &
 DEV_PID=$!
-sleep 3
-if ps -p $DEV_PID > /dev/null; then
+sleep 5  # Give it more time to start
+if ps -p $DEV_PID > /dev/null && (curl -s http://localhost:5173 > /dev/null 2>&1 || grep -q "ready in" /tmp/dev_test.log); then
     echo -e "${GREEN}✅ Dev server: PASS${NC}"
     kill $DEV_PID 2>/dev/null
+    wait $DEV_PID 2>/dev/null
 else
     echo -e "${RED}❌ Dev server: FAIL${NC}"
+    kill $DEV_PID 2>/dev/null
+    wait $DEV_PID 2>/dev/null
     test_result=1
 fi
 
-# Test 6: Multiplayer server start (5 second test)
+# Test 6: Multiplayer server start (check port binding)
 echo "Test 6: Multiplayer server start..."
-timeout 5 node multiplayer-server.js > /dev/null 2>&1 &
+timeout 8 node multiplayer-server.js > /tmp/server_test.log 2>&1 &
 SERVER_PID=$!
-sleep 3
-if ps -p $SERVER_PID > /dev/null; then
+sleep 5  # Give it more time to start
+if ps -p $SERVER_PID > /dev/null && (curl -s http://localhost:3000/health > /dev/null 2>&1 || grep -q "Server ready" /tmp/server_test.log); then
     echo -e "${GREEN}✅ Multiplayer server: PASS${NC}"
     kill $SERVER_PID 2>/dev/null
+    wait $SERVER_PID 2>/dev/null
 else
     echo -e "${RED}❌ Multiplayer server: FAIL${NC}"
+    kill $SERVER_PID 2>/dev/null
+    wait $SERVER_PID 2>/dev/null
     test_result=1
 fi
 
