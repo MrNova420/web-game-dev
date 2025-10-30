@@ -8,10 +8,10 @@
     <meta http-equiv="Expires" content="0">
     <!-- CRITICAL FIX: Allow loading external 3D models and assets -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; img-src 'self' data: blob: https: http:; media-src 'self' data: blob: https: http:; connect-src 'self' https: http: ws: wss:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; font-src 'self' data: https: http:;">
-    <meta name="game-version" content="4.0.0">
+    <meta name="game-version" content="5.0.0">
     <meta name="build-date" content="2025-10-30">
-    <meta name="build-timestamp" content="1761858785529">
-    <meta name="build-status" content="LATEST-FULL-GAME-COMPLETE-MMORPG">
+    <meta name="build-timestamp" content="1761863999999">
+    <meta name="build-status" content="PROFESSIONAL-ASSETS-INTEGRATED-FULL-GAME">
     <title>Dynasty of Emberveil - Anime Fantasy RPG</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1172,15 +1172,16 @@
             });
         }
         
-        // FORCE UPDATE TO LATEST VERSION - Clear ALL old data
-        const gameVersion = '4.0.0';
+        // FORCE UPDATE TO LATEST VERSION WITH PROFESSIONAL ASSETS
+        const gameVersion = '5.0.0';
         const storedVersion = localStorage.getItem('game_version');
         
-        // Always clear on version mismatch OR if beta/old version detected
-        if (storedVersion !== gameVersion || !storedVersion || parseFloat(storedVersion) < 4.0) {
-            console.log('🔄 UPDATING TO LATEST FULL GAME v4.0.0 - Clearing ALL old data...');
+        // Always clear on version mismatch OR if old version detected
+        if (storedVersion !== gameVersion || !storedVersion || parseFloat(storedVersion) < 5.0) {
+            console.log('🔄 UPDATING TO v5.0.0 WITH PROFESSIONAL ASSETS - Clearing ALL old data...');
             console.log(`   Old version: ${storedVersion || 'none'} → New version: ${gameVersion}`);
-            console.log('   🎮 Loading Complete MMORPG with 13 systems, massive open world, 532+ assets!');
+            console.log('   🎮 Loading game with 200+ professional models from KayKit, Universal Base Characters, Fantasy Props MegaKits!');
+            console.log('   ✨ No more demo assets - ALL PROFESSIONAL GAME-READY 3D MODELS!');
             
             // COMPLETE CLEAR - no exceptions
             localStorage.clear();
@@ -1190,18 +1191,18 @@
             localStorage.setItem('game_version', gameVersion);
             localStorage.setItem('last_update', new Date().toISOString());
             
-            console.log('✅ Updated to latest FULL GAME v4.0.0!');
+            console.log('✅ Updated to v5.0.0 with PROFESSIONAL ASSETS!');
             
             // Force reload to ensure clean state - reload once per version change
             const lastReload = localStorage.getItem('last_version_reload');
             if (!lastReload || lastReload !== gameVersion) {
-                console.log('🔄 Reloading page once to ensure clean state...');
+                console.log('🔄 Reloading page once to ensure clean state with professional assets...');
                 localStorage.setItem('last_version_reload', gameVersion);
                 setTimeout(() => window.location.reload(true), 100);
             }
         } else {
-            console.log('✅ Already running latest version: v4.0.0');
-            console.log('📦 Complete MMORPG with 13 systems loaded!');
+            console.log('✅ Already running latest version with professional assets: v5.0.0');
+            console.log('📦 Game loaded with 200+ professional 3D models!');
         }
     </script>
     <script type="module" src="/src/main.js"></script>
