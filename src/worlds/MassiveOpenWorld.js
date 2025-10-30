@@ -19,6 +19,7 @@
 import * as THREE from 'three';
 import { assetRegistry } from '../core/AssetRegistry.js';
 import { MysticForestBiome } from './MysticForestBiome.js';
+import { CrimsonPeaksBiome } from './CrimsonPeaksBiome.js';
 
 export class MassiveOpenWorld {
     constructor(scene, modelLoader) {
@@ -616,6 +617,22 @@ export class MassiveOpenWorld {
         this.loadedBiomes.set('mystic_forest', mysticForest);
         
         console.log(`   ✅ Mystic Forest loaded at (${biomeCenter[0]}, ${biomeCenter[1]})`);
+        
+        // Also build Crimson Peaks for Phase 6
+        console.log('\n🔥 Building Crimson Peaks Biome...');
+        const crimsonData = this.biomeGrid.find(b => b.id === 'crimson_peaks');
+        
+        const crimsonPeaks = new CrimsonPeaksBiome(this.scene, this.modelLoader);
+        crimsonPeaks.center = {
+            x: crimsonData.pos[0],
+            z: crimsonData.pos[1]
+        };
+        
+        await crimsonPeaks.build();
+        
+        this.loadedBiomes.set('crimson_peaks', crimsonPeaks);
+        
+        console.log(`   ✅ Crimson Peaks loaded at (${crimsonData.pos[0]}, ${crimsonData.pos[1]})\n`);
     }
     
     /**
