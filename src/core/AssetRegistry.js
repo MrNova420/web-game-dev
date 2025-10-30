@@ -10,7 +10,31 @@ export class AssetRegistry {
         this.animationBase = '/assets/animations';
         
         // Asset catalogs
-        this.playerCharacters = [
+        // Universal Base Characters for players (male/female superhero bases)
+        this.universalCharacters = [
+            'Superhero_Male.gltf',
+            'Superhero_Female.gltf'
+        ];
+        
+        // Universal animations for all character movements
+        this.universalAnimations = [
+            'AnimationLibrary_Godot_Standard.glb'
+        ];
+        
+        // Hairstyles for character customization
+        this.hairstyles = [
+            'Hair_Long_HO.gltf',
+            'Hair_Buns_HO.gltf',
+            'Hair_SimpleParted_HO.gltf',
+            'Hair_Buzzed_HO.gltf',
+            'Hair_BuzzedFemale_HO.gltf',
+            'Hair_Beard_HO.gltf',
+            'Eyebrows_Regular_HO.gltf',
+            'Eyebrows_Female_HO.gltf'
+        ];
+        
+        // KayKit Adventurers - for NPCs/companions
+        this.npcCharacters = [
             'Barbarian.glb',
             'Knight.glb',
             'Mage.glb',
@@ -19,6 +43,7 @@ export class AssetRegistry {
             'Rogue_Hooded.glb'
         ];
         
+        // Enemy characters (skeletons and other mobs)
         this.enemyCharacters = [
             'Skeleton_Mage.glb',
             'Skeleton_Minion.glb',
@@ -26,28 +51,59 @@ export class AssetRegistry {
             'Skeleton_Warrior.glb'
         ];
         
-        // Nature assets - organized by type
+        // Nature assets - organized by type (ALL 68 models from Stylized Nature MegaKit)
         this.trees = [
+            // Common Trees
             'CommonTree_1.gltf', 'CommonTree_2.gltf', 'CommonTree_3.gltf',
             'CommonTree_4.gltf', 'CommonTree_5.gltf',
+            // Pine Trees
+            'Pine_1.gltf', 'Pine_2.gltf', 'Pine_3.gltf', 'Pine_4.gltf', 'Pine_5.gltf',
+            // Twisted Trees (mystical)
             'TwistedTree_1.gltf', 'TwistedTree_2.gltf', 'TwistedTree_3.gltf',
             'TwistedTree_4.gltf', 'TwistedTree_5.gltf',
-            'Pine_1.gltf', 'Pine_2.gltf', 'Pine_3.gltf'
+            // Dead Trees (spooky areas)
+            'DeadTree_1.gltf', 'DeadTree_2.gltf', 'DeadTree_3.gltf',
+            'DeadTree_4.gltf', 'DeadTree_5.gltf'
         ];
         
         this.rocks = [
-            'Rock_Medium_1.gltf', 'Rock_Medium_2.gltf', 'Rock_Medium_3.gltf',
+            // Large Rocks
             'Rock_Large_1.gltf', 'Rock_Large_2.gltf', 'Rock_Large_3.gltf',
-            'Pebble_Round_1.gltf', 'Pebble_Round_2.gltf', 'Pebble_Round_3.gltf'
+            'Rock_Large_4.gltf', 'Rock_Large_5.gltf', 'Rock_Large_6.gltf',
+            // Medium Rocks
+            'Rock_Medium_1.gltf', 'Rock_Medium_2.gltf', 'Rock_Medium_3.gltf',
+            'Rock_Medium_4.gltf', 'Rock_Medium_5.gltf',
+            // Round Pebbles
+            'Pebble_Round_1.gltf', 'Pebble_Round_2.gltf', 'Pebble_Round_3.gltf',
+            'Pebble_Round_4.gltf', 'Pebble_Round_5.gltf',
+            // Square Pebbles
+            'Pebble_Square_1.gltf', 'Pebble_Square_2.gltf', 'Pebble_Square_3.gltf',
+            'Pebble_Square_4.gltf', 'Pebble_Square_5.gltf', 'Pebble_Square_6.gltf',
+            // Rock Paths
+            'RockPath_Round_Small_1.gltf', 'RockPath_Round_Small_2.gltf',
+            'RockPath_Round_Wide.gltf', 'RockPath_Square_Small_1.gltf',
+            'RockPath_Square_Thin.gltf'
         ];
         
         this.plants = [
-            'Plant_1.gltf', 'Plant_1_Big.gltf', 'Plant_7_Big.gltf',
+            // Ground Plants
+            'Plant_1.gltf', 'Plant_1_Big.gltf', 'Plant_7.gltf', 'Plant_7_Big.gltf',
+            // Grass
             'Grass_Common_Short.gltf', 'Grass_Common_Tall.gltf',
             'Grass_Wispy_Short.gltf', 'Grass_Wispy_Tall.gltf',
-            'Flower_1_Single.gltf', 'Flower_2_Single.gltf',
-            'Flower_3_Single.gltf', 'Flower_4_Single.gltf',
-            'Clover_2.gltf'
+            // Flowers (single and groups)
+            'Flower_3_Single.gltf', 'Flower_3_Group.gltf',
+            'Flower_4_Single.gltf', 'Flower_4_Group.gltf',
+            // Petals
+            'Petal_1.gltf', 'Petal_2.gltf', 'Petal_3.gltf', 'Petal_4.gltf', 'Petal_5.gltf',
+            // Clover
+            'Clover_1.gltf', 'Clover_2.gltf',
+            // Bushes
+            'Bush_Common.gltf', 'Bush_Common_Flowers.gltf',
+            // Ferns
+            'Fern_1.gltf',
+            // Mushrooms
+            'Mushroom_Common.gltf', 'Mushroom_Laetiporus.gltf'
         ];
         
         // Props for villages and interiors
@@ -98,10 +154,33 @@ export class AssetRegistry {
     }
     
     /**
-     * Get full path for a player character model
+     * Get full path for a player character model (Universal Base Character)
      */
-    getPlayerCharacterPath(index = 0) {
-        const char = this.playerCharacters[index % this.playerCharacters.length];
+    getPlayerCharacterPath(gender = 'male') {
+        const char = gender === 'female' ? this.universalCharacters[1] : this.universalCharacters[0];
+        return `${this.assetBase}/characters/universal/${char}`;
+    }
+    
+    /**
+     * Get animation library path
+     */
+    getAnimationLibraryPath() {
+        return `${this.animationBase}/universal/${this.universalAnimations[0]}`;
+    }
+    
+    /**
+     * Get hairstyle path
+     */
+    getHairstylePath(index = 0) {
+        const hairstyle = this.hairstyles[index % this.hairstyles.length];
+        return `${this.assetBase}/characters/hairstyles/${hairstyle}`;
+    }
+    
+    /**
+     * Get NPC character path (KayKit Adventurers for companions/NPCs)
+     */
+    getNPCCharacterPath(index = 0) {
+        const char = this.npcCharacters[index % this.npcCharacters.length];
         return `${this.assetBase}/characters/player/${char}`;
     }
     
