@@ -8,10 +8,11 @@
 
 import { spawn, exec } from 'child_process';
 import { promisify } from 'util';
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, statSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import os from 'os';
 
 const execAsync = promisify(exec);
 const __filename = fileURLToPath(import.meta.url);
@@ -49,7 +50,7 @@ async function cleanBuild() {
     // Verify files
     const distPath = join(__dirname, 'dist/index.html');
     if (existsSync(distPath)) {
-      const stats = require('fs').statSync(distPath);
+      const stats = statSync(distPath);
       console.log(`   📦 Output size: ${(stats.size / 1024).toFixed(2)} KB`);
       return true;
     } else {
@@ -195,7 +196,6 @@ function showDeploymentInfo() {
   console.log('\n📡 Step 6: Deployment Information');
   console.log('─'.repeat(80));
   
-  const os = require('os');
   const networkInterfaces = os.networkInterfaces();
   const ips = [];
   
@@ -232,6 +232,18 @@ function showDeploymentInfo() {
 function createQuickStart() {
   console.log('\n📚 Step 7: Quick Start Guide');
   console.log('─'.repeat(80));
+  
+  // Get network IPs first
+  const networkInterfaces = os.networkInterfaces();
+  const ips = [];
+  
+  for (const name of Object.keys(networkInterfaces)) {
+    for (const iface of networkInterfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        ips.push(iface.address);
+      }
+    }
+  }
   
   const guide = `
 # 🎮 DYNASTY OF EMBERVEIL - QUICK START
@@ -287,18 +299,6 @@ Game Version: 2.4.0
 Status: FULLY PLAYABLE
 Performance: 60 FPS TARGET
 `;
-
-  const os = require('os');
-  const networkInterfaces = os.networkInterfaces();
-  const ips = [];
-  
-  for (const name of Object.keys(networkInterfaces)) {
-    for (const iface of networkInterfaces[name]) {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        ips.push(iface.address);
-      }
-    }
-  }
 
   try {
     writeFileSync(join(__dirname, 'PLAYING_NOW.md'), guide);

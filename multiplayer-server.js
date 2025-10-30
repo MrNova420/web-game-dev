@@ -240,7 +240,7 @@ class GameState {
     }
   }
   
-  addPlayer(socket Id, playerData) {
+  addPlayer(socketId, playerData) {
     // Server capacity check
     if (this.players.size >= MAX_PLAYERS) {
       throw new Error('Server is full');
@@ -400,19 +400,6 @@ class GameState {
       avgTickTime: this.avgTickTime,
       tickRate: TICK_RATE
     };
-  }
-            attacker.health = attacker.maxHealth;
-            attacker.maxMana += 5;
-            attacker.mana = attacker.maxMana;
-          }
-          
-          return { killed: true, expGain, levelUp: attacker.level };
-        }
-      }
-      
-      return { killed: false, damage };
-    }
-    return null;
   }
   
   respawnEnemy(enemyId) {
