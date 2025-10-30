@@ -735,11 +735,28 @@ export class CloudSaveSystem {
     }
     
     generateUserId() {
-        // Use crypto.randomUUID if available (modern browsers), otherwise timestamp-based
-        const randomPart = typeof crypto !== 'undefined' && crypto.randomUUID 
-            ? crypto.randomUUID()
-            : `${Date.now()}-${Date.now() * Math.random()}`.replace('.', '');
-        const userId = `user_${randomPart}`;
+        // Use crypto.randomUUID for secure random generation
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            const randomPart = crypto.randomUUID();
+            const userId = `user_${randomPart}`;
+            localStorage.setItem('userId', userId);
+            return userId;
+        }
+        
+        // Fallback: Use crypto.getRandomValues for secure random
+        if (typeof crypto !== 'undefined' && crypto.getRandomValues) {
+            const array = new Uint32Array(4);
+            crypto.getRandomValues(array);
+            const randomPart = Array.from(array, num => num.toString(36)).join('');
+            const userId = `user_${randomPart}`;
+            localStorage.setItem('userId', userId);
+            return userId;
+        }
+        
+        // Last resort: timestamp-based (not cryptographically secure but better than Math.random)
+        const timestamp = Date.now();
+        const performanceNow = performance.now().toString().replace('.', '');
+        const userId = `user_${timestamp}_${performanceNow}`;
         localStorage.setItem('userId', userId);
         return userId;
     }
