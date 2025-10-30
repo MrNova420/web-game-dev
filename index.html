@@ -10,6 +10,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; img-src 'self' data: blob: https: http:; media-src 'self' data: blob: https: http:; connect-src 'self' https: http: ws: wss:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; font-src 'self' data: https: http:;">
     <meta name="game-version" content="4.0.0">
     <meta name="build-date" content="2025-10-30">
+    <meta name="build-timestamp" content="1761858785529">
     <meta name="build-status" content="LATEST-FULL-GAME-COMPLETE-MMORPG">
     <title>Dynasty of Emberveil - Anime Fantasy RPG</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1153,6 +1154,7 @@
         
         // Cache clearing - FORCE CLEAR ALL OLD CACHED DATA
         console.log('🔄 Loading Dynasty of Emberveil v4.0.0 - COMPLETE MMORPG - LATEST FULL GAME...');
+        console.log('📅 Build timestamp:', document.querySelector('meta[name="build-timestamp"]')?.content || 'development');
         
         // Force clear ALL service workers
         if ('serviceWorker' in navigator) {
@@ -1190,11 +1192,16 @@
             
             console.log('✅ Updated to latest FULL GAME v4.0.0!');
             
-            // Force reload to ensure clean state
-            if (storedVersion && parseFloat(storedVersion) < 4.0) {
-                console.log('🔄 Reloading page to apply updates...');
+            // Force reload to ensure clean state - reload once per version change
+            const lastReload = localStorage.getItem('last_version_reload');
+            if (!lastReload || lastReload !== gameVersion) {
+                console.log('🔄 Reloading page once to ensure clean state...');
+                localStorage.setItem('last_version_reload', gameVersion);
                 setTimeout(() => window.location.reload(true), 100);
             }
+        } else {
+            console.log('✅ Already running latest version: v4.0.0');
+            console.log('📦 Complete MMORPG with 13 systems loaded!');
         }
     </script>
     <script type="module" src="/src/main.js"></script>
