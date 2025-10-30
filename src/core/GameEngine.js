@@ -98,6 +98,8 @@ import { PlayerControlSettingsSystem } from '../systems/PlayerControlSettingsSys
 import { CloudSaveSystem } from '../systems/CloudSaveSystem.js';
 import { AdvancedAutoManagementSystem } from '../systems/AdvancedAutoManagementSystem.js';
 import { ContentIntegrationSystem } from '../systems/ContentIntegrationSystem.js';
+import { MysticForestBiome } from '../worlds/MysticForestBiome.js';
+import { assetRegistry } from './AssetRegistry.js';
 import { MascotBrandingSystem } from '../systems/MascotBrandingSystem.js';
 // Phase 1 Session 1.1: Psychedelic Cel-Shading (ULTIMATE_AUTONOMOUS_ROADMAP.md)
 import { PsychedelicCelShadingSystem } from '../rendering/PsychedelicCelShadingSystem.js';
@@ -121,6 +123,10 @@ export class GameEngine {
         
         // World builder for creating immersive worlds from presets
         this.worldBuilder = null; // Initialized after scene is created
+        
+        // Current active biome
+        this.currentBiome = null;
+        this.assetRegistry = assetRegistry;
         
         // Game systems
         this.player = null;
@@ -458,35 +464,41 @@ export class GameEngine {
     }
     
     async createWorld() {
-        console.log('🌍 Creating world...');
+        console.log('🌍 Creating Dynasty of Emberveil world...');
+        console.log('📍 Starting Zone: Mystic Forest (Level 1-15)');
         
-        // Preload models
-        await this.modelLoader.preloadCommonModels();
+        // Build the Mystic Forest biome - the first complete zone
+        this.currentBiome = new MysticForestBiome(this.scene, this.modelLoader);
+        await this.currentBiome.build();
         
-        // Build world from preset
-        const playerLevel = 1;
-        const currentPreset = 'crystal_caverns';
+        console.log('✅ Mystic Forest biome loaded successfully!');
         
-        await this.worldBuilder.buildWorld(currentPreset, playerLevel);
-        
-        // Create player
+        // Create player with real character model
         this.player = new Player(this.scene);
         await this.player.init();
         
-        // Try to load player model
+        // Load player character from asset registry
         try {
-            const playerModel = await this.modelLoader.loadModel('characters', 'anime_girl');
+            const playerCharPath = this.assetRegistry.getPlayerCharacterPath(0); // Knight by default
+            console.log(`🎮 Loading player character: ${playerCharPath}`);
+            const playerModel = await this.modelLoader.load(playerCharPath);
+            
             if (playerModel && this.player.mesh) {
                 const oldMesh = this.player.mesh;
                 this.scene.remove(oldMesh);
-                playerModel.scale.set(0.5, 0.5, 0.5);
+                
+                // Scale and position the model
+                playerModel.scale.set(1, 1, 1);
                 playerModel.position.copy(oldMesh.position);
+                playerModel.castShadow = true;
+                playerModel.receiveShadow = true;
+                
                 this.player.mesh = playerModel;
                 this.scene.add(playerModel);
-                console.log('✅ Player model loaded');
+                console.log('✅ Player character model loaded: Knight');
             }
         } catch (error) {
-            console.log('ℹ️ Using procedural player model');
+            console.log('ℹ️ Using default player model:', error.message);
         }
         
         // Initialize combat systems with player reference
@@ -498,67 +510,58 @@ export class GameEngine {
         this.companionManager.setActiveCompanion('smoke_siren');
         this.updateCompanionUI();
         
-        // Activate systems that depend on world
-        if (this.openWorldSystem && this.openWorldSystem.terrain) {
-            console.log('✅ Open world terrain active');
+        // Spawn skeleton enemies using real models
+        console.log('💀 Spawning skeleton enemies...');
+        const enemySpawnPoints = [
+            { x: 30, z: 30 }, { x: -30, z: 30 },
+            { x: 30, z: -30 }, { x: -30, z: -30 },
+            { x: 40, z: 0 }, { x: -40, z: 0 },
+            { x: 0, z: 40 }, { x: 0, z: -40 }
+        ];
+        
+        for (let i = 0; i < enemySpawnPoints.length; i++) {
+            try {
+                const point = enemySpawnPoints[i];
+                const enemyPath = this.assetRegistry.getEnemyCharacterPath(i % 4);
+                const enemyModel = await this.modelLoader.load(enemyPath);
+                
+                if (enemyModel) {
+                    enemyModel.position.set(point.x, 0, point.z);
+                    enemyModel.scale.set(1, 1, 1);
+                    enemyModel.castShadow = true;
+                    enemyModel.receiveShadow = true;
+                    
+                    // Add to enemy manager if available
+                    if (this.enemyManager) {
+                        this.enemyManager.addEnemy({
+                            mesh: enemyModel,
+                            type: 'skeleton',
+                            health: 100,
+                            maxHealth: 100,
+                            damage: 10,
+                            level: 1
+                        });
+                    }
+                    
+                    this.scene.add(enemyModel);
+                    console.log(`   ✅ Spawned skeleton at (${point.x}, ${point.z})`);
+                }
+            } catch (error) {
+                console.log(`   ⚠️ Couldn't spawn enemy at point ${i}:`, error.message);
+            }
         }
         
+        console.log(`✅ Spawned ${enemySpawnPoints.length} skeleton enemies`);
+        
+        // Activate weather and day/night systems for Mystic Forest
         if (this.weatherSystem) {
-            this.weatherSystem.setWeather('rain', 0.3);
-            console.log('🌦️ Weather system active');
+            this.weatherSystem.setWeather('mist', 0.2); // Light mystical mist
+            console.log('🌫️ Mystical mist active');
         }
         
         if (this.dayNightCycleSystem) {
-            this.dayNightCycleSystem.setTime(12);
-            console.log('☀️ Day/night cycle active');
-        }
-        
-        if (this.environmentDetailsSystem) {
-            const bounds = {
-                min: new THREE.Vector3(-50, 0, -50),
-                max: new THREE.Vector3(50, 0, 50)
-            };
-            this.environmentDetailsSystem.populateBiome('crystal_caverns', bounds);
-            console.log('🌲 Environment details populated');
-            
-            for (let i = 0; i < 10; i++) {
-                const angle = (i / 10) * Math.PI * 2;
-                const radius = 10 + Math.random() * 20;
-                try {
-                    const tree = await this.modelLoader.loadModel('environment', Math.random() > 0.5 ? 'tree_1' : 'tree_2');
-                    tree.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-                    tree.scale.set(0.5, 0.5, 0.5);
-                    this.scene.add(tree);
-                } catch (error) {
-                    // Fallback already handles this
-                }
-            }
-            console.log('🌳 Real tree models added');
-        }
-        
-        // Initialize biome-specific features
-        if (this.biomeGenerationSystem) {
-            console.log('🏞️ Biome generation active');
-        }
-        
-        // Spawn animals/creatures with real models
-        if (this.worldBeautificationSystem) {
-            console.log('🦌 Wildlife system active - flora, fauna, and structures created');
-            
-            // Add real creature models
-            for (let i = 0; i < 5; i++) {
-                const angle = (i / 5) * Math.PI * 2;
-                const radius = 15;
-                try {
-                    const creature = await this.modelLoader.loadModel('creatures', 'bird');
-                    creature.position.set(Math.cos(angle) * radius, 2, Math.sin(angle) * radius);
-                    creature.scale.set(0.3, 0.3, 0.3);
-                    this.scene.add(creature);
-                } catch (error) {
-                    // Fallback handles this
-                }
-            }
-            console.log('🐦 Real creature models added');
+            this.dayNightCycleSystem.setTime(16); // Late afternoon, mystical lighting
+            console.log('🌅 Day/night cycle active (late afternoon)');
         }
         
         // Spawn anime characters/NPCs with REAL models
