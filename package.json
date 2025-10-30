@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:network": "vite --host 0.0.0.0",
+    "prebuild": "node update-build-timestamp.js",
     "build": "vite build",
     "preview": "vite preview",
     "preview:network": "vite preview --host 0.0.0.0",
