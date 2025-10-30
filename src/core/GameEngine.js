@@ -241,7 +241,8 @@ export class GameEngine {
         this.scene = new THREE.Scene();
         // Light blue/grey background so 3D objects are visible
         this.scene.background = new THREE.Color(0x87CEEB); // Sky blue
-        this.scene.fog = new THREE.FogExp2(0x2d0a4e, 0.02);
+        // FOG DISABLED - Was making 3D world invisible!
+        // this.scene.fog = new THREE.FogExp2(0x2d0a4e, 0.02);
         this.scene.userData.gameEngine = this;
         
         // Setup camera

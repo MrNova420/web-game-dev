@@ -6,6 +6,8 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
+    <!-- CRITICAL FIX: Allow loading external 3D models and assets -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https: http:; img-src 'self' data: blob: https: http:; media-src 'self' data: blob: https: http:; connect-src 'self' https: http: ws: wss:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https: http:; style-src 'self' 'unsafe-inline' https: http:; font-src 'self' data: https: http:;">
     <meta name="game-version" content="3.0.0">
     <meta name="build-date" content="2025-10-30">
     <meta name="build-status" content="PRODUCTION-READY-LATEST">
@@ -753,7 +755,7 @@
             font-size: 0.9em;
         }
     </style>
-  <script type="module" crossorigin src="/assets/index-mqOdjOKQ.js"></script>
+  <script type="module" crossorigin src="/assets/index-CspQSCjF.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/three-nqoIw8Ck.js">
   <link rel="modulepreload" crossorigin href="/assets/cannon-DPZWuR6y.js">
 </head>
