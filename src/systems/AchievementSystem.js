@@ -277,7 +277,7 @@ export class AchievementSystem {
         // Create achievement toggle button
         const toggleButton = document.createElement('div');
         toggleButton.id = 'achievement-toggle';
-        toggleButton.innerHTML = '🏆 Achievements (A)';
+        toggleButton.innerHTML = '🏆 Achievements (H)';
         toggleButton.style.cssText = `
             position: absolute;
             bottom: 100px;
@@ -324,9 +324,9 @@ export class AchievementSystem {
         
         this.updateAchievementUI();
         
-        // Add keyboard shortcut
+        // Add keyboard shortcut - Changed from 'A' to 'H' to avoid conflict with movement
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'a' || e.key === 'A') {
+            if (e.key === 'h' || e.key === 'H') {
                 this.togglePanel();
             }
         });

@@ -23,4 +23,9 @@ export class GuildSystem {
     console.log(`${leaderId} created guild: ${guildName}`);
     console.log(`  UI: ${this.ui.guild_panel}`);
   }
+
+  update(delta) {
+    // Guild system update logic
+    // Currently just a placeholder to prevent errors
+  }
 }

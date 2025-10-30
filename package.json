@@ -1,7 +1,7 @@
 {
   "name": "dynasty-of-emberveil",
-  "version": "2.4.0",
-  "description": "Advanced anime/fantasy online multiplayer RPG - Production Ready - Always Playable at 60 FPS",
+  "version": "3.0.0",
+  "description": "Advanced anime/fantasy online multiplayer RPG - Latest Production Version - Always Playable at 60 FPS",
   "type": "module",
   "scripts": {
     "dev": "vite",
