@@ -72,10 +72,10 @@ export class Advanced3DGraphicsSystem {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
         
-        // Enable additional renderer features
+        // Enable additional renderer features - Updated for Three.js r160+
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.0;
-        this.renderer.outputEncoding = THREE.sRGBEncoding;
+        this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     }
     
     setupFog() {
