@@ -118,6 +118,8 @@ import { MysticForestBiome } from '../worlds/MysticForestBiome.js';
 import { MoonlitGladeVillage } from '../worlds/MoonlitGladeVillage.js';
 import { CrimsonPeaksBiome } from '../worlds/CrimsonPeaksBiome.js';
 import { CompleteGameIntegration } from './CompleteGameIntegration.js';
+// Pre-built world data for instant loading
+import { PreBuiltWorldData, quickLoadWorld } from '../data/PreBuiltWorldData.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -516,9 +518,29 @@ export class GameEngine {
         console.log('   Massive Multiplayer Open World');
         console.log('============================================\n');
         
-        // Initialize the MASSIVE OPEN WORLD
-        this.massiveWorld = new MassiveOpenWorld(this.scene, this.modelLoader);
-        await this.massiveWorld.initialize();
+        // ⚡ QUICK LOAD: Load from PreBuiltWorldData first!
+        console.log('⚡ LOADING PRE-BUILT WORLD DATA...');
+        console.log('   Using PreBuiltWorldData.js for instant loading');
+        
+        // Load all pre-built content (now async)
+        const preBuiltWorld = await quickLoadWorld(this.scene, this.modelLoader);
+        
+        if (preBuiltWorld && preBuiltWorld.biomes) {
+            console.log('✅ PRE-BUILT WORLD LOADED!');
+            console.log(`   - ${Object.keys(preBuiltWorld.biomes).length} biomes loaded`);
+            console.log(`   - ${Object.keys(preBuiltWorld.villages || {}).length} villages loaded`);
+            console.log(`   - ${Object.keys(preBuiltWorld.dungeons || {}).length} dungeons loaded`);
+            console.log(`   - ${(preBuiltWorld.quests || []).length} quests initialized`);
+            
+            // Store pre-built world data for later use
+            this.preBuiltWorld = preBuiltWorld;
+        } else {
+            console.warn('⚠️ PreBuiltWorldData not available, falling back to procedural generation');
+            
+            // Fallback: Initialize the MASSIVE OPEN WORLD procedurally
+            this.massiveWorld = new MassiveOpenWorld(this.scene, this.modelLoader);
+            await this.massiveWorld.initialize();
+        }
         
         console.log('✅ WORLD INITIALIZATION COMPLETE!\n');
         
