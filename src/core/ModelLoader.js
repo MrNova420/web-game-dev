@@ -142,13 +142,16 @@ export class ModelLoader {
             const modelUrl = this.modelLibrary[category]?.[modelName];
             
             if (!modelUrl) {
-                console.warn(`Model not found: ${category}/${modelName}, using fallback`);
-                return this.createEnhancedFallback(category, modelName);
+                console.error(`❌ Model URL not found: ${category}/${modelName}`);
+                console.error('⚠️ NO FALLBACK - Returning empty group');
+                // Return empty group instead of fallback - user explicitly requests NO FALLBACK
+                return new THREE.Group();
             }
             
             const gltf = await this.loadGLTF(modelUrl);
             
             if (gltf && gltf.scene) {
+                console.log(`✅ Successfully loaded REAL model: ${category}/${modelName}`);
                 // Apply anime toon shader for that cel-shaded anime look
                 if (useAnimeShader) {
                     this.applyAnimeShader(gltf.scene);
@@ -158,12 +161,16 @@ export class ModelLoader {
                 this.modelCache.set(cacheKey, gltf.scene);
                 return gltf.scene.clone();
             } else {
-                return this.createEnhancedFallback(category, modelName);
+                console.error(`❌ Model loaded but no scene: ${category}/${modelName}`);
+                // Return empty group - NO FALLBACK
+                return new THREE.Group();
             }
             
         } catch (error) {
-            console.warn(`Failed to load model ${category}/${modelName}:`, error.message);
-            return this.createEnhancedFallback(category, modelName);
+            console.error(`❌ FAILED to load REAL model ${category}/${modelName}:`, error.message);
+            console.error('⚠️ NO FALLBACK - Model will not be visible until external source is accessible');
+            // Return empty group instead of fallback geometry - user explicitly requests NO FALLBACK
+            return new THREE.Group();
         }
     }
     
@@ -222,10 +229,10 @@ export class ModelLoader {
      */
     loadGLTF(url) {
         return new Promise((resolve, reject) => {
-            // Reduced timeout to 2 seconds for faster fallback
+            // INCREASED timeout to 30 seconds - allow real models to load (NO FALLBACK!)
             const timeout = setTimeout(() => {
-                reject(new Error('Model loading timeout'));
-            }, 2000);
+                reject(new Error('Model loading timeout - external model failed to load'));
+            }, 30000);
             
             this.loader.load(
                 url,
