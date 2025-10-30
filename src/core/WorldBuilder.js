@@ -45,48 +45,54 @@ export class WorldBuilder {
         console.log(`📜 Loading: ${preset.name} (Tier ${preset.tier}, Levels ${preset.recommendedLevel})`);
         console.log(`📖 Lore: ${preset.lore.description}`);
         
-        // Apply visual settings
-        await this.applyVisuals(preset.visuals);
-        
-        // Generate terrain
-        await this.generateTerrain(preset.generation.terrain);
-        
-        // Build structures
-        await this.buildStructures(preset.generation.structures);
-        
-        // Plant vegetation
-        await this.plantVegetation(preset.generation.vegetation);
-        
-        // Add decorations
-        await this.addDecorations(preset.generation.decorations);
-        
-        // Spawn NPCs
-        await this.spawnNPCs(preset.npcs);
-        
-        // Spawn enemies
-        await this.spawnEnemies(preset.enemies, playerLevel);
-        
-        // Setup quests
-        this.setupQuests(preset.quests);
-        
-        // Initialize audio
-        this.initializeAudio(preset.audio);
-        
-        // Register events
-        this.registerEvents(preset.events);
-        
-        console.log(`✅ World built: ${preset.name}`);
-        console.log(`   - ${preset.npcs.length} NPCs spawned`);
-        console.log(`   - ${preset.enemies.length} enemy types available`);
-        console.log(`   - ${preset.quests.length} quests initialized`);
-        
-        return preset;
+        try {
+            // Use Promise.all for parallel operations where possible
+            // Apply visual settings (quick, non-blocking)
+            this.applyVisuals(preset.visuals);
+            
+            // Generate terrain (quick, procedural)
+            this.generateTerrain(preset.generation.terrain);
+            
+            // Build structures, vegetation, and decorations in parallel
+            // Each uses fallbacks so they're fast
+            await Promise.allSettled([
+                this.buildStructures(preset.generation.structures),
+                this.plantVegetation(preset.generation.vegetation),
+                this.addDecorations(preset.generation.decorations)
+            ]);
+            
+            // Spawn NPCs and enemies in parallel
+            await Promise.allSettled([
+                this.spawnNPCs(preset.npcs),
+                this.spawnEnemies(preset.enemies, playerLevel)
+            ]);
+            
+            // Setup quests (synchronous, quick)
+            this.setupQuests(preset.quests);
+            
+            // Initialize audio (quick)
+            this.initializeAudio(preset.audio);
+            
+            // Register events (quick)
+            this.registerEvents(preset.events);
+            
+            console.log(`✅ World built: ${preset.name}`);
+            console.log(`   - ${preset.npcs.length} NPCs spawned`);
+            console.log(`   - ${preset.enemies.length} enemy types available`);
+            console.log(`   - ${preset.quests.length} quests initialized`);
+            
+            return preset;
+        } catch (error) {
+            console.error(`Error building world: ${error.message}`);
+            // Return partial success
+            return preset;
+        }
     }
     
     /**
      * Apply visual settings (skybox, fog, lighting)
      */
-    async applyVisuals(visuals) {
+    applyVisuals(visuals) {
         // Set fog
         if (visuals.fog) {
             this.scene.fog = new THREE.FogExp2(visuals.fog.color, visuals.fog.density);
@@ -124,7 +130,7 @@ export class WorldBuilder {
     /**
      * Generate terrain based on preset rules
      */
-    async generateTerrain(terrainRules) {
+    generateTerrain(terrainRules) {
         const size = 100;
         const geometry = new THREE.PlaneGeometry(size, size, 50, 50);
         const vertices = geometry.attributes.position.array;

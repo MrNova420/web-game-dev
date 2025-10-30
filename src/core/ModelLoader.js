@@ -222,10 +222,10 @@ export class ModelLoader {
      */
     loadGLTF(url) {
         return new Promise((resolve, reject) => {
-            // Timeout after 10 seconds
+            // Reduced timeout to 2 seconds for faster fallback
             const timeout = setTimeout(() => {
                 reject(new Error('Model loading timeout'));
-            }, 10000);
+            }, 2000);
             
             this.loader.load(
                 url,
