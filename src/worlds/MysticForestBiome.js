@@ -12,6 +12,7 @@
 
 import * as THREE from 'three';
 import { assetRegistry } from '../core/AssetRegistry.js';
+import { MoonlitGladeVillage } from './MoonlitGladeVillage.js';
 
 export class MysticForestBiome {
     constructor(scene, modelLoader) {
@@ -24,6 +25,7 @@ export class MysticForestBiome {
         this.rocks = [];
         this.plants = [];
         this.structures = [];
+        this.village = null;
         
         this.worldSize = 200; // 200x200 world
     }
@@ -50,7 +52,10 @@ export class MysticForestBiome {
             
             // Build special locations
             await this.buildAncientTree();
-            await this.buildMoonlitGlade();
+            
+            // Build Moonlit Glade Village - complete with buildings, NPCs, props
+            this.village = new MoonlitGladeVillage(this.scene, this.modelLoader);
+            await this.village.build();
             
             // Add atmospheric effects
             this.addMist();
