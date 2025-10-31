@@ -828,10 +828,32 @@
             lastBossSpawn: 0,
             achievements: [],
             biomesVisited: new Set(),
+            villagesVisited: new Set(),
             totalPlayTime: 0,
             sessionStartTime: Date.now(),
             miniMapEnabled: true,
-            questMarkers: []
+            questMarkers: [],
+            // SURVIVAL MECHANICS
+            survival: {
+                hunger: 100,
+                thirst: 100,
+                stamina: 100,
+                temperature: 50, // 0=freezing, 50=normal, 100=burning
+                sanity: 100
+            },
+            crafting: {
+                materials: {
+                    wood: 0,
+                    stone: 0,
+                    iron: 0,
+                    herbs: 0,
+                    leather: 0
+                }
+            },
+            time: {
+                day: 1,
+                hour: 6 // Start at 6 AM
+            }
         };
 
         // ========================================
@@ -953,15 +975,71 @@
         }
 
         // ========================================
-        // QUEST SYSTEM (from README)
+        // LORE & STORY (from README)
+        // ========================================
+
+        const GAME_LORE = {
+            world: "Dynasty of Emberveil - a realm suspended in eternal twilight",
+            backstory: "500 years ago, Malachar the Betrayer opened the Void Rift, unleashing corruption. King Alderan sacrificed himself to seal it, but the world shattered.",
+            prophecy: "Heroes summoned through mystical means, prophesied to either save Emberveil or witness its final destruction.",
+            factions: [
+                { name: "Light Keepers", desc: "Protectors of the realm" },
+                { name: "Shadow Guild", desc: "Masters of stealth" },
+                { name: "Arcane Circle", desc: "Mage collective" },
+                { name: "Iron Legion", desc: "Warrior army" }
+            ]
+        };
+
+        // ========================================
+        // EXPANDED QUEST SYSTEM
         // ========================================
 
         const QUESTS = [
-            { id: 'starter1', name: 'First Steps', desc: 'Explore the world and defeat 5 enemies', goal: 5, type: 'combat', reward: { exp: 100, gold: 50 }, active: true, progress: 0 },
-            { id: 'explorer1', name: 'World Explorer', desc: 'Discover 5 landmarks', goal: 5, type: 'explore', reward: { exp: 200, gold: 100 }, active: false, progress: 0 },
-            { id: 'social1', name: 'Making Friends', desc: 'Interact with 5 NPCs', goal: 5, type: 'social', reward: { exp: 150, gold: 75 }, active: false, progress: 0 },
-            { id: 'boss1', name: 'Boss Hunter', desc: 'Defeat your first boss', goal: 1, type: 'boss', reward: { exp: 500, gold: 250, item: 'Epic' }, active: false, progress: 0 },
-            { id: 'wealth1', name: 'Treasure Seeker', desc: 'Collect 1000 gold', goal: 1000, type: 'gold', reward: { exp: 300, gold: 0 }, active: false, progress: 0 }
+            // Starter Quests
+            { id: 'starter1', name: 'First Steps', desc: 'Welcome hero! Defeat 5 enemies to prove yourself', goal: 5, type: 'combat', reward: { exp: 100, gold: 50 }, active: true, progress: 0, lore: 'Every hero must start somewhere...' },
+            { id: 'starter2', name: 'Village Visit', desc: 'Find and visit a village', goal: 1, type: 'village', reward: { exp: 150, gold: 100 }, active: false, progress: 0, lore: 'Villages are the heart of civilization' },
+            { id: 'starter3', name: 'Meet the Locals', desc: 'Interact with 3 NPCs', goal: 3, type: 'social', reward: { exp: 120, gold: 60 }, active: false, progress: 0 },
+            
+            // Exploration Quests
+            { id: 'explore1', name: 'World Explorer', desc: 'Discover 5 landmarks', goal: 5, type: 'explore', reward: { exp: 200, gold: 100 }, active: false, progress: 0, lore: 'The world holds many secrets...' },
+            { id: 'explore2', name: 'Legendary Explorer', desc: 'Discover 20 landmarks', goal: 20, type: 'explore', reward: { exp: 500, gold: 300, item: 'Rare' }, active: false, progress: 0 },
+            { id: 'explore3', name: 'Master Explorer', desc: 'Discover all villages (5)', goal: 5, type: 'villages', reward: { exp: 800, gold: 500, item: 'Epic' }, active: false, progress: 0 },
+            
+            // Combat Quests
+            { id: 'combat1', name: 'Slayer Initiate', desc: 'Defeat 25 enemies', goal: 25, type: 'combat', reward: { exp: 300, gold: 150 }, active: false, progress: 0 },
+            { id: 'combat2', name: 'Slayer Adept', desc: 'Defeat 100 enemies', goal: 100, type: 'combat', reward: { exp: 800, gold: 400, item: 'Rare' }, active: false, progress: 0 },
+            { id: 'combat3', name: 'Combo Master', desc: 'Achieve a 10x combo', goal: 10, type: 'combo', reward: { exp: 400, gold: 200 }, active: false, progress: 0, lore: 'Strike with precision!' },
+            
+            // Boss Quests
+            { id: 'boss1', name: 'Boss Hunter', desc: 'Defeat your first boss', goal: 1, type: 'boss', reward: { exp: 500, gold: 250, item: 'Epic' }, active: false, progress: 0, lore: 'The greatest challenges await...' },
+            { id: 'boss2', name: 'Boss Slayer', desc: 'Defeat 5 bosses', goal: 5, type: 'boss', reward: { exp: 1500, gold: 750, item: 'Legendary' }, active: false, progress: 0 },
+            { id: 'boss3', name: 'Dragon Slayer', desc: 'Defeat the Smoke Dragon', goal: 1, type: 'dragon', reward: { exp: 2000, gold: 1000, item: 'Legendary' }, active: false, progress: 0, lore: 'A legendary beast terrorizes the land' },
+            
+            // Wealth Quests
+            { id: 'wealth1', name: 'Treasure Hunter', desc: 'Collect 500 gold', goal: 500, type: 'gold', reward: { exp: 200, gold: 0 }, active: false, progress: 0 },
+            { id: 'wealth2', name: 'Fortune Seeker', desc: 'Collect 2000 gold', goal: 2000, type: 'gold', reward: { exp: 500, gold: 100, item: 'Rare' }, active: false, progress: 0 },
+            { id: 'wealth3', name: 'Dragon Hoard', desc: 'Collect 10000 gold', goal: 10000, type: 'gold', reward: { exp: 1500, gold: 500, item: 'Epic' }, active: false, progress: 0 },
+            
+            // Social Quests
+            { id: 'social1', name: 'Making Friends', desc: 'Interact with 8 NPCs', goal: 8, type: 'social', reward: { exp: 250, gold: 125 }, active: false, progress: 0 },
+            { id: 'social2', name: 'Town Hero', desc: 'Help NPCs in all 5 villages', goal: 5, type: 'village_help', reward: { exp: 600, gold: 300, item: 'Epic' }, active: false, progress: 0, lore: 'Be the hero each village needs' },
+            
+            // Level Quests
+            { id: 'level1', name: 'Apprentice Hero', desc: 'Reach level 5', goal: 5, type: 'level', reward: { exp: 0, gold: 100, item: 'Uncommon' }, active: false, progress: 0 },
+            { id: 'level2', name: 'Seasoned Hero', desc: 'Reach level 10', goal: 10, type: 'level', reward: { exp: 0, gold: 300, item: 'Rare' }, active: false, progress: 0 },
+            { id: 'level3', name: 'Master Hero', desc: 'Reach level 20', goal: 20, type: 'level', reward: { exp: 0, gold: 1000, item: 'Epic' }, active: false, progress: 0 },
+            
+            // Story Quests (from README lore)
+            { id: 'story1', name: 'The Prophecy', desc: 'Learn about the ancient prophecy from a Sage', goal: 1, type: 'sage', reward: { exp: 300, gold: 150 }, active: false, progress: 0, lore: 'The prophecy speaks of chosen heroes...' },
+            { id: 'story2', name: "Alderan's Legacy", desc: 'Find 3 Ancient Ruins', goal: 3, type: 'ruins', reward: { exp: 600, gold: 300, item: 'Rare' }, active: false, progress: 0, lore: 'Seek the artifacts of the fallen king' },
+            { id: 'story3', name: 'Void Corruption', desc: 'Investigate the Void Rift', goal: 1, type: 'void', reward: { exp: 1000, gold: 500, item: 'Epic' }, active: false, progress: 0, lore: 'The source of all darkness' }
+        ];
+
+        // Daily Activities
+        const DAILY_ACTIVITIES = [
+            { name: 'Daily Hunt', desc: 'Defeat 20 enemies', reward: { exp: 200, gold: 100 }, completed: false },
+            { name: 'Daily Exploration', desc: 'Discover 3 new landmarks', reward: { exp: 150, gold: 75 }, completed: false },
+            { name: 'Daily Trade', desc: 'Trade with 3 merchants', reward: { exp: 100, gold: 150 }, completed: false }
         ];
 
         function updateQuests() {
@@ -985,6 +1063,18 @@
                     case 'gold':
                         currentProgress = gameState.player.gold;
                         break;
+                    case 'level':
+                        currentProgress = gameState.player.level;
+                        break;
+                    case 'combo':
+                        currentProgress = gameState.comboCount || 0;
+                        break;
+                    case 'village':
+                        currentProgress = gameState.villagesVisited ? gameState.villagesVisited.size : 0;
+                        break;
+                    case 'villages':
+                        currentProgress = gameState.villagesVisited ? gameState.villagesVisited.size : 0;
+                        break;
                 }
                 
                 quest.progress = currentProgress;
@@ -1000,6 +1090,11 @@
 
         function completeQuest(quest) {
             createParticle(gameState.player.x, gameState.player.y, `✨ Quest Complete: ${quest.name}!`, '#00ff00');
+            
+            // Show lore if exists
+            if (quest.lore) {
+                createParticle(gameState.player.x, gameState.player.y - 30, quest.lore, '#FFD700');
+            }
             
             // Give rewards
             if (quest.reward.exp) {
@@ -1421,6 +1516,9 @@
             gameState.landmarks = [];
             gameState.buildings = [];
             gameState.villages = [];
+            gameState.resources = []; // For gathering
+            gameState.farmPlots = []; // For farming
+            gameState.playerBuildings = []; // Player-built structures
             
             const landmarkTypes = [
                 { name: 'Ancient Tree', emoji: '🌳', reward: 'gold', size: 60 },
@@ -1440,7 +1538,7 @@
                 const villageX = 1000 + Math.random() * (gameState.worldSize - 2000);
                 const villageY = 1000 + Math.random() * (gameState.worldSize - 2000);
                 
-                gameState.villages.push({ x: villageX, y: villageY, name: `Village ${v + 1}` });
+                gameState.villages.push({ x: villageX, y: villageY, name: `${['Everlight', 'Shadowmoon', 'Crystalpeak', 'Emberforge', 'Voidgate'][v]} Village` });
                 
                 // Add 8-12 buildings per village
                 const buildingCount = 8 + Math.floor(Math.random() * 5);
@@ -1470,6 +1568,31 @@
                     reward: type.reward,
                     discovered: false,
                     radius: type.size
+                });
+            }
+            
+            // RESOURCE NODES - For gathering/crafting
+            const resourceTypes = [
+                { name: 'Tree', emoji: '🌲', resource: 'wood', amount: 5, respawn: 30000 },
+                { name: 'Rock', emoji: '🪨', resource: 'stone', amount: 3, respawn: 40000 },
+                { name: 'Iron Ore', emoji: '⛏️', resource: 'iron', amount: 2, respawn: 60000 },
+                { name: 'Herb Bush', emoji: '🌿', resource: 'herbs', amount: 3, respawn: 20000 },
+                { name: 'Berry Bush', emoji: '🫐', resource: 'berries', amount: 5, respawn: 25000 }
+            ];
+            
+            // Generate 200 resource nodes
+            for (let i = 0; i < 200; i++) {
+                const type = resourceTypes[Math.floor(Math.random() * resourceTypes.length)];
+                gameState.resources.push({
+                    x: Math.random() * gameState.worldSize,
+                    y: Math.random() * gameState.worldSize,
+                    type: type.name,
+                    emoji: type.emoji,
+                    resource: type.resource,
+                    amount: type.amount,
+                    respawnTime: type.respawn,
+                    depleted: false,
+                    radius: 30
                 });
             }
         }
