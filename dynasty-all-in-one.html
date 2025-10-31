@@ -629,19 +629,401 @@
         // GAME DATA FROM DOCUMENTATION
         // ========================================
 
+        // ========================================
+        // COMPLETE BIOME SYSTEM (12 Massive Biomes)
+        // Each biome: 4000x4000 area with unique content
+        // ========================================
+
         const BIOMES = [
-            { name: 'Mystic Forest', color: '#2d5016', emoji: '🌲', level: '1-15' },
-            { name: 'Crimson Peaks', color: '#8b0000', emoji: '⛰️', level: '15-30' },
-            { name: 'Azure Depths', color: '#003366', emoji: '🌊', level: '20-35' },
-            { name: 'Shadowmoon Valley', color: '#1a0033', emoji: '🌙', level: '30-45' },
-            { name: 'Crystal Peaks', color: '#4b0082', emoji: '💎', level: '35-50' },
-            { name: 'Verdant Plains', color: '#228b22', emoji: '🌾', level: '10-25' },
-            { name: 'Frozen Wastes', color: '#87ceeb', emoji: '❄️', level: '40-55' },
-            { name: 'Scorched Desert', color: '#c19a6b', emoji: '🏜️', level: '45-60' },
-            { name: 'Twilight Marshlands', color: '#2f4f2f', emoji: '🐸', level: '25-40' },
-            { name: 'Celestial Highlands', color: '#ffd700', emoji: '☁️', level: '50-65' },
-            { name: 'Volcanic Badlands', color: '#ff4500', emoji: '🌋', level: '55-70' },
-            { name: 'Void Rift', color: '#000000', emoji: '🌀', level: '65-80' }
+            {
+                id: 0,
+                name: 'Mystic Forest',
+                color: '#2d5016',
+                emoji: '🌲',
+                level: '1-15',
+                size: 4000,
+                description: 'Lush ancient forest with glowing flora',
+                weather: ['clear', 'rain'],
+                creatures: [
+                    { name: 'Forest Spirit', emoji: '👻', hp: 50, attack: 8, exp: 10, gold: 5 },
+                    { name: 'Wolf', emoji: '🐺', hp: 80, attack: 12, exp: 15, gold: 8 },
+                    { name: 'Tree Ent', emoji: '🌳', hp: 150, attack: 15, exp: 25, gold: 15 },
+                    { name: 'Deer', emoji: '🦌', hp: 40, attack: 5, exp: 8, gold: 3 },
+                    { name: 'Rabbit', emoji: '🐰', hp: 20, attack: 2, exp: 5, gold: 2 }
+                ],
+                resources: [
+                    { type: 'wood', emoji: '🪵', amount: 5, rarity: 'common' },
+                    { type: 'herbs', emoji: '🌿', amount: 3, rarity: 'common' },
+                    { type: 'berries', emoji: '🫐', amount: 5, rarity: 'common' }
+                ],
+                landmarks: [
+                    { name: 'Ancient Tree of Beginnings', emoji: '🌳✨', reward: 'exp', amount: 100, lore: 'World Tree where heroes are born' },
+                    { name: 'Moonlit Glade', emoji: '🌙🌲', reward: 'gold', amount: 50, lore: 'Hidden village of moon elves' },
+                    { name: 'Whispering Grove', emoji: '🍃', reward: 'item', lore: 'Mystical place where trees speak' }
+                ],
+                dungeons: [
+                    { name: 'Root Caverns', difficulty: 1, floors: 5, boss: 'Ancient Ent King' },
+                    { name: 'Fairy Ring', difficulty: 1, floors: 3, boss: 'Dark Fairy Queen' }
+                ],
+                quests: 15
+            },
+            {
+                id: 1,
+                name: 'Crimson Peaks',
+                color: '#8b0000',
+                emoji: '⛰️',
+                level: '15-30',
+                size: 4000,
+                description: 'Towering mountains with volcanic activity',
+                weather: ['clear', 'storm'],
+                creatures: [
+                    { name: 'Mountain Troll', emoji: '👹', hp: 200, attack: 25, exp: 40, gold: 25 },
+                    { name: 'Fire Elemental', emoji: '🔥', hp: 150, attack: 30, exp: 50, gold: 30 },
+                    { name: 'Young Dragon', emoji: '🐉', hp: 300, attack: 40, exp: 100, gold: 80 },
+                    { name: 'Mountain Goat', emoji: '🐐', hp: 60, attack: 10, exp: 12, gold: 5 },
+                    { name: 'Eagle', emoji: '🦅', hp: 80, attack: 15, exp: 20, gold: 10 }
+                ],
+                resources: [
+                    { type: 'iron', emoji: '⛏️', amount: 3, rarity: 'uncommon' },
+                    { type: 'stone', emoji: '🪨', amount: 5, rarity: 'common' },
+                    { type: 'gems', emoji: '💎', amount: 1, rarity: 'rare' }
+                ],
+                landmarks: [
+                    { name: 'Dragonspine Summit', emoji: '🏔️', reward: 'item', lore: 'Highest peak, home of dragons' },
+                    { name: 'Forge of Titans', emoji: '⚒️', reward: 'gold', amount: 100, lore: 'Ancient legendary smithy' },
+                    { name: 'Lavafall Caverns', emoji: '🌋', reward: 'exp', amount: 200, lore: 'Dungeon with lava rivers' }
+                ],
+                dungeons: [
+                    { name: 'Dragon Lair', difficulty: 3, floors: 10, boss: 'Elder Red Dragon' },
+                    { name: 'Volcanic Depths', difficulty: 2, floors: 8, boss: 'Magma Lord' }
+                ],
+                quests: 20
+            },
+            {
+                id: 2,
+                name: 'Azure Depths',
+                color: '#003366',
+                emoji: '🌊',
+                level: '20-35',
+                size: 4000,
+                description: 'Vast underwater realm with coral cities',
+                weather: ['clear'],
+                underwater: true,
+                creatures: [
+                    { name: 'Merfolk Warrior', emoji: '🧜', hp: 250, attack: 28, exp: 60, gold: 35 },
+                    { name: 'Sea Serpent', emoji: '🐍', hp: 400, attack: 35, exp: 80, gold: 50 },
+                    { name: 'Kraken Spawn', emoji: '🦑', hp: 500, attack: 45, exp: 120, gold: 80 },
+                    { name: 'Fish', emoji: '🐟', hp: 30, attack: 5, exp: 8, gold: 3 },
+                    { name: 'Crab', emoji: '🦀', hp: 100, attack: 15, exp: 25, gold: 12 }
+                ],
+                resources: [
+                    { type: 'pearls', emoji: '🦪', amount: 1, rarity: 'rare' },
+                    { type: 'seaweed', emoji: '🌊', amount: 5, rarity: 'common' },
+                    { type: 'coral', emoji: '🪸', amount: 3, rarity: 'uncommon' }
+                ],
+                landmarks: [
+                    { name: 'Atlantean Ruins', emoji: '🏛️', reward: 'item', lore: 'Sunken ancient city' },
+                    { name: 'Coral Palace', emoji: '🏰', reward: 'gold', amount: 150, lore: 'Merfolk kingdom' },
+                    { name: 'Trench of Shadows', emoji: '🌑', reward: 'exp', amount: 250, lore: 'Dark ocean depths' }
+                ],
+                dungeons: [
+                    { name: 'Sunken Temple', difficulty: 4, floors: 12, boss: 'Leviathan' },
+                    { name: 'Abyssal Trench', difficulty: 3, floors: 10, boss: 'Deep One King' }
+                ],
+                quests: 18
+            },
+            {
+                id: 3,
+                name: 'Shadowmoon Valley',
+                color: '#1a0033',
+                emoji: '🌙',
+                level: '30-45',
+                size: 4000,
+                description: 'Perpetual twilight with corrupted landscape',
+                weather: ['fog', 'storm'],
+                creatures: [
+                    { name: 'Shadow Demon', emoji: '👿', hp: 350, attack: 40, exp: 90, gold: 60 },
+                    { name: 'Corrupted Beast', emoji: '🐺💀', hp: 300, attack: 35, exp: 75, gold: 45 },
+                    { name: 'Undead Knight', emoji: '☠️', hp: 400, attack: 45, exp: 110, gold: 70 },
+                    { name: 'Wraith', emoji: '👻', hp: 200, attack: 30, exp: 60, gold: 40 },
+                    { name: 'Bat Swarm', emoji: '🦇', hp: 150, attack: 25, exp: 50, gold: 30 }
+                ],
+                resources: [
+                    { type: 'dark_crystal', emoji: '🔮', amount: 2, rarity: 'rare' },
+                    { type: 'shadowstone', emoji: '🪨', amount: 3, rarity: 'uncommon' },
+                    { type: 'cursed_wood', emoji: '🪵', amount: 4, rarity: 'uncommon' }
+                ],
+                landmarks: [
+                    { name: 'Eclipse Citadel', emoji: '🏰', reward: 'item', lore: 'Demon fortress' },
+                    { name: 'Graveyard of Heroes', emoji: '⚰️', reward: 'exp', amount: 300, lore: 'Massive cemetery' },
+                    { name: 'Void Rift Portal', emoji: '🌀', reward: 'gold', amount: 200, lore: 'Portal to darkness' }
+                ],
+                dungeons: [
+                    { name: 'Shadow Citadel', difficulty: 5, floors: 15, boss: 'Shadow Lord' },
+                    { name: 'Catacombs', difficulty: 4, floors: 12, boss: 'Lich King' }
+                ],
+                quests: 22
+            },
+            {
+                id: 4,
+                name: 'Crystal Peaks',
+                color: '#4b0082',
+                emoji: '💎',
+                level: '35-50',
+                size: 4000,
+                description: 'Floating crystal islands with arcane energy',
+                weather: ['clear'],
+                floating: true,
+                creatures: [
+                    { name: 'Arcane Golem', emoji: '🗿', hp: 450, attack: 50, exp: 130, gold: 85 },
+                    { name: 'Spell Wraith', emoji: '👻', hp: 300, attack: 55, exp: 140, gold: 90 },
+                    { name: 'Crystal Dragon', emoji: '🐉💎', hp: 600, attack: 65, exp: 200, gold: 150 },
+                    { name: 'Mana Sprite', emoji: '✨', hp: 150, attack: 35, exp: 70, gold: 45 },
+                    { name: 'Arcane Elemental', emoji: '🔮', hp: 350, attack: 48, exp: 120, gold: 80 }
+                ],
+                resources: [
+                    { type: 'mana_crystal', emoji: '💎', amount: 2, rarity: 'rare' },
+                    { type: 'arcane_dust', emoji: '✨', amount: 4, rarity: 'uncommon' },
+                    { type: 'pure_essence', emoji: '🌟', amount: 1, rarity: 'epic' }
+                ],
+                landmarks: [
+                    { name: 'Mage Academy', emoji: '🏫', reward: 'item', lore: 'Floating magic school' },
+                    { name: 'Crystal Nexus', emoji: '💠', reward: 'exp', amount: 350, lore: 'Source of magic' },
+                    { name: 'Astral Observatory', emoji: '🔭', reward: 'gold', amount: 250, lore: 'Star viewing platform' }
+                ],
+                dungeons: [
+                    { name: 'Arcane Spire', difficulty: 6, floors: 18, boss: 'Archmage Eternal' },
+                    { name: 'Crystal Labyrinth', difficulty: 5, floors: 15, boss: 'Crystal Golem Prime' }
+                ],
+                quests: 20
+            },
+            {
+                id: 5,
+                name: 'Verdant Plains',
+                color: '#228b22',
+                emoji: '🌾',
+                level: '10-25',
+                size: 4000,
+                description: 'Rolling hills with scattered villages',
+                weather: ['clear', 'rain'],
+                creatures: [
+                    { name: 'Centaur', emoji: '🏹', hp: 180, attack: 22, exp: 35, gold: 20 },
+                    { name: 'Griffin', emoji: '🦅', hp: 220, attack: 28, exp: 50, gold: 30 },
+                    { name: 'Wild Horse', emoji: '🐴', hp: 120, attack: 15, exp: 20, gold: 12 },
+                    { name: 'Cattle', emoji: '🐄', hp: 100, attack: 10, exp: 15, gold: 8 },
+                    { name: 'Bandit', emoji: '🗡️', hp: 150, attack: 20, exp: 30, gold: 25 }
+                ],
+                resources: [
+                    { type: 'wheat', emoji: '🌾', amount: 5, rarity: 'common' },
+                    { type: 'cotton', emoji: '🌸', amount: 4, rarity: 'common' },
+                    { type: 'leather', emoji: '🪶', amount: 3, rarity: 'uncommon' }
+                ],
+                landmarks: [
+                    { name: 'Harvest Town', emoji: '🏘️', reward: 'gold', amount: 80, lore: 'Peaceful farming village' },
+                    { name: 'Windmill Hill', emoji: '🌾', reward: 'item', lore: 'Scenic farming area' },
+                    { name: 'Nomad Camp', emoji: '⛺', reward: 'exp', amount: 150, lore: 'Traveling traders' }
+                ],
+                dungeons: [
+                    { name: 'Bandit Hideout', difficulty: 2, floors: 6, boss: 'Bandit King' },
+                    { name: 'Ancient Barrow', difficulty: 2, floors: 7, boss: 'Barrow Wight' }
+                ],
+                quests: 16
+            },
+            {
+                id: 6,
+                name: 'Frozen Wastes',
+                color: '#87ceeb',
+                emoji: '❄️',
+                level: '40-55',
+                size: 4000,
+                description: 'Endless snow and ice with ancient ruins',
+                weather: ['snow', 'storm'],
+                creatures: [
+                    { name: 'Frost Giant', emoji: '❄️👹', hp: 550, attack: 58, exp: 160, gold: 100 },
+                    { name: 'Ice Dragon', emoji: '🐉❄️', hp: 700, attack: 70, exp: 220, gold: 170 },
+                    { name: 'Yeti', emoji: '🦍', hp: 450, attack: 52, exp: 145, gold: 95 },
+                    { name: 'Polar Bear', emoji: '🐻‍❄️', hp: 350, attack: 45, exp: 110, gold: 70 },
+                    { name: 'Ice Elemental', emoji: '❄️', hp: 400, attack: 50, exp: 130, gold: 85 }
+                ],
+                resources: [
+                    { type: 'ice_crystal', emoji: '❄️💎', amount: 2, rarity: 'rare' },
+                    { type: 'frozen_timber', emoji: '🪵', amount: 3, rarity: 'uncommon' },
+                    { type: 'rare_pelt', emoji: '🦊', amount: 2, rarity: 'rare' }
+                ],
+                landmarks: [
+                    { name: 'Frostheim Stronghold', emoji: '🏰', reward: 'item', lore: 'Ancient ice fortress' },
+                    { name: 'Eternal Glacier', emoji: '🏔️', reward: 'exp', amount: 400, lore: 'Massive ice wall' },
+                    { name: 'Aurora Shrine', emoji: '🌌', reward: 'gold', amount: 300, lore: 'Northern lights temple' }
+                ],
+                dungeons: [
+                    { name: 'Ice Palace', difficulty: 7, floors: 20, boss: 'Ice Queen' },
+                    { name: 'Frozen Caverns', difficulty: 6, floors: 16, boss: 'Frost Wyrm' }
+                ],
+                quests: 19
+            },
+            {
+                id: 7,
+                name: 'Scorched Desert',
+                color: '#c19a6b',
+                emoji: '🏜️',
+                level: '45-60',
+                size: 4000,
+                description: 'Vast desert with sandstorms and oases',
+                weather: ['clear', 'sandstorm'],
+                creatures: [
+                    { name: 'Sand Worm', emoji: '🪱', hp: 600, attack: 62, exp: 180, gold: 120 },
+                    { name: 'Scorpion', emoji: '🦂', hp: 400, attack: 55, exp: 150, gold: 95 },
+                    { name: 'Mummy', emoji: '🧟', hp: 500, attack: 58, exp: 165, gold: 110 },
+                    { name: 'Jackal', emoji: '🦊', hp: 300, attack: 45, exp: 120, gold: 75 },
+                    { name: 'Sand Elemental', emoji: '🌪️', hp: 450, attack: 52, exp: 140, gold: 90 }
+                ],
+                resources: [
+                    { type: 'ancient_relic', emoji: '🏺', amount: 1, rarity: 'epic' },
+                    { type: 'rare_spice', emoji: '🌶️', amount: 3, rarity: 'rare' },
+                    { type: 'desert_herb', emoji: '🌿', amount: 4, rarity: 'uncommon' }
+                ],
+                landmarks: [
+                    { name: 'Pyramid of Ancients', emoji: '🔺', reward: 'item', lore: 'Ancient tomb' },
+                    { name: 'Oasis Haven', emoji: '🏝️', reward: 'gold', amount: 350, lore: 'Trading post' },
+                    { name: 'Sandstorm Keep', emoji: '🏰', reward: 'exp', amount: 450, lore: 'Desert fortress' }
+                ],
+                dungeons: [
+                    { name: 'Pharaoh\'s Tomb', difficulty: 8, floors: 22, boss: 'Ancient Pharaoh' },
+                    { name: 'Sand Temple', difficulty: 7, floors: 18, boss: 'Sand God' }
+                ],
+                quests: 21
+            },
+            {
+                id: 8,
+                name: 'Twilight Marshlands',
+                color: '#2f4f2f',
+                emoji: '🐸',
+                level: '25-40',
+                size: 4000,
+                description: 'Murky swamps with poisonous plants',
+                weather: ['fog', 'rain'],
+                creatures: [
+                    { name: 'Swamp Dragon', emoji: '🐉💧', hp: 480, attack: 48, exp: 135, gold: 88 },
+                    { name: 'Plague Rat', emoji: '🐀', hp: 200, attack: 32, exp: 65, gold: 42 },
+                    { name: 'Corrupt Ent', emoji: '🌳', hp: 400, attack: 42, exp: 105, gold: 68 },
+                    { name: 'Giant Frog', emoji: '🐸', hp: 250, attack: 35, exp: 75, gold: 48 },
+                    { name: 'Lizardfolk', emoji: '🦎', hp: 300, attack: 38, exp: 85, gold: 55 }
+                ],
+                resources: [
+                    { type: 'alchemical_ingredient', emoji: '🧪', amount: 3, rarity: 'rare' },
+                    { type: 'mushroom', emoji: '🍄', amount: 5, rarity: 'uncommon' },
+                    { type: 'swamp_reed', emoji: '🌾', amount: 4, rarity: 'common' }
+                ],
+                landmarks: [
+                    { name: 'Witch\'s Hut', emoji: '🏚️', reward: 'item', lore: 'Potion master dwelling' },
+                    { name: 'Bog of Despair', emoji: '🌑', reward: 'exp', amount: 280, lore: 'Cursed swamp' },
+                    { name: 'Lizardfolk Village', emoji: '🏘️', reward: 'gold', amount: 180, lore: 'Native settlement' }
+                ],
+                dungeons: [
+                    { name: 'Sunken Ruins', difficulty: 5, floors: 14, boss: 'Swamp Hydra' },
+                    { name: 'Witch\'s Lair', difficulty: 4, floors: 11, boss: 'Dark Witch' }
+                ],
+                quests: 17
+            },
+            {
+                id: 9,
+                name: 'Celestial Highlands',
+                color: '#ffd700',
+                emoji: '☁️',
+                level: '50-65',
+                size: 4000,
+                description: 'Floating islands among clouds',
+                weather: ['clear'],
+                floating: true,
+                creatures: [
+                    { name: 'Griffin Guardian', emoji: '🦅', hp: 650, attack: 68, exp: 200, gold: 135 },
+                    { name: 'Phoenix', emoji: '🔥🦅', hp: 700, attack: 75, exp: 230, gold: 160 },
+                    { name: 'Cloud Giant', emoji: '☁️👹', hp: 800, attack: 72, exp: 215, gold: 145 },
+                    { name: 'Sky Serpent', emoji: '🐍', hp: 550, attack: 65, exp: 185, gold: 125 },
+                    { name: 'Storm Eagle', emoji: '⚡🦅', hp: 500, attack: 62, exp: 175, gold: 115 }
+                ],
+                resources: [
+                    { type: 'star_metal', emoji: '⭐', amount: 1, rarity: 'legendary' },
+                    { type: 'cloud_cotton', emoji: '☁️', amount: 4, rarity: 'rare' },
+                    { type: 'celestial_essence', emoji: '✨', amount: 2, rarity: 'epic' }
+                ],
+                landmarks: [
+                    { name: 'Sky Castle', emoji: '🏰', reward: 'item', lore: 'Ancient floating fortress' },
+                    { name: 'Rainbow Bridge', emoji: '🌈', reward: 'gold', amount: 400, lore: 'Connection between realms' },
+                    { name: 'Wind Temple', emoji: '🌪️', reward: 'exp', amount: 500, lore: 'Shrine of sky gods' }
+                ],
+                dungeons: [
+                    { name: 'Cloud Palace', difficulty: 9, floors: 25, boss: 'Sky King' },
+                    { name: 'Storm Spire', difficulty: 8, floors: 20, boss: 'Thunder Lord' }
+                ],
+                quests: 23
+            },
+            {
+                id: 10,
+                name: 'Volcanic Badlands',
+                color: '#ff4500',
+                emoji: '🌋',
+                level: '55-70',
+                size: 4000,
+                description: 'Active volcanoes with lava rivers',
+                weather: ['clear'],
+                volcanic: true,
+                creatures: [
+                    { name: 'Lava Golem', emoji: '🌋🗿', hp: 850, attack: 78, exp: 245, gold: 175 },
+                    { name: 'Fire Demon', emoji: '😈🔥', hp: 750, attack: 82, exp: 260, gold: 185 },
+                    { name: 'Hell Hound', emoji: '🐺🔥', hp: 600, attack: 72, exp: 220, gold: 150 },
+                    { name: 'Salamander', emoji: '🦎🔥', hp: 550, attack: 68, exp: 200, gold: 135 },
+                    { name: 'Magma Elemental', emoji: '🌋', hp: 700, attack: 75, exp: 230, gold: 160 }
+                ],
+                resources: [
+                    { type: 'magma_core', emoji: '🔥💎', amount: 1, rarity: 'legendary' },
+                    { type: 'obsidian', emoji: '🪨', amount: 3, rarity: 'epic' },
+                    { type: 'fire_gem', emoji: '💎🔥', amount: 2, rarity: 'rare' }
+                ],
+                landmarks: [
+                    { name: 'Mt. Inferno', emoji: '🌋', reward: 'item', lore: 'Largest active volcano' },
+                    { name: 'Ember Forge', emoji: '⚒️🔥', reward: 'gold', amount: 450, lore: 'Legendary fire smithy' },
+                    { name: 'Hellgate', emoji: '🚪🔥', reward: 'exp', amount: 550, lore: 'Portal to underworld' }
+                ],
+                dungeons: [
+                    { name: 'Magma Core', difficulty: 10, floors: 28, boss: 'Volcanic Titan' },
+                    { name: 'Hell Fortress', difficulty: 9, floors: 24, boss: 'Demon Lord' }
+                ],
+                quests: 20
+            },
+            {
+                id: 11,
+                name: 'Void Rift',
+                color: '#000000',
+                emoji: '🌀',
+                level: '65-80',
+                size: 4000,
+                description: 'Chaotic dimension with shifting reality',
+                weather: ['storm'],
+                voidRealm: true,
+                creatures: [
+                    { name: 'Void Lord', emoji: '👁️', hp: 1000, attack: 88, exp: 300, gold: 220 },
+                    { name: 'Chaos Beast', emoji: '🌀👾', hp: 900, attack: 85, exp: 280, gold: 200 },
+                    { name: 'Reality Warper', emoji: '🌀🔮', hp: 850, attack: 90, exp: 310, gold: 230 },
+                    { name: 'Void Dragon', emoji: '🐉🌀', hp: 1200, attack: 95, exp: 350, gold: 260 },
+                    { name: 'Chaos Elemental', emoji: '🌪️', hp: 800, attack: 82, exp: 270, gold: 190 }
+                ],
+                resources: [
+                    { type: 'void_crystal', emoji: '🌀💎', amount: 1, rarity: 'mythic' },
+                    { type: 'chaos_essence', emoji: '💫', amount: 2, rarity: 'legendary' },
+                    { type: 'reality_shard', emoji: '🔮', amount: 1, rarity: 'omega' }
+                ],
+                landmarks: [
+                    { name: 'Portal of Infinity', emoji: '🌀', reward: 'item', lore: 'Main entrance to void' },
+                    { name: 'Chaos Throne', emoji: '👑🌀', reward: 'gold', amount: 500, lore: 'Seat of void king' },
+                    { name: 'Dimension Maze', emoji: '🧩', reward: 'exp', amount: 600, lore: 'Reality puzzle dungeon' }
+                ],
+                dungeons: [
+                    { name: 'Void Citadel', difficulty: 11, floors: 30, boss: 'Void King' },
+                    { name: 'Chaos Temple', difficulty: 10, floors: 26, boss: 'Chaos God' }
+                ],
+                quests: 25
+            }
         ];
 
         const CLASSES = {
