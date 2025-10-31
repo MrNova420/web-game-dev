@@ -3339,38 +3339,55 @@
         }
 
         function render() {
-            // Clear with gradient sky
-            const biome = BIOMES[gameState.currentBiomeIndex];
+            // Get current biome for background
+            const currentBiome = getCurrentBiome() || BIOMES[0];
             
-            // Beautiful gradient background (sky to horizon)
+            // BEAUTIFUL GRADIENT SKY based on current biome
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, biome.color);
-            gradient.addColorStop(0.6, biome.color);
-            gradient.addColorStop(1, '#1a1a2e');
+            gradient.addColorStop(0, currentBiome.color);
+            gradient.addColorStop(0.6, currentBiome.color);
+            gradient.addColorStop(1, '#1a1a2e'); // Dark horizon
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Save and translate for camera (isometric view)
+            // === WORLD SPACE RENDERING ===
             ctx.save();
             
-            // Isometric camera with tilt for 3D feel
+            // Isometric 3D camera system
             const camOffsetX = canvas.width / 2 - gameState.camera.x;
             const camOffsetY = canvas.height / 2 - gameState.camera.y * 0.8; // Tilt for depth
             ctx.translate(camOffsetX, camOffsetY);
-            
-            // Add slight rotation for isometric view
-            ctx.scale(1, 0.9); // Vertical compression for 3D effect
+            ctx.scale(1, 0.9); // Vertical compression for 3D isometric effect
 
-            // === WORLD SPACE RENDERING with DEPTH ===
-            
-            // Calculate visible area
-            const viewPadding = 800;
+            // Calculate visible viewport with padding
+            const viewPadding = 1000;
             const minX = gameState.camera.x - canvas.width / 2 - viewPadding;
             const maxX = gameState.camera.x + canvas.width / 2 + viewPadding;
             const minY = gameState.camera.y - canvas.height / 2 - viewPadding;
             const maxY = gameState.camera.y + canvas.height / 2 + viewPadding;
             
-            // TERRAIN - Diamond pattern for 3D ground
+            // RENDER BIOME BORDERS (show all 12 biomes)
+            if (gameState.biomeRegions && gameState.biomeRegions.length > 0) {
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.lineWidth = 5;
+                for (const region of gameState.biomeRegions) {
+                    // Only draw if in view
+                    if (region.x + region.width < minX || region.x > maxX ||
+                        region.y + region.height < minY || region.y > maxY) continue;
+                    
+                    // Draw biome boundary
+                    ctx.strokeRect(region.x, region.y, region.width, region.height);
+                    
+                    // Draw biome name in center
+                    ctx.font = 'bold 80px Arial';
+                    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(region.biome.name, region.centerX, region.centerY);
+                    ctx.textAlign = 'left';
+                }
+            }
+            
+            // TERRAIN GRID - Diamond pattern for 3D ground
             ctx.strokeStyle = 'rgba(100, 255, 100, 0.15)';
             ctx.lineWidth = 2;
             const gridSize = 200;
@@ -3379,169 +3396,288 @@
             const startY = Math.floor(minY / gridSize) * gridSize;
             const endY = Math.ceil(maxY / gridSize) * gridSize;
             
-            // Diamond grid for isometric feel
             for (let x = startX; x <= endX; x += gridSize) {
                 for (let y = startY; y <= endY; y += gridSize) {
-                    // Shadow under grid
+                    // Shadow under grid for depth
                     ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
                     ctx.fillRect(x + 2, y + 2, gridSize - 4, gridSize - 4);
                     
-                    // Grid tile with depth
+                    // Grid tile
                     ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
                     ctx.strokeRect(x, y, gridSize, gridSize);
                 }
             }
 
-            // GROUND VEGETATION - Add grass/plants
+            // GROUND VEGETATION with animation
             ctx.font = '24px Arial';
+            const vegTime = Date.now() * 0.001;
             for (let x = startX; x < endX; x += 150) {
                 for (let y = startY; y < endY; y += 150) {
                     const vegetation = ['🌱', '🌿', '☘️', '🍀'][Math.floor((x + y) / 100) % 4];
+                    const sway = Math.sin(vegTime + x * 0.01 + y * 0.01) * 2;
                     ctx.globalAlpha = 0.4;
-                    ctx.fillText(vegetation, x + ((x + y) % 50), y + ((x * y) % 50));
+                    ctx.fillText(vegetation, x + ((x + y) % 50) + sway, y + ((x * y) % 50));
                 }
             }
             ctx.globalAlpha = 1;
+            
+            // BIOME DECORATIONS - larger, animated
+            ctx.font = '60px Arial';
+            const time = Date.now() * 0.0005;
             for (let x = startX; x < endX; x += 500) {
                 for (let y = startY; y < endY; y += 500) {
-                    ctx.fillText(biome.emoji, x, y);
+                    const float = Math.sin(time + x * 0.001 + y * 0.001) * 5;
+                    ctx.fillText(currentBiome.emoji, x, y + float);
                 }
             }
 
-            // Villages (only visible)
-            ctx.font = 'bold 20px Arial';
+            // === RENDER GAME OBJECTS WITH ANIMATIONS ===
+            
+            // DUNGEON PORTALS with rotation animation
+            if (gameState.dungeonPortals) {
+                ctx.font = '70px Arial';
+                for (const portal of gameState.dungeonPortals) {
+                    if (portal.x < minX || portal.x > maxX || portal.y < minY || portal.y > maxY) continue;
+                    
+                    // Rotating portal effect
+                    portal.rotation = (portal.rotation || 0) + 0.05;
+                    
+                    ctx.save();
+                    ctx.translate(portal.x, portal.y);
+                    ctx.rotate(portal.rotation);
+                    
+                    // Glowing portal
+                    ctx.shadowColor = '#9900ff';
+                    ctx.shadowBlur = 30;
+                    ctx.fillStyle = '#9900ff';
+                    ctx.beginPath();
+                    ctx.arc(0, 0, portal.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    
+                    // Portal symbol
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText('🌀', -35, 25);
+                    ctx.restore();
+                    
+                    // Portal name
+                    ctx.font = 'bold 18px Arial';
+                    ctx.fillStyle = '#9900ff';
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(portal.name, portal.x - 80, portal.y - 80);
+                    ctx.fillText(portal.name, portal.x - 80, portal.y - 80);
+                }
+            }
+            
+            // RESOURCES with sway animation
+            ctx.font = '35px Arial';
+            for (const resource of gameState.resources) {
+                if (resource.x < minX || resource.x > maxX || resource.y < minY || resource.y > maxY) continue;
+                if (resource.depleted) continue;
+                
+                // Swaying animation
+                const sway = Math.sin(time * 2 + (resource.swayOffset || 0)) * 3;
+                
+                ctx.fillStyle = resource.depleted ? '#666666' : '#8B4513';
+                ctx.beginPath();
+                ctx.arc(resource.x + sway, resource.y, resource.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(resource.emoji, resource.x - 17 + sway, resource.y + 12);
+            }
+
+            // VILLAGES with glow
+            ctx.font = 'bold 22px Arial';
             for (const village of gameState.villages) {
                 if (village.x < minX || village.x > maxX || village.y < minY || village.y > maxY) continue;
                 
-                ctx.fillStyle = 'rgba(139, 69, 19, 0.3)';
+                // Village area circle with pulsing glow
+                const pulse = 0.3 + Math.sin(time * 2) * 0.1;
+                ctx.fillStyle = `rgba(139, 69, 19, ${pulse})`;
                 ctx.beginPath();
-                ctx.arc(village.x, village.y, 300, 0, Math.PI * 2);
+                ctx.arc(village.x, village.y, village.radius || 300, 0, Math.PI * 2);
                 ctx.fill();
                 
+                // Village name with glow
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 10;
                 ctx.fillStyle = '#FFD700';
                 ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 3;
-                ctx.strokeText(village.name, village.x - 50, village.y - 320);
-                ctx.fillText(village.name, village.x - 50, village.y - 320);
+                ctx.lineWidth = 4;
+                ctx.strokeText(village.name, village.x - 100, village.y - 320);
+                ctx.fillText(village.name, village.x - 100, village.y - 320);
+                ctx.shadowBlur = 0;
             }
 
-            // Buildings (only visible)
-            ctx.font = '45px Arial';
+            // BUILDINGS
+            ctx.font = '50px Arial';
             for (const building of gameState.buildings) {
                 if (building.x < minX || building.x > maxX || building.y < minY || building.y > maxY) continue;
                 
+                // Building shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.beginPath();
+                ctx.arc(building.x + 5, building.y + 5, building.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Building base
                 ctx.fillStyle = 'rgba(139, 69, 19, 0.8)';
                 ctx.beginPath();
                 ctx.arc(building.x, building.y, building.radius, 0, Math.PI * 2);
                 ctx.fill();
                 
+                // Building emoji
                 ctx.fillStyle = '#FFFFFF';
-                ctx.fillText(building.emoji, building.x - 22, building.y + 15);
+                ctx.fillText(building.emoji, building.x - 25, building.y + 18);
             }
 
-            // Landmarks (only visible)
-            ctx.font = '50px Arial';
+            // LANDMARKS with pulsing glow and float animation
+            ctx.font = '60px Arial';
             for (const landmark of gameState.landmarks) {
                 if (landmark.x < minX || landmark.x > maxX || landmark.y < minY || landmark.y > maxY) continue;
                 
+                // Update animation
+                landmark.pulseTime = (landmark.pulseTime || 0) + (landmark.pulseSpeed || 0.02);
+                const pulse = Math.sin(landmark.pulseTime);
+                const floatY = Math.sin(time * 2 + (landmark.floatOffset || 0)) * 10;
+                const glowSize = 20 + pulse * 10;
+                
+                // Glowing aura
+                if (!landmark.discovered) {
+                    ctx.shadowColor = landmark.glowColor || '#FFD700';
+                    ctx.shadowBlur = glowSize;
+                    ctx.fillStyle = `rgba(255, 215, 0, ${0.3 + pulse * 0.2})`;
+                    ctx.beginPath();
+                    ctx.arc(landmark.x, landmark.y + floatY, landmark.radius + pulse * 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+                
+                // Landmark base
                 ctx.fillStyle = landmark.discovered ? '#666666' : '#FFD700';
                 ctx.beginPath();
-                ctx.arc(landmark.x, landmark.y, landmark.radius, 0, Math.PI * 2);
+                ctx.arc(landmark.x, landmark.y + floatY, landmark.radius, 0, Math.PI * 2);
                 ctx.fill();
-                ctx.fillText(landmark.emoji, landmark.x - 25, landmark.y + 18);
                 
+                // Landmark emoji
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(landmark.emoji, landmark.x - 30, landmark.y + floatY + 20);
+                
+                // Landmark name
                 if (!landmark.discovered) {
-                    ctx.font = 'bold 16px Arial';
-                    ctx.fillStyle = '#FFD700';
-                    ctx.strokeStyle = '#000000';
-                    ctx.lineWidth = 3;
-                    ctx.strokeText(landmark.name, landmark.x - 60, landmark.y - landmark.radius - 10);
-                    ctx.fillText(landmark.name, landmark.x - 60, landmark.y - landmark.radius - 10);
-                    ctx.font = '50px Arial';
-                }
-            }
-
-            // NPCs (only visible)
-            ctx.font = '40px Arial';
-            for (const npc of gameState.npcs) {
-                if (npc.x < minX || npc.x > maxX || npc.y < minY || npc.y > maxY) continue;
-                ctx.fillStyle = npc.interacted ? '#888888' : '#00FF00';
-                ctx.beginPath();
-                ctx.arc(npc.x, npc.y, npc.radius, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillText(npc.emoji, npc.x - 20, npc.y + 14);
-                
-                ctx.font = 'bold 14px Arial';
-                ctx.fillStyle = '#00FF00';
-                ctx.strokeStyle = '#000000';
-                ctx.lineWidth = 2;
-                ctx.strokeText(npc.name, npc.x - 40, npc.y - 40);
-                ctx.fillText(npc.name, npc.x - 40, npc.y - 40);
-                ctx.font = '40px Arial';
-            }
-
-            // Enemies
-            for (const enemy of gameState.enemies) {
-                if (enemy.isBoss) {
-                    // Boss
-                    ctx.fillStyle = '#FF0000';
-                    ctx.strokeStyle = '#FFD700';
-                    ctx.lineWidth = 4;
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
-                    
-                    ctx.font = '50px Arial';
-                    ctx.fillText(enemy.emoji, enemy.x - 25, enemy.y + 18);
-                    
                     ctx.font = 'bold 18px Arial';
                     ctx.fillStyle = '#FFD700';
                     ctx.strokeStyle = '#000000';
                     ctx.lineWidth = 3;
-                    ctx.strokeText(enemy.name, enemy.x - 70, enemy.y - 60);
-                    ctx.fillText(enemy.name, enemy.x - 70, enemy.y - 60);
-                    
-                    // HP bar
-                    const hpW = enemy.radius * 2;
-                    const hpH = 10;
-                    const hpP = enemy.hp / enemy.maxHp;
-                    ctx.fillStyle = '#000000';
-                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 15, hpW, hpH);
-                    ctx.fillStyle = '#FF0000';
-                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 15, hpW * hpP, hpH);
-                } else {
-                    // Regular enemy
-                    ctx.fillStyle = enemy.color;
-                    ctx.strokeStyle = '#FFFFFF';
-                    ctx.lineWidth = 2;
-                    ctx.beginPath();
-                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
-                    
-                    const enemyEmojis = ['👾', '👹', '👻', '💀', '🐉'];
-                    ctx.font = '25px Arial';
-                    ctx.fillStyle = '#FFFFFF';
-                    ctx.fillText(enemyEmojis[enemy.type], enemy.x - 12, enemy.y + 8);
-                    
-                    // HP bar
-                    const hpW = enemy.radius * 2;
-                    const hpH = 5;
-                    const hpP = enemy.hp / enemy.maxHp;
-                    ctx.fillStyle = '#000000';
-                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 8, hpW, hpH);
-                    ctx.fillStyle = '#FF0000';
-                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 8, hpW * hpP, hpH);
+                    ctx.strokeText(landmark.name, landmark.x - 80, landmark.y - landmark.radius - 20 + floatY);
+                    ctx.fillText(landmark.name, landmark.x - 80, landmark.y - landmark.radius - 20 + floatY);
+                    ctx.font = '60px Arial';
                 }
             }
 
-            // Player
+            // NPCs with idle animation
+            ctx.font = '45px Arial';
+            for (const npc of gameState.npcs) {
+                if (npc.x < minX || npc.x > maxX || npc.y < minY || npc.y > maxY) continue;
+                
+                // Idle bobbing animation
+                npc.idleTime = (npc.idleTime || 0) + 0.05;
+                const bob = Math.sin(npc.idleTime) * 3;
+                
+                // NPC circle
+                ctx.fillStyle = npc.interacted ? '#888888' : '#00FF00';
+                ctx.beginPath();
+                ctx.arc(npc.x, npc.y + bob, npc.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // NPC emoji
+                ctx.fillText(npc.emoji, npc.x - 22, npc.y + bob + 16);
+                
+                // NPC name
+                ctx.font = 'bold 16px Arial';
+                ctx.fillStyle = '#00FF00';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeText(npc.name, npc.x - 40, npc.y - 45 + bob);
+                ctx.fillText(npc.name, npc.x - 40, npc.y - 45 + bob);
+                ctx.font = '45px Arial';
+            }
+
+            // ENEMIES with bounce animation
+            ctx.font = '40px Arial';
+            for (const enemy of gameState.enemies) {
+                if (enemy.x < minX || enemy.x > maxX || enemy.y < minY || enemy.y > maxY) continue;
+                
+                // Bounce animation
+                enemy.bounceOffset = (enemy.bounceOffset || 0) + 0.1;
+                const bounce = Math.abs(Math.sin(enemy.bounceOffset)) * 5;
+                
+                if (enemy.isBoss) {
+                    // BOSS rendering with glow
+                    ctx.shadowColor = '#FF0000';
+                    ctx.shadowBlur = 25;
+                    ctx.fillStyle = '#FF0000';
+                    ctx.strokeStyle = '#FFD700';
+                    ctx.lineWidth = 6;
+                    ctx.beginPath();
+                    ctx.arc(enemy.x, enemy.y - bounce, enemy.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                    
+                    ctx.font = '60px Arial';
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillText(enemy.emoji, enemy.x - 30, enemy.y - bounce + 20);
+                    
+                    // Boss name
+                    ctx.font = 'bold 20px Arial';
+                    ctx.fillStyle = '#FFD700';
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(enemy.name, enemy.x - 80, enemy.y - 70 - bounce);
+                    ctx.fillText(enemy.name, enemy.x - 80, enemy.y - 70 - bounce);
+                    
+                    // HP bar
+                    const hpW = enemy.radius * 2.5;
+                    const hpH = 12;
+                    const hpP = enemy.hp / enemy.maxHp;
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(enemy.x - enemy.radius * 1.25, enemy.y - enemy.radius - 20 - bounce, hpW, hpH);
+                    ctx.fillStyle = '#FF0000';
+                    ctx.fillRect(enemy.x - enemy.radius * 1.25, enemy.y - enemy.radius - 20 - bounce, hpW * hpP, hpH);
+                } else {
+                    // Regular enemy
+                    ctx.fillStyle = '#FF0000';
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(enemy.x, enemy.y - bounce, enemy.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    ctx.font = '30px Arial';
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillText(enemy.emoji || '👾', enemy.x - 15, enemy.y - bounce + 10);
+                    
+                    // HP bar
+                    const hpW = enemy.radius * 2;
+                    const hpH = 6;
+                    const hpP = enemy.hp / enemy.maxHp;
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 10 - bounce, hpW, hpH);
+                    ctx.fillStyle = '#FF0000';
+                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 10 - bounce, hpW * hpP, hpH);
+                }
+            }
+
+            // PLAYER with glow
+            ctx.shadowColor = '#FFD700';
+            ctx.shadowBlur = 20;
             ctx.fillStyle = '#FFD700';
             ctx.strokeStyle = '#FFFFFF';
-            ctx.lineWidth = 4;
-            ctx.shadowColor = '#FFD700';
-            ctx.shadowBlur = 15;
+            ctx.lineWidth = 5;
             ctx.beginPath();
             ctx.arc(gameState.player.x, gameState.player.y, gameState.player.radius, 0, Math.PI * 2);
             ctx.fill();
