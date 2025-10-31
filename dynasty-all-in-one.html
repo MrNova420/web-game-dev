@@ -767,11 +767,17 @@
                 description: 'Perpetual twilight with corrupted landscape',
                 weather: ['fog', 'storm'],
                 creatures: [
-                    { name: 'Shadow Demon', emoji: '👿', hp: 350, attack: 40, exp: 90, gold: 60 },
-                    { name: 'Corrupted Beast', emoji: '🐺💀', hp: 300, attack: 35, exp: 75, gold: 45 },
-                    { name: 'Undead Knight', emoji: '☠️', hp: 400, attack: 45, exp: 110, gold: 70 },
-                    { name: 'Wraith', emoji: '👻', hp: 200, attack: 30, exp: 60, gold: 40 },
-                    { name: 'Bat Swarm', emoji: '🦇', hp: 150, attack: 25, exp: 50, gold: 30 }
+                    { name: 'Shadow Demon', emoji: '👿', hp: 350, attack: 40, exp: 90, gold: 60, type: 'demon', speed: 1.3 },
+                    { name: 'Corrupted Beast', emoji: '🐺💀', hp: 300, attack: 35, exp: 75, gold: 45, type: 'beast', speed: 1.4 },
+                    { name: 'Undead Knight', emoji: '☠️', hp: 400, attack: 45, exp: 110, gold: 70, type: 'undead', speed: 1.0 },
+                    { name: 'Wraith', emoji: '👻', hp: 200, attack: 30, exp: 60, gold: 40, type: 'spirit', speed: 1.5 },
+                    { name: 'Bat Swarm', emoji: '🦇', hp: 150, attack: 25, exp: 50, gold: 30, type: 'swarm', speed: 1.7 },
+                    // NEW: Added 5 more
+                    { name: 'Vampire Lord', emoji: '🧛', hp: 450, attack: 50, exp: 130, gold: 85, type: 'elite_vampire', speed: 1.4 },
+                    { name: 'Dark Cultist', emoji: '🧙‍♂️💀', hp: 280, attack: 42, exp: 95, gold: 65, type: 'caster', speed: 1.1 },
+                    { name: 'Ghoul', emoji: '🧟', hp: 320, attack: 38, exp: 85, gold: 55, type: 'undead_fast', speed: 1.3 },
+                    { name: 'Nightmare Horse', emoji: '🐴💀', hp: 380, attack: 44, exp: 100, gold: 70, type: 'mount', speed: 1.6 },
+                    { name: 'Banshee', emoji: '👻💀', hp: 250, attack: 48, exp: 120, gold: 80, type: 'screamer', speed: 1.5 }
                 ],
                 resources: [
                     { type: 'dark_crystal', emoji: '🔮', amount: 2, rarity: 'rare' },
@@ -800,11 +806,17 @@
                 weather: ['clear'],
                 floating: true,
                 creatures: [
-                    { name: 'Arcane Golem', emoji: '🗿', hp: 450, attack: 50, exp: 130, gold: 85 },
-                    { name: 'Spell Wraith', emoji: '👻', hp: 300, attack: 55, exp: 140, gold: 90 },
-                    { name: 'Crystal Dragon', emoji: '🐉💎', hp: 600, attack: 65, exp: 200, gold: 150 },
-                    { name: 'Mana Sprite', emoji: '✨', hp: 150, attack: 35, exp: 70, gold: 45 },
-                    { name: 'Arcane Elemental', emoji: '🔮', hp: 350, attack: 48, exp: 120, gold: 80 }
+                    { name: 'Arcane Golem', emoji: '🗿', hp: 450, attack: 50, exp: 130, gold: 85, type: 'golem', speed: 0.8 },
+                    { name: 'Spell Wraith', emoji: '👻', hp: 300, attack: 55, exp: 140, gold: 90, type: 'caster_spirit', speed: 1.4 },
+                    { name: 'Crystal Dragon', emoji: '🐉💎', hp: 600, attack: 65, exp: 200, gold: 150, type: 'dragon_elite', speed: 1.3 },
+                    { name: 'Mana Sprite', emoji: '✨', hp: 150, attack: 35, exp: 70, gold: 45, type: 'sprite', speed: 1.8 },
+                    { name: 'Arcane Elemental', emoji: '🔮', hp: 350, attack: 48, exp: 120, gold: 80, type: 'elemental', speed: 1.2 },
+                    // NEW: Added 5 more
+                    { name: 'Prism Guardian', emoji: '💎🗿', hp: 500, attack: 52, exp: 145, gold: 95, type: 'crystal_tank', speed: 0.7 },
+                    { name: 'Void Mage', emoji: '🌀🧙', hp: 320, attack: 60, exp: 155, gold: 100, type: 'void_caster', speed: 1.1 },
+                    { name: 'Lightning Wisp', emoji: '⚡✨', hp: 180, attack: 45, exp: 95, gold: 60, type: 'fast_shocker', speed: 2.0 },
+                    { name: 'Floating Eye', emoji: '👁️', hp: 250, attack: 58, exp: 150, gold: 95, type: 'observer', speed: 1.5 },
+                    { name: 'Arcane Construct', emoji: '🤖💎', hp: 480, attack: 54, exp: 160, gold: 110, type: 'construct', speed: 0.9 }
                 ],
                 resources: [
                     { type: 'mana_crystal', emoji: '💎', amount: 2, rarity: 'rare' },
@@ -832,11 +844,17 @@
                 description: 'Rolling hills with scattered villages',
                 weather: ['clear', 'rain'],
                 creatures: [
-                    { name: 'Centaur', emoji: '🏹', hp: 180, attack: 22, exp: 35, gold: 20 },
-                    { name: 'Griffin', emoji: '🦅', hp: 220, attack: 28, exp: 50, gold: 30 },
-                    { name: 'Wild Horse', emoji: '🐴', hp: 120, attack: 15, exp: 20, gold: 12 },
-                    { name: 'Cattle', emoji: '🐄', hp: 100, attack: 10, exp: 15, gold: 8 },
-                    { name: 'Bandit', emoji: '🗡️', hp: 150, attack: 20, exp: 30, gold: 25 }
+                    { name: 'Centaur', emoji: '🏹', hp: 180, attack: 22, exp: 35, gold: 20, type: 'archer', speed: 1.4 },
+                    { name: 'Griffin', emoji: '🦅', hp: 220, attack: 28, exp: 50, gold: 30, type: 'flying_elite', speed: 1.7 },
+                    { name: 'Wild Horse', emoji: '🐴', hp: 120, attack: 15, exp: 20, gold: 12, type: 'mount', speed: 1.8 },
+                    { name: 'Cattle', emoji: '🐄', hp: 100, attack: 10, exp: 15, gold: 8, type: 'peaceful', speed: 0.9 },
+                    { name: 'Bandit', emoji: '🗡️', hp: 150, attack: 20, exp: 30, gold: 25, type: 'human', speed: 1.2 },
+                    // NEW: Added 5 more
+                    { name: 'Plains Orc', emoji: '👹', hp: 200, attack: 26, exp: 45, gold: 28, type: 'warrior', speed: 1.1 },
+                    { name: 'Wind Rider', emoji: '💨🏇', hp: 180, attack: 24, exp: 40, gold: 24, type: 'mounted', speed: 1.9 },
+                    { name: 'Grass Elemental', emoji: '🌿', hp: 140, attack: 18, exp: 32, gold: 20, type: 'nature', speed: 1.3 },
+                    { name: 'Nomad Chief', emoji: '👑🏇', hp: 250, attack: 32, exp: 60, gold: 40, type: 'boss', speed: 1.6 },
+                    { name: 'Thunder Bird', emoji: '⚡🦅', hp: 280, attack: 35, exp: 70, gold: 50, type: 'legendary_bird', speed: 2.0 }
                 ],
                 resources: [
                     { type: 'wheat', emoji: '🌾', amount: 5, rarity: 'common' },
@@ -864,11 +882,17 @@
                 description: 'Endless snow and ice with ancient ruins',
                 weather: ['snow', 'storm'],
                 creatures: [
-                    { name: 'Frost Giant', emoji: '❄️👹', hp: 550, attack: 58, exp: 160, gold: 100 },
-                    { name: 'Ice Dragon', emoji: '🐉❄️', hp: 700, attack: 70, exp: 220, gold: 170 },
-                    { name: 'Yeti', emoji: '🦍', hp: 450, attack: 52, exp: 145, gold: 95 },
-                    { name: 'Polar Bear', emoji: '🐻‍❄️', hp: 350, attack: 45, exp: 110, gold: 70 },
-                    { name: 'Ice Elemental', emoji: '❄️', hp: 400, attack: 50, exp: 130, gold: 85 }
+                    { name: 'Frost Giant', emoji: '❄️👹', hp: 550, attack: 58, exp: 160, gold: 100, type: 'giant', speed: 0.9 },
+                    { name: 'Ice Dragon', emoji: '🐉❄️', hp: 700, attack: 70, exp: 220, gold: 170, type: 'dragon', speed: 1.3 },
+                    { name: 'Yeti', emoji: '🦍', hp: 450, attack: 52, exp: 145, gold: 95, type: 'beast', speed: 1.1 },
+                    { name: 'Polar Bear', emoji: '🐻‍❄️', hp: 350, attack: 45, exp: 110, gold: 70, type: 'predator', speed: 1.2 },
+                    { name: 'Ice Elemental', emoji: '❄️', hp: 400, attack: 50, exp: 130, gold: 85, type: 'elemental', speed: 1.0 },
+                    // NEW: Added 5 more
+                    { name: 'Frost Lich', emoji: '💀❄️', hp: 480, attack: 65, exp: 190, gold: 130, type: 'undead_caster', speed: 1.1 },
+                    { name: 'Snow Leopard', emoji: '🐆', hp: 380, attack: 55, exp: 155, gold: 100, type: 'fast_predator', speed: 1.7 },
+                    { name: 'Ice Golem', emoji: '🗿❄️', hp: 650, attack: 60, exp: 175, gold: 120, type: 'tank', speed: 0.7 },
+                    { name: 'Frost Wraith', emoji: '👻❄️', hp: 320, attack: 62, exp: 170, gold: 115, type: 'spirit', speed: 1.4 },
+                    { name: 'Blizzard Drake', emoji: '🐲❄️', hp: 580, attack: 68, exp: 200, gold: 150, type: 'drake', speed: 1.3 }
                 ],
                 resources: [
                     { type: 'ice_crystal', emoji: '❄️💎', amount: 2, rarity: 'rare' },
@@ -896,11 +920,17 @@
                 description: 'Vast desert with sandstorms and oases',
                 weather: ['clear', 'sandstorm'],
                 creatures: [
-                    { name: 'Sand Worm', emoji: '🪱', hp: 600, attack: 62, exp: 180, gold: 120 },
-                    { name: 'Scorpion', emoji: '🦂', hp: 400, attack: 55, exp: 150, gold: 95 },
-                    { name: 'Mummy', emoji: '🧟', hp: 500, attack: 58, exp: 165, gold: 110 },
-                    { name: 'Jackal', emoji: '🦊', hp: 300, attack: 45, exp: 120, gold: 75 },
-                    { name: 'Sand Elemental', emoji: '🌪️', hp: 450, attack: 52, exp: 140, gold: 90 }
+                    { name: 'Sand Worm', emoji: '🪱', hp: 600, attack: 62, exp: 180, gold: 120, type: 'worm', speed: 1.0 },
+                    { name: 'Scorpion', emoji: '🦂', hp: 400, attack: 55, exp: 150, gold: 95, type: 'poisoner', speed: 1.2 },
+                    { name: 'Mummy', emoji: '🧟', hp: 500, attack: 58, exp: 165, gold: 110, type: 'undead', speed: 0.9 },
+                    { name: 'Jackal', emoji: '🦊', hp: 300, attack: 45, exp: 120, gold: 75, type: 'scavenger', speed: 1.5 },
+                    { name: 'Sand Elemental', emoji: '🌪️', hp: 450, attack: 52, exp: 140, gold: 90, type: 'elemental', speed: 1.3 },
+                    // NEW: Added 5 more
+                    { name: 'Desert Sphinx', emoji: '🦁', hp: 650, attack: 70, exp: 210, gold: 150, type: 'guardian', speed: 1.1 },
+                    { name: 'Fire Snake', emoji: '🐍🔥', hp: 380, attack: 60, exp: 175, gold: 115, type: 'serpent', speed: 1.4 },
+                    { name: 'Anubis Warrior', emoji: '🐕', hp: 550, attack: 65, exp: 195, gold: 135, type: 'divine', speed: 1.2 },
+                    { name: 'Dust Devil', emoji: '🌪️💨', hp: 320, attack: 58, exp: 160, gold: 105, type: 'storm', speed: 1.8 },
+                    { name: 'Pharaoh Lich', emoji: '👑💀', hp: 700, attack: 75, exp: 230, gold: 170, type: 'boss_undead', speed: 1.0 }
                 ],
                 resources: [
                     { type: 'ancient_relic', emoji: '🏺', amount: 1, rarity: 'epic' },
