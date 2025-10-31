@@ -5815,7 +5815,7 @@
             };
             
             try {
-                localStorage.setItem('dynasty_of_emberveil_save', JSON.stringify(saveData));
+                localStorage.setItem('dynasty_emberveil_save', JSON.stringify(saveData));
                 console.log("Game saved successfully!");
                 createParticle(player.x, player.y - 40, "💾 Game Saved!", "#00FF00", 2000);
                 return true;
@@ -5827,7 +5827,7 @@
 
         function loadGameState() {
             try {
-                const saveDataStr = localStorage.getItem('dynasty_of_emberveil_save');
+                const saveDataStr = localStorage.getItem('dynasty_emberveil_save');
                 if (!saveDataStr) return false;
                 
                 const saveData = JSON.parse(saveDataStr);
