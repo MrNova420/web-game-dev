@@ -3988,13 +3988,75 @@
             // Get current biome for background
             const currentBiome = getCurrentBiome() || BIOMES[0];
             
-            // BEAUTIFUL GRADIENT SKY based on current biome
+            // ENHANCED GRADIENT SKY with time-of-day and weather
+            const timeOfDay = TIME_SYSTEM ? TIME_SYSTEM.timeOfDay : 12;
+            let skyTop, skyMid, skyBottom;
+            
+            if (timeOfDay >= 6 && timeOfDay < 8) {
+                // Dawn
+                skyTop = '#FF6B6B';
+                skyMid = '#FFA07A';
+                skyBottom = '#FFD700';
+            } else if (timeOfDay >= 8 && timeOfDay < 18) {
+                // Day - use biome color
+                skyTop = currentBiome.color;
+                skyMid = currentBiome.color;
+                skyBottom = '#87CEEB';
+            } else if (timeOfDay >= 18 && timeOfDay < 20) {
+                // Dusk
+                skyTop = '#4B0082';
+                skyMid = '#FF4500';
+                skyBottom = '#FFD700';
+            } else {
+                // Night
+                skyTop = '#000428';
+                skyMid = '#001f3f';
+                skyBottom = '#003366';
+            }
+            
+            // Apply weather effects to sky
+            const weather = gameState.weather ? gameState.weather.current : 'clear';
+            if (weather === 'rain' || weather === 'storm') {
+                skyTop = '#1a1a2e';
+                skyMid = '#2f3640';
+                skyBottom = '#4a5568';
+            } else if (weather === 'fog') {
+                skyTop = '#95a5a6';
+                skyMid = '#bdc3c7';
+                skyBottom = '#ecf0f1';
+            }
+            
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, currentBiome.color);
-            gradient.addColorStop(0.6, currentBiome.color);
-            gradient.addColorStop(1, '#1a1a2e'); // Dark horizon
+            gradient.addColorStop(0, skyTop);
+            gradient.addColorStop(0.5, skyMid);
+            gradient.addColorStop(1, skyBottom);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add stars at night
+            if (timeOfDay < 6 || timeOfDay >= 20) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                for (let i = 0; i < 100; i++) {
+                    const starX = (i * 73) % canvas.width;
+                    const starY = (i * 59) % (canvas.height * 0.6);
+                    const twinkle = Math.sin(Date.now() * 0.001 + i) * 0.5 + 0.5;
+                    ctx.globalAlpha = twinkle;
+                    ctx.fillRect(starX, starY, 2, 2);
+                }
+                ctx.globalAlpha = 1;
+            }
+            
+            // Add clouds during day
+            if (timeOfDay >= 6 && timeOfDay < 20 && weather !== 'storm') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.font = '60px Arial';
+                const cloudTime = Date.now() * 0.00005;
+                for (let i = 0; i < 5; i++) {
+                    const cloudX = ((i * 300 + cloudTime * 1000) % (canvas.width + 200)) - 100;
+                    const cloudY = (i * 80) % (canvas.height * 0.4);
+                    ctx.fillText('☁️', cloudX, cloudY);
+                }
+            }
 
             // === WORLD SPACE RENDERING ===
             ctx.save();
@@ -4054,15 +4116,34 @@
                 }
             }
 
-            // GROUND VEGETATION with animation
+            // ENHANCED GROUND VEGETATION with biome-specific details
             ctx.font = '24px Arial';
             const vegTime = Date.now() * 0.001;
+            const currentBiomeVeg = {
+                0: ['🌱', '🌿', '☘️', '🍀', '🌸', '🦋'], // Mystic Forest
+                1: ['🪨', '⛰️', '🌲', '🔥'], // Crimson Peaks
+                2: ['🌊', '🐚', '🦀', '🐟'], // Azure Depths
+                3: ['💀', '🌑', '🦇', '🕷️'], // Shadowmoon
+                4: ['💎', '✨', '🔮', '⚡'], // Crystal Peaks
+                5: ['🌾', '🌻', '🦋', '🐝'], // Verdant Plains
+                6: ['❄️', '⛄', '🌨️', '❅'], // Frozen Wastes
+                7: ['🏜️', '🦂', '🌵', '☀️'], // Desert
+                8: ['🐸', '🍄', '🌿', '🦎'], // Marshlands
+                9: ['☁️', '⚡', '🦅', '✨'], // Celestial
+                10: ['🌋', '🔥', '💀', '🪨'], // Volcanic
+                11: ['🌀', '💫', '👁️', '🔮']  // Void Rift
+            };
+            
+            const biomeId = currentBiome.id || 0;
+            const vegetation = currentBiomeVeg[biomeId] || ['🌱', '🌿'];
+            
             for (let x = startX; x < endX; x += 150) {
                 for (let y = startY; y < endY; y += 150) {
-                    const vegetation = ['🌱', '🌿', '☘️', '🍀'][Math.floor((x + y) / 100) % 4];
+                    const vegIndex = Math.floor((x + y) / 100) % vegetation.length;
+                    const veg = vegetation[vegIndex];
                     const sway = Math.sin(vegTime + x * 0.01 + y * 0.01) * 2;
-                    ctx.globalAlpha = 0.4;
-                    ctx.fillText(vegetation, x + ((x + y) % 50) + sway, y + ((x * y) % 50));
+                    ctx.globalAlpha = 0.5;
+                    ctx.fillText(veg, x + ((x + y) % 50) + sway, y + ((x * y) % 50));
                 }
             }
             ctx.globalAlpha = 1;
