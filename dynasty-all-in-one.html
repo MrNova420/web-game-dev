@@ -690,11 +690,17 @@
                 description: 'Towering mountains with volcanic activity',
                 weather: ['clear', 'storm'],
                 creatures: [
-                    { name: 'Mountain Troll', emoji: '👹', hp: 200, attack: 25, exp: 40, gold: 25 },
-                    { name: 'Fire Elemental', emoji: '🔥', hp: 150, attack: 30, exp: 50, gold: 30 },
-                    { name: 'Young Dragon', emoji: '🐉', hp: 300, attack: 40, exp: 100, gold: 80 },
-                    { name: 'Mountain Goat', emoji: '🐐', hp: 60, attack: 10, exp: 12, gold: 5 },
-                    { name: 'Eagle', emoji: '🦅', hp: 80, attack: 15, exp: 20, gold: 10 }
+                    { name: 'Mountain Troll', emoji: '👹', hp: 200, attack: 25, exp: 40, gold: 25, type: 'tank', speed: 0.9 },
+                    { name: 'Fire Elemental', emoji: '🔥', hp: 150, attack: 30, exp: 50, gold: 30, type: 'mage', speed: 1.2 },
+                    { name: 'Young Dragon', emoji: '🐉', hp: 300, attack: 40, exp: 100, gold: 80, type: 'elite', speed: 1.4 },
+                    { name: 'Mountain Goat', emoji: '🐐', hp: 60, attack: 10, exp: 12, gold: 5, type: 'peaceful', speed: 1.0 },
+                    { name: 'Eagle', emoji: '🦅', hp: 80, attack: 15, exp: 20, gold: 10, type: 'flying', speed: 1.8 },
+                    // NEW: Added 5 more enemy types
+                    { name: 'Frost Giant', emoji: '❄️👹', hp: 250, attack: 28, exp: 45, gold: 28, type: 'bruiser', speed: 0.8 },
+                    { name: 'Lava Lizard', emoji: '🦎🔥', hp: 180, attack: 26, exp: 38, gold: 22, type: 'fast', speed: 1.3 },
+                    { name: 'Stone Sentinel', emoji: '🗿', hp: 280, attack: 24, exp: 48, gold: 30, type: 'defender', speed: 0.7 },
+                    { name: 'Magma Elemental', emoji: '🌋', hp: 160, attack: 32, exp: 52, gold: 32, type: 'exploder', speed: 1.0 },
+                    { name: 'Wyvern', emoji: '🐲', hp: 220, attack: 35, exp: 70, gold: 50, type: 'flying_elite', speed: 1.6 }
                 ],
                 resources: [
                     { type: 'iron', emoji: '⛏️', amount: 3, rarity: 'uncommon' },
@@ -723,11 +729,17 @@
                 weather: ['clear'],
                 underwater: true,
                 creatures: [
-                    { name: 'Merfolk Warrior', emoji: '🧜', hp: 250, attack: 28, exp: 60, gold: 35 },
-                    { name: 'Sea Serpent', emoji: '🐍', hp: 400, attack: 35, exp: 80, gold: 50 },
-                    { name: 'Kraken Spawn', emoji: '🦑', hp: 500, attack: 45, exp: 120, gold: 80 },
-                    { name: 'Fish', emoji: '🐟', hp: 30, attack: 5, exp: 8, gold: 3 },
-                    { name: 'Crab', emoji: '🦀', hp: 100, attack: 15, exp: 25, gold: 12 }
+                    { name: 'Merfolk Warrior', emoji: '🧜', hp: 250, attack: 28, exp: 60, gold: 35, type: 'warrior', speed: 1.2 },
+                    { name: 'Sea Serpent', emoji: '🐍', hp: 400, attack: 35, exp: 80, gold: 50, type: 'serpent', speed: 1.4 },
+                    { name: 'Kraken Spawn', emoji: '🦑', hp: 500, attack: 45, exp: 120, gold: 80, type: 'elite', speed: 1.1 },
+                    { name: 'Fish', emoji: '🐟', hp: 30, attack: 5, exp: 8, gold: 3, type: 'critter', speed: 1.5 },
+                    { name: 'Crab', emoji: '🦀', hp: 100, attack: 15, exp: 25, gold: 12, type: 'armored', speed: 0.8 },
+                    // NEW: Added 5 more enemy types
+                    { name: 'Electric Eel', emoji: '⚡🐍', hp: 180, attack: 30, exp: 55, gold: 30, type: 'shocker', speed: 1.6 },
+                    { name: 'Shark', emoji: '🦈', hp: 320, attack: 38, exp: 75, gold: 45, type: 'predator', speed: 1.8 },
+                    { name: 'Jellyfish', emoji: '🪼', hp: 140, attack: 24, exp: 45, gold: 25, type: 'poisoner', speed: 0.9 },
+                    { name: 'Sea Witch', emoji: '🧙‍♀️🌊', hp: 220, attack: 42, exp: 90, gold: 60, type: 'caster', speed: 1.3 },
+                    { name: 'Leviathan Hatchling', emoji: '🐋', hp: 450, attack: 40, exp: 110, gold: 75, type: 'boss_spawn', speed: 1.0 }
                 ],
                 resources: [
                     { type: 'pearls', emoji: '🦪', amount: 1, rarity: 'rare' },
