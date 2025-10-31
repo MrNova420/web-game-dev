@@ -4,6 +4,8 @@
  */
 
 import * as THREE from 'three';
+import { logger } from './Logger.js';
+import { SystemManager } from './SystemManager.js';
 import { Player } from '../entities/Player.js';
 import { CompanionManager } from '../systems/CompanionManager.js';
 import { DungeonGenerator } from '../worlds/DungeonGenerator.js';
@@ -367,7 +369,7 @@ export class GameEngine {
             animatePointLight();
         }
         
-        console.log('✅ Scene and renderer ready');
+        logger.info('✅ Scene and renderer ready');
         
         // Initialize essential systems only
         try {
@@ -388,10 +390,18 @@ export class GameEngine {
             this.tutorialSystem = new TutorialSystem(this);
             
             // ========================================
+            // COMPREHENSIVE SYSTEM MANAGER
+            // Manages ALL 270+ game systems automatically
+            // ========================================
+            logger.info('🎮 Initializing SystemManager for ALL systems...');
+            this.systemManager = new SystemManager(this);
+            await this.systemManager.initializeAllSystems();
+            
+            // ========================================
             // Phase 7-9: COMPLETE GAME INTEGRATION
             // Initialize ALL new systems for full gameplay
             // ========================================
-            console.log('🎮 Initializing Complete Game Integration...');
+            logger.info('🎮 Initializing Complete Game Integration...');
             
             // Initialize Complete Game Integration (this connects everything)
             this.completeGameIntegration = new CompleteGameIntegration(
@@ -1309,6 +1319,14 @@ export class GameEngine {
         
         if (this.deviceOptimizationSystem) {
             this.deviceOptimizationSystem.update(delta);
+        }
+        
+        // ========================================
+        // UPDATE ALL SYSTEMS via SystemManager
+        // This updates ALL 270+ systems that have update() methods
+        // ========================================
+        if (this.systemManager) {
+            this.systemManager.updateAll(delta);
         }
         
         // Update camera to follow player

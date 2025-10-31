@@ -348,7 +348,7 @@ export class PlayerHousingSystem {
             if (furniture.data.feature === featureType) {
                 switch (featureType) {
                     case 'training':
-                        return this.useTra iningDummy();
+                        return this.useTrainingDummy();
                     case 'meditation':
                         return this.useMeditation();
                     case 'gardening':

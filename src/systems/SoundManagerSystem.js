@@ -421,7 +421,7 @@ export class SoundManagerSystem {
     getStats() {
         return {
             ...this.stats,
-            activeS sounds: this.activeSounds.size,
+            activeSounds: this.activeSounds.size,
             cacheHitRate: this.stats.cacheHits / (this.stats.cacheHits + this.stats.cacheMisses)
         };
     }
