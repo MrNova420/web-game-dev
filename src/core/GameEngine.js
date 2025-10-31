@@ -1274,6 +1274,43 @@ export class GameEngine {
             this.progressTrackingSystem.update(delta);
         }
         
+        // Update NEW Survival & Immersive Gameplay Systems
+        if (this.cannabisMagicSystem) {
+            this.cannabisMagicSystem.update(delta);
+        }
+        
+        if (this.survivalSystem) {
+            this.survivalSystem.update(delta);
+        }
+        
+        if (this.buildingSystem) {
+            this.buildingSystem.update(delta);
+        }
+        
+        if (this.farmingSystem) {
+            this.farmingSystem.update(delta);
+        }
+        
+        if (this.seductiveBossSystem) {
+            this.seductiveBossSystem.update(delta);
+        }
+        
+        if (this.enemyCampSystem) {
+            this.enemyCampSystem.update(delta);
+        }
+        
+        if (this.worldPopulationSystem) {
+            this.worldPopulationSystem.update(delta);
+        }
+        
+        if (this.cityVillageSystem) {
+            this.cityVillageSystem.update(delta);
+        }
+        
+        if (this.deviceOptimizationSystem) {
+            this.deviceOptimizationSystem.update(delta);
+        }
+        
         // Update camera to follow player
         if (this.player && this.player.mesh) {
             const targetPosition = this.player.mesh.position.clone();
