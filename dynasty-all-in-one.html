@@ -2155,49 +2155,69 @@
         }
 
         function render() {
-            // Clear with biome color
+            // Clear with gradient sky
             const biome = BIOMES[gameState.currentBiomeIndex];
-            ctx.fillStyle = biome.color;
+            
+            // Beautiful gradient background (sky to horizon)
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, biome.color);
+            gradient.addColorStop(0.6, biome.color);
+            gradient.addColorStop(1, '#1a1a2e');
+            ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Save and translate for camera
+            // Save and translate for camera (isometric view)
             ctx.save();
-            ctx.translate(canvas.width / 2 - gameState.camera.x, canvas.height / 2 - gameState.camera.y);
+            
+            // Isometric camera with tilt for 3D feel
+            const camOffsetX = canvas.width / 2 - gameState.camera.x;
+            const camOffsetY = canvas.height / 2 - gameState.camera.y * 0.8; // Tilt for depth
+            ctx.translate(camOffsetX, camOffsetY);
+            
+            // Add slight rotation for isometric view
+            ctx.scale(1, 0.9); // Vertical compression for 3D effect
 
-            // === WORLD SPACE RENDERING ===
+            // === WORLD SPACE RENDERING with DEPTH ===
             
             // Calculate visible area
-            const viewPadding = 500;
+            const viewPadding = 800;
             const minX = gameState.camera.x - canvas.width / 2 - viewPadding;
             const maxX = gameState.camera.x + canvas.width / 2 + viewPadding;
             const minY = gameState.camera.y - canvas.height / 2 - viewPadding;
             const maxY = gameState.camera.y + canvas.height / 2 + viewPadding;
             
-            // Grid (only visible area)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            ctx.lineWidth = 1;
+            // TERRAIN - Diamond pattern for 3D ground
+            ctx.strokeStyle = 'rgba(100, 255, 100, 0.15)';
+            ctx.lineWidth = 2;
             const gridSize = 200;
             const startX = Math.floor(minX / gridSize) * gridSize;
             const endX = Math.ceil(maxX / gridSize) * gridSize;
             const startY = Math.floor(minY / gridSize) * gridSize;
             const endY = Math.ceil(maxY / gridSize) * gridSize;
             
+            // Diamond grid for isometric feel
             for (let x = startX; x <= endX; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, startY);
-                ctx.lineTo(x, endY);
-                ctx.stroke();
-            }
-            for (let y = startY; y <= endY; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(startX, y);
-                ctx.lineTo(endX, y);
-                ctx.stroke();
+                for (let y = startY; y <= endY; y += gridSize) {
+                    // Shadow under grid
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+                    ctx.fillRect(x + 2, y + 2, gridSize - 4, gridSize - 4);
+                    
+                    // Grid tile with depth
+                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+                    ctx.strokeRect(x, y, gridSize, gridSize);
+                }
             }
 
-            // Biome decorations (only visible)
-            ctx.font = '60px Arial';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+            // GROUND VEGETATION - Add grass/plants
+            ctx.font = '24px Arial';
+            for (let x = startX; x < endX; x += 150) {
+                for (let y = startY; y < endY; y += 150) {
+                    const vegetation = ['🌱', '🌿', '☘️', '🍀'][Math.floor((x + y) / 100) % 4];
+                    ctx.globalAlpha = 0.4;
+                    ctx.fillText(vegetation, x + ((x + y) % 50), y + ((x * y) % 50));
+                }
+            }
+            ctx.globalAlpha = 1;
             for (let x = startX; x < endX; x += 500) {
                 for (let y = startY; y < endY; y += 500) {
                     ctx.fillText(biome.emoji, x, y);
