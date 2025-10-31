@@ -775,6 +775,345 @@
         ];
 
         // ========================================
+        // PHASE 1: ENHANCED 3D GRAPHICS SYSTEM
+        // ========================================
+
+        // 3D RENDERING SYSTEM
+        const RENDERING_3D = {
+            enabled: true,
+            perspective: 0.6, // Perspective strength (0-1)
+            elevation: {
+                min: -100,
+                max: 200,
+                default: 0
+            },
+            shadows: {
+                enabled: true,
+                color: 'rgba(0, 0, 0, 0.3)',
+                offsetX: 5,
+                offsetY: 5,
+                blur: 10
+            },
+            lighting: {
+                ambient: 0.4, // Ambient light level
+                sunAngle: 45, // Sun angle in degrees
+                sunIntensity: 1.0,
+                nightIntensity: 0.3
+            }
+        };
+
+        // PARTICLE EFFECTS LIBRARY
+        const PARTICLE_EFFECTS = {
+            explosion: {
+                count: 20,
+                speed: 5,
+                life: 60,
+                colors: ['#ff6600', '#ff3300', '#ffcc00', '#ff9900'],
+                size: 8
+            },
+            magic: {
+                count: 15,
+                speed: 3,
+                life: 80,
+                colors: ['#9900ff', '#cc00ff', '#ff00ff', '#ff99ff'],
+                size: 6
+            },
+            heal: {
+                count: 10,
+                speed: 2,
+                life: 100,
+                colors: ['#00ff00', '#99ff99', '#ccffcc'],
+                size: 5
+            },
+            critical: {
+                count: 8,
+                speed: 4,
+                life: 40,
+                colors: ['#ff0000', '#ff3333', '#ff6666'],
+                size: 10
+            },
+            levelUp: {
+                count: 30,
+                speed: 3,
+                life: 120,
+                colors: ['#ffd700', '#ffee00', '#ffaa00'],
+                size: 7
+            },
+            ice: {
+                count: 12,
+                speed: 2,
+                life: 90,
+                colors: ['#00ffff', '#66ffff', '#99ffff', '#ccffff'],
+                size: 6
+            },
+            fire: {
+                count: 18,
+                speed: 4,
+                life: 70,
+                colors: ['#ff4500', '#ff6347', '#ffa500', '#ff8c00'],
+                size: 7
+            },
+            lightning: {
+                count: 6,
+                speed: 8,
+                life: 30,
+                colors: ['#ffffff', '#ffff00', '#00ffff'],
+                size: 12
+            },
+            poison: {
+                count: 10,
+                speed: 1,
+                life: 150,
+                colors: ['#00ff00', '#33cc33', '#66ff66'],
+                size: 5
+            },
+            dark: {
+                count: 15,
+                speed: 2,
+                life: 100,
+                colors: ['#000000', '#333333', '#666666', '#9900cc'],
+                size: 8
+            }
+        };
+
+        // WEATHER SYSTEM
+        const WEATHER_TYPES = {
+            clear: {
+                name: 'Clear',
+                icon: '☀️',
+                visibility: 1.0,
+                particleCount: 0
+            },
+            rain: {
+                name: 'Rain',
+                icon: '🌧️',
+                visibility: 0.7,
+                particleCount: 150,
+                particleColor: '#4488ff',
+                particleSpeed: 8
+            },
+            storm: {
+                name: 'Storm',
+                icon: '⛈️',
+                visibility: 0.5,
+                particleCount: 200,
+                particleColor: '#3366dd',
+                particleSpeed: 12,
+                lightning: true
+            },
+            snow: {
+                name: 'Snow',
+                icon: '❄️',
+                visibility: 0.6,
+                particleCount: 100,
+                particleColor: '#ffffff',
+                particleSpeed: 3
+            },
+            fog: {
+                name: 'Fog',
+                icon: '🌫️',
+                visibility: 0.4,
+                particleCount: 0,
+                fogDensity: 0.7
+            },
+            sandstorm: {
+                name: 'Sandstorm',
+                icon: '🌪️',
+                visibility: 0.3,
+                particleCount: 180,
+                particleColor: '#d4a574',
+                particleSpeed: 10
+            }
+        };
+
+        // VISUAL EFFECTS SYSTEM
+        const VISUAL_EFFECTS = {
+            screenShake: {
+                active: false,
+                intensity: 0,
+                duration: 0,
+                decay: 0.9
+            },
+            flash: {
+                active: false,
+                color: '#ffffff',
+                alpha: 0,
+                fadeSpeed: 0.05
+            },
+            transition: {
+                active: false,
+                type: 'fade', // fade, wipe, circle
+                progress: 0,
+                speed: 0.02
+            },
+            chromatic: {
+                enabled: false,
+                intensity: 0
+            }
+        };
+
+        // FOG OF WAR SYSTEM
+        const FOG_OF_WAR = {
+            enabled: true,
+            viewDistance: 800, // How far player can see
+            fogColor: 'rgba(0, 0, 0, 0.8)',
+            revealed: new Map(), // Stores revealed areas
+            updateInterval: 10 // Frames between updates
+        };
+
+        // LIGHTING SYSTEM
+        const LIGHT_SOURCES = [];
+
+        class Light {
+            constructor(x, y, radius, color, intensity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.intensity = intensity;
+                this.flickerSpeed = Math.random() * 0.1 + 0.05;
+                this.flickerAmount = Math.random() * 0.2 + 0.1;
+                this.time = 0;
+            }
+
+            update() {
+                this.time += this.flickerSpeed;
+                // Flicker effect
+                this.currentIntensity = this.intensity + 
+                    Math.sin(this.time) * this.flickerAmount;
+            }
+
+            render(ctx) {
+                ctx.save();
+                const gradient = ctx.createRadialGradient(
+                    this.x, this.y, 0,
+                    this.x, this.y, this.radius
+                );
+                
+                gradient.addColorStop(0, this.color.replace(')', `, ${this.currentIntensity})`).replace('rgb', 'rgba'));
+                gradient.addColorStop(1, this.color.replace(')', ', 0)').replace('rgb', 'rgba'));
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(
+                    this.x - this.radius,
+                    this.y - this.radius,
+                    this.radius * 2,
+                    this.radius * 2
+                );
+                ctx.restore();
+            }
+        }
+
+        // DEPTH SORTING SYSTEM
+        function sortByDepth(entities) {
+            return entities.sort((a, b) => {
+                const aDepth = (a.y || 0) + (a.z || 0);
+                const bDepth = (b.y || 0) + (b.z || 0);
+                return aDepth - bDepth;
+            });
+        }
+
+        // 3D PROJECTION HELPERS
+        function project3D(x, y, z) {
+            // Simple isometric projection
+            const scale = 1 + (z / 1000) * RENDERING_3D.perspective;
+            return {
+                x: x * scale,
+                y: y * scale - z * 0.5,
+                scale: scale
+            };
+        }
+
+        function renderWithHeight(ctx, entity) {
+            if (!entity.z) entity.z = RENDERING_3D.elevation.default;
+            
+            const projected = project3D(entity.x, entity.y, entity.z);
+            
+            // Draw shadow
+            if (RENDERING_3D.shadows.enabled && entity.z > 0) {
+                ctx.save();
+                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = RENDERING_3D.shadows.color;
+                ctx.filter = `blur(${RENDERING_3D.shadows.blur}px)`;
+                ctx.beginPath();
+                ctx.arc(
+                    entity.x + RENDERING_3D.shadows.offsetX,
+                    entity.y + RENDERING_3D.shadows.offsetY,
+                    (entity.radius || 20) * 0.8,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.fill();
+                ctx.restore();
+            }
+            
+            return projected;
+        }
+
+        // ADVANCED PARTICLE SYSTEM
+        class AdvancedParticle {
+            constructor(x, y, z, config) {
+                this.x = x;
+                this.y = y;
+                this.z = z || 0;
+                this.vx = (Math.random() - 0.5) * config.speed;
+                this.vy = (Math.random() - 0.5) * config.speed;
+                this.vz = Math.random() * config.speed * 0.5;
+                this.life = config.life;
+                this.maxLife = config.life;
+                this.color = config.colors[Math.floor(Math.random() * config.colors.length)];
+                this.size = config.size;
+                this.gravity = 0.1;
+                this.friction = 0.98;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.z += this.vz;
+                this.vz -= this.gravity;
+                this.vx *= this.friction;
+                this.vy *= this.friction;
+                this.life--;
+                
+                if (this.z < 0) {
+                    this.z = 0;
+                    this.vz = -this.vz * 0.5;
+                }
+            }
+
+            render(ctx) {
+                const alpha = this.life / this.maxLife;
+                const projected = project3D(this.x, this.y, this.z);
+                
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(projected.x, projected.y, this.size * projected.scale, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            isDead() {
+                return this.life <= 0;
+            }
+        }
+
+        // Create particle effect
+        function createParticleEffect(x, y, effectType) {
+            const config = PARTICLE_EFFECTS[effectType];
+            if (!config) return;
+            
+            for (let i = 0; i < config.count; i++) {
+                gameState.advancedParticles = gameState.advancedParticles || [];
+                gameState.advancedParticles.push(
+                    new AdvancedParticle(x, y, 0, config)
+                );
+            }
+        }
+
+        // ========================================
         // GAME STATE
         // ========================================
 
@@ -856,6 +1195,21 @@
             time: {
                 day: 1,
                 hour: 6 // Start at 6 AM
+            },
+            // PHASE 1: 3D Graphics enhancements
+            advancedParticles: [],
+            lights: [],
+            weather: {
+                current: 'clear',
+                changeTimer: 0,
+                particles: []
+            },
+            visualEffects: {
+                screenShake: { ...VISUAL_EFFECTS.screenShake },
+                flash: { ...VISUAL_EFFECTS.flash }
+            },
+            rendering: {
+                fogOfWar: { ...FOG_OF_WAR }
             }
         };
 
