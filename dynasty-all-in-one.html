@@ -3843,10 +3843,10 @@
                     if (enemyType === 'fast' || enemyType === 'flying') {
                         aggroRange = 600;
                         attackRange = 40;
-                    } else if (enemyType === 'tank' || enemyType === 'golem') {
+                    } else if (enemyType === 'tank' || enemyType === 'golem' || enemyType === 'defender') {
                         aggroRange = 300;
                         attackRange = 45;
-                    } else if (enemyType === 'ranged' || enemyType === 'caster') {
+                    } else if (enemyType === 'ranged' || enemyType === 'caster' || enemyType === 'mage') {
                         aggroRange = 500;
                         attackRange = 150; // Stay at range
                     } else if (enemyType === 'elite' || enemyType.includes('boss')) {
@@ -3854,37 +3854,69 @@
                         attackRange = 50;
                     }
 
-                    // Better AI: Chase if close, wander if far
+                    // IMPROVED AI: Smarter behavior
                     if (dist < aggroRange) {
+                        // Spotted player - engage
+                        enemy.isAggro = true;
+                        enemy.lastAggroTime = Date.now();
+                        
                         // Chase player (or kite for ranged)
-                        if (enemyType === 'ranged' || enemyType === 'caster') {
-                            // Ranged enemies keep distance
+                        if (enemyType === 'ranged' || enemyType === 'caster' || enemyType === 'mage') {
+                            // Ranged enemies maintain distance + circle strafe
                             if (dist < attackRange - 50) {
                                 // Too close, back away
-                                enemy.x -= (dx / dist) * enemy.speed * 0.8;
-                                enemy.y -= (dy / dist) * enemy.speed * 0.8;
+                                enemy.x -= (dx / dist) * enemy.speed * 0.9;
+                                enemy.y -= (dy / dist) * enemy.speed * 0.9;
                             } else if (dist > attackRange + 50) {
                                 // Too far, move closer
                                 enemy.x += (dx / dist) * enemy.speed * 0.5;
                                 enemy.y += (dy / dist) * enemy.speed * 0.5;
+                            } else {
+                                // Perfect range: strafe sideways
+                                const strafeAngle = Math.atan2(dy, dx) + Math.PI / 2;
+                                enemy.x += Math.cos(strafeAngle) * enemy.speed * 0.4;
+                                enemy.y += Math.sin(strafeAngle) * enemy.speed * 0.4;
                             }
-                            // Otherwise stay at perfect range
                         } else {
-                            // Melee enemies chase directly
-                            const speedMod = enemyType === 'fast' ? 1.2 : enemyType === 'tank' ? 0.8 : 1.0;
-                            enemy.x += (dx / dist) * enemy.speed * speedMod;
-                            enemy.y += (dy / dist) * enemy.speed * speedMod;
+                            // Melee chase with zigzag (less predictable)
+                            const speedMod = enemyType === 'fast' ? 1.2 : enemyType === 'tank' ? 0.8 : enemyType === 'elite' ? 1.1 : 1.0;
+                            const zigzag = Math.sin(Date.now() / 500) * 0.08;
+                            const angle = Math.atan2(dy, dx) + zigzag;
+                            enemy.x += Math.cos(angle) * enemy.speed * speedMod;
+                            enemy.y += Math.sin(angle) * enemy.speed * speedMod;
                         }
+                    } else if (enemy.isAggro && Date.now() - enemy.lastAggroTime < 5000) {
+                        // Lost sight - search nearby area
+                        if (!enemy.searchTimer) {
+                            enemy.searchTimer = 120;
+                            enemy.searchAngle = Math.atan2(dy, dx) + (Math.random() - 0.5);
+                        }
+                        enemy.searchTimer--;
+                        enemy.x += Math.cos(enemy.searchAngle) * enemy.speed * 0.6;
+                        enemy.y += Math.sin(enemy.searchAngle) * enemy.speed * 0.6;
+                        
+                        if (enemy.searchTimer <= 0) enemy.isAggro = false;
                     } else {
-                        // Wander around
+                        // Natural wandering with pauses
+                        enemy.isAggro = false;
+                        
                         if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
                             enemy.wanderAngle = Math.random() * Math.PI * 2;
                             enemy.wanderTimer = 60 + Math.random() * 120;
+                            // Sometimes pause (30% chance)
+                            enemy.isPaused = Math.random() < 0.3;
+                            enemy.pauseDuration = enemy.isPaused ? Math.floor(30 + Math.random() * 60) : 0;
                         }
                         enemy.wanderTimer--;
                         
-                        enemy.x += Math.cos(enemy.wanderAngle) * enemy.speed * 0.3;
-                        enemy.y += Math.sin(enemy.wanderAngle) * enemy.speed * 0.3;
+                        // Idle or wander
+                        if (enemy.isPaused && enemy.pauseDuration > 0) {
+                            enemy.pauseDuration--;
+                        } else {
+                            enemy.isPaused = false;
+                            enemy.x += Math.cos(enemy.wanderAngle) * enemy.speed * 0.3;
+                            enemy.y += Math.sin(enemy.wanderAngle) * enemy.speed * 0.3;
+                        }
                         
                         // Keep in world bounds
                         enemy.x = Math.max(50, Math.min(gameState.worldSize - 50, enemy.x));
