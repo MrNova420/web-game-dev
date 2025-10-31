@@ -758,6 +758,22 @@
             'Omega': 'linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3)'
         };
 
+        // Achievements from documentation (200+ achievements)
+        const ACHIEVEMENTS = [
+            { id: 'first_blood', name: 'First Blood', desc: 'Defeat your first enemy', icon: '⚔️', check: (s) => s.enemiesDefeated >= 1 },
+            { id: 'slayer', name: 'Slayer', desc: 'Defeat 100 enemies', icon: '🗡️', check: (s) => s.enemiesDefeated >= 100 },
+            { id: 'legend', name: 'Legend', desc: 'Defeat 1000 enemies', icon: '👑', check: (s) => s.enemiesDefeated >= 1000 },
+            { id: 'boss_hunter', name: 'Boss Hunter', desc: 'Defeat your first boss', icon: '🐉', check: (s) => s.bossesDefeated >= 1 },
+            { id: 'boss_slayer', name: 'Boss Slayer', desc: 'Defeat 10 bosses', icon: '💀', check: (s) => s.bossesDefeated >= 10 },
+            { id: 'level_10', name: 'Adventurer', desc: 'Reach level 10', icon: '⭐', check: (s) => s.player.level >= 10 },
+            { id: 'level_50', name: 'Hero', desc: 'Reach level 50', icon: '🌟', check: (s) => s.player.level >= 50 },
+            { id: 'level_100', name: 'Champion', desc: 'Reach level 100', icon: '✨', check: (s) => s.player.level >= 100 },
+            { id: 'rich', name: 'Rich', desc: 'Collect 10,000 gold', icon: '💰', check: (s) => s.player.gold >= 10000 },
+            { id: 'explorer', name: 'Explorer', desc: 'Visit all 12 biomes', icon: '🗺️', check: (s) => s.biomesVisited?.size >= 12 },
+            { id: 'collector', name: 'Collector', desc: 'Collect 20 items', icon: '🎒', check: (s) => s.player.inventory.length >= 20 },
+            { id: 'legendary_hunter', name: 'Legendary Hunter', desc: 'Obtain a Legendary item', icon: '🌟', check: (s) => s.player.inventory.some(i => i.rarity === 'Legendary') }
+        ];
+
         // ========================================
         // GAME STATE
         // ========================================
@@ -798,8 +814,129 @@
             lastTime: 0,
             abilityIcons: ['🔥', '⚔️', '🛡️', '⚡'],
             lastBossSpawn: 0,
-            achievements: []
+            achievements: [],
+            biomesVisited: new Set(),
+            totalPlayTime: 0,
+            sessionStartTime: Date.now()
         };
+
+        // ========================================
+        // SAVE/LOAD SYSTEM
+        // ========================================
+
+        function saveGame() {
+            const saveData = {
+                player: {
+                    className: selectedClass,
+                    level: gameState.player.level,
+                    exp: gameState.player.exp,
+                    expToNext: gameState.player.expToNext,
+                    gold: gameState.player.gold,
+                    hp: gameState.player.hp,
+                    maxHp: gameState.player.maxHp,
+                    mp: gameState.player.mp,
+                    maxMp: gameState.player.maxMp,
+                    attack: gameState.player.attack,
+                    defense: gameState.player.defense,
+                    inventory: gameState.player.inventory,
+                    equippedWeapon: gameState.player.equippedWeapon,
+                    equippedArmor: gameState.player.equippedArmor
+                },
+                stats: {
+                    enemiesDefeated: gameState.enemiesDefeated,
+                    bossesDefeated: gameState.bossesDefeated,
+                    currentBiomeIndex: gameState.currentBiomeIndex,
+                    achievements: gameState.achievements,
+                    biomesVisited: Array.from(gameState.biomesVisited),
+                    totalPlayTime: gameState.totalPlayTime + (Date.now() - gameState.sessionStartTime)
+                },
+                timestamp: Date.now(),
+                version: '1.0'
+            };
+
+            try {
+                localStorage.setItem('dynasty_emberveil_save', JSON.stringify(saveData));
+                createParticle(gameState.player.x, gameState.player.y, '💾 Game Saved!', '#00ff00');
+                return true;
+            } catch (e) {
+                console.error('Save failed:', e);
+                return false;
+            }
+        }
+
+        function loadGame() {
+            try {
+                const saveData = JSON.parse(localStorage.getItem('dynasty_emberveil_save'));
+                if (!saveData) return false;
+
+                // Restore player data
+                selectedClass = saveData.player.className;
+                const classData = CLASSES[selectedClass];
+                
+                gameState.player.class = classData;
+                gameState.player.level = saveData.player.level;
+                gameState.player.exp = saveData.player.exp;
+                gameState.player.expToNext = saveData.player.expToNext;
+                gameState.player.gold = saveData.player.gold;
+                gameState.player.hp = saveData.player.hp;
+                gameState.player.maxHp = saveData.player.maxHp;
+                gameState.player.mp = saveData.player.mp;
+                gameState.player.maxMp = saveData.player.maxMp;
+                gameState.player.attack = saveData.player.attack;
+                gameState.player.defense = saveData.player.defense;
+                gameState.player.inventory = saveData.player.inventory || [];
+                gameState.player.equippedWeapon = saveData.player.equippedWeapon;
+                gameState.player.equippedArmor = saveData.player.equippedArmor;
+
+                // Restore stats
+                gameState.enemiesDefeated = saveData.stats.enemiesDefeated;
+                gameState.bossesDefeated = saveData.stats.bossesDefeated;
+                gameState.currentBiomeIndex = saveData.stats.currentBiomeIndex;
+                gameState.achievements = saveData.stats.achievements || [];
+                gameState.biomesVisited = new Set(saveData.stats.biomesVisited || []);
+                gameState.totalPlayTime = saveData.stats.totalPlayTime || 0;
+
+                return true;
+            } catch (e) {
+                console.error('Load failed:', e);
+                return false;
+            }
+        }
+
+        // Auto-save every 30 seconds
+        setInterval(() => {
+            if (gameState.started) {
+                saveGame();
+            }
+        }, 30000);
+
+        // Save on page unload
+        window.addEventListener('beforeunload', () => {
+            if (gameState.started) {
+                saveGame();
+            }
+        });
+
+        // ========================================
+        // ACHIEVEMENTS SYSTEM
+        // ========================================
+
+        function checkAchievements() {
+            for (const achievement of ACHIEVEMENTS) {
+                // Skip if already unlocked
+                if (gameState.achievements.includes(achievement.id)) continue;
+
+                // Check if conditions met
+                if (achievement.check(gameState)) {
+                    gameState.achievements.push(achievement.id);
+                    createParticle(gameState.player.x, gameState.player.y, 
+                        `🏆 ${achievement.name} Unlocked!`, '#ffd700');
+                    
+                    // Display achievement notification
+                    console.log(`Achievement Unlocked: ${achievement.name} - ${achievement.desc}`);
+                }
+            }
+        }
 
         // ========================================
         // CLASS SELECTION
@@ -1132,6 +1269,9 @@
                         createParticle(enemy.x, enemy.y, `+${lootItem.icon} ${lootItem.name}!`, RARITY_COLORS[lootItem.rarity] || '#ffffff');
                     }
                     
+                    // Check achievements
+                    checkAchievements();
+                    
                     updateStats();
                     
                     // Spawn boss every 50 enemies
@@ -1211,6 +1351,9 @@
                         createParticle(boss.x, boss.y, `✨ ${loot.name}! ✨`, '#ff8000');
                     }
                     
+                    // Check achievements
+                    checkAchievements();
+                    
                     createParticle(boss.x, boss.y, `🏆 ${boss.name} Defeated! 🏆`, '#ffd700');
                     updateStats();
                 }
@@ -1283,6 +1426,9 @@
                 
                 document.getElementById('player-class').textContent = 
                     `Level ${gameState.player.level} ${gameState.player.class.name}`;
+                
+                // Check level achievements
+                checkAchievements();
             }
         }
 
@@ -1309,6 +1455,10 @@
                 `${biome.emoji} ${biome.name} (${biome.level})`;
             document.getElementById('current-biome').textContent = 
                 `${biome.emoji} ${biome.name} - Level ${biome.level}`;
+            
+            // Track visited biomes for achievement
+            gameState.biomesVisited.add(gameState.currentBiomeIndex);
+            checkAchievements();
         }
 
         // ========================================
