@@ -1,19 +1,19 @@
 # Dynasty All-in-One HTML - Complete Development Tracking
 
 **Last Updated**: October 31, 2025  
-**Version**: 2.0.0  
-**Status**: ✅ **PRODUCTION READY** - Priorities 1 & 2 Complete
+**Version**: 2.1.0  
+**Status**: ✅ **PRODUCTION READY** - Priorities 1 & 2 Complete + P5 Progress
 
 ---
 
 ## 📊 PROJECT STATISTICS
 
 ### File Metrics (Updated)
-- **Total Lines**: 7,797
-- **File Size**: 388 KB
-- **Functions**: 145+
-- **Systems**: 18 major systems
-- **Target**: 20,000-50,000 lines (39% progress)
+- **Total Lines**: 7,846
+- **File Size**: 383 KB
+- **Functions**: 148+
+- **Systems**: 19 major systems (added Combat VFX)
+- **Target**: 20,000-50,000 lines (39.2% progress)
 
 ### Game Content
 | Content Type | Count |
@@ -47,7 +47,6 @@
   - Per combo: +3% (was +2%)
   - Crit multiplier: 2.5x (was 2.0x)
   - Max chance: 45% at 10 combo
-  
 - **Enemy Scaling**:
   - Defense stat added to all enemies
   - HP scales with player level

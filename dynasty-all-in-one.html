@@ -4998,14 +4998,14 @@
         });
 
         // Craft an item
-        function craftItem(profession, recipe Name) {
-            const profession = CRAFTING_PROFESSIONS[profession];
-            if (!profession) return false;
+        function craftItem(professionName, recipeName) {
+            const professionData = CRAFTING_PROFESSIONS[professionName];
+            if (!professionData) return false;
             
-            const recipe = profession.recipes.find(r => r.name === recipeName);
+            const recipe = professionData.recipes.find(r => r.name === recipeName);
             if (!recipe) return false;
             
-            const skill = craftingSkills[profession];
+            const skill = craftingSkills[professionName];
             if (skill.level < recipe.level) return false;
             
             // Check materials
