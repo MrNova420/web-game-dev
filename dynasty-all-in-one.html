@@ -5583,6 +5583,762 @@
         });
 
         // ========================================
+        // PHASE 18: SOCIAL & GUILD SYSTEMS
+        // ========================================
+
+        // Guild System
+        const guilds = [];
+        let playerGuild = null;
+
+        const GUILD_RANKS = {
+            LEADER: { name: 'Guild Leader', permissions: ['all'] },
+            OFFICER: { name: 'Officer', permissions: ['invite', 'promote_member', 'kick_member', 'bank'] },
+            MEMBER: { name: 'Member', permissions: ['bank'] },
+            RECRUIT: { name: 'Recruit', permissions: [] }
+        };
+
+        class Guild {
+            constructor(name, emblem, motto, founder) {
+                this.id = Date.now() + Math.random();
+                this.name = name;
+                this.emblem = emblem;
+                this.motto = motto;
+                this.level = 1;
+                this.exp = 0;
+                this.members = [{
+                    name: founder,
+                    rank: 'LEADER',
+                    joinDate: Date.now(),
+                    contribution: 0
+                }];
+                this.bank = { gold: 0, items: [] };
+                this.achievements = [];
+                this.quests = [];
+            }
+
+            addMember(playerName) {
+                this.members.push({
+                    name: playerName,
+                    rank: 'RECRUIT',
+                    joinDate: Date.now(),
+                    contribution: 0
+                });
+            }
+
+            promoteMember(playerName) {
+                const member = this.members.find(m => m.name === playerName);
+                if (!member) return;
+                
+                if (member.rank === 'RECRUIT') member.rank = 'MEMBER';
+                else if (member.rank === 'MEMBER') member.rank = 'OFFICER';
+            }
+
+            demoteMember(playerName) {
+                const member = this.members.find(m => m.name === playerName);
+                if (!member || member.rank === 'LEADER') return;
+                
+                if (member.rank === 'OFFICER') member.rank = 'MEMBER';
+                else if (member.rank === 'MEMBER') member.rank = 'RECRUIT';
+            }
+
+            removeMember(playerName) {
+                const index = this.members.findIndex(m => m.name === playerName);
+                if (index !== -1 && this.members[index].rank !== 'LEADER') {
+                    this.members.splice(index, 1);
+                }
+            }
+
+            depositToBank(gold, items) {
+                this.bank.gold += gold;
+                if (items) this.bank.items.push(...items);
+            }
+
+            gainExp(amount) {
+                this.exp += amount;
+                const expNeeded = this.level * 10000;
+                if (this.exp >= expNeeded) {
+                    this.exp -= expNeeded;
+                    this.level++;
+                    this.unlockGuildPerk();
+                }
+            }
+
+            unlockGuildPerk() {
+                const perks = [
+                    { level: 2, name: 'Increased Bank Size', effect: 'bankSize', value: 50 },
+                    { level: 3, name: 'Guild XP Bonus', effect: 'expBonus', value: 0.05 },
+                    { level: 5, name: 'Guild Mount', effect: 'mount', value: 'guild_mount' },
+                    { level: 10, name: 'Guild Hall', effect: 'hall', value: true }
+                ];
+                
+                const perk = perks.find(p => p.level === this.level);
+                if (perk) {
+                    createParticle(player.x, player.y - 50, `Guild Perk: ${perk.name}!`, "#FFD700", 3000);
+                }
+            }
+        }
+
+        function createGuild(name, emblem, motto) {
+            if (playerGuild) return { success: false, message: 'Already in a guild' };
+            if (player.gold < 10000) return { success: false, message: 'Need 10,000 gold' };
+            
+            player.gold -= 10000;
+            const guild = new Guild(name, emblem, motto, 'Player');
+            guilds.push(guild);
+            playerGuild = guild;
+            
+            return { success: true, message: 'Guild created!', guild };
+        }
+
+        // Party System
+        let currentParty = null;
+
+        class Party {
+            constructor(leader) {
+                this.id = Date.now();
+                this.leader = leader;
+                this.members = [leader];
+                this.maxSize = 5;
+                this.lootMode = 'free_for_all'; // or 'round_robin', 'master_loot'
+                this.expShare = true;
+            }
+
+            addMember(playerName) {
+                if (this.members.length >= this.maxSize) return false;
+                if (this.members.includes(playerName)) return false;
+                
+                this.members.push(playerName);
+                return true;
+            }
+
+            removeMember(playerName) {
+                const index = this.members.indexOf(playerName);
+                if (index !== -1) {
+                    this.members.splice(index, 1);
+                    if (this.members.length === 0) {
+                        currentParty = null;
+                    } else if (playerName === this.leader && this.members.length > 0) {
+                        this.leader = this.members[0];
+                    }
+                }
+            }
+
+            shareExp(amount) {
+                if (!this.expShare || this.members.length === 0) return amount;
+                return Math.floor(amount * 1.1 / this.members.length); // 10% bonus for party
+            }
+        }
+
+        function createParty() {
+            if (currentParty) return { success: false, message: 'Already in a party' };
+            currentParty = new Party('Player');
+            return { success: true, party: currentParty };
+        }
+
+        function inviteToParty(playerName) {
+            if (!currentParty) return { success: false, message: 'Not in a party' };
+            if (currentParty.leader !== 'Player') return { success: false, message: 'Not party leader' };
+            
+            const added = currentParty.addMember(playerName);
+            return added ? { success: true } : { success: false, message: 'Could not add member' };
+        }
+
+        function leaveParty() {
+            if (!currentParty) return;
+            currentParty.removeMember('Player');
+            if (currentParty.members.length === 0) currentParty = null;
+        }
+
+        // Chat System
+        const chatChannels = {
+            global: [],
+            local: [],
+            guild: [],
+            party: [],
+            whisper: []
+        };
+
+        const MAX_CHAT_HISTORY = 100;
+
+        function sendChatMessage(channel, message, target = null) {
+            const chatMessage = {
+                timestamp: Date.now(),
+                sender: 'Player',
+                message: message,
+                target: target
+            };
+
+            if (chatChannels[channel]) {
+                chatChannels[channel].push(chatMessage);
+                if (chatChannels[channel].length > MAX_CHAT_HISTORY) {
+                    chatChannels[channel].shift();
+                }
+            }
+
+            return chatMessage;
+        }
+
+        function getChatHistory(channel, limit = 50) {
+            if (!chatChannels[channel]) return [];
+            return chatChannels[channel].slice(-limit);
+        }
+
+        // Friend System
+        const friendsList = [];
+        const friendRequests = [];
+
+        class Friend {
+            constructor(name, status = 'offline') {
+                this.name = name;
+                this.status = status;
+                this.lastOnline = Date.now();
+                this.note = '';
+            }
+        }
+
+        function addFriend(playerName) {
+            if (friendsList.find(f => f.name === playerName)) {
+                return { success: false, message: 'Already friends' };
+            }
+            
+            friendRequests.push({
+                from: 'Player',
+                to: playerName,
+                timestamp: Date.now()
+            });
+            
+            return { success: true, message: 'Friend request sent' };
+        }
+
+        function acceptFriendRequest(playerName) {
+            const requestIndex = friendRequests.findIndex(r => r.from === playerName && r.to === 'Player');
+            if (requestIndex === -1) return { success: false };
+            
+            friendRequests.splice(requestIndex, 1);
+            friendsList.push(new Friend(playerName, 'online'));
+            
+            return { success: true };
+        }
+
+        function removeFriend(playerName) {
+            const index = friendsList.findIndex(f => f.name === playerName);
+            if (index !== -1) {
+                friendsList.splice(index, 1);
+                return { success: true };
+            }
+            return { success: false };
+        }
+
+        // Player Profile System
+        const playerProfile = {
+            title: '',
+            bio: '',
+            achievementPoints: 0,
+            totalPlayTime: 0,
+            statistics: {
+                enemiesDefeated: 0,
+                bossesDefeated: 0,
+                questsCompleted: 0,
+                dungeonsCleared: 0,
+                crafted: 0,
+                gathered: 0
+            },
+            collections: {
+                mounts: [],
+                pets: [],
+                titles: [],
+                achievements: []
+            }
+        };
+
+        function updatePlayerProfile() {
+            playerProfile.achievementPoints = achievements.filter(a => a.unlocked).length * 10;
+            playerProfile.statistics.enemiesDefeated = gameState.enemiesDefeated;
+            playerProfile.statistics.bossesDefeated = gameState.bossesDefeated;
+            playerProfile.statistics.questsCompleted = completedQuests.length;
+            playerProfile.collections.titles = player.titles || [];
+            playerProfile.collections.achievements = achievements.filter(a => a.unlocked).map(a => a.name);
+        }
+
+        // ========================================
+        // PHASE 19: MINI-GAMES
+        // ========================================
+
+        // Card Game (Gwent-style)
+        const cardGame = {
+            deck: [],
+            hand: [],
+            board: { player: [], opponent: [] },
+            score: { player: 0, opponent: 0 },
+            round: 1
+        };
+
+        const CARD_TYPES = [
+            { id: 1, name: 'Warrior', power: 5, ability: 'none', rarity: 'common' },
+            { id: 2, name: 'Mage', power: 7, ability: 'burn', rarity: 'rare' },
+            { id: 3, name: 'Rogue', power: 4, ability: 'stealth', rarity: 'common' },
+            { id: 4, name: 'Dragon', power: 15, ability: 'breath', rarity: 'legendary' },
+            { id: 5, name: 'Healer', power: 3, ability: 'heal', rarity: 'uncommon' }
+        ];
+
+        function initializeCardGame() {
+            // Build deck
+            cardGame.deck = [];
+            for (let i = 0; i < 25; i++) {
+                const card = CARD_TYPES[Math.floor(Math.random() * CARD_TYPES.length)];
+                cardGame.deck.push({...card, uid: Date.now() + i});
+            }
+            
+            // Draw starting hand
+            cardGame.hand = [];
+            for (let i = 0; i < 5; i++) {
+                if (cardGame.deck.length > 0) {
+                    cardGame.hand.push(cardGame.deck.pop());
+                }
+            }
+            
+            cardGame.round = 1;
+            cardGame.score = { player: 0, opponent: 0 };
+        }
+
+        function playCard(cardIndex) {
+            if (cardIndex < 0 || cardIndex >= cardGame.hand.length) return;
+            
+            const card = cardGame.hand.splice(cardIndex, 1)[0];
+            cardGame.board.player.push(card);
+            calculateCardScore();
+            
+            // AI opponent plays card
+            opponentPlayCard();
+        }
+
+        function opponentPlayCard() {
+            // Simple AI: play random card
+            if (cardGame.deck.length > 0) {
+                const card = cardGame.deck[Math.floor(Math.random() * cardGame.deck.length)];
+                cardGame.board.opponent.push(card);
+                calculateCardScore();
+            }
+        }
+
+        function calculateCardScore() {
+            cardGame.score.player = cardGame.board.player.reduce((sum, card) => sum + card.power, 0);
+            cardGame.score.opponent = cardGame.board.opponent.reduce((sum, card) => sum + card.power, 0);
+        }
+
+        function endCardRound() {
+            if (cardGame.score.player > cardGame.score.opponent) {
+                createParticle(player.x, player.y - 50, "Round Won! +100 Gold", "#FFD700", 2000);
+                player.gold += 100;
+            }
+            
+            cardGame.round++;
+            cardGame.board = { player: [], opponent: [] };
+            
+            if (cardGame.round > 3) {
+                // Game over
+                const playerWins = 3; // Track wins per round
+                if (playerWins >= 2) {
+                    gainExp(500);
+                    player.gold += 500;
+                }
+            }
+        }
+
+        // Fishing Mini-game
+        const fishingGame = {
+            active: false,
+            fish: null,
+            tension: 0,
+            catching: false,
+            timer: 0
+        };
+
+        const FISH_TYPES = [
+            { name: 'Minnow', rarity: 'common', value: 5, difficulty: 1 },
+            { name: 'Trout', rarity: 'uncommon', value: 15, difficulty: 2 },
+            { name: 'Salmon', rarity: 'rare', value: 50, difficulty: 3 },
+            { name: 'Golden Koi', rarity: 'epic', value: 200, difficulty: 5 },
+            { name: 'Leviathan', rarity: 'legendary', value: 1000, difficulty: 10 }
+        ];
+
+        function startFishing() {
+            if (fishingGame.active) return;
+            
+            fishingGame.active = true;
+            fishingGame.tension = 0;
+            fishingGame.catching = false;
+            fishingGame.timer = 3000 + Math.random() * 5000; // 3-8 seconds
+            
+            setTimeout(() => {
+                if (fishingGame.active) {
+                    fishingGame.fish = FISH_TYPES[Math.floor(Math.random() * FISH_TYPES.length)];
+                    fishingGame.catching = true;
+                    createParticle(player.x, player.y - 40, "🎣 Fish hooked!", "#4FC3F7", 1000);
+                }
+            }, fishingGame.timer);
+        }
+
+        function reelFish() {
+            if (!fishingGame.catching || !fishingGame.fish) return;
+            
+            const success = Math.random() > (fishingGame.fish.difficulty * 0.1);
+            
+            if (success) {
+                const fish = fishingGame.fish;
+                player.gold += fish.value;
+                createParticle(player.x, player.y - 50, `Caught ${fish.name}! +${fish.value} gold`, 
+                    RARITY_COLORS[fish.rarity], 2000);
+                
+                // Add to inventory
+                addItemToInventory({ type: 'fish', ...fish });
+            } else {
+                createParticle(player.x, player.y - 40, "Fish got away...", "#FF5252", 1500);
+            }
+            
+            fishingGame.active = false;
+            fishingGame.catching = false;
+            fishingGame.fish = null;
+        }
+
+        // Racing Mini-game
+        const racingGame = {
+            active: false,
+            position: 0,
+            opponents: [],
+            track: [],
+            speed: 0,
+            boost: 100
+        };
+
+        function initializeRacing() {
+            racingGame.position = 0;
+            racingGame.speed = 5;
+            racingGame.boost = 100;
+            racingGame.track = [];
+            
+            // Generate track
+            for (let i = 0; i < 100; i++) {
+                racingGame.track.push({
+                    x: i * 100,
+                    obstacles: Math.random() > 0.7 ? 1 : 0,
+                    powerup: Math.random() > 0.9 ? 'boost' : null
+                });
+            }
+            
+            // Generate opponents
+            racingGame.opponents = [
+                { name: 'Racer 1', position: 0, speed: 4.5 },
+                { name: 'Racer 2', position: 0, speed: 5.5 },
+                { name: 'Racer 3', position: 0, speed: 5.2 }
+            ];
+            
+            racingGame.active = true;
+        }
+
+        function updateRacing(delta) {
+            if (!racingGame.active) return;
+            
+            racingGame.position += racingGame.speed * (delta / 1000);
+            
+            // Update opponents
+            for (const opponent of racingGame.opponents) {
+                opponent.position += opponent.speed * (delta / 1000);
+            }
+            
+            // Check finish line
+            if (racingGame.position >= 100) {
+                const playerPlace = 1 + racingGame.opponents.filter(o => o.position > racingGame.position).length;
+                
+                let reward = 0;
+                if (playerPlace === 1) reward = 500;
+                else if (playerPlace === 2) reward = 250;
+                else if (playerPlace === 3) reward = 100;
+                
+                if (reward > 0) {
+                    player.gold += reward;
+                    gainExp(reward);
+                    createParticle(player.x, player.y - 50, `${playerPlace}st Place! +${reward} gold`, "#FFD700", 2000);
+                }
+                
+                racingGame.active = false;
+            }
+        }
+
+        function useRacingBoost() {
+            if (racingGame.boost > 0) {
+                racingGame.speed *= 1.5;
+                racingGame.boost -= 10;
+                
+                setTimeout(() => {
+                    racingGame.speed /= 1.5;
+                }, 2000);
+            }
+        }
+
+        // Puzzle Mini-game
+        const puzzleGame = {
+            active: false,
+            board: [],
+            size: 4,
+            moves: 0,
+            solved: false
+        };
+
+        function initializePuzzle(size = 4) {
+            puzzleGame.size = size;
+            puzzleGame.moves = 0;
+            puzzleGame.solved = false;
+            puzzleGame.board = [];
+            
+            // Create solved board
+            for (let i = 0; i < size * size - 1; i++) {
+                puzzleGame.board.push(i + 1);
+            }
+            puzzleGame.board.push(0); // Empty space
+            
+            // Shuffle
+            for (let i = 0; i < 100; i++) {
+                const validMoves = getValidPuzzleMoves();
+                if (validMoves.length > 0) {
+                    const move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                    movePuzzleTile(move);
+                }
+            }
+            
+            puzzleGame.moves = 0;
+            puzzleGame.active = true;
+        }
+
+        function getValidPuzzleMoves() {
+            const emptyIndex = puzzleGame.board.indexOf(0);
+            const row = Math.floor(emptyIndex / puzzleGame.size);
+            const col = emptyIndex % puzzleGame.size;
+            const moves = [];
+            
+            if (row > 0) moves.push(emptyIndex - puzzleGame.size); // Up
+            if (row < puzzleGame.size - 1) moves.push(emptyIndex + puzzleGame.size); // Down
+            if (col > 0) moves.push(emptyIndex - 1); // Left
+            if (col < puzzleGame.size - 1) moves.push(emptyIndex + 1); // Right
+            
+            return moves;
+        }
+
+        function movePuzzleTile(tileIndex) {
+            const emptyIndex = puzzleGame.board.indexOf(0);
+            const validMoves = getValidPuzzleMoves();
+            
+            if (validMoves.includes(tileIndex)) {
+                [puzzleGame.board[emptyIndex], puzzleGame.board[tileIndex]] = 
+                [puzzleGame.board[tileIndex], puzzleGame.board[emptyIndex]];
+                puzzleGame.moves++;
+                
+                checkPuzzleSolved();
+            }
+        }
+
+        function checkPuzzleSolved() {
+            for (let i = 0; i < puzzleGame.board.length - 1; i++) {
+                if (puzzleGame.board[i] !== i + 1) return false;
+            }
+            
+            puzzleGame.solved = true;
+            const reward = Math.max(500 - puzzleGame.moves * 10, 100);
+            player.gold += reward;
+            gainExp(reward);
+            createParticle(player.x, player.y - 50, `Puzzle Solved in ${puzzleGame.moves} moves! +${reward} gold`, "#FFD700", 2000);
+            
+            return true;
+        }
+
+        // ========================================
+        // PHASE 20: HOUSING SYSTEM
+        // ========================================
+
+        const playerHouses = [];
+        let currentHouse = null;
+
+        const HOUSE_SIZES = {
+            small: { cost: 10000, slots: 20, size: { width: 400, height: 300 } },
+            medium: { cost: 50000, slots: 50, size: { width: 600, height: 450 } },
+            large: { cost: 100000, slots: 100, size: { width: 800, height: 600 } },
+            mansion: { cost: 500000, slots: 200, size: { width: 1200, height: 900 } }
+        };
+
+        class House {
+            constructor(size, location) {
+                this.id = Date.now() + Math.random();
+                this.size = size;
+                this.location = location;
+                this.furniture = [];
+                this.decorations = [];
+                this.storage = [];
+                this.visitors = [];
+                this.permissions = 'private'; // or 'friends', 'guild', 'public'
+            }
+
+            placeFurniture(furnitureItem, x, y) {
+                if (this.furniture.length >= HOUSE_SIZES[this.size].slots) {
+                    return { success: false, message: 'House is full' };
+                }
+                
+                this.furniture.push({
+                    item: furnitureItem,
+                    x: x,
+                    y: y,
+                    rotation: 0
+                });
+                
+                return { success: true };
+            }
+
+            removeFurniture(index) {
+                if (index >= 0 && index < this.furniture.length) {
+                    const furniture = this.furniture.splice(index, 1)[0];
+                    return { success: true, item: furniture.item };
+                }
+                return { success: false };
+            }
+
+            addToStorage(items) {
+                this.storage.push(...items);
+            }
+
+            inviteVisitor(playerName) {
+                if (this.permissions === 'private') {
+                    if (!this.visitors.includes(playerName)) {
+                        this.visitors.push(playerName);
+                    }
+                }
+            }
+        }
+
+        const FURNITURE_TYPES = [
+            { id: 1, name: 'Wooden Chair', cost: 50, type: 'seating', icon: '🪑' },
+            { id: 2, name: 'Oak Table', cost: 100, type: 'table', icon: '🗿' },
+            { id: 3, name: 'Bed', cost: 200, type: 'bed', icon: '🛏️' },
+            { id: 4, name: 'Bookshelf', cost: 150, type: 'storage', icon: '📚' },
+            { id: 5, name: 'Fireplace', cost: 500, type: 'decoration', icon: '🔥' },
+            { id: 6, name: 'Chandelier', cost: 300, type: 'lighting', icon: '💡' },
+            { id: 7, name: 'Rug', cost: 80, type: 'floor', icon: '🟫' },
+            { id: 8, name: 'Painting', cost: 250, type: 'wall', icon: '🖼️' },
+            { id: 9, name: 'Plant Pot', cost: 75, type: 'decoration', icon: '🪴' },
+            { id: 10, name: 'Trophy Case', cost: 400, type: 'storage', icon: '🏆' }
+        ];
+
+        function purchaseHouse(size, location) {
+            const houseData = HOUSE_SIZES[size];
+            if (!houseData) return { success: false, message: 'Invalid house size' };
+            if (player.gold < houseData.cost) return { success: false, message: 'Not enough gold' };
+            
+            player.gold -= houseData.cost;
+            const house = new House(size, location);
+            playerHouses.push(house);
+            currentHouse = house;
+            
+            return { success: true, message: `Purchased ${size} house!`, house };
+        }
+
+        function purchaseFurniture(furnitureId) {
+            const furniture = FURNITURE_TYPES.find(f => f.id === furnitureId);
+            if (!furniture) return { success: false };
+            if (player.gold < furniture.cost) return { success: false, message: 'Not enough gold' };
+            
+            player.gold -= furniture.cost;
+            addItemToInventory({ type: 'furniture', ...furniture });
+            
+            return { success: true, furniture };
+        }
+
+        function enterHouse(houseId) {
+            const house = playerHouses.find(h => h.id === houseId);
+            if (!house) return { success: false };
+            
+            currentHouse = house;
+            // Transition to house interior view
+            gameState.inHouse = true;
+            
+            return { success: true, house };
+        }
+
+        function exitHouse() {
+            gameState.inHouse = false;
+            currentHouse = null;
+        }
+
+        // Farm System (part of Housing)
+        const farmPlots = [];
+
+        const CROP_TYPES = [
+            { id: 1, name: 'Wheat', growTime: 300000, value: 50, icon: '🌾' }, // 5 min
+            { id: 2, name: 'Corn', growTime: 600000, value: 100, icon: '🌽' }, // 10 min
+            { id: 3, name: 'Tomato', growTime: 900000, value: 150, icon: '🍅' }, // 15 min
+            { id: 4, name: 'Magic Herb', growTime: 1800000, value: 500, icon: '🌿' }, // 30 min
+            { id: 5, name: 'Dragon Fruit', growTime: 3600000, value: 1000, icon: '🐉' } // 1 hour
+        ];
+
+        class FarmPlot {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.crop = null;
+                this.plantedAt = null;
+                this.quality = 'normal'; // or 'high', 'perfect'
+            }
+
+            plantSeed(cropType) {
+                if (this.crop) return { success: false, message: 'Plot already planted' };
+                
+                this.crop = cropType;
+                this.plantedAt = Date.now();
+                
+                return { success: true };
+            }
+
+            harvest() {
+                if (!this.crop) return { success: false, message: 'Nothing to harvest' };
+                
+                const crop = CROP_TYPES.find(c => c.id === this.crop);
+                const growTime = Date.now() - this.plantedAt;
+                
+                if (growTime < crop.growTime) {
+                    return { success: false, message: 'Not ready yet' };
+                }
+                
+                // Calculate quality and yield
+                let yield_amount = 1;
+                if (growTime > crop.growTime * 1.5) yield_amount = 3; // Perfect timing
+                else if (growTime > crop.growTime * 1.2) yield_amount = 2;
+                
+                const totalValue = crop.value * yield_amount;
+                player.gold += totalValue;
+                
+                this.crop = null;
+                this.plantedAt = null;
+                
+                return { success: true, crop: crop.name, amount: yield_amount, value: totalValue };
+            }
+
+            getGrowthProgress() {
+                if (!this.crop || !this.plantedAt) return 0;
+                
+                const crop = CROP_TYPES.find(c => c.id === this.crop);
+                const elapsed = Date.now() - this.plantedAt;
+                
+                return Math.min(elapsed / crop.growTime, 1);
+            }
+        }
+
+        function createFarmPlot(x, y) {
+            if (farmPlots.length >= 20) return { success: false, message: 'Max plots reached' };
+            
+            const plot = new FarmPlot(x, y);
+            farmPlots.push(plot);
+            
+            return { success: true, plot };
+        }
+
+        // ========================================
         // INITIALIZE
         // ========================================
 
