@@ -23,6 +23,8 @@ import { CrimsonPeaksBiome } from './CrimsonPeaksBiome.js';
 import { AzureDepthsBiome } from './AzureDepthsBiome.js';
 import { ShadowmoonValleyBiome } from './ShadowmoonValleyBiome.js';
 import { CrystalPeaksBiome } from './CrystalPeaksBiome.js';
+import { VerdantPlainsBiome } from './VerdantPlainsBiome.js';
+import { FrozenWastesBiome } from './FrozenWastesBiome.js';
 
 export class MassiveOpenWorld {
     constructor(scene, modelLoader) {
@@ -673,6 +675,34 @@ export class MassiveOpenWorld {
             await crystalPeaks.build();
             this.loadedBiomes.set('crystal_peaks', crystalPeaks);
             console.log(`   ✅ Crystal Peaks loaded at (${crystalData.pos[0]}, ${crystalData.pos[1]})\n`);
+        }
+        
+        // Build Verdant Plains (Grassland Zone)
+        console.log('\n🌾 Building Verdant Plains Biome...');
+        const verdantData = this.biomeGrid.find(b => b.id === 'verdant_plains');
+        if (verdantData) {
+            const verdantPlains = new VerdantPlainsBiome(this.scene, this.modelLoader);
+            verdantPlains.center = {
+                x: verdantData.pos[0],
+                z: verdantData.pos[1]
+            };
+            await verdantPlains.build();
+            this.loadedBiomes.set('verdant_plains', verdantPlains);
+            console.log(`   ✅ Verdant Plains loaded at (${verdantData.pos[0]}, ${verdantData.pos[1]})\n`);
+        }
+        
+        // Build Frozen Wastes (Ice Zone)
+        console.log('\n❄️ Building Frozen Wastes Biome...');
+        const frozenData = this.biomeGrid.find(b => b.id === 'frozen_wastes');
+        if (frozenData) {
+            const frozenWastes = new FrozenWastesBiome(this.scene, this.modelLoader);
+            frozenWastes.center = {
+                x: frozenData.pos[0],
+                z: frozenData.pos[1]
+            };
+            await frozenWastes.build();
+            this.loadedBiomes.set('frozen_wastes', frozenWastes);
+            console.log(`   ✅ Frozen Wastes loaded at (${frozenData.pos[0]}, ${frozenData.pos[1]})\n`);
         }
     }
     
