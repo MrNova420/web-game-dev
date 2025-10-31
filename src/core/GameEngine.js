@@ -1549,13 +1549,18 @@ export class GameEngine {
     
     // Centralized enemy kill handler
     onEnemyKilled(enemy) {
+        // Safety check
+        if (!enemy) return;
+        
         // Play death sound
         if (this.audioSystem) {
             this.audioSystem.playSoundEffect('death');
         }
         
-        // Give experience
-        this.player.gainExp(enemy.stats.exp);
+        // Give experience (with null check)
+        if (enemy.stats && enemy.stats.exp) {
+            this.player.gainExp(enemy.stats.exp);
+        }
         
         // Update endless mode
         if (this.endlessMode) {
