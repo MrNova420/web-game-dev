@@ -1796,7 +1796,10 @@
             },
             rendering: {
                 fogOfWar: { ...FOG_OF_WAR }
-            }
+            },
+            // PHASE 4: Complete World System
+            biomeRegions: [],
+            dungeonPortals: []
         };
 
         // ========================================
@@ -2229,9 +2232,10 @@
             gameState.abilityIcons = abilityIcons[selectedClass] || ['🔥', '⚔️', '🛡️', '⚡'];
             updateAbilityIcons();
             
-            // Generate open world content
-            generateLandmarks();
-            generateNPCs();
+            // Generate complete open world with all 12 biomes
+            console.log('🌍 Starting Complete World Generation...');
+            generateCompleteWorld();
+            console.log('✅ World Built! Starting game...');
 
             // Hide start screen, show game UI
             document.getElementById('start-screen').classList.add('hidden');
@@ -2242,7 +2246,6 @@
             document.getElementById('controls-help').classList.remove('hidden');
 
             gameState.started = true;
-            spawnEnemies();
             gameLoop(0);
         });
 
@@ -2452,141 +2455,289 @@
         }, { passive: false });
 
         // ========================================
-        // OPEN WORLD GENERATION
+        // ========================================
+        // COMPLETE WORLD GENERATION SYSTEM
+        // Building the full massive anime fantasy world
         // ========================================
         
-        function generateLandmarks() {
+        function generateCompleteWorld() {
+            console.log('🌍 Building Complete Fantasy World...');
+            
+            // Expand world size to 50000x50000 for full 12-biome coverage
+            gameState.worldSize = 50000;
+            
+            // Clear existing world
             gameState.landmarks = [];
             gameState.buildings = [];
             gameState.villages = [];
-            gameState.resources = []; // For gathering
-            gameState.farmPlots = []; // For farming
-            gameState.playerBuildings = []; // Player-built structures
+            gameState.resources = [];
+            gameState.npcs = [];
+            gameState.enemies = [];
+            gameState.dungeonPortals = [];
+            gameState.biomeRegions = [];
             
-            const landmarkTypes = [
-                { name: 'Ancient Tree', emoji: '🌳', reward: 'gold', size: 60 },
-                { name: 'Mystical Shrine', emoji: '⛩️', reward: 'exp', size: 50 },
-                { name: 'Hidden Cave', emoji: '🕳️', reward: 'item', size: 55 },
-                { name: 'Treasure Chest', emoji: '💎', reward: 'gold', size: 40 },
-                { name: 'Magic Fountain', emoji: '⛲', reward: 'heal', size: 50 },
-                { name: 'Ancient Ruins', emoji: '🏛️', reward: 'exp', size: 70 },
-                { name: 'Crystal Formation', emoji: '💠', reward: 'item', size: 45 },
-                { name: 'Portal Stone', emoji: '🌀', reward: 'teleport', size: 50 },
-                { name: 'Windmill', emoji: '🏰', reward: 'gold', size: 65 },
-                { name: 'Temple', emoji: '⛪', reward: 'heal', size: 80 }
+            // PHASE 1: Create Biome Regions (12 biomes in a 3x4 grid)
+            const biomeLayout = [
+                [0, 5, 1],   // Row 1: Mystic Forest, Verdant Plains, Crimson Peaks
+                [2, 8, 3],   // Row 2: Azure Depths, Twilight Marshlands, Shadowmoon
+                [6, 4, 9],   // Row 3: Frozen Wastes, Crystal Peaks, Celestial Highlands
+                [7, 10, 11]  // Row 4: Scorched Desert, Volcanic Badlands, Void Rift
             ];
             
-            // Create 5 villages with buildings clustered together
-            for (let v = 0; v < 5; v++) {
-                const villageX = 1000 + Math.random() * (gameState.worldSize - 2000);
-                const villageY = 1000 + Math.random() * (gameState.worldSize - 2000);
-                
-                gameState.villages.push({ x: villageX, y: villageY, name: `${['Everlight', 'Shadowmoon', 'Crystalpeak', 'Emberforge', 'Voidgate'][v]} Village` });
-                
-                // Add 8-12 buildings per village
-                const buildingCount = 8 + Math.floor(Math.random() * 5);
-                for (let b = 0; b < buildingCount; b++) {
-                    const angle = (b / buildingCount) * Math.PI * 2;
-                    const dist = 100 + Math.random() * 200;
-                    const bx = villageX + Math.cos(angle) * dist;
-                    const by = villageY + Math.sin(angle) * dist;
+            const biomeWidth = gameState.worldSize / 3;
+            const biomeHeight = gameState.worldSize / 4;
+            
+            // Place each biome in the world
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const biomeId = biomeLayout[row][col];
+                    const biome = BIOMES[biomeId];
                     
-                    gameState.buildings.push({
-                        x: bx,
-                        y: by,
-                        emoji: ['🏠', '🏘️', '🏪', '⛺'][Math.floor(Math.random() * 4)],
-                        radius: 35
-                    });
+                    const region = {
+                        biome: biome,
+                        x: col * biomeWidth,
+                        y: row * biomeHeight,
+                        width: biomeWidth,
+                        height: biomeHeight,
+                        centerX: col * biomeWidth + biomeWidth / 2,
+                        centerY: row * biomeHeight + biomeHeight / 2
+                    };
+                    
+                    gameState.biomeRegions.push(region);
+                    
+                    // Generate content for this biome
+                    generateBiomeContent(region);
                 }
             }
             
-            // Generate 80 scattered landmarks across the world
-            for (let i = 0; i < 80; i++) {
-                const type = landmarkTypes[Math.floor(Math.random() * landmarkTypes.length)];
+            console.log('✅ World Generation Complete!');
+            console.log(`📊 Generated: ${gameState.biomeRegions.length} biomes, ${gameState.landmarks.length} landmarks, ${gameState.enemies.length} creatures`);
+        }
+        
+        function generateBiomeContent(region) {
+            const biome = region.biome;
+            
+            // 1. CREATE MAJOR LANDMARKS (from biome data)
+            for (const landmark of biome.landmarks) {
+                const lx = region.centerX + (Math.random() - 0.5) * region.width * 0.8;
+                const ly = region.centerY + (Math.random() - 0.5) * region.height * 0.8;
+                
                 gameState.landmarks.push({
-                    x: Math.random() * gameState.worldSize,
-                    y: Math.random() * gameState.worldSize,
-                    type: type.name,
-                    emoji: type.emoji,
-                    reward: type.reward,
+                    x: lx,
+                    y: ly,
+                    z: Math.random() * 50, // Height for 3D effect
+                    name: landmark.name,
+                    emoji: landmark.emoji,
+                    biomeId: biome.id,
+                    reward: landmark.reward,
+                    rewardAmount: landmark.amount || 100,
+                    lore: landmark.lore,
                     discovered: false,
-                    radius: type.size
+                    radius: 80,
+                    glowColor: biome.color,
+                    // Animation properties
+                    pulseTime: 0,
+                    pulseSpeed: 0.02 + Math.random() * 0.03,
+                    floatOffset: Math.random() * Math.PI * 2
                 });
             }
             
-            // RESOURCE NODES - For gathering/crafting
-            const resourceTypes = [
-                { name: 'Tree', emoji: '🌲', resource: 'wood', amount: 5, respawn: 30000 },
-                { name: 'Rock', emoji: '🪨', resource: 'stone', amount: 3, respawn: 40000 },
-                { name: 'Iron Ore', emoji: '⛏️', resource: 'iron', amount: 2, respawn: 60000 },
-                { name: 'Herb Bush', emoji: '🌿', resource: 'herbs', amount: 3, respawn: 20000 },
-                { name: 'Berry Bush', emoji: '🫐', resource: 'berries', amount: 5, respawn: 25000 }
+            // 2. CREATE DUNGEON ENTRANCES (from biome data)
+            for (let i = 0; i < biome.dungeons.length; i++) {
+                const dungeon = biome.dungeons[i];
+                const dx = region.centerX + (Math.random() - 0.5) * region.width * 0.7;
+                const dy = region.centerY + (Math.random() - 0.5) * region.height * 0.7;
+                
+                gameState.dungeonPortals = gameState.dungeonPortals || [];
+                gameState.dungeonPortals.push({
+                    x: dx,
+                    y: dy,
+                    z: 0,
+                    name: dungeon.name,
+                    emoji: '🌀',
+                    biomeId: biome.id,
+                    difficulty: dungeon.difficulty,
+                    floors: dungeon.floors,
+                    boss: dungeon.boss,
+                    radius: 60,
+                    // Portal animation
+                    rotation: 0,
+                    rotationSpeed: 0.05,
+                    particles: []
+                });
+            }
+            
+            // 3. SPAWN CREATURES (from biome creature data)
+            const creatureCount = 15 + biome.id * 3; // More in higher level biomes
+            for (let i = 0; i < creatureCount; i++) {
+                const creatureData = biome.creatures[Math.floor(Math.random() * biome.creatures.length)];
+                const ex = region.centerX + (Math.random() - 0.5) * region.width * 0.9;
+                const ey = region.centerY + (Math.random() - 0.5) * region.height * 0.9;
+                
+                gameState.enemies.push({
+                    x: ex,
+                    y: ey,
+                    z: 0,
+                    name: creatureData.name,
+                    emoji: creatureData.emoji,
+                    biomeId: biome.id,
+                    hp: creatureData.hp,
+                    maxHp: creatureData.hp,
+                    attack: creatureData.attack,
+                    exp: creatureData.exp,
+                    gold: creatureData.gold,
+                    radius: 25,
+                    speed: 1 + Math.random() * 2,
+                    // AI properties
+                    wanderAngle: Math.random() * Math.PI * 2,
+                    wanderTimer: Math.floor(Math.random() * 120),
+                    aggroRange: 400,
+                    // Animation properties
+                    animFrame: 0,
+                    animSpeed: 0.1 + Math.random() * 0.1,
+                    bounceOffset: Math.random() * Math.PI * 2,
+                    facingDirection: 1 // 1 = right, -1 = left
+                });
+            }
+            
+            // 4. PLACE RESOURCES (from biome resource data)
+            const resourceCount = 30;
+            for (let i = 0; i < resourceCount; i++) {
+                const resourceData = biome.resources[Math.floor(Math.random() * biome.resources.length)];
+                const rx = region.centerX + (Math.random() - 0.5) * region.width * 0.85;
+                const ry = region.centerY + (Math.random() - 0.5) * region.height * 0.85;
+                
+                gameState.resources.push({
+                    x: rx,
+                    y: ry,
+                    z: 0,
+                    type: resourceData.type,
+                    emoji: resourceData.emoji,
+                    biomeId: biome.id,
+                    resource: resourceData.type.toLowerCase().replace(/\s+/g, '_'),
+                    amount: resourceData.amount,
+                    rarity: resourceData.rarity,
+                    respawnTime: 20000 + Math.random() * 40000,
+                    depleted: false,
+                    radius: 30,
+                    // Visual properties
+                    swayOffset: Math.random() * Math.PI * 2,
+                    swaySpeed: 0.02 + Math.random() * 0.02
+                });
+            }
+            
+            // 5. CREATE VILLAGES/SETTLEMENTS (one major city per biome)
+            const cityX = region.centerX + (Math.random() - 0.5) * region.width * 0.5;
+            const cityY = region.centerY + (Math.random() - 0.5) * region.height * 0.5;
+            
+            const cityNames = [
+                'Everlight Sanctuary', 'Crimson Hold', 'Azure Depths City', 
+                'Shadowmoon Citadel', 'Crystal Spire', 'Harvest Haven',
+                'Frostheim', 'Sunspire Oasis', 'Mistmarsh Town',
+                'Skyreach', 'Emberforge', 'Void Gate Outpost'
             ];
             
-            // Generate 200 resource nodes
-            for (let i = 0; i < 200; i++) {
-                const type = resourceTypes[Math.floor(Math.random() * resourceTypes.length)];
-                gameState.resources.push({
-                    x: Math.random() * gameState.worldSize,
-                    y: Math.random() * gameState.worldSize,
-                    type: type.name,
-                    emoji: type.emoji,
-                    resource: type.resource,
-                    amount: type.amount,
-                    respawnTime: type.respawn,
-                    depleted: false,
-                    radius: 30
+            gameState.villages.push({
+                x: cityX,
+                y: cityY,
+                name: cityNames[biome.id],
+                biomeId: biome.id,
+                radius: 300,
+                population: 100 + biome.id * 20
+            });
+            
+            // Generate buildings around city
+            const buildingTypes = ['🏠', '🏘️', '🏪', '⛺', '🏛️', '🏰', '⚒️', '🏥'];
+            const buildingCount = 20 + biome.id * 5;
+            
+            for (let b = 0; b < buildingCount; b++) {
+                const angle = (b / buildingCount) * Math.PI * 2 + Math.random() * 0.5;
+                const dist = 100 + Math.random() * 250;
+                const bx = cityX + Math.cos(angle) * dist;
+                const by = cityY + Math.sin(angle) * dist;
+                
+                gameState.buildings.push({
+                    x: bx,
+                    y: by,
+                    z: 0,
+                    emoji: buildingTypes[Math.floor(Math.random() * buildingTypes.length)],
+                    biomeId: biome.id,
+                    radius: 40,
+                    type: ['house', 'shop', 'guild', 'temple'][Math.floor(Math.random() * 4)]
+                });
+            }
+            
+            // 6. POPULATE WITH NPCs
+            const npcCount = 15 + biome.id * 2;
+            const npcTypes = [
+                { name: 'Merchant', emoji: '🧙', dialogue: 'Welcome! Browse my wares!', gives: 'gold' },
+                { name: 'Quest Giver', emoji: '🧝', dialogue: 'Hero! I need your help!', gives: 'exp' },
+                { name: 'Blacksmith', emoji: '⚒️', dialogue: 'I forge legendary weapons!', gives: 'item' },
+                { name: 'Healer', emoji: '💊', dialogue: 'Let me heal you.', gives: 'heal' },
+                { name: 'Sage', emoji: '📚', dialogue: 'Seek wisdom, young one.', gives: 'exp' },
+                { name: 'Guard', emoji: '🛡️', dialogue: 'Stay safe, traveler.', gives: 'gold' },
+                { name: 'Innkeeper', emoji: '🏨', dialogue: 'Rest at my inn!', gives: 'heal' },
+                { name: 'Alchemist', emoji: '🧪', dialogue: 'Potions and elixirs!', gives: 'item' }
+            ];
+            
+            for (let n = 0; n < npcCount; n++) {
+                const npcData = npcTypes[Math.floor(Math.random() * npcTypes.length)];
+                const npcX = cityX + (Math.random() - 0.5) * 400;
+                const npcY = cityY + (Math.random() - 0.5) * 400;
+                
+                gameState.npcs.push({
+                    x: npcX,
+                    y: npcY,
+                    z: 0,
+                    name: npcData.name,
+                    emoji: npcData.emoji,
+                    dialogue: npcData.dialogue,
+                    gives: npcData.gives,
+                    biomeId: biome.id,
+                    radius: 35,
+                    interacted: false,
+                    // Animation
+                    idleTime: 0,
+                    idleAnimation: Math.random() * Math.PI * 2
                 });
             }
         }
         
-        function generateNPCs() {
-            gameState.npcs = [];
-            const npcTypes = [
-                { name: 'Merchant', emoji: '🧙', dialogue: 'Welcome traveler! I have wares!', gives: 'shop' },
-                { name: 'Quest Giver', emoji: '🧝', dialogue: 'I need your help, hero!', gives: 'quest' },
-                { name: 'Blacksmith', emoji: '⚒️', dialogue: 'I can forge powerful weapons!', gives: 'item' },
-                { name: 'Healer', emoji: '💊', dialogue: 'Let me heal your wounds.', gives: 'heal' },
-                { name: 'Sage', emoji: '📚', dialogue: 'Seek knowledge and wisdom.', gives: 'exp' },
-                { name: 'Guard', emoji: '🛡️', dialogue: 'Safe travels, adventurer.', gives: 'gold' },
-                { name: 'Farmer', emoji: '🧑‍🌾', dialogue: 'Hard work yields rewards!', gives: 'gold' },
-                { name: 'Innkeeper', emoji: '🏨', dialogue: 'Rest here, weary traveler.', gives: 'heal' }
-            ];
-            
-            // Place NPCs in and around villages
-            for (const village of gameState.villages) {
-                for (let i = 0; i < 8; i++) {
-                    const type = npcTypes[Math.floor(Math.random() * npcTypes.length)];
-                    const angle = Math.random() * Math.PI * 2;
-                    const dist = 50 + Math.random() * 250;
-                    
-                    gameState.npcs.push({
-                        x: village.x + Math.cos(angle) * dist,
-                        y: village.y + Math.sin(angle) * dist,
-                        name: type.name,
-                        emoji: type.emoji,
-                        dialogue: type.dialogue,
-                        gives: type.gives,
-                        radius: 35,
-                        interacted: false
-                    });
+        // Get current biome based on player position
+        function getCurrentBiome() {
+            for (const region of gameState.biomeRegions) {
+                if (gameState.player.x >= region.x && 
+                    gameState.player.x < region.x + region.width &&
+                    gameState.player.y >= region.y && 
+                    gameState.player.y < region.y + region.height) {
+                    return region.biome;
                 }
             }
-            
-            // Add 20 random wandering NPCs
-            for (let i = 0; i < 20; i++) {
-                const type = npcTypes[Math.floor(Math.random() * npcTypes.length)];
-                gameState.npcs.push({
-                    x: Math.random() * gameState.worldSize,
-                    y: Math.random() * gameState.worldSize,
-                    name: type.name,
-                    emoji: type.emoji,
-                    dialogue: type.dialogue,
-                    gives: type.gives,
-                    radius: 35,
-                    interacted: false
-                });
+            return BIOMES[0]; // Default to Mystic Forest
+        }
+        
+        // Update weather based on current biome
+        function updateBiomeWeather() {
+            const biome = getCurrentBiome();
+            if (biome && biome.weather && Math.random() < 0.001) { // Change weather occasionally
+                const weather = biome.weather[Math.floor(Math.random() * biome.weather.length)];
+                if (gameState.weather.current !== weather) {
+                    gameState.weather.current = weather;
+                    createParticle(gameState.player.x, gameState.player.y, 
+                        `☁️ Weather: ${WEATHER_TYPES[weather].name}`, '#ffffff');
+                }
             }
+        }
+        
+        // SIMPLIFIED OLD FUNCTIONS - Now called by generateCompleteWorld
+        function generateLandmarks() {
+            // This is now handled by generateCompleteWorld()
+            console.log('Using new complete world generation system');
+        }
+        
+        function generateNPCs() {
+            // This is now handled by generateCompleteWorld()
+            console.log('NPCs generated as part of complete world');
         }
 
         // ========================================
