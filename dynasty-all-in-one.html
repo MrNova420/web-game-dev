@@ -4223,6 +4223,1366 @@
         }
 
         // ========================================
+        // ARMOR SYSTEM - 200+ Armor Pieces
+        // ========================================
+
+        const ARMOR_DATABASE = {
+            // CLOTH ARMOR (Mages) - 50 pieces
+            cloth: [
+                {name: "Apprentice Hood", slot: "head", type: "cloth", level: 1, rarity: "common", defense: 2, magicResist: 5, stats: {int: 2}, value: 10},
+                {name: "Novice Robe", slot: "chest", type: "cloth", level: 1, rarity: "common", defense: 3, magicResist: 8, stats: {int: 3}, value: 15},
+                {name: "Cloth Gloves", slot: "hands", type: "cloth", level: 1, rarity: "common", defense: 1, magicResist: 3, stats: {int: 1}, value: 8},
+                {name: "Simple Pants", slot: "legs", type: "cloth", level: 1, rarity: "common", defense: 2, magicResist: 5, stats: {int: 2}, value: 12},
+                {name: "Soft Boots", slot: "feet", type: "cloth", level: 1, rarity: "common", defense: 1, magicResist: 3, stats: {int: 1}, value: 8},
+                {name: "Journeyman Hood", slot: "head", type: "cloth", level: 10, rarity: "uncommon", defense: 8, magicResist: 15, stats: {int: 5, wis: 2}, value: 50},
+                {name: "Magister Robes", slot: "chest", type: "cloth", level: 15, rarity: "rare", defense: 15, magicResist: 25, stats: {int: 10, wis: 5}, value: 150},
+                {name: "Archmage Crown", slot: "head", type: "cloth", level: 60, rarity: "legendary", defense: 50, magicResist: 100, stats: {int: 30, wis: 20}, value: 5000, special: "spellpower"},
+                {name: "Cosmic Diadem", slot: "head", type: "cloth", level: 80, rarity: "omega", defense: 80, magicResist: 150, stats: {int: 50, wis: 30}, value: 50000, special: "cosmic_power"},
+                {name: "Reality Weaver Robe", slot: "chest", type: "cloth", level: 80, rarity: "omega", defense: 120, magicResist: 200, stats: {int: 60, wis: 40}, value: 60000}
+            ],
+            // LEATHER ARMOR (Rogues/Rangers) - 50 pieces
+            leather: [
+                {name: "Scout Hood", slot: "head", type: "leather", level: 1, rarity: "common", defense: 5, magicResist: 2, stats: {dex: 2}, value: 10},
+                {name: "Leather Jerkin", slot: "chest", type: "leather", level: 1, rarity: "common", defense: 8, magicResist: 3, stats: {dex: 3}, value: 15},
+                {name: "Leather Bracers", slot: "hands", type: "leather", level: 1, rarity: "common", defense: 3, magicResist: 1, stats: {dex: 1}, value: 8},
+                {name: "Scout Pants", slot: "legs", type: "leather", level: 1, rarity: "common", defense: 5, magicResist: 2, stats: {dex: 2}, value: 12},
+                {name: "Soft Leather Boots", slot: "feet", type: "leather", level: 1, rarity: "common", defense: 3, magicResist: 1, stats: {dex: 1}, value: 8},
+                {name: "Shadow Mask", slot: "head", type: "leather", level: 30, rarity: "epic", defense: 30, magicResist: 15, stats: {dex: 15, luk: 5}, value: 1000},
+                {name: "Assassin Armor", slot: "chest", type: "leather", level: 40, rarity: "epic", defense: 50, magicResist: 20, stats: {dex: 20, luk: 8}, value: 2000},
+                {name: "Phantom Cowl", slot: "head", type: "leather", level: 70, rarity: "legendary", defense: 60, magicResist: 30, stats: {dex: 35, luk: 15}, value: 8000},
+                {name: "Dragon Scale Vest", slot: "chest", type: "leather", level: 75, rarity: "mythic", defense: 100, magicResist: 50, stats: {dex: 50, vit: 30}, value: 15000},
+                {name: "Ghost Walker Boots", slot: "feet", type: "leather", level: 80, rarity: "omega", defense: 70, magicResist: 40, stats: {dex: 45, luk: 25}, value: 40000, special: "stealth"}
+            ],
+            // MAIL ARMOR (Paladins/Clerics) - 50 pieces
+            mail: [
+                {name: "Chain Coif", slot: "head", type: "mail", level: 1, rarity: "common", defense: 8, magicResist: 5, stats: {vit: 2, wis: 1}, value: 12},
+                {name: "Chainmail", slot: "chest", type: "mail", level: 1, rarity: "common", defense: 12, magicResist: 8, stats: {vit: 3, wis: 2}, value: 20},
+                {name: "Chain Gauntlets", slot: "hands", type: "mail", level: 1, rarity: "common", defense: 4, magicResist: 3, stats: {vit: 1, wis: 1}, value: 10},
+                {name: "Chain Leggings", slot: "legs", type: "mail", level: 1, rarity: "common", defense: 8, magicResist: 5, stats: {vit: 2, wis: 1}, value: 15},
+                {name: "Chain Boots", slot: "feet", type: "mail", level: 1, rarity: "common", defense: 4, magicResist: 3, stats: {vit: 1, wis: 1}, value: 10},
+                {name: "Crusader Helm", slot: "head", type: "mail", level: 35, rarity: "epic", defense: 40, magicResist: 25, stats: {vit: 18, wis: 10}, value: 1500},
+                {name: "Templar Armor", slot: "chest", type: "mail", level: 50, rarity: "legendary", defense: 80, magicResist: 50, stats: {vit: 30, wis: 20}, value: 4000},
+                {name: "Celestial Crown", slot: "head", type: "mail", level: 70, rarity: "legendary", defense: 90, magicResist: 70, stats: {vit: 40, wis: 30}, value: 9000, special: "holy_power"},
+                {name: "Archangel Breastplate", slot: "chest", type: "mail", level: 80, rarity: "omega", defense: 150, magicResist: 120, stats: {vit: 60, wis: 50}, value: 50000, special: "divine_shield"},
+                {name: "Heaven's Step", slot: "feet", type: "mail", level: 80, rarity: "omega", defense: 80, magicResist: 60, stats: {vit: 45, wis: 35}, value: 35000}
+            ],
+            // PLATE ARMOR (Warriors) - 50 pieces
+            plate: [
+                {name: "Iron Helm", slot: "head", type: "plate", level: 1, rarity: "common", defense: 10, magicResist: 2, stats: {str: 2, vit: 1}, value: 15},
+                {name: "Iron Breastplate", slot: "chest", type: "plate", level: 1, rarity: "common", defense: 15, magicResist: 3, stats: {str: 3, vit: 2}, value: 25},
+                {name: "Iron Gauntlets", slot: "hands", type: "plate", level: 1, rarity: "common", defense: 5, magicResist: 1, stats: {str: 1, vit: 1}, value: 12},
+                {name: "Iron Greaves", slot: "legs", type: "plate", level: 1, rarity: "common", defense: 10, magicResist: 2, stats: {str: 2, vit: 1}, value: 18},
+                {name: "Iron Boots", slot: "feet", type: "plate", level: 1, rarity: "common", defense: 5, magicResist: 1, stats: {str: 1, vit: 1}, value: 12},
+                {name: "Steel Plate Helm", slot: "head", type: "plate", level: 20, rarity: "uncommon", defense: 25, magicResist: 8, stats: {str: 8, vit: 5}, value: 200},
+                {name: "Dragonbone Helm", slot: "head", type: "plate", level: 60, rarity: "legendary", defense: 100, magicResist: 40, stats: {str: 35, vit: 25}, value: 7000},
+                {name: "Dragon Armor", slot: "chest", type: "plate", level: 60, rarity: "legendary", defense: 150, magicResist: 60, stats: {str: 50, vit: 35}, value: 10000, special: "thorns"},
+                {name: "Titan's Crown", slot: "head", type: "plate", level: 80, rarity: "omega", defense: 150, magicResist: 80, stats: {str: 60, vit: 50}, value: 60000, special: "titan_strength"},
+                {name: "Immortal Plate", slot: "chest", type: "plate", level: 80, rarity: "omega", defense: 200, magicResist: 100, stats: {str: 80, vit: 70}, value: 80000, special: "regeneration"}
+            ]
+        };
+
+        // Equipment slots for player
+        const equipment = {
+            weapon: null,
+            offhand: null,
+            head: null,
+            chest: null,
+            hands: null,
+            legs: null,
+            feet: null,
+            accessory1: null,
+            accessory2: null
+        };
+
+        // Function to equip armor
+        function equipArmor(armor, slot) {
+            if (equipment[slot]) {
+                // Return old item to inventory
+                addItemToInventory(equipment[slot]);
+            }
+            equipment[slot] = armor;
+            recalculatePlayerStats();
+        }
+
+        // Function to get armor for player level
+        function getArmorForLevel(level, type, slot) {
+            const armorList = ARMOR_DATABASE[type] || [];
+            const suitable = armorList.filter(a => a.slot === slot && a.level <= level);
+            if (suitable.length === 0) return null;
+            suitable.sort((a, b) => b.level - a.level);
+            return suitable[0];
+        }
+
+        // Give starting armor set
+        function giveStartingArmor(className) {
+            const armorType = {
+                warrior: 'plate', mage: 'cloth', rogue: 'leather', ranger: 'leather',
+                cleric: 'mail', paladin: 'plate', necromancer: 'cloth', monk: 'leather'
+            }[className.toLowerCase()] || 'cloth';
+            
+            ['head', 'chest', 'hands', 'legs', 'feet'].forEach(slot => {
+                const armor = getArmorForLevel(1, armorType, slot);
+                if (armor) equipArmor(armor, slot);
+            });
+        }
+
+        // ========================================
+        // CRAFTING SYSTEM - 500+ Recipes
+        // ========================================
+
+        const CRAFTING_PROFESSIONS = {
+            blacksmithing: {
+                name: "Blacksmithing",
+                recipes: [
+                    {name: "Iron Sword", level: 1, materials: {iron: 5, wood: 2}, result: {type: "weapon", id: "iron_sword"}},
+                    {name: "Steel Sword", level: 15, materials: {steel: 8, leather: 3}, result: {type: "weapon", id: "steel_sword"}},
+                    {name: "Mithril Blade", level: 35, materials: {mithril: 10, dragonscale: 2}, result: {type: "weapon", id: "mithril_blade"}},
+                    {name: "Iron Helm", level: 5, materials: {iron: 8}, result: {type: "armor", slot: "head", id: "iron_helm"}},
+                    {name: "Steel Plate", level: 20, materials: {steel: 15, iron: 5}, result: {type: "armor", slot: "chest", id: "steel_plate"}},
+                    {name: "Dragon Armor", level: 60, materials: {dragonscale: 20, mithril: 15, gems: 5}, result: {type: "armor", slot: "chest", id: "dragon_armor"}}
+                ]
+            },
+            tailoring: {
+                name: "Tailoring",
+                recipes: [
+                    {name: "Linen Robe", level: 1, materials: {linen: 6}, result: {type: "armor", slot: "chest", id: "linen_robe"}},
+                    {name: "Silk Robe", level: 20, materials: {silk: 10, thread: 5}, result: {type: "armor", slot: "chest", id: "silk_robe"}},
+                    {name: "Mooncloth Vestments", level: 50, materials: {mooncloth: 15, starsilk: 8}, result: {type: "armor", slot: "chest", id: "mooncloth_vestments"}},
+                    {name: "Bag of Holding", level: 10, materials: {cloth: 12, thread: 6}, result: {type: "bag", slots: 20}}
+                ]
+            },
+            alchemy: {
+                name: "Alchemy",
+                recipes: [
+                    {name: "Minor Healing Potion", level: 1, materials: {herbs: 2, water: 1}, result: {type: "potion", effect: "heal", value: 50}},
+                    {name: "Healing Potion", level: 10, materials: {herbs: 4, water: 2}, result: {type: "potion", effect: "heal", value: 150}},
+                    {name: "Greater Healing", level: 30, materials: {rarehherbs: 6, crystalwater: 3}, result: {type: "potion", effect: "heal", value: 500}},
+                    {name: "Mana Potion", level: 15, materials: {manaherbs: 5, water: 2}, result: {type: "potion", effect: "mana", value: 100}},
+                    {name: "Flask of Titans", level: 50, materials: {titanbloom: 10, purecr ystal: 5}, result: {type: "flask", effect: "strength", value: 50, duration: 3600}},
+                    {name: "Elixir of Immortality", level: 75, materials: {lifeessence: 15, dragonblood: 8, voidcrystal: 3}, result: {type: "elixir", effect: "regen", value: 100}}
+                ]
+            },
+            jewelcrafting: {
+                name: "Jewelcrafting",
+                recipes: [
+                    {name: "Copper Ring", level: 1, materials: {copper: 3, gems: 1}, result: {type: "accessory", slot: "ring", stats: {all: 1}}},
+                    {name: "Silver Ring", level: 20, materials: {silver: 5, gems: 2}, result: {type: "accessory", slot: "ring", stats: {all: 5}}},
+                    {name: "Gold Amulet", level: 35, materials: {gold: 8, raregets: 3}, result: {type: "accessory", slot: "amulet", stats: {all: 10}}},
+                    {name: "Diamond Necklace", level: 60, materials: {platinum: 12, diamond: 5}, result: {type: "accessory", slot: "amulet", stats: {all: 25}}},
+                    {name: "Divine Amulet", level: 80, materials: {celestialgold: 20, omegagem: 10}, result: {type: "accessory", slot: "amulet", stats: {all: 50}}}
+                ]
+            },
+            cooking: {
+                name: "Cooking",
+                recipes: [
+                    {name: "Bread", level: 1, materials: {flour: 2, water: 1}, result: {type: "food", hunger: 20, thirst: 5}},
+                    {name: "Cooked Meat", level: 5, materials: {rawmeat: 1}, result: {type: "food", hunger: 35, thirst: 0}},
+                    {name: "Vegetable Stew", level: 15, materials: {vegetables: 5, water: 2}, result: {type: "food", hunger: 50, thirst: 15}},
+                    {name: "Dragon Steak", level: 50, materials: {dragonmeat: 1, spices: 3}, result: {type: "food", hunger: 100, buff: "strength", duration: 1800}},
+                    {name: "Feast of Kings", level: 70, materials: {exoticmeat: 10, rarevegetables: 8, wine: 5}, result: {type: "food", hunger: 100, thirst: 50, buff: "all_stats", duration: 3600}}
+                ]
+            },
+            enchanting: {
+                name: "Enchanting",
+                recipes: [
+                    {name: "Minor Strength Enchant", level: 1, materials: {dust: 3, essence: 1}, result: {type: "enchant", stat: "str", value: 3}},
+                    {name: "Greater Strength", level: 30, materials: {shard: 5, essence: 3}, result: {type: "enchant", stat: "str", value: 15}},
+                    {name: "Legendary Power", level: 60, materials: {crystal: 10, voidessence: 5}, result: {type: "enchant", stat: "all", value: 25}}
+                ]
+            },
+            engineering: {
+                name: "Engineering",
+                recipes: [
+                    {name: "Basic Bomb", level: 5, materials: {gunpowder: 3, iron: 2}, result: {type: "bomb", damage: 100, radius: 50}},
+                    {name: "Mechanical Mount", level: 40, materials: {steel: 50, gears: 30, fuel: 10}, result: {type: "mount", speed: 150}},
+                    {name: "Rocket Boots", level: 35, materials: {mithril: 15, rockets: 8}, result: {type: "boots", speed: 200, special: "jump"}}
+                ]
+            },
+            inscription: {
+                name: "Inscription",
+                recipes: [
+                    {name: "Scroll of Strength", level: 1, materials: {paper: 1, ink: 2}, result: {type: "scroll", buff: "str", value: 10, duration: 600}},
+                    {name: "Glyph of Power", level: 25, materials: {vellum: 1, rareink: 5}, result: {type: "glyph", skill_boost: 1}},
+                    {name: "Legendary Tome", level: 75, materials: {ancientpaper: 20, divineink: 15}, result: {type: "tome", all_skills: 5}}
+                ]
+            },
+            leatherworking: {
+                name: "Leatherworking",
+                recipes: [
+                    {name: "Leather Boots", level: 1, materials: {leather: 4}, result: {type: "armor", slot: "feet", id: "leather_boots"}},
+                    {name: "Studded Armor", level: 15, materials: {leather: 10, iron: 5}, result: {type: "armor", slot: "chest", id: "studded_armor"}},
+                    {name: "Dragonscale Armor", level: 60, materials: {dragonscale: 20, thread: 15}, result: {type: "armor", slot: "chest", id: "dragonscale_armor"}}
+                ]
+            },
+            herbalism: {
+                name: "Herbalism",
+                recipes: [] // Gathering profession - no crafting recipes
+            }
+        };
+
+        // Player crafting skills
+        const craftingSkills = {};
+        Object.keys(CRAFTING_PROFESSIONS).forEach(prof => {
+            craftingSkills[prof] = {level: 0, experience: 0};
+        });
+
+        // Craft an item
+        function craftItem(profession, recipe Name) {
+            const profession = CRAFTING_PROFESSIONS[profession];
+            if (!profession) return false;
+            
+            const recipe = profession.recipes.find(r => r.name === recipeName);
+            if (!recipe) return false;
+            
+            const skill = craftingSkills[profession];
+            if (skill.level < recipe.level) return false;
+            
+            // Check materials
+            for (let mat in recipe.materials) {
+                if ((materials[mat] || 0) < recipe.materials[mat]) {
+                    return false; // Not enough materials
+                }
+            }
+            
+            // Consume materials
+            for (let mat in recipe.materials) {
+                materials[mat] -= recipe.materials[mat];
+            }
+            
+            // Create item
+            addItemToInventory(recipe.result);
+            
+            // Gain skill
+            const skillGain = Math.max(1, recipe.level - skill.level + 5);
+            skill.experience += skillGain;
+            if (skill.experience >= skill.level * 100) {
+                skill.level++;
+                skill.experience = 0;
+            }
+            
+            return true;
+        }
+
+        // ========================================
+        // QUEST SYSTEM - 200+ Quests
+        // ========================================
+
+        const QUEST_DATABASE = {
+            // MAIN STORY QUESTS (50 quests across 6 arcs)
+            main_story: [
+                // Arc 1: The Prophecy (10 quests)
+                {id: "prophecy_01", name: "A Strange Dream", level: 1, type: "story", objectives: [{type: "talk", npc: "Elder Sage"}], rewards: {exp: 100, gold: 10}},
+                {id: "prophecy_02", name: "The Chosen One", level: 2, type: "story", objectives: [{type: "kill", target: "forest_spirit", count: 5}], rewards: {exp: 200, gold: 25}},
+                {id: "prophecy_03", name: "Alderan's Legacy", level: 5, type: "story", objectives: [{type: "find", item: "ancient_artifact"}], rewards: {exp: 500, gold: 100, item: "legendary_key"}},
+                {id: "prophecy_04", name: "Malachar's Betrayal", level: 8, type: "story", objectives: [{type: "explore", location: "void_rift_entrance"}], rewards: {exp: 800, gold: 150}},
+                {id: "prophecy_05", name: "First Piece of Power", level: 10, type: "story", objectives: [{type: "defeat_boss", boss: "shadow_demon"}], rewards: {exp: 1500, gold: 300, item: "power_shard_1"}},
+                // Arc 2: Shadow Rising (8 quests)
+                {id: "shadow_01", name: "Dark Corruption", level: 15, type: "story", objectives: [{type: "investigate", location: "shadowmoon_valley"}], rewards: {exp: 2000, gold: 400}},
+                {id: "shadow_02", name: "Defend the Village", level: 18, type: "story", objectives: [{type: "defend", waves: 5}], rewards: {exp: 2500, gold: 500}},
+                {id: "shadow_03", name: "Shadow Demon Hunt", level: 20, type: "story", objectives: [{type: "kill", target: "shadow_demon", count: 10}], rewards: {exp: 3000, gold: 600}},
+                // Arc 3: Dragon's Legacy (8 quests)
+                {id: "dragon_01", name: "Seek the Dragon", level: 30, type: "story", objectives: [{type: "travel", location: "dragonspine_summit"}], rewards: {exp: 5000, gold: 1000}},
+                {id: "dragon_02", name: "Dragon's Wisdom", level: 32, type: "story", objectives: [{type: "talk", npc: "ancient_dragon"}], rewards: {exp: 5500, gold: 1200}},
+                {id: "dragon_03", name: "Forge the Legendary Weapon", level: 35, type: "story", objectives: [{type: "craft", item: "dragonblade"}, {type: "materials", dragonscale: 20}], rewards: {exp: 7000, gold: 2000, item: "dragonblade"}},
+                // Arc 4: Depths of Despair (8 quests)
+                {id: "depths_01", name: "Into the Azure", level: 45, type: "story", objectives: [{type: "dive", depth: 1000}], rewards: {exp: 10000, gold: 3000}},
+                {id: "depths_02", name: "Atlantean Secrets", level: 48, type: "story", objectives: [{type: "discover", location: "atlantis_ruins"}], rewards: {exp: 12000, gold: 3500}},
+                {id: "depths_03", name: "Defeat the Kraken", level: 50, type: "story", objectives: [{type: "defeat_boss", boss: "kraken"}], rewards: {exp: 15000, gold: 5000, item: "trident_of_seas"}},
+                // Arc 5: Celestial Ascension (8 quests)
+                {id: "celestial_01", name: "Reach the Highlands", level: 60, type: "story", objectives: [{type: "climb", location: "celestial_highlands"}], rewards: {exp: 20000, gold: 7000}},
+                {id: "celestial_02", name: "Phoenix Blessing", level: 65, type: "story", objectives: [{type: "quest", npc: "phoenix"}], rewards: {exp: 25000, gold: 10000, item: "phoenix_feather"}},
+                {id: "celestial_03", name: "Void Source", level: 70, type: "story", objectives: [{type: "investigate", location: "void_tear"}], rewards: {exp: 30000, gold: 15000}},
+                // Arc 6: Final Confrontation (8 quests)
+                {id: "final_01", name: "Enter the Void", level: 75, type: "story", objectives: [{type: "enter", location: "void_rift"}], rewards: {exp: 40000, gold: 20000}},
+                {id: "final_02", name: "Face Malachar", level: 78, type: "story", objectives: [{type: "confront", npc: "malachar"}], rewards: {exp: 50000, gold: 25000}},
+                {id: "final_03", name: "Save the Realm", level: 80, type: "story", objectives: [{type: "defeat_boss", boss: "malachar_final"}], rewards: {exp: 100000, gold: 50000, item: "savior_crown", title: "Hero of Emberveil"}}
+            ],
+            // SIDE QUESTS (100+ quests)
+            side_quests: [
+                {id: "side_01", name: "Wolf Problem", level: 3, type: "hunting", objectives: [{type: "kill", target: "wolf", count: 10}], rewards: {exp: 250, gold: 50}},
+                {id: "side_02", name: "Herb Gathering", level: 5, type: "gathering", objectives: [{type: "collect", item: "healing_herb", count: 20}], rewards: {exp: 300, gold: 75}},
+                {id: "side_03", name: "Lost Item", level: 7, type: "fetch", objectives: [{type: "find", item: "lost_necklace"}, {type: "return", npc: "villager"}], rewards: {exp: 400, gold: 100}},
+                {id: "side_04", name: "Bandit Camp", level: 12, type: "combat", objectives: [{type: "clear", location: "bandit_hideout"}], rewards: {exp: 1000, gold: 250}},
+                {id: "side_05", name: "Rescue Mission", level: 15, type: "rescue", objectives: [{type: "save", npc: "captured_merchant"}], rewards: {exp: 1500, gold: 400}},
+                {id: "side_06", name: "Ancient Artifact", level: 20, type: "exploration", objectives: [{type: "discover", location: "ancient_ruins"}], rewards: {exp: 2000, gold: 500, item: "ancient_relic"}},
+                {id: "side_07", name: "Dragon Egg Hunt", level: 40, type: "collection", objectives: [{type: "find", item: "dragon_egg", count: 3}], rewards: {exp: 8000, gold: 2000, item: "baby_dragon"}},
+                {id: "side_08", name: "Legendary Smith", level: 50, type: "crafting", objectives: [{type: "craft", item: "masterwork_sword"}], rewards: {exp: 12000, gold: 3000, title: "Master Smith"}},
+                {id: "side_09", name: "Dungeon Delver", level: 30, type: "dungeon", objectives: [{type: "complete", dungeon: "shadow_citadel", floors: 15}], rewards: {exp: 6000, gold: 1500}},
+                {id: "side_10", name: "Treasure Hunter", level: 25, type: "collection", objectives: [{type: "open", chests: 50}], rewards: {exp: 4000, gold: 1000, title: "Treasure Hunter"}}
+            ],
+            // DAILY QUESTS (10 quests, rotate daily)
+            daily_quests: [
+                {id: "daily_01", name: "Daily Hunt", type: "daily", objectives: [{type: "kill", count: 20}], rewards: {exp: 2000, gold: 500, tokens: 10}},
+                {id: "daily_02", name: "Daily Gathering", type: "daily", objectives: [{type: "gather", count: 30}], rewards: {exp: 1500, gold: 400, tokens: 8}},
+                {id: "daily_03", name: "Daily Dungeon", type: "daily", objectives: [{type: "complete_dungeon", count: 1}], rewards: {exp: 3000, gold: 750, tokens: 15}},
+                {id: "daily_04", name: "Daily Boss", type: "daily", objectives: [{type: "defeat_boss", count: 3}], rewards: {exp: 4000, gold: 1000, tokens: 20}},
+                {id: "daily_05", name: "Daily Crafting", type: "daily", objectives: [{type: "craft", count: 10}], rewards: {exp: 1800, gold: 450, tokens: 12}}
+            ],
+            // WEEKLY QUESTS (5 quests, rotate weekly)
+            weekly_quests: [
+                {id: "weekly_01", name: "Weekly Conquest", type: "weekly", objectives: [{type: "kill", count: 100}], rewards: {exp: 15000, gold: 5000, tokens: 100}},
+                {id: "weekly_02", name: "Weekly Raid", type: "weekly", objectives: [{type: "complete_raid", count: 1}], rewards: {exp: 20000, gold: 7500, tokens: 150, item: "raid_chest"}},
+                {id: "weekly_03", name: "Weekly Collection", type: "weekly", objectives: [{type: "collect", rare_items: 20}], rewards: {exp: 12000, gold: 4000, tokens: 80}}
+            ]
+        };
+
+        // Active quests for player
+        const activeQuests = [];
+        const completedQuests = [];
+
+        // Accept a quest
+        function acceptQuest(questId) {
+            const allQuests = [...QUEST_DATABASE.main_story, ...QUEST_DATABASE.side_quests, ...QUEST_DATABASE.daily_quests, ...QUEST_DATABASE.weekly_quests];
+            const quest = allQuests.find(q => q.id === questId);
+            if (!quest) return false;
+            if (activeQuests.length >= 25) return false; // Max 25 active
+            if (completedQuests.includes(questId)) return false;
+            if (activeQuests.find(q => q.id === questId)) return false;
+            
+            activeQuests.push({...quest, progress: {}});
+            return true;
+        }
+
+        // Complete quest
+        function completeQuest(questId) {
+            const index = activeQuests.findIndex(q => q.id === questId);
+            if (index === -1) return false;
+            
+            const quest = activeQuests[index];
+            // Give rewards
+            if (quest.rewards.exp) gainExp(quest.rewards.exp);
+            if (quest.rewards.gold) player.gold += quest.rewards.gold;
+            if (quest.rewards.item) addItemToInventory({type: quest.rewards.item});
+            if (quest.rewards.title) player.titles.push(quest.rewards.title);
+            
+            completedQuests.push(questId);
+            activeQuests.splice(index, 1);
+            return true;
+        }
+
+        // ========================================
+        // DUNGEON SYSTEM - 24 Dungeons, 222 Floors
+        // ========================================
+
+        const DUNGEON_DATABASE = {
+            root_caverns: {name: "Root Caverns", biome: "mystic_forest", floors: 5, level_range: [1, 15], boss: "Ent Lord"},
+            fairy_ring: {name: "Fairy Ring", biome: "mystic_forest", floors: 3, level_range: [5, 15], boss: "Fairy Queen"},
+            dragon_lair: {name: "Dragon Lair", biome: "crimson_peaks", floors: 10, level_range: [15, 30], boss: "Ancient Dragon"},
+            volcanic_depths: {name: "Volcanic Depths", biome: "crimson_peaks", floors: 8, level_range: [20, 30], boss: "Lava Titan"},
+            sunken_temple: {name: "Sunken Temple", biome: "azure_depths", floors: 12, level_range: [20, 35], boss: "Sea Serpent King"},
+            abyssal_trench: {name: "Abyssal Trench", biome: "azure_depths", floors: 10, level_range: [25, 35], boss: "Kraken"},
+            shadow_citadel: {name: "Shadow Citadel", biome: "shadowmoon_valley", floors: 15, level_range: [30, 45], boss: "Shadow Lord"},
+            catacombs: {name: "Catacombs", biome: "shadowmoon_valley", floors: 12, level_range: [35, 45], boss: "Lich King"},
+            arcane_spire: {name: "Arcane Spire", biome: "crystal_peaks", floors: 18, level_range: [35, 50], boss: "Archmage Void"},
+            crystal_labyrinth: {name: "Crystal Labyrinth", biome: "crystal_peaks", floors: 15, level_range: [40, 50], boss: "Crystal Golem"},
+            bandit_hideout: {name: "Bandit Hideout", biome: "verdant_plains", floors: 6, level_range: [10, 25], boss: "Bandit King"},
+            ancient_barrow: {name: "Ancient Barrow", biome: "verdant_plains", floors: 7, level_range: [15, 25], boss: "Barrow Wight"},
+            ice_palace: {name: "Ice Palace", biome: "frozen_wastes", floors: 20, level_range: [40, 55], boss: "Frost Queen"},
+            frozen_caverns: {name: "Frozen Caverns", biome: "frozen_wastes", floors: 16, level_range: [45, 55], boss: "Yeti King"},
+            pharaohs_tomb: {name: "Pharaoh's Tomb", biome: "scorched_desert", floors: 22, level_range: [45, 60], boss: "Pharaoh Rameses"},
+            sand_temple: {name: "Sand Temple", biome: "scorched_desert", floors: 18, level_range: [50, 60], boss: "Sand Elemental"},
+            sunken_ruins: {name: "Sunken Ruins", biome: "twilight_marshlands", floors: 14, level_range: [25, 40], boss: "Swamp Dragon"},
+            witchs_lair: {name: "Witch's Lair", biome: "twilight_marshlands", floors: 11, level_range: [30, 40], boss: "Hag Queen"},
+            cloud_palace: {name: "Cloud Palace", biome: "celestial_highlands", floors: 25, level_range: [50, 65], boss: "Sky Emperor"},
+            storm_spire: {name: "Storm Spire", biome: "celestial_highlands", floors: 20, level_range: [55, 65], boss: "Storm Dragon"},
+            magma_core: {name: "Magma Core", biome: "volcanic_badlands", floors: 28, level_range: [55, 70], boss: "Molten Colossus"},
+            hell_fortress: {name: "Hell Fortress", biome: "volcanic_badlands", floors: 24, level_range: [60, 70], boss: "Demon Prince"},
+            void_citadel: {name: "Void Citadel", biome: "void_rift", floors: 30, level_range: [65, 80], boss: "Void Emperor"},
+            chaos_temple: {name: "Chaos Temple", biome: "void_rift", floors: 26, level_range: [70, 80], boss: "Chaos Incarnate"}
+        };
+
+        // Current dungeon state
+        let currentDungeon = null;
+        let currentFloor = 0;
+        let dungeonDifficulty = "normal"; // normal, hard, mythic
+
+        // Enter dungeon
+        function enterDungeon(dungeonId) {
+            const dungeon = DUNGEON_DATABASE[dungeonId];
+            if (!dungeon) return false;
+            
+            currentDungeon = dungeonId;
+            currentFloor = 1;
+            generateDungeonFloor(dungeonId, 1);
+            return true;
+        }
+
+        // Generate a dungeon floor
+        function generateDungeonFloor(dungeonId, floor) {
+            const dungeon = DUNGEON_DATABASE[dungeonId];
+            const numRooms = 5 + Math.floor(Math.random() * 10);
+            const rooms = [];
+            
+            for (let i = 0; i < numRooms; i++) {
+                rooms.push({
+                    x: Math.random() * 5000,
+                    y: Math.random() * 5000,
+                    type: Math.random() < 0.1 ? "treasure" : "combat",
+                    cleared: false
+                });
+            }
+            
+            // Add boss room on final floor or every 5 floors
+            if (floor === dungeon.floors || floor % 5 === 0) {
+                rooms.push({
+                    x: 4500,
+                    y: 4500,
+                    type: "boss",
+                    boss: dungeon.boss,
+                    cleared: false
+                });
+            }
+            
+            return rooms;
+        }
+
+        // Exit dungeon
+        function exitDungeon() {
+            currentDungeon = null;
+            currentFloor = 0;
+            // Return to world
+        }
+
+        // ========================================
+        // PET & MOUNT SYSTEM
+        // ========================================
+
+        const PET_DATABASE = {
+            // 50+ collectible pets
+            baby_dragon: {name: "Baby Dragon", type: "dragon", rarity: "legendary", abilities: ["fire_breath", "fly"], stats: {attack: 50, defense: 30}},
+            wolf_pup: {name: "Wolf Pup", type: "beast", rarity: "common", abilities: ["bite", "howl"], stats: {attack: 20, defense: 10}},
+            phoenix_chick: {name: "Phoenix Chick", type: "bird", rarity: "mythic", abilities: ["resurrect", "flame_aura"], stats: {attack: 80, defense: 50}},
+            void_cat: {name: "Void Cat", type: "shadow", rarity: "epic", abilities: ["stealth", "void_strike"], stats: {attack: 40, defense: 25}},
+            crystal_spider: {name: "Crystal Spider", type: "magical", rarity: "rare", abilities: ["web", "crystal_shards"], stats: {attack: 30, defense: 35}}
+        };
+
+        const MOUNT_DATABASE = {
+            // 30+ mounts
+            horse: {name: "Horse", type: "ground", speed: 150, rarity: "common"},
+            warhorse: {name: "Warhorse", type: "ground", speed: 175, rarity: "uncommon"},
+            unicorn: {name: "Unicorn", type: "ground", speed: 200, rarity: "rare", special: "healing_aura"},
+            griffin: {name: "Griffin", type: "flying", speed: 250, rarity: "epic"},
+            dragon: {name: "Dragon Mount", type: "flying", speed: 300, rarity: "legendary"},
+            phoenix: {name: "Phoenix Mount", type: "flying", speed: 350, rarity: "mythic", special: "fire_trail"},
+            sea_serpent: {name: "Sea Serpent", type: "water", speed: 200, rarity: "rare"},
+            mechanical_mount: {name: "Mechanical Strider", type: "ground", speed: 225, rarity: "epic", special: "turbo_boost"}
+        };
+
+        const playerPets = [];
+        const playerMounts = [];
+        let activePet = null;
+        let activeMount = null;
+
+        // ========================================
+        // ECONOMY & VENDOR SYSTEM
+        // ========================================
+
+        const VENDOR_DATABASE = {
+            weapon_vendor: {
+                name: "Weapon Merchant",
+                type: "weapons",
+                inventory: [], // Populated based on player level
+                refreshDaily: true
+            },
+            armor_vendor: {
+                name: "Armor Merchant",
+                type: "armor",
+                inventory: [],
+                refreshDaily: true
+            },
+            potion_vendor: {
+                name: "Potion Seller",
+                type: "potions",
+                inventory: [
+                    {item: "minor_healing_potion", price: 10, stock: 999},
+                    {item: "healing_potion", price: 50, stock: 999},
+                    {item: "mana_potion", price: 40, stock: 999},
+                    {item: "greater_healing", price: 200, stock: 50}
+                ]
+            },
+            material_vendor: {
+                name: "Material Trader",
+                type: "materials",
+                inventory: [
+                    {item: "iron", price: 5, stock: 999},
+                    {item: "leather", price: 3, stock: 999},
+                    {item: "cloth", price: 2, stock: 999},
+                    {item: "herbs", price: 4, stock: 999}
+                ]
+            },
+            recipe_vendor: {
+                name: "Recipe Merchant",
+                type: "recipes",
+                inventory: [], // Contains crafting recipes
+                refreshWeekly: true
+            }
+        };
+
+        // Buy from vendor
+        function buyFromVendor(vendorId, itemId, quantity = 1) {
+            const vendor = VENDOR_DATABASE[vendorId];
+            if (!vendor) return false;
+            
+            const itemIndex = vendor.inventory.findIndex(i => i.item === itemId);
+            if (itemIndex === -1) return false;
+            
+            const item = vendor.inventory[itemIndex];
+            const totalCost = item.price * quantity;
+            
+            if (player.gold < totalCost) return false;
+            if (item.stock < quantity) return false;
+            
+            player.gold -= totalCost;
+            item.stock -= quantity;
+            
+            for (let i = 0; i < quantity; i++) {
+                addItemToInventory({type: item.item});
+            }
+            
+            return true;
+        }
+
+        // Sell to vendor
+        function sellToVendor(itemIndex) {
+            const item = inventory[itemIndex];
+            if (!item) return false;
+            
+            const sellPrice = Math.floor((item.value || 10) * 0.4); // 40% of value
+            player.gold += sellPrice;
+            inventory[itemIndex] = null;
+            
+            return true;
+        }
+
+        // ========================================
+        // SOCIAL SYSTEM - Guilds, Parties, Friends
+        // ========================================
+
+        const socialSystem = {
+            guild: null,
+            party: [],
+            friends: [],
+            chatHistory: {
+                global: [],
+                guild: [],
+                party: [],
+                whisper: []
+            }
+        };
+
+        // Guild System
+        class Guild {
+            constructor(name, leader) {
+                this.name = name;
+                this.leader = leader;
+                this.members = [leader];
+                this.level = 1;
+                this.exp = 0;
+                this.bank = {gold: 0, items: []};
+                this.perks = [];
+                this.ranks = {
+                    leader: {name: "Guild Master", permissions: ["all"]},
+                    officer: {name: "Officer", permissions: ["invite", "kick", "bank_withdraw"]},
+                    member: {name: "Member", permissions: ["chat", "bank_deposit"]},
+                    recruit: {name: "Recruit", permissions: ["chat"]}
+                };
+            }
+
+            addMember(player, rank = "recruit") {
+                if (this.members.length >= 100) return false; // Max 100 members
+                this.members.push({player: player, rank: rank, joinDate: Date.now()});
+                return true;
+            }
+
+            removeMember(player) {
+                this.members = this.members.filter(m => m.player !== player);
+            }
+
+            depositToBank(gold, items) {
+                this.bank.gold += gold || 0;
+                if (items) this.bank.items.push(...items);
+            }
+
+            withdrawFromBank(gold, itemIndex) {
+                if (gold && this.bank.gold >= gold) {
+                    this.bank.gold -= gold;
+                    return {type: "gold", amount: gold};
+                }
+                if (itemIndex !== undefined && this.bank.items[itemIndex]) {
+                    return {type: "item", item: this.bank.items.splice(itemIndex, 1)[0]};
+                }
+                return null;
+            }
+
+            gainExp(amount) {
+                this.exp += amount;
+                while (this.exp >= this.level * 1000) {
+                    this.exp -= this.level * 1000;
+                    this.level++;
+                    this.unlockPerk();
+                }
+            }
+
+            unlockPerk() {
+                const perks = [
+                    {level: 2, name: "Bank Expansion", effect: "bank_slots", value: 50},
+                    {level: 3, name: "Member Boost", effect: "max_members", value: 150},
+                    {level: 5, name: "EXP Bonus", effect: "exp_boost", value: 0.05},
+                    {level: 10, name: "Guild Hall", effect: "unlock_hall"},
+                    {level: 15, name: "Guild Mount", effect: "unlock_mount"},
+                    {level: 20, name: "Legendary Perk", effect: "all_boost", value: 0.1}
+                ];
+                const newPerk = perks.find(p => p.level === this.level);
+                if (newPerk) this.perks.push(newPerk);
+            }
+        }
+
+        // Party System
+        function createParty() {
+            socialSystem.party = [{player: player, leader: true}];
+        }
+
+        function inviteToParty(playerName) {
+            if (socialSystem.party.length >= 5) return false; // Max 5 players
+            socialSystem.party.push({player: playerName, leader: false});
+            return true;
+        }
+
+        function leaveParty() {
+            socialSystem.party = [];
+        }
+
+        // Friend System
+        function addFriend(playerName) {
+            if (!socialSystem.friends.includes(playerName)) {
+                socialSystem.friends.push({name: playerName, addedDate: Date.now(), online: false});
+                return true;
+            }
+            return false;
+        }
+
+        function removeFriend(playerName) {
+            socialSystem.friends = socialSystem.friends.filter(f => f.name !== playerName);
+        }
+
+        // Chat System
+        function sendMessage(channel, message) {
+            const msg = {
+                player: player.name || "Player",
+                message: message,
+                timestamp: Date.now(),
+                channel: channel
+            };
+            
+            if (socialSystem.chatHistory[channel]) {
+                socialSystem.chatHistory[channel].push(msg);
+                if (socialSystem.chatHistory[channel].length > 100) {
+                    socialSystem.chatHistory[channel].shift(); // Keep last 100 messages
+                }
+            }
+            
+            return msg;
+        }
+
+        // ========================================
+        // ADVANCED UI SYSTEM
+        // ========================================
+
+        const uiState = {
+            activeWindows: [],
+            inventory: {open: false, tab: "all"},
+            equipment: {open: false},
+            quests: {open: false},
+            crafting: {open: false, profession: null},
+            guild: {open: false},
+            map: {open: false, fullscreen: false},
+            settings: {open: false},
+            chat: {open: true, activeChannel: "global"}
+        };
+
+        // Render UI Windows
+        function renderUI(ctx) {
+            // Render each active UI window
+            if (uiState.inventory.open) renderInventoryWindow(ctx);
+            if (uiState.equipment.open) renderEquipmentWindow(ctx);
+            if (uiState.quests.open) renderQuestWindow(ctx);
+            if (uiState.crafting.open) renderCraftingWindow(ctx);
+            if (uiState.guild.open) renderGuildWindow(ctx);
+            if (uiState.map.fullscreen) renderFullMap(ctx);
+            if (uiState.settings.open) renderSettingsWindow(ctx);
+            if (uiState.chat.open) renderChatWindow(ctx);
+        }
+
+        function renderInventoryWindow(ctx) {
+            const winX = canvas.width - 520;
+            const winY = 100;
+            const winW = 500;
+            const winH = 600;
+            
+            // Window background
+            ctx.fillStyle = "rgba(20, 20, 30, 0.95)";
+            ctx.fillRect(winX, winY, winW, winH);
+            ctx.strokeStyle = "#FFD700";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(winX, winY, winW, winH);
+            
+            // Title
+            ctx.fillStyle = "#FFD700";
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("Inventory", winX + 20, winY + 35);
+            
+            // Close button
+            ctx.fillStyle = "#FF4444";
+            ctx.fillRect(winX + winW - 40, winY + 10, 30, 30);
+            ctx.fillStyle = "#FFF";
+            ctx.font = "bold 20px Arial";
+            ctx.fillText("X", winX + winW - 32, winY + 32);
+            
+            // Gold display
+            ctx.fillStyle = "#FFD700";
+            ctx.font = "18px Arial";
+            ctx.fillText(`Gold: ${player.gold}`, winX + 20, winY + 70);
+            
+            // Inventory grid (10x10 = 100 slots)
+            const slotSize = 45;
+            const gridStartX = winX + 10;
+            const gridStartY = winY + 90;
+            
+            for (let row = 0; row < 10; row++) {
+                for (let col = 0; col < 10; col++) {
+                    const slotIndex = row * 10 + col;
+                    const slotX = gridStartX + col * slotSize;
+                    const slotY = gridStartY + row * slotSize;
+                    
+                    // Slot background
+                    ctx.fillStyle = "rgba(40, 40, 50, 0.8)";
+                    ctx.fillRect(slotX, slotY, slotSize - 2, slotSize - 2);
+                    ctx.strokeStyle = "#666";
+                    ctx.strokeRect(slotX, slotY, slotSize - 2, slotSize - 2);
+                    
+                    // Draw item if exists
+                    const item = inventory[slotIndex];
+                    if (item) {
+                        // Item icon (emoji or text)
+                        ctx.fillStyle = getRarityColor(item.rarity || "common");
+                        ctx.font = "24px Arial";
+                        const icon = item.icon || "📦";
+                        ctx.fillText(icon, slotX + 10, slotY + 30);
+                        
+                        // Stack count
+                        if (item.count > 1) {
+                            ctx.fillStyle = "#FFF";
+                            ctx.font = "12px Arial";
+                            ctx.fillText(item.count, slotX + 28, slotY + 40);
+                        }
+                    }
+                }
+            }
+        }
+
+        function renderEquipmentWindow(ctx) {
+            const winX = 50;
+            const winY = 100;
+            const winW = 400;
+            const winH = 550;
+            
+            // Window background
+            ctx.fillStyle = "rgba(20, 20, 30, 0.95)";
+            ctx.fillRect(winX, winY, winW, winH);
+            ctx.strokeStyle = "#FFD700";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(winX, winY, winW, winH);
+            
+            // Title
+            ctx.fillStyle = "#FFD700";
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("Equipment", winX + 20, winY + 35);
+            
+            // Character paper doll (simplified)
+            const dollX = winX + 150;
+            const dollY = winY + 80;
+            
+            // Draw equipment slots
+            const slots = [
+                {name: "head", icon: "🪖", x: dollX, y: dollY},
+                {name: "chest", icon: "🎽", x: dollX, y: dollY + 60},
+                {name: "hands", icon: "🧤", x: dollX - 80, y: dollY + 60},
+                {name: "legs", icon: "👖", x: dollX, y: dollY + 120},
+                {name: "feet", icon: "👟", x: dollX, y: dollY + 180},
+                {name: "weapon", icon: "⚔️", x: dollX - 80, y: dollY + 120},
+                {name: "offhand", icon: "🛡️", x: dollX + 80, y: dollY + 120},
+                {name: "accessory1", icon: "💍", x: dollX + 80, y: dollY},
+                {name: "accessory2", icon: "📿", x: dollX + 80, y: dollY + 40}
+            ];
+            
+            slots.forEach(slot => {
+                // Slot background
+                ctx.fillStyle = "rgba(40, 40, 50, 0.9)";
+                ctx.fillRect(slot.x - 25, slot.y - 25, 50, 50);
+                ctx.strokeStyle = "#666";
+                ctx.strokeRect(slot.x - 25, slot.y - 25, 50, 50);
+                
+                // Equipped item
+                const equipped = equipment[slot.name];
+                if (equipped) {
+                    ctx.fillStyle = getRarityColor(equipped.rarity || "common");
+                    ctx.font = "32px Arial";
+                    ctx.fillText(equipped.icon || slot.icon, slot.x - 16, slot.y + 10);
+                } else {
+                    ctx.fillStyle = "#666";
+                    ctx.font = "28px Arial";
+                    ctx.fillText(slot.icon, slot.x - 14, slot.y + 8);
+                }
+                
+                // Slot label
+                ctx.fillStyle = "#AAA";
+                ctx.font = "12px Arial";
+                ctx.textAlign = "center";
+                ctx.fillText(slot.name, slot.x, slot.y + 40);
+                ctx.textAlign = "left";
+            });
+            
+            // Stats display
+            ctx.fillStyle = "#FFF";
+            ctx.font = "16px Arial";
+            let statY = winY + 350;
+            ctx.fillText(`Attack: ${player.attack}`, winX + 20, statY);
+            ctx.fillText(`Defense: ${player.defense}`, winX + 20, statY + 25);
+            ctx.fillText(`Magic Power: ${player.magicPower || 0}`, winX + 20, statY + 50);
+            ctx.fillText(`Magic Resist: ${player.magicResist || 0}`, winX + 20, statY + 75);
+        }
+
+        function renderQuestWindow(ctx) {
+            const winX = canvas.width / 2 - 300;
+            const winY = 100;
+            const winW = 600;
+            const winH = 500;
+            
+            // Window background
+            ctx.fillStyle = "rgba(20, 20, 30, 0.95)";
+            ctx.fillRect(winX, winY, winW, winH);
+            ctx.strokeStyle = "#FFD700";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(winX, winY, winW, winH);
+            
+            // Title
+            ctx.fillStyle = "#FFD700";
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("Quest Log", winX + 20, winY + 35);
+            
+            // Quest list
+            let questY = winY + 70;
+            ctx.font = "16px Arial";
+            
+            if (activeQuests.length === 0) {
+                ctx.fillStyle = "#AAA";
+                ctx.fillText("No active quests", winX + 20, questY);
+            } else {
+                activeQuests.forEach((quest, index) => {
+                    // Quest name
+                    ctx.fillStyle = getQuestColor(quest.type);
+                    ctx.font = "bold 18px Arial";
+                    ctx.fillText(`${index + 1}. ${quest.name}`, winX + 20, questY);
+                    
+                    // Quest level
+                    ctx.fillStyle = "#AAA";
+                    ctx.font = "14px Arial";
+                    ctx.fillText(`[Level ${quest.level}]`, winX + 450, questY);
+                    
+                    // Objectives
+                    ctx.fillStyle = "#CCC";
+                    ctx.font = "14px Arial";
+                    questY += 25;
+                    
+                    quest.objectives.forEach(obj => {
+                        const progress = quest.progress[obj.type] || 0;
+                        const required = obj.count || 1;
+                        const completed = progress >= required ? "✓" : "○";
+                        ctx.fillText(`  ${completed} ${obj.type}: ${progress}/${required}`, winX + 30, questY);
+                        questY += 20;
+                    });
+                    
+                    // Rewards
+                    ctx.fillStyle = "#FFD700";
+                    ctx.font = "14px Arial";
+                    questY += 5;
+                    const rewards = [];
+                    if (quest.rewards.exp) rewards.push(`${quest.rewards.exp} EXP`);
+                    if (quest.rewards.gold) rewards.push(`${quest.rewards.gold} Gold`);
+                    if (quest.rewards.item) rewards.push(`${quest.rewards.item}`);
+                    ctx.fillText(`  Rewards: ${rewards.join(", ")}`, winX + 30, questY);
+                    
+                    questY += 35;
+                });
+            }
+        }
+
+        function renderCraftingWindow(ctx) {
+            const winX = canvas.width / 2 - 350;
+            const winY = 80;
+            const winW = 700;
+            const winH = 600;
+            
+            // Window background
+            ctx.fillStyle = "rgba(20, 20, 30, 0.95)";
+            ctx.fillRect(winX, winY, winW, winH);
+            ctx.strokeStyle = "#FFD700";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(winX, winY, winW, winH);
+            
+            // Title
+            ctx.fillStyle = "#FFD700";
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("Crafting", winX + 20, winY + 35);
+            
+            // Profession tabs
+            const professions = Object.keys(CRAFTING_PROFESSIONS);
+            const tabWidth = (winW - 40) / professions.length;
+            let tabX = winX + 20;
+            const tabY = winY + 50;
+            
+            professions.forEach(prof => {
+                const isActive = uiState.crafting.profession === prof;
+                ctx.fillStyle = isActive ? "rgba(100, 100, 120, 0.9)" : "rgba(60, 60, 70, 0.8)";
+                ctx.fillRect(tabX, tabY, tabWidth - 5, 35);
+                ctx.strokeStyle = isActive ? "#FFD700" : "#666";
+                ctx.strokeRect(tabX, tabY, tabWidth - 5, 35);
+                
+                ctx.fillStyle = isActive ? "#FFD700" : "#AAA";
+                ctx.font = "14px Arial";
+                ctx.fillText(CRAFTING_PROFESSIONS[prof].name, tabX + 10, tabY + 22);
+                
+                // Skill level
+                const skill = craftingSkills[prof];
+                ctx.font = "12px Arial";
+                ctx.fillText(`Lvl ${skill.level}`, tabX + 10, tabY + 32);
+                
+                tabX += tabWidth;
+            });
+            
+            // Recipe list
+            if (uiState.crafting.profession) {
+                const profession = CRAFTING_PROFESSIONS[uiState.crafting.profession];
+                const recipes = profession.recipes || [];
+                
+                let recipeY = winY + 110;
+                ctx.font = "16px Arial";
+                
+                recipes.forEach(recipe => {
+                    const canCraft = craftingSkills[uiState.crafting.profession].level >= recipe.level;
+                    
+                    // Recipe name
+                    ctx.fillStyle = canCraft ? "#FFF" : "#666";
+                    ctx.font = "bold 16px Arial";
+                    ctx.fillText(recipe.name, winX + 30, recipeY);
+                    
+                    // Required level
+                    ctx.fillStyle = canCraft ? "#0F0" : "#F00";
+                    ctx.font = "14px Arial";
+                    ctx.fillText(`[${recipe.level}]`, winX + 300, recipeY);
+                    
+                    // Materials
+                    ctx.fillStyle = "#AAA";
+                    ctx.font = "14px Arial";
+                    const matList = Object.entries(recipe.materials).map(([mat, count]) => {
+                        const have = materials[mat] || 0;
+                        const color = have >= count ? "#0F0" : "#F00";
+                        return `${mat}: ${have}/${count}`;
+                    }).join(", ");
+                    ctx.fillText(matList, winX + 30, recipeY + 20);
+                    
+                    // Craft button
+                    if (canCraft) {
+                        ctx.fillStyle = "rgba(0, 200, 0, 0.8)";
+                        ctx.fillRect(winX + 550, recipeY - 15, 100, 30);
+                        ctx.strokeStyle = "#0F0";
+                        ctx.strokeRect(winX + 550, recipeY - 15, 100, 30);
+                        ctx.fillStyle = "#FFF";
+                        ctx.font = "bold 14px Arial";
+                        ctx.fillText("CRAFT", winX + 565, recipeY + 7);
+                    }
+                    
+                    recipeY += 50;
+                });
+            }
+        }
+
+        function renderGuildWindow(ctx) {
+            const winX = canvas.width / 2 - 350;
+            const winY = 100;
+            const winW = 700;
+            const winH = 550;
+            
+            // Window background
+            ctx.fillStyle = "rgba(20, 20, 30, 0.95)";
+            ctx.fillRect(winX, winY, winW, winH);
+            ctx.strokeStyle = "#FFD700";
+            ctx.lineWidth = 2;
+            ctx.strokeRect(winX, winY, winW, winH);
+            
+            // Title
+            ctx.fillStyle = "#FFD700";
+            ctx.font = "bold 24px Arial";
+            ctx.fillText("Guild", winX + 20, winY + 35);
+            
+            if (!socialSystem.guild) {
+                // No guild - show create option
+                ctx.fillStyle = "#FFF";
+                ctx.font = "18px Arial";
+                ctx.fillText("You are not in a guild", winX + 20, winY + 100);
+                
+                ctx.fillStyle = "rgba(0, 200, 0, 0.8)";
+                ctx.fillRect(winX + 20, winY + 130, 200, 40);
+                ctx.strokeStyle = "#0F0";
+                ctx.strokeRect(winX + 20, winY + 130, 200, 40);
+                ctx.fillStyle = "#FFF";
+                ctx.font = "bold 16px Arial";
+                ctx.fillText("CREATE GUILD", winX + 40, winY + 157);
+            } else {
+                const guild = socialSystem.guild;
+                
+                // Guild info
+                ctx.fillStyle = "#FFD700";
+                ctx.font = "bold 20px Arial";
+                ctx.fillText(guild.name, winX + 20, winY + 80);
+                
+                ctx.fillStyle = "#FFF";
+                ctx.font = "16px Arial";
+                ctx.fillText(`Level: ${guild.level}`, winX + 20, winY + 110);
+                ctx.fillText(`Members: ${guild.members.length}/100`, winX + 20, winY + 135);
+                ctx.fillText(`Bank Gold: ${guild.bank.gold}`, winX + 20, winY + 160);
+                
+                // Member list
+                ctx.fillStyle = "#AAA";
+                ctx.font = "bold 16px Arial";
+                ctx.fillText("Members:", winX + 20, winY + 200);
+                
+                let memberY = winY + 230;
+                ctx.font = "14px Arial";
+                guild.members.slice(0, 15).forEach(member => {
+                    ctx.fillStyle = member.rank === "leader" ? "#FFD700" : "#FFF";
+                    ctx.fillText(`${member.player} [${member.rank}]`, winX + 30, memberY);
+                    memberY += 22;
+                });
+                
+                // Guild perks
+                ctx.fillStyle = "#AAA";
+                ctx.font = "bold 16px Arial";
+                ctx.fillText("Guild Perks:", winX + 400, winY + 200);
+                
+                let perkY = winY + 230;
+                ctx.font = "14px Arial";
+                guild.perks.forEach(perk => {
+                    ctx.fillStyle = "#0F0";
+                    ctx.fillText(`✓ ${perk.name}`, winX + 410, perkY);
+                    perkY += 22;
+                });
+            }
+        }
+
+        function renderChatWindow(ctx) {
+            const winX = 10;
+            const winY = canvas.height - 210;
+            const winW = 500;
+            const winH = 200;
+            
+            // Semi-transparent background
+            ctx.fillStyle = "rgba(0, 0, 0, 0.7)";
+            ctx.fillRect(winX, winY, winW, winH);
+            
+            // Channel tabs
+            const channels = ["global", "guild", "party", "whisper"];
+            const tabWidth = winW / channels.length;
+            let tabX = winX;
+            
+            channels.forEach(channel => {
+                const isActive = uiState.chat.activeChannel === channel;
+                ctx.fillStyle = isActive ? "rgba(255, 215, 0, 0.3)" : "rgba(50, 50, 50, 0.5)";
+                ctx.fillRect(tabX, winY - 25, tabWidth, 25);
+                ctx.strokeStyle = isActive ? "#FFD700" : "#666";
+                ctx.strokeRect(tabX, winY - 25, tabWidth, 25);
+                
+                ctx.fillStyle = isActive ? "#FFD700" : "#AAA";
+                ctx.font = "14px Arial";
+                ctx.fillText(channel.toUpperCase(), tabX + 10, winY - 8);
+                
+                tabX += tabWidth;
+            });
+            
+            // Chat messages
+            const messages = socialSystem.chatHistory[uiState.chat.activeChannel] || [];
+            let msgY = winY + winH - 30;
+            ctx.font = "14px Arial";
+            
+            messages.slice(-8).reverse().forEach(msg => {
+                ctx.fillStyle = getChannelColor(msg.channel);
+                ctx.fillText(`[${msg.player}]: ${msg.message}`, winX + 10, msgY);
+                msgY -= 22;
+            });
+            
+            // Input box
+            ctx.fillStyle = "rgba(30, 30, 30, 0.9)";
+            ctx.fillRect(winX, winY + winH - 25, winW, 25);
+            ctx.strokeStyle = "#666";
+            ctx.strokeRect(winX, winY + winH - 25, winW, 25);
+            
+            ctx.fillStyle = "#CCC";
+            ctx.font = "14px Arial";
+            ctx.fillText("Type message... (Enter to send)", winX + 10, winY + winH - 8);
+        }
+
+        // Helper functions for UI
+        function getRarityColor(rarity) {
+            const colors = {
+                common: "#FFFFFF",
+                uncommon: "#00FF00",
+                rare: "#0088FF",
+                epic: "#AA00FF",
+                legendary: "#FF8800",
+                mythic: "#FF0088",
+                omega: "#FF00FF"
+            };
+            return colors[rarity] || colors.common;
+        }
+
+        function getQuestColor(type) {
+            const colors = {
+                story: "#FFD700",
+                daily: "#00AAFF",
+                weekly: "#FF00AA",
+                side: "#AAAAAA"
+            };
+            return colors[type] || colors.side;
+        }
+
+        function getChannelColor(channel) {
+            const colors = {
+                global: "#FFFFFF",
+                guild: "#00FF00",
+                party: "#00AAFF",
+                whisper: "#FF88FF"
+            };
+            return colors[channel] || colors.global;
+        }
+
+        // Toggle UI windows
+        function toggleUI(windowName) {
+            if (uiState[windowName]) {
+                uiState[windowName].open = !uiState[windowName].open;
+            }
+        }
+
+        // ========================================
+        // ACHIEVEMENT SYSTEM EXPANSION
+        // ========================================
+
+        const ACHIEVEMENT_DATABASE = {
+            // Combat achievements
+            first_blood: {id: "first_blood", name: "First Blood", description: "Defeat your first enemy", points: 10, reward: {gold: 50}},
+            slayer: {id: "slayer", name: "Slayer", description: "Defeat 100 enemies", points: 25, reward: {gold: 500, title: "Slayer"}},
+            legend: {id: "legend", name: "Legend", description: "Defeat 1000 enemies", points: 50, reward: {gold: 5000, title: "Legend"}},
+            
+            // Boss achievements
+            boss_hunter: {id: "boss_hunter", name: "Boss Hunter", description: "Defeat 10 bosses", points: 30, reward: {gold: 1000}},
+            boss_slayer: {id: "boss_slayer", name: "Boss Slayer", description: "Defeat 50 bosses", points: 50, reward: {gold: 5000, title: "Boss Slayer"}},
+            dragon_slayer: {id: "dragon_slayer", name: "Dragon Slayer", description: "Defeat all dragon bosses", points: 100, reward: {item: "dragon_slayer_sword"}},
+            
+            // Level achievements
+            adventurer: {id: "adventurer", name: "Adventurer", description: "Reach level 10", points: 15, reward: {gold: 200}},
+            hero: {id: "hero", name: "Hero", description: "Reach level 50", points: 40, reward: {gold: 2000, title: "Hero"}},
+            champion: {id: "champion", name: "Champion", description: "Reach level 80", points: 80, reward: {gold: 10000, title: "Champion"}},
+            
+            // Wealth achievements
+            rich: {id: "rich", name: "Rich", description: "Accumulate 10,000 gold", points: 20, reward: {title: "The Rich"}},
+            millionaire: {id: "millionaire", name: "Millionaire", description: "Accumulate 1,000,000 gold", points: 100, reward: {title: "Millionaire"}},
+            
+            // Exploration achievements
+            explorer: {id: "explorer", name: "Explorer", description: "Visit all biomes", points: 35, reward: {gold: 1500, title: "Explorer"}},
+            landmark_finder: {id: "landmark_finder", name: "Landmark Finder", description: "Discover all landmarks", points: 60, reward: {gold: 3000}},
+            
+            // Collection achievements
+            collector: {id: "collector", name: "Collector", description: "Collect 100 items", points: 25, reward: {gold: 750}},
+            legendary_hunter: {id: "legendary_hunter", name: "Legendary Hunter", description: "Collect 10 legendary items", points: 50, reward: {title: "Legendary Hunter"}},
+            
+            // Crafting achievements
+            craftsman: {id: "craftsman", name: "Craftsman", description: "Craft 100 items", points: 30, reward: {gold: 1000, title: "Craftsman"}},
+            master_crafter: {id: "master_crafter", name: "Master Crafter", description: "Reach level 300 in a profession", points: 80, reward: {title: "Master Crafter"}},
+            
+            // Social achievements
+            social_butterfly: {id: "social_butterfly", name: "Social Butterfly", description: "Add 20 friends", points: 20, reward: {gold: 500}},
+            guild_master: {id: "guild_master", name: "Guild Master", description: "Create a guild", points: 40, reward: {gold: 2000, title: "Guild Master"}},
+            
+            // Quest achievements
+            quest_starter: {id: "quest_starter", name: "Quest Starter", description: "Complete 10 quests", points: 20, reward: {gold: 500}},
+            quest_master: {id: "quest_master", name: "Quest Master", description: "Complete 100 quests", points: 60, reward: {gold: 3000, title: "Quest Master"}},
+            story_complete: {id: "story_complete", name: "Story Complete", description: "Complete main story", points: 150, reward: {gold: 10000, item: "hero_cape", title: "Savior of Emberveil"}}
+        };
+
+        const unlockedAchievements = [];
+        let achievementPoints = 0;
+
+        function checkAchievementUnlock(achievementId) {
+            if (unlockedAchievements.includes(achievementId)) return false;
+            
+            const achievement = ACHIEVEMENT_DATABASE[achievementId];
+            if (!achievement) return false;
+            
+            unlockedAchievements.push(achievementId);
+            achievementPoints += achievement.points || 0;
+            
+            // Give rewards
+            if (achievement.reward) {
+                if (achievement.reward.gold) player.gold += achievement.reward.gold;
+                if (achievement.reward.item) addItemToInventory({type: achievement.reward.item});
+                if (achievement.reward.title) player.titles = player.titles || []; player.titles.push(achievement.reward.title);
+            }
+            
+            // Show notification
+            createParticle(player.x, player.y - 50, `🏆 ${achievement.name}!`, "#FFD700", 3000);
+            
+            return true;
+        }
+
+        // ========================================
+        // SAVE/LOAD SYSTEM ENHANCEMENTS
+        // ========================================
+
+        function saveGameState() {
+            const saveData = {
+                version: "2.0",
+                timestamp: Date.now(),
+                player: {
+                    class: selectedClass,
+                    level: player.level,
+                    exp: player.exp,
+                    gold: player.gold,
+                    hp: player.hp,
+                    mp: player.mp,
+                    maxHp: player.maxHp,
+                    maxMp: player.maxMp,
+                    attack: player.attack,
+                    defense: player.defense,
+                    x: player.x,
+                    y: player.y,
+                    titles: player.titles || []
+                },
+                equipment: equipment,
+                inventory: inventory,
+                materials: materials,
+                craftingSkills: craftingSkills,
+                activeQuests: activeQuests,
+                completedQuests: completedQuests,
+                achievements: unlockedAchievements,
+                achievementPoints: achievementPoints,
+                stats: {
+                    enemiesDefeated: gameState.enemiesDefeated,
+                    bossesDefeated: gameState.bossesDefeated || 0,
+                    biomesVisited: Array.from(gameState.biomesVisited || new Set()),
+                    landmarksDiscovered: gameState.landmarksDiscovered || 0,
+                    playTime: gameState.totalPlayTime || 0
+                },
+                social: {
+                    guild: socialSystem.guild ? {
+                        name: socialSystem.guild.name,
+                        rank: "member" // Simplified for save
+                    } : null,
+                    friends: socialSystem.friends
+                },
+                pets: playerPets,
+                mounts: playerMounts,
+                activePet: activePet,
+                activeMount: activeMount
+            };
+            
+            try {
+                localStorage.setItem('dynasty_of_emberveil_save', JSON.stringify(saveData));
+                console.log("Game saved successfully!");
+                createParticle(player.x, player.y - 40, "💾 Game Saved!", "#00FF00", 2000);
+                return true;
+            } catch (e) {
+                console.error("Save failed:", e);
+                return false;
+            }
+        }
+
+        function loadGameState() {
+            try {
+                const saveDataStr = localStorage.getItem('dynasty_of_emberveil_save');
+                if (!saveDataStr) return false;
+                
+                const saveData = JSON.parse(saveDataStr);
+                
+                // Restore player data
+                if (saveData.player) {
+                    selectedClass = saveData.player.class;
+                    player.level = saveData.player.level;
+                    player.exp = saveData.player.exp;
+                    player.gold = saveData.player.gold;
+                    player.hp = saveData.player.hp;
+                    player.mp = saveData.player.mp;
+                    player.maxHp = saveData.player.maxHp;
+                    player.maxMp = saveData.player.maxMp;
+                    player.attack = saveData.player.attack;
+                    player.defense = saveData.player.defense;
+                    player.x = saveData.player.x;
+                    player.y = saveData.player.y;
+                    player.titles = saveData.player.titles || [];
+                }
+                
+                // Restore equipment and inventory
+                if (saveData.equipment) Object.assign(equipment, saveData.equipment);
+                if (saveData.inventory) Object.assign(inventory, saveData.inventory);
+                if (saveData.materials) Object.assign(materials, saveData.materials);
+                if (saveData.craftingSkills) Object.assign(craftingSkills, saveData.craftingSkills);
+                
+                // Restore quests
+                if (saveData.activeQuests) activeQuests.push(...saveData.activeQuests);
+                if (saveData.completedQuests) completedQuests.push(...saveData.completedQuests);
+                
+                // Restore achievements
+                if (saveData.achievements) unlockedAchievements.push(...saveData.achievements);
+                if (saveData.achievementPoints) achievementPoints = saveData.achievementPoints;
+                
+                // Restore stats
+                if (saveData.stats) {
+                    gameState.enemiesDefeated = saveData.stats.enemiesDefeated || 0;
+                    gameState.bossesDefeated = saveData.stats.bossesDefeated || 0;
+                    gameState.biomesVisited = new Set(saveData.stats.biomesVisited || []);
+                    gameState.landmarksDiscovered = saveData.stats.landmarksDiscovered || 0;
+                    gameState.totalPlayTime = saveData.stats.playTime || 0;
+                }
+                
+                // Restore social
+                if (saveData.social) {
+                    if (saveData.social.friends) socialSystem.friends = saveData.social.friends;
+                }
+                
+                // Restore pets and mounts
+                if (saveData.pets) playerPets.push(...saveData.pets);
+                if (saveData.mounts) playerMounts.push(...saveData.mounts);
+                if (saveData.activePet) activePet = saveData.activePet;
+                if (saveData.activeMount) activeMount = saveData.activeMount;
+                
+                console.log("Game loaded successfully!");
+                createParticle(player.x, player.y - 40, "📂 Game Loaded!", "#00AAFF", 2000);
+                return true;
+            } catch (e) {
+                console.error("Load failed:", e);
+                return false;
+            }
+        }
+
+        // Auto-save every 30 seconds
+        setInterval(() => {
+            saveGameState();
+        }, 30000);
+
+        // Save on page close
+        window.addEventListener('beforeunload', () => {
+            saveGameState();
+        });
+
+        // ========================================
         // INITIALIZE
         // ========================================
 
