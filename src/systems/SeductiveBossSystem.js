@@ -257,7 +257,7 @@ export class SeductiveBossSystem {
         boss.mesh.add(sprite);
     }
     
-    damageB boss(bossKey, damage) {
+    damageBoss(bossKey, damage) {
         const boss = this.activeBosses.get(bossKey);
         if (!boss || boss.state === 'defeated' || boss.isInvulnerable) return false;
         

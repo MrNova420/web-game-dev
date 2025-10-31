@@ -118,6 +118,12 @@ import { MysticForestBiome } from '../worlds/MysticForestBiome.js';
 import { MoonlitGladeVillage } from '../worlds/MoonlitGladeVillage.js';
 import { CrimsonPeaksBiome } from '../worlds/CrimsonPeaksBiome.js';
 import { CompleteGameIntegration } from './CompleteGameIntegration.js';
+// NEW SURVIVAL SYSTEMS - Complete immersive gameplay
+import { CannabisMagicSystem } from '../systems/CannabisMagicSystem.js';
+import { SeductiveBossSystem } from '../systems/SeductiveBossSystem.js';
+import { SurvivalSystem } from '../systems/SurvivalSystem.js';
+import { BuildingSystem } from '../systems/BuildingSystem.js';
+import { FarmingSystem } from '../systems/FarmingSystem.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -148,6 +154,13 @@ export class GameEngine {
         this.saveSystem = null;
         this.inventorySystem = null;
         this.questSystem = null;
+        
+        // NEW SURVIVAL & GAMEPLAY SYSTEMS
+        this.cannabisMagicSystem = null;
+        this.seductiveBossSystem = null;
+        this.survivalSystem = null;
+        this.buildingSystem = null;
+        this.farmingSystem = null;
         this.achievementSystem = null;
         this.audioSystem = null;
         this.skillTreeSystem = null;
@@ -381,6 +394,50 @@ export class GameEngine {
             console.log('   🏛️ Dungeon system ready');
             
             console.log('✅ Essential systems initialized');
+            
+            // ========================================
+            // SURVIVAL & IMMERSIVE GAMEPLAY SYSTEMS
+            // Initialize all survival mechanics for full gameplay
+            // ========================================
+            console.log('🌿 Initializing Survival & Immersive Systems...');
+            
+            // Initialize Survival System (hunger, thirst, temperature)
+            this.survivalSystem = new SurvivalSystem(this.player);
+            console.log('   ✅ Survival System: Hunger, Thirst, Temperature');
+            
+            // Initialize Cannabis Magic System (herb cultivation & magic)
+            this.cannabisMagicSystem = new CannabisMagicSystem(
+                this.scene,
+                this.player,
+                this.modelLoader
+            );
+            await this.cannabisMagicSystem.initialize();
+            console.log('   ✅ Cannabis Magic System: 10 herb types, cultivation, smoke abilities');
+            
+            // Initialize Seductive Boss System (anime bosses & romance)
+            this.seductiveBossSystem = new SeductiveBossSystem(
+                this.scene,
+                this.modelLoader
+            );
+            console.log('   ✅ Seductive Boss System: 8 bosses, affection mechanics');
+            
+            // Initialize Building System (construct structures)
+            this.buildingSystem = new BuildingSystem(this.scene, this.modelLoader);
+            console.log('   ✅ Building System: 15+ building types from mega packs');
+            
+            // Initialize Farming System (crops & agriculture)
+            this.farmingSystem = new FarmingSystem(this.scene, this.modelLoader);
+            await this.farmingSystem.initialize();
+            console.log('   ✅ Farming System: 15+ crops, seasons, growth stages');
+            
+            console.log('🌿 Survival & Immersive Systems Ready!');
+            console.log('   Players can now:');
+            console.log('   - Manage hunger, thirst, and temperature');
+            console.log('   - Grow and harvest 10 cannabis strains');
+            console.log('   - Romance 8 seductive anime bosses');
+            console.log('   - Build 15+ structures (houses, farms, forges)');
+            console.log('   - Farm 15+ crops with seasons');
+            
         } catch (error) {
             console.error('Error initializing essential systems:', error);
             throw error;
