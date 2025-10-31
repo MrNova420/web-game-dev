@@ -40,8 +40,8 @@ export class CrimsonPeaksBiome {
         console.log('   Theme: Volcanic mountains, dragons, fire');
         
         try {
-            // Environment
-            this.setupEnvironment();
+            // Environment with REAL skybox
+            await this.setupEnvironment();
             
             // Terrain
             this.createMountainTerrain();
@@ -70,11 +70,24 @@ export class CrimsonPeaksBiome {
     }
     
     /**
-     * Setup volcanic environment
+     * Setup volcanic environment - USING YOUR REAL SKYBOX
      */
-    setupEnvironment() {
-        // Volcanic sky
-        this.scene.background = new THREE.Color(0x4a1515);
+    async setupEnvironment() {
+        // Load SunsetSky for volcanic atmosphere
+        const textureLoader = new THREE.TextureLoader();
+        
+        try {
+            const skyboxTexture = await new Promise((resolve, reject) => {
+                textureLoader.load('/assets/skyboxes/SunsetSky.png', resolve, undefined, reject);
+            });
+            
+            const skyGeo = new THREE.SphereGeometry(500, 32, 32);
+            const skyMat = new THREE.MeshBasicMaterial({ map: skyboxTexture, side: THREE.BackSide });
+            this.scene.add(new THREE.Mesh(skyGeo, skyMat));
+        } catch (error) {
+            this.scene.background = new THREE.Color(0x4a1515);
+        }
+        
         this.scene.fog = new THREE.FogExp2(0x6a2020, 0.01);
         
         // Red ambient light

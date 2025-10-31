@@ -31,24 +31,47 @@ export class MysticForestBiome {
     }
     
     /**
+     * Preload the most common models to cache them
+     * After this, all trees/rocks/plants will clone from cache instantly
+     */
+    async preloadCommonModels() {
+        console.log('📦 Preloading forest models for fast cloning...');
+        
+        const commonPaths = [
+            this.assetRegistry.getRandomTree(),  // Load one tree model
+            this.assetRegistry.getRandomTree(),  // Load another variant
+            this.assetRegistry.getRandomRock(),  // Load one rock
+            this.assetRegistry.getRandomPlant()  // Load one plant
+        ];
+        
+        for (const path of commonPaths) {
+            await this.modelLoader.load(path);
+        }
+        
+        console.log('   ✅ Models preloaded and cached!');
+    }
+    
+    /**
      * Build the complete Mystic Forest biome
      */
     async build() {
         console.log('🌲 Building Mystic Forest Biome...');
         
         try {
-            // Setup environment
-            this.setupEnvironment();
+            // Setup environment with REAL skybox
+            await this.setupEnvironment();
             
-            // Create terrain
-            this.createTerrain();
+            // Create terrain with REAL ground tiles
+            await this.createTerrain();
             
-            // Build world in parallel where possible
-            await Promise.all([
-                this.plantForest(),
-                this.addRocks(),
-                this.addGroundCover()
-            ]);
+            // OPTIMIZED: Preload common models first (loads once, reuses many times)
+            await this.preloadCommonModels();
+            
+            // Build world elements sequentially with progress feedback
+            // This prevents overwhelming the browser
+            await this.plantForest();
+            await this.addRocks();
+            await this.addGroundCover();
             
             // Build special locations
             await this.buildAncientTree();
@@ -73,10 +96,39 @@ export class MysticForestBiome {
     
     /**
      * Setup environmental lighting and atmosphere
+     * USING YOUR REAL SKYBOX ASSETS!
      */
-    setupEnvironment() {
-        // Mystical forest colors
-        this.scene.background = new THREE.Color(0x1a2f3a);
+    async setupEnvironment() {
+        // Load REAL skybox texture from your assets
+        const textureLoader = new THREE.TextureLoader();
+        
+        try {
+            // Use your actual GreenSky skybox for forest biome
+            const skyboxTexture = await new Promise((resolve, reject) => {
+                textureLoader.load(
+                    '/assets/skyboxes/GreenSky.png',
+                    resolve,
+                    undefined,
+                    reject
+                );
+            });
+            
+            // Create skybox sphere using YOUR actual asset
+            const skyGeo = new THREE.SphereGeometry(500, 32, 32);
+            const skyMat = new THREE.MeshBasicMaterial({
+                map: skyboxTexture,
+                side: THREE.BackSide
+            });
+            const sky = new THREE.Mesh(skyGeo, skyMat);
+            this.scene.add(sky);
+            
+            console.log('   ✅ Loaded GreenSky.png skybox from your assets');
+        } catch (error) {
+            console.error('   ⚠️ Failed to load skybox, using fallback color');
+            this.scene.background = new THREE.Color(0x1a2f3a);
+        }
+        
+        // Fog for mystical atmosphere
         this.scene.fog = new THREE.FogExp2(0x1a3f5a, 0.008);
         
         // Ambient light - mystical blue-green tint
@@ -115,68 +167,136 @@ export class MysticForestBiome {
     }
     
     /**
-     * Create the forest terrain
+     * Create the forest terrain using REAL ground models from mega packs
+     * NO MORE CODED GEOMETRY - USING YOUR ACTUAL ASSETS!
      */
-    createTerrain() {
-        const geometry = new THREE.PlaneGeometry(
-            this.worldSize, 
-            this.worldSize, 
-            100, 
-            100
-        );
+    async createTerrain() {
+        console.log('🗺️ Creating terrain from ground tile models...');
         
-        // Add elevation variation
-        const vertices = geometry.attributes.position.array;
-        for (let i = 0; i < vertices.length; i += 3) {
-            const x = vertices[i];
-            const z = vertices[i + 1];
-            
-            // Gentle hills using multiple noise octaves
-            const height = 
-                Math.sin(x * 0.02) * 2 +
-                Math.cos(z * 0.03) * 1.5 +
-                Math.sin(x * 0.1) * Math.cos(z * 0.1) * 0.5;
-            
-            vertices[i + 2] = height;
+        // Use actual ground path models from Nature MegaKit
+        const groundTiles = [
+            '/assets/models/nature/RockPath_Round_Wide.gltf',
+            '/assets/models/nature/RockPath_Square_Wide.gltf',
+            '/assets/models/buildings/Floor_UnevenBrick.gltf'
+        ];
+        
+        // Load ground tile models
+        const tileVariants = [];
+        for (const tilePath of groundTiles) {
+            const tile = await this.modelLoader.load(tilePath);
+            if (tile) tileVariants.push(tile);
         }
         
-        geometry.computeVertexNormals();
+        if (tileVariants.length === 0) {
+            console.error('❌ No ground tiles loaded! Cannot create terrain.');
+            return;
+        }
         
-        // Forest floor material - mossy green
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x2d5016,
-            roughness: 0.9,
-            metalness: 0.1
-        });
+        console.log(`   Using ${tileVariants.length} ground tile variants`);
         
-        this.terrain = new THREE.Mesh(geometry, material);
-        this.terrain.rotation.x = -Math.PI / 2;
-        this.terrain.receiveShadow = true;
-        this.scene.add(this.terrain);
+        // Create terrain grid using actual tile models
+        const tileSize = 10; // Size of each tile
+        const tilesX = Math.floor(this.worldSize / tileSize);
+        const tilesZ = Math.floor(this.worldSize / tileSize);
         
-        console.log('🗺️ Terrain created');
+        let tileCount = 0;
+        
+        for (let x = 0; x < tilesX; x++) {
+            for (let z = 0; z < tilesZ; z++) {
+                // Pick a random tile variant and clone it
+                const variant = tileVariants[Math.floor(Math.random() * tileVariants.length)];
+                const tile = variant.clone();
+                
+                // Position tile
+                const posX = (x - tilesX / 2) * tileSize;
+                const posZ = (z - tilesZ / 2) * tileSize;
+                tile.position.set(posX, 0, posZ);
+                
+                // Random rotation for variety
+                tile.rotation.y = Math.floor(Math.random() * 4) * (Math.PI / 2);
+                
+                // Scale to fit tileSize
+                tile.scale.setScalar(tileSize / 2);
+                
+                tile.receiveShadow = true;
+                
+                this.scene.add(tile);
+                this.terrain = tile; // Keep reference to first tile
+                tileCount++;
+            }
+        }
+        
+        console.log(`   ✅ Created terrain with ${tileCount} ground tile models`);
+    }
+    
+    /**
+     * Get terrain height at position (for object placement)
+     */
+    getTerrainHeight(x, z) {
+        // Simple flat terrain since we're using tile models
+        return 0;
     }
     
     /**
      * Plant forest with varied trees
+     * OPTIMIZED: Uses model caching - only loads each unique tree once, then clones!
      */
     async plantForest() {
         console.log('🌲 Planting forest...');
         
         const treeCount = 150; // Dense forest
-        const loadedTrees = [];
         
-        // Load tree models in batches
-        const batchSize = 10;
-        for (let i = 0; i < treeCount; i += batchSize) {
-            const batch = [];
-            
-            for (let j = 0; j < batchSize && i + j < treeCount; j++) {
-                batch.push(this.placeTree(i + j));
+        // Load a few tree variants once
+        const treeVariants = [
+            await this.modelLoader.load(this.assetRegistry.getRandomTree()),
+            await this.modelLoader.load(this.assetRegistry.getRandomTree()),
+            await this.modelLoader.load(this.assetRegistry.getRandomTree())
+        ].filter(t => t !== null);
+        
+        if (treeVariants.length === 0) {
+            console.warn('   ⚠️ No tree models loaded, using fallbacks');
+            // Create all fallback trees
+            for (let i = 0; i < treeCount; i++) {
+                this.createFallbackTree(i);
             }
-            
-            const results = await Promise.allSettled(batch);
-            loadedTrees.push(...results.filter(r => r.status === 'fulfilled'));
+            return;
+        }
+        
+        console.log(`   Using ${treeVariants.length} tree variants for ${treeCount} trees`);
+        
+        // Now plant trees by cloning the loaded variants (instant!)
+        for (let i = 0; i < treeCount; i++) {
+            try {
+                // Pick a random variant and clone it (instant since it's cached)
+                const variant = treeVariants[i % treeVariants.length];
+                const tree = variant.clone();
+                
+                // Position in forest pattern
+                const angle = (i / 150) * Math.PI * 2 + Math.random() * 0.5;
+                const radius = 10 + Math.random() * 80;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                tree.position.set(x, this.getTerrainHeight(x, z), z);
+                tree.rotation.y = Math.random() * Math.PI * 2;
+                
+                // Scale variation
+                const scale = 0.8 + Math.random() * 0.6;
+                tree.scale.setScalar(scale);
+                
+                tree.castShadow = true;
+                tree.receiveShadow = true;
+                
+                this.scene.add(tree);
+                this.trees.push(tree);
+                
+                // Progress feedback every 25 trees
+                if ((i + 1) % 25 === 0) {
+                    console.log(`   🌲 Planted ${i + 1}/${treeCount} trees...`);
+                }
+            } catch (error) {
+                this.createFallbackTree(i);
+            }
         }
         
         console.log(`   ✅ Planted ${this.trees.length} trees`);
@@ -265,41 +385,54 @@ export class MysticForestBiome {
     
     /**
      * Add rocks scattered throughout
+     * OPTIMIZED: Load once, clone many times!
      */
     async addRocks() {
         console.log('🪨 Adding rocks...');
         
         const rockCount = 80;
         
+        // Load 2-3 rock variants once
+        const rockVariants = [
+            await this.modelLoader.load(this.assetRegistry.getRandomRock()),
+            await this.modelLoader.load(this.assetRegistry.getRandomRock())
+        ].filter(r => r !== null);
+        
+        if (rockVariants.length === 0) {
+            console.warn('   ⚠️ No rock models, using fallbacks');
+            for (let i = 0; i < rockCount; i++) {
+                this.createFallbackRock(i);
+            }
+            return;
+        }
+        
+        // Clone rocks quickly
         for (let i = 0; i < rockCount; i++) {
             try {
-                const rockPath = this.assetRegistry.getRandomRock();
-                const model = await this.modelLoader.load(rockPath);
+                const variant = rockVariants[i % rockVariants.length];
+                const rock = variant.clone();
                 
-                if (model) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const radius = Math.random() * 90;
-                    const x = Math.cos(angle) * radius;
-                    const z = Math.sin(angle) * radius;
-                    
-                    model.position.set(x, this.getTerrainHeight(x, z), z);
-                    model.rotation.set(
-                        (Math.random() - 0.5) * 0.3,
-                        Math.random() * Math.PI * 2,
-                        (Math.random() - 0.5) * 0.3
-                    );
-                    
-                    const scale = 0.5 + Math.random() * 1.5;
-                    model.scale.setScalar(scale);
-                    
-                    model.castShadow = true;
-                    model.receiveShadow = true;
-                    
-                    this.scene.add(model);
-                    this.rocks.push(model);
-                }
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 90;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                rock.position.set(x, this.getTerrainHeight(x, z), z);
+                rock.rotation.set(
+                    (Math.random() - 0.5) * 0.3,
+                    Math.random() * Math.PI * 2,
+                    (Math.random() - 0.5) * 0.3
+                );
+                
+                const scale = 0.5 + Math.random() * 1.5;
+                rock.scale.setScalar(scale);
+                
+                rock.castShadow = true;
+                rock.receiveShadow = true;
+                
+                this.scene.add(rock);
+                this.rocks.push(rock);
             } catch (error) {
-                // Fallback rock
                 this.createFallbackRock(i);
             }
         }
@@ -342,34 +475,45 @@ export class MysticForestBiome {
     
     /**
      * Add ground cover (grass, flowers, plants)
+     * OPTIMIZED: Load once, clone many times!
      */
     async addGroundCover() {
         console.log('🌿 Adding ground cover...');
         
         const plantCount = 200;
         
+        // Load 2-3 plant variants once
+        const plantVariants = [
+            await this.modelLoader.load(this.assetRegistry.getRandomPlant()),
+            await this.modelLoader.load(this.assetRegistry.getRandomPlant())
+        ].filter(p => p !== null);
+        
+        if (plantVariants.length === 0) {
+            console.warn('   ⚠️ No plant models loaded, skipping ground cover');
+            return;
+        }
+        
+        // Clone plants quickly
         for (let i = 0; i < plantCount; i++) {
             try {
-                const plantPath = this.assetRegistry.getRandomPlant();
-                const model = await this.modelLoader.load(plantPath);
+                const variant = plantVariants[i % plantVariants.length];
+                const plant = variant.clone();
                 
-                if (model) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const radius = Math.random() * 95;
-                    const x = Math.cos(angle) * radius;
-                    const z = Math.sin(angle) * radius;
-                    
-                    model.position.set(x, this.getTerrainHeight(x, z), z);
-                    model.rotation.y = Math.random() * Math.PI * 2;
-                    
-                    const scale = 0.5 + Math.random() * 0.5;
-                    model.scale.setScalar(scale);
-                    
-                    this.scene.add(model);
-                    this.plants.push(model);
-                }
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.random() * 95;
+                const x = Math.cos(angle) * radius;
+                const z = Math.sin(angle) * radius;
+                
+                plant.position.set(x, this.getTerrainHeight(x, z), z);
+                plant.rotation.y = Math.random() * Math.PI * 2;
+                
+                const scale = 0.5 + Math.random() * 0.5;
+                plant.scale.setScalar(scale);
+                
+                this.scene.add(plant);
+                this.plants.push(plant);
             } catch (error) {
-                // Skip failed plants - we have plenty
+                // Skip failed plants
             }
         }
         

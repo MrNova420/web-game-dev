@@ -20,8 +20,19 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export class ModelLoader {
     constructor() {
         this.loader = new GLTFLoader();
+        
+        // Configure loader manager to handle missing resources gracefully
+        this.loader.manager.onError = (url) => {
+            console.warn(`⚠️ Failed to load resource: ${url} - Using fallback`);
+        };
+        
         this.loadedModels = new Map();
         this.modelCache = new Map();
+        this.fallbackMaterial = new THREE.MeshStandardMaterial({
+            color: 0x88cc88,
+            roughness: 0.7,
+            metalness: 0.2
+        });
         
         // PROFESSIONAL ASSET LIBRARY - Real game-ready models
         this.modelLibrary = {
@@ -178,20 +189,18 @@ export class ModelLoader {
      * This is what AssetRegistry returns
      */
     async load(modelPath) {
-        // Check cache first
+        // Check cache first - this makes subsequent loads instant!
         if (this.modelCache.has(modelPath)) {
             const cached = this.modelCache.get(modelPath).clone();
             return cached;
         }
         
         try {
-            console.log(`📦 Loading model from path: ${modelPath}`);
+            // Load from network (first time only)
             const gltf = await this.loadGLTF(modelPath);
             
             if (gltf && gltf.scene) {
-                console.log(`✅ Successfully loaded: ${modelPath}`);
-                
-                // Cache the model
+                // Cache the model for instant cloning later
                 this.modelCache.set(modelPath, gltf.scene);
                 return gltf.scene.clone();
             } else {
@@ -200,9 +209,39 @@ export class ModelLoader {
             }
             
         } catch (error) {
-            console.error(`❌ Failed to load model ${modelPath}:`, error.message);
+            // Suppress error spam - models will use fallback
             return null;
         }
+    }
+    
+    /**
+     * Preload common models to speed up world building
+     * This loads and caches frequently used models before they're needed
+     */
+    async preloadCommonModels() {
+        console.log('📦 Preloading common models...');
+        
+        const commonModels = [
+            '/assets/models/nature/CommonTree_1.gltf',
+            '/assets/models/nature/CommonTree_2.gltf',
+            '/assets/models/nature/CommonTree_3.gltf',
+            '/assets/models/nature/Rock_Small_1.gltf',
+            '/assets/models/nature/Bush_Common.gltf',
+            '/assets/models/nature/Grass_Common_Tall.gltf'
+        ];
+        
+        const loaded = [];
+        for (const path of commonModels) {
+            try {
+                const model = await this.load(path);
+                if (model) loaded.push(path);
+            } catch (error) {
+                // Continue if one fails
+            }
+        }
+        
+        console.log(`✅ Preloaded ${loaded.length}/${commonModels.length} common models`);
+        return loaded.length;
     }
     
     /**
@@ -309,10 +348,10 @@ export class ModelLoader {
      */
     loadGLTF(url) {
         return new Promise((resolve, reject) => {
-            // INCREASED timeout to 30 seconds - allow real models to load (NO FALLBACK!)
+            // Reduced timeout to 5 seconds - fail fast and use fallbacks
             const timeout = setTimeout(() => {
-                reject(new Error('Model loading timeout - external model failed to load'));
-            }, 30000);
+                reject(new Error('Model loading timeout - using fallback'));
+            }, 5000);
             
             this.loader.load(
                 url,
@@ -321,10 +360,11 @@ export class ModelLoader {
                     resolve(gltf);
                 },
                 (progress) => {
-                    if (progress.total > 0) {
-                        const percent = (progress.loaded / progress.total) * 100;
-                        console.log(`Loading model: ${percent.toFixed(0)}%`);
-                    }
+                    // Suppress progress logs to reduce console spam
+                    // if (progress.total > 0) {
+                    //     const percent = (progress.loaded / progress.total) * 100;
+                    //     console.log(`Loading model: ${percent.toFixed(0)}%`);
+                    // }
                 },
                 (error) => {
                     clearTimeout(timeout);
