@@ -1515,11 +1515,38 @@
 
         function attackEnemy(enemy) {
             const totalAttack = gameState.player.attack + (gameState.player.equippedWeapon?.attack || 0);
-            const damage = totalAttack + Math.floor(Math.random() * 10);
-            enemy.hp -= damage;
             
-            // Create damage particle
-            createParticle(enemy.x, enemy.y, `-${damage}`, '#ff0000');
+            // Combo system
+            if (!gameState.lastAttackTime) gameState.lastAttackTime = 0;
+            if (!gameState.comboCount) gameState.comboCount = 0;
+            
+            const now = Date.now();
+            if (now - gameState.lastAttackTime < 1000) {
+                gameState.comboCount++;
+            } else {
+                gameState.comboCount = 1;
+            }
+            gameState.lastAttackTime = now;
+            
+            // Critical hit chance (10% + 2% per combo)
+            const critChance = 0.1 + (gameState.comboCount * 0.02);
+            const isCrit = Math.random() < critChance;
+            
+            let damage = totalAttack + Math.floor(Math.random() * 10);
+            damage *= (1 + gameState.comboCount * 0.1); // 10% damage per combo
+            
+            if (isCrit) {
+                damage *= 2;
+                createParticle(enemy.x, enemy.y, `💥 CRIT! -${Math.floor(damage)}`, '#ff00ff');
+            } else {
+                createParticle(enemy.x, enemy.y, `-${Math.floor(damage)}`, '#ff0000');
+            }
+            
+            if (gameState.comboCount > 1) {
+                createParticle(enemy.x, enemy.y - 30, `${gameState.comboCount}x COMBO!`, '#ffd700');
+            }
+            
+            enemy.hp -= damage;
             
             if (enemy.hp <= 0) {
                 const index = gameState.enemies.indexOf(enemy);
@@ -1527,14 +1554,17 @@
                     gameState.enemies.splice(index, 1);
                     gameState.enemiesDefeated++;
                     
-                    // Grant exp and gold
-                    const expGain = 10 + gameState.player.level * 2;
-                    const goldGain = 5 + Math.floor(Math.random() * 10);
+                    // Bonus rewards for combos
+                    const comboMultiplier = 1 + (gameState.comboCount * 0.1);
+                    const expGain = Math.floor((10 + gameState.player.level * 2) * comboMultiplier);
+                    const goldGain = Math.floor((5 + Math.floor(Math.random() * 10)) * comboMultiplier);
+                    
                     gainExp(expGain);
                     gameState.player.gold += goldGain;
                     
-                    // Loot drop chance (20%)
-                    if (Math.random() < 0.2) {
+                    // Better loot with combos (20% + 5% per combo)
+                    const lootChance = 0.2 + (gameState.comboCount * 0.05);
+                    if (Math.random() < lootChance) {
                         const lootItem = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
                         gameState.player.inventory.push({...lootItem});
                         createParticle(enemy.x, enemy.y, `+${lootItem.icon} ${lootItem.name}!`, RARITY_COLORS[lootItem.rarity] || '#ffffff');
@@ -1550,13 +1580,13 @@
                         spawnBoss();
                     }
                     
-                    // Respawn enemy
+                    // Respawn enemy in open world
                     setTimeout(() => {
-                        const angle = Math.random() * Math.PI * 2;
-                        const dist = 300 + Math.random() * 400;
+                        const x = Math.random() * gameState.worldSize;
+                        const y = Math.random() * gameState.worldSize;
                         gameState.enemies.push({
-                            x: gameState.player.x + Math.cos(angle) * dist,
-                            y: gameState.player.y + Math.sin(angle) * dist,
+                            x: x,
+                            y: y,
                             radius: 15,
                             hp: 30 + gameState.player.level * 5,
                             maxHp: 30 + gameState.player.level * 5,
@@ -1564,7 +1594,7 @@
                             color: BIOMES[gameState.currentBiomeIndex].color,
                             type: Math.floor(Math.random() * 5)
                         });
-                    }, 2000);
+                    }, 3000);
                 }
             }
         }
@@ -2129,8 +2159,22 @@
             }
             ctx.globalAlpha = 1;
 
-            // Restore context
+            // Restore context (back to screen space)
             ctx.restore();
+            
+            // Reset global alpha for screen-space elements
+            ctx.globalAlpha = 1;
+            
+            // Draw biome name (screen space - top center)
+            const biome = BIOMES[gameState.currentBiomeIndex];
+            ctx.font = 'bold 32px Arial';
+            ctx.fillStyle = 'rgba(255, 215, 0, 0.9)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
+            ctx.lineWidth = 4;
+            const biomeName = `${biome.emoji} ${biome.name}`;
+            const biomeNameWidth = ctx.measureText(biomeName).width;
+            ctx.strokeText(biomeName, canvas.width / 2 - biomeNameWidth / 2, 50);
+            ctx.fillText(biomeName, canvas.width / 2 - biomeNameWidth / 2, 50);
             
             // Draw weather effects (screen space)
             drawWeatherEffects();
@@ -2254,22 +2298,6 @@
             }
             
             ctx.globalAlpha = 1;
-        }
-                ctx.globalAlpha = p.life / p.maxLife;
-                ctx.fillStyle = p.color;
-                ctx.font = '16px Arial';
-                ctx.fillText(p.text, p.x, p.y);
-            }
-            ctx.globalAlpha = 1;
-
-            // Draw biome name on canvas
-            ctx.font = 'bold 32px Arial';
-            ctx.fillStyle = 'rgba(255, 215, 0, 0.8)';
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.lineWidth = 3;
-            const biomeName = `${biome.emoji} ${biome.name}`;
-            ctx.strokeText(biomeName, canvas.width / 2 - 150, 50);
-            ctx.fillText(biomeName, canvas.width / 2 - 150, 50);
         }
 
         // ========================================
