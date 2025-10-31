@@ -8,12 +8,12 @@
 
 ## 📊 PROJECT STATISTICS
 
-### File Metrics
-- **Total Lines**: 7,570
-- **File Size**: 372 KB
-- **Functions**: 135+
-- **Systems**: 16 major systems (added graphics system)
-- **Target**: 20,000-50,000 lines (37.8% progress)
+### File Metrics (Updated)
+- **Total Lines**: 7,797
+- **File Size**: 388 KB
+- **Functions**: 145+
+- **Systems**: 18 major systems
+- **Target**: 20,000-50,000 lines (39% progress)
 
 ### Game Content
 | Content Type | Count |

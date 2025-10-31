@@ -3871,7 +3871,7 @@
                 gameState.keys['q'] = false;
             }
 
-            // Update enemies with better AI (only move if near camera for performance)
+            // ENHANCED ENEMY AI with type-based behaviors
             for (const enemy of gameState.enemies) {
                 const screenDist = distance(gameState.camera, enemy);
                 
@@ -3880,12 +3880,48 @@
                     const dx = gameState.player.x - enemy.x;
                     const dy = gameState.player.y - enemy.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Type-based AI behaviors
+                    const enemyType = enemy.type || 'normal';
+                    let aggroRange = 400;
+                    let attackRange = 35;
+                    
+                    // Adjust behavior by type
+                    if (enemyType === 'fast' || enemyType === 'flying') {
+                        aggroRange = 600;
+                        attackRange = 40;
+                    } else if (enemyType === 'tank' || enemyType === 'golem') {
+                        aggroRange = 300;
+                        attackRange = 45;
+                    } else if (enemyType === 'ranged' || enemyType === 'caster') {
+                        aggroRange = 500;
+                        attackRange = 150; // Stay at range
+                    } else if (enemyType === 'elite' || enemyType.includes('boss')) {
+                        aggroRange = 700;
+                        attackRange = 50;
+                    }
 
                     // Better AI: Chase if close, wander if far
-                    if (dist < 400) {
-                        // Chase player
-                        enemy.x += (dx / dist) * enemy.speed;
-                        enemy.y += (dy / dist) * enemy.speed;
+                    if (dist < aggroRange) {
+                        // Chase player (or kite for ranged)
+                        if (enemyType === 'ranged' || enemyType === 'caster') {
+                            // Ranged enemies keep distance
+                            if (dist < attackRange - 50) {
+                                // Too close, back away
+                                enemy.x -= (dx / dist) * enemy.speed * 0.8;
+                                enemy.y -= (dy / dist) * enemy.speed * 0.8;
+                            } else if (dist > attackRange + 50) {
+                                // Too far, move closer
+                                enemy.x += (dx / dist) * enemy.speed * 0.5;
+                                enemy.y += (dy / dist) * enemy.speed * 0.5;
+                            }
+                            // Otherwise stay at perfect range
+                        } else {
+                            // Melee enemies chase directly
+                            const speedMod = enemyType === 'fast' ? 1.2 : enemyType === 'tank' ? 0.8 : 1.0;
+                            enemy.x += (dx / dist) * enemy.speed * speedMod;
+                            enemy.y += (dy / dist) * enemy.speed * speedMod;
+                        }
                     } else {
                         // Wander around
                         if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
@@ -3903,10 +3939,16 @@
                     }
 
                     // Enemy attacks player
-                    if (dist < 35) {
+                    if (dist < attackRange) {
                         const damage = 2 + Math.floor(Math.random() * 8);
                         const actualDamage = Math.max(1, damage - gameState.player.defense * 0.1);
                         gameState.player.hp -= actualDamage * 0.15;
+                        
+                        // Hit particle effect
+                        if (Math.random() < 0.1) {
+                            createParticle(gameState.player.x, gameState.player.y, 
+                                `💥 -${Math.floor(actualDamage)}`, '#ff4444');
+                        }
                         
                         if (gameState.player.hp <= 0) {
                             gameState.player.hp = 0;
