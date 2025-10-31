@@ -8,5 +8,5 @@ export class LandmarkSystem {
       mystical_fountain: { model: '/assets/models/landmarks/fountain.glb', vfx: '/assets/particles/magic_water.png' }  // Quaternius + Kenney
     };
   }
-  visitLandmark(landmarkId) { console.log(`Visited: ${landmarkId}`); }
+  visitLandmark(landmarkId) { logger.info(`Visited: ${landmarkId}`); }
 }

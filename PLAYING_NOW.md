@@ -12,9 +12,7 @@
 
 ### For Friends (Same WiFi):
 Share this URL with friends:
-http://YOUR_NETWORK_IP:3000
-
-(Check the server output for your actual network IP address)
+http://10.1.0.252:3000
 
 ### Performance:
 - Target: 60 FPS client

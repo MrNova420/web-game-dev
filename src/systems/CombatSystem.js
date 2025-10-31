@@ -53,7 +53,7 @@ export class CombatSystem {
             this.combatLog.shift();
         }
         
-        console.log(`⚔️ ${message}`);
+        logger.info(`⚔️ ${message}`);
     }
     
     getCombatLog() {

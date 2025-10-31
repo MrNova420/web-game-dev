@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Verdant Plains Biome - Grassland Zone (Level 10-25)
  * Per README: Rolling hills with scattered villages
  * 
@@ -29,7 +30,7 @@ export class VerdantPlainsBiome {
     }
     
     async build() {
-        console.log('🌾 Building Verdant Plains Biome...');
+        logger.info('🌾 Building Verdant Plains Biome...');
         
         try {
             await this.setupEnvironment();
@@ -39,12 +40,12 @@ export class VerdantPlainsBiome {
             await this.buildHarvestTown();
             await this.buildWindmillHill();
             
-            console.log('✅ Verdant Plains complete!');
-            console.log(`   - Grass patches: ${this.grass.length}`);
-            console.log(`   - Flowers: ${this.flowers.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Verdant Plains complete!');
+            logger.info(`   - Grass patches: ${this.grass.length}`);
+            logger.info(`   - Flowers: ${this.flowers.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Verdant Plains:', error);
+            logger.error('Error building Verdant Plains:', error);
         }
     }
     
@@ -78,7 +79,7 @@ export class VerdantPlainsBiome {
     }
     
     async createGrasslandTerrain() {
-        console.log('🗺️ Creating grassland terrain...');
+        logger.info('🗺️ Creating grassland terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_WoodLight.gltf',
@@ -123,11 +124,11 @@ export class VerdantPlainsBiome {
             }
         }
         
-        console.log('   ✅ Grassland terrain created');
+        logger.info('   ✅ Grassland terrain created');
     }
     
     async addGrassFields() {
-        console.log('🌱 Adding grass fields...');
+        logger.info('🌱 Adding grass fields...');
         
         const grassCount = 200;
         const grassPaths = [
@@ -162,11 +163,11 @@ export class VerdantPlainsBiome {
             this.grass.push(grass);
         }
         
-        console.log(`   ✅ Added ${this.grass.length} grass patches`);
+        logger.info(`   ✅ Added ${this.grass.length} grass patches`);
     }
     
     async addFlowers() {
-        console.log('🌸 Adding wildflowers...');
+        logger.info('🌸 Adding wildflowers...');
         
         const flowerCount = 100;
         const flowerPaths = [
@@ -201,11 +202,11 @@ export class VerdantPlainsBiome {
             this.flowers.push(flower);
         }
         
-        console.log(`   ✅ Added ${this.flowers.length} wildflowers`);
+        logger.info(`   ✅ Added ${this.flowers.length} wildflowers`);
     }
     
     async buildHarvestTown() {
-        console.log('🏡 Building Harvest Town (farming village)...');
+        logger.info('🏡 Building Harvest Town (farming village)...');
         
         const buildingPaths = [
             '/assets/models/buildings/Wall_Wood.gltf',
@@ -235,11 +236,11 @@ export class VerdantPlainsBiome {
         }
         
         this.structures.push({ name: 'Harvest Town', type: 'village', buildings: buildingCount });
-        console.log(`   ✅ Harvest Town built with ${buildingCount} structures`);
+        logger.info(`   ✅ Harvest Town built with ${buildingCount} structures`);
     }
     
     async buildWindmillHill() {
-        console.log('🌬️ Building Windmill Hill...');
+        logger.info('🌬️ Building Windmill Hill...');
         
         // Create windmill using props
         const windmillBase = await this.modelLoader.load('/assets/models/buildings/Wall_Wood.gltf');
@@ -249,7 +250,7 @@ export class VerdantPlainsBiome {
             this.scene.add(windmillBase);
             
             this.structures.push({ name: 'Windmill Hill', type: 'landmark' });
-            console.log('   ✅ Windmill Hill created');
+            logger.info('   ✅ Windmill Hill created');
         }
     }
 }

@@ -10,7 +10,7 @@ export class ContentExpansionSystem {
         this.expansions = [];
         this.improvements = [];
         
-        console.log('[ContentExpansionSystem] Content expansion system initialized');
+        logger.info('[ContentExpansionSystem] Content expansion system initialized');
         
         this.loadContentPacks();
     }
@@ -148,7 +148,7 @@ export class ContentExpansionSystem {
             ]
         });
 
-        console.log(`[ContentExpansionSystem] ${this.contentPacks.size} content packs loaded`);
+        logger.info(`[ContentExpansionSystem] ${this.contentPacks.size} content packs loaded`);
     }
 
     /**
@@ -157,11 +157,11 @@ export class ContentExpansionSystem {
     async applyExpansion(packName) {
         const pack = this.contentPacks.get(packName);
         if (!pack) {
-            console.warn(`[ContentExpansionSystem] Content pack not found: ${packName}`);
+            logger.warn(`[ContentExpansionSystem] Content pack not found: ${packName}`);
             return false;
         }
 
-        console.log(`[ContentExpansionSystem] Applying expansion: ${pack.name}`);
+        logger.info(`[ContentExpansionSystem] Applying expansion: ${pack.name}`);
         
         try {
             // Apply the content pack
@@ -174,11 +174,11 @@ export class ContentExpansionSystem {
                 status: 'active'
             });
 
-            console.log(`✓ [ContentExpansionSystem] Expansion applied: ${pack.name}`);
+            logger.info(`✓ [ContentExpansionSystem] Expansion applied: ${pack.name}`);
             return true;
             
         } catch (error) {
-            console.error(`[ContentExpansionSystem] Failed to apply expansion:`, error);
+            logger.error(`[ContentExpansionSystem] Failed to apply expansion:`, error);
             return false;
         }
     }
@@ -187,7 +187,7 @@ export class ContentExpansionSystem {
      * Apply all expansions
      */
     async applyAllExpansions() {
-        console.log('[ContentExpansionSystem] Applying all content expansions...');
+        logger.info('[ContentExpansionSystem] Applying all content expansions...');
         
         const results = [];
         for (const packName of this.contentPacks.keys()) {
@@ -196,7 +196,7 @@ export class ContentExpansionSystem {
         }
 
         const successful = results.filter(r => r.success).length;
-        console.log(`[ContentExpansionSystem] Applied ${successful}/${results.length} expansions`);
+        logger.info(`[ContentExpansionSystem] Applied ${successful}/${results.length} expansions`);
         
         return results;
     }
@@ -205,7 +205,7 @@ export class ContentExpansionSystem {
      * Improve existing content
      */
     improveContent(category, improvements) {
-        console.log(`[ContentExpansionSystem] Improving ${category}:`, improvements);
+        logger.info(`[ContentExpansionSystem] Improving ${category}:`, improvements);
         
         this.improvements.push({
             category,
@@ -225,7 +225,7 @@ export class ContentExpansionSystem {
      * Balance game systems
      */
     balanceSystem(systemName, adjustments) {
-        console.log(`[ContentExpansionSystem] Balancing ${systemName}:`, adjustments);
+        logger.info(`[ContentExpansionSystem] Balancing ${systemName}:`, adjustments);
         
         // Apply balance adjustments
         // - Adjust damage numbers

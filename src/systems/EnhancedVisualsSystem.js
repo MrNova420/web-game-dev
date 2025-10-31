@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * EnhancedVisualsSystem - Improved visual effects and graphics enhancements
  * Adds post-processing, better particle effects, and visual polish
  */
@@ -24,7 +25,7 @@ export class EnhancedVisualsSystem {
         this.setupFog();
         this.setupGlowEffects();
         
-        console.log('✨ Enhanced Visuals System initialized');
+        logger.info('✨ Enhanced Visuals System initialized');
     }
     
     setupEnhancedLighting() {

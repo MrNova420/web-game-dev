@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * TeleportationSystem - Fast travel between hubs, safe zones, and waypoints
  * Enables quick navigation across the game world
  */
@@ -23,7 +24,7 @@ export class TeleportationSystem {
         this.createDefaultWaypoints();
         this.setupTeleportUI();
         
-        console.log('🌀 Teleportation System initialized');
+        logger.info('🌀 Teleportation System initialized');
     }
     
     createDefaultWaypoints() {
@@ -87,7 +88,7 @@ export class TeleportationSystem {
             alwaysDiscovered: false
         });
         
-        console.log(`Created ${this.waypoints.size} waypoints`);
+        logger.info(`Created ${this.waypoints.size} waypoints`);
     }
     
     addWaypoint(id, waypointData) {
@@ -335,7 +336,7 @@ export class TeleportationSystem {
         if (!waypoint) return false;
         
         if (!this.discoveredWaypoints.has(waypointId)) {
-            console.log('Waypoint not discovered yet');
+            logger.info('Waypoint not discovered yet');
             return false;
         }
         
@@ -367,7 +368,7 @@ export class TeleportationSystem {
             );
         }
         
-        console.log(`🌀 Teleported to: ${waypoint.name}`);
+        logger.info(`🌀 Teleported to: ${waypoint.name}`);
         
         return true;
     }
@@ -391,7 +392,7 @@ export class TeleportationSystem {
             );
         }
         
-        console.log(`Discovered waypoint: ${waypoint.name}`);
+        logger.info(`Discovered waypoint: ${waypoint.name}`);
         
         return true;
     }
@@ -439,6 +440,6 @@ export class TeleportationSystem {
             this.teleportButton.parentElement.removeChild(this.teleportButton);
         }
         
-        console.log('🌀 Teleportation System disposed');
+        logger.info('🌀 Teleportation System disposed');
     }
 }

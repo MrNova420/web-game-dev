@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * SoundManagerSystem - 3D Spatial Audio Management
  * 
  * Manages audio from FREE external sources:
@@ -132,7 +133,7 @@ export class SoundManagerSystem {
         
         const path = this.manifest[category]?.[name];
         if (!path) {
-            console.warn(`Audio ${category}/${name} not found in manifest`);
+            logger.warn(`Audio ${category}/${name} not found in manifest`);
             return null;
         }
         
@@ -151,7 +152,7 @@ export class SoundManagerSystem {
             
             return buffer;
         } catch (error) {
-            console.warn(`Failed to load audio ${category}/${name}:`, error);
+            logger.warn(`Failed to load audio ${category}/${name}:`, error);
             return null;
         }
     }
@@ -421,7 +422,7 @@ export class SoundManagerSystem {
     getStats() {
         return {
             ...this.stats,
-            activeS sounds: this.activeSounds.size,
+            activeSounds: this.activeSounds.size,
             cacheHitRate: this.stats.cacheHits / (this.stats.cacheHits + this.stats.cacheMisses)
         };
     }

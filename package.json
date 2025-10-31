@@ -29,6 +29,7 @@
     "test:all": "npm run test:quick && npm run test:comprehensive && npm run test:gameplay",
     "verify": "node verify-full-game.js",
     "verify:full": "node verify-full-game.js",
+    "verify:loading": "node verify-game-loading.js",
     "format": "prettier --write \"src/**/*.js\"",
     "stress-test": "echo 'Install k6 for load testing' && exit 0",
     "install:all": "npm install && echo '✅ All dependencies installed'",

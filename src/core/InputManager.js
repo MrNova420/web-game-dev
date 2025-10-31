@@ -1,3 +1,4 @@
+import { logger } from "./Logger.js";
 /**
  * InputManager - Handles keyboard and mouse input
  */
@@ -43,7 +44,7 @@ export class InputManager {
             });
         }
         
-        console.log('🎮 Input manager initialized');
+        logger.info('🎮 Input manager initialized');
     }
     
     onKeyDown(event) {

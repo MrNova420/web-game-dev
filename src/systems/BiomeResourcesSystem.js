@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BiomeResourcesSystem.js
  * Phase 4.4 - Biome-Specific Resources System
@@ -299,7 +300,7 @@ export class BiomeResourcesSystem {
         // Player's harvested resources
         this.playerResources = {};
         
-        console.log('💎 BiomeResourcesSystem initialized with', Object.keys(this.resourceTypes).length, 'resource types');
+        logger.info('💎 BiomeResourcesSystem initialized with', Object.keys(this.resourceTypes).length, 'resource types');
     }
     
     /**
@@ -411,7 +412,7 @@ export class BiomeResourcesSystem {
         
         this.playerResources[playerId][resourceType] = newAmount;
         
-        console.log(`💰 Player gained ${amount}x ${resource.name} (Total: ${newAmount}/${resource.stackSize})`);
+        logger.info(`💰 Player gained ${amount}x ${resource.name} (Total: ${newAmount}/${resource.stackSize})`);
     }
     
     /**

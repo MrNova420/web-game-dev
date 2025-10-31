@@ -15,7 +15,7 @@ export class DialogueSystemBranching {
   }
 
   startDialogue(npcId, dialogueId) {
-    console.log(`Starting dialogue ${dialogueId} with ${npcId}`);
-    console.log(`  Portrait: ${this.characterPortraits[npcId]}`);
+    logger.info(`Starting dialogue ${dialogueId} with ${npcId}`);
+    logger.info(`  Portrait: ${this.characterPortraits[npcId]}`);
   }
 }

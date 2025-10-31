@@ -304,7 +304,7 @@ export class ComboSystemEnhanced {
     };
 
     this.activeCombos.set(entityId, combo);
-    console.log(`${entityId} started combo with ${weaponType}`);
+    logger.info(`${entityId} started combo with ${weaponType}`);
   }
 
   /**
@@ -313,7 +313,7 @@ export class ComboSystemEnhanced {
   continueCombo(entityId, nextMove) {
     const combo = this.activeCombos.get(entityId);
     if (!combo) {
-      console.log(`No active combo for ${entityId}`);
+      logger.info(`No active combo for ${entityId}`);
       return false;
     }
 
@@ -327,7 +327,7 @@ export class ComboSystemEnhanced {
     );
 
     if (matchingCombos.length === 0) {
-      console.log(`No matching combos for sequence`);
+      logger.info(`No matching combos for sequence`);
       this.endCombo(entityId);
       return false;
     }
@@ -337,7 +337,7 @@ export class ComboSystemEnhanced {
     const windowTime = this.timingWindows[bestMatch.timingWindow];
 
     if (timeSinceLastInput > windowTime) {
-      console.log(`Combo timed out (${timeSinceLastInput}s > ${windowTime}s)`);
+      logger.info(`Combo timed out (${timeSinceLastInput}s > ${windowTime}s)`);
       this.endCombo(entityId);
       return false;
     }
@@ -348,7 +348,7 @@ export class ComboSystemEnhanced {
     combo.hitCount++;
     combo.currentMultiplier = this.calculateMultiplier(combo.hitCount);
 
-    console.log(`${entityId} combo: ${combo.sequence.join(' -> ')} (${combo.hitCount} hits, ${combo.currentMultiplier}x)`);
+    logger.info(`${entityId} combo: ${combo.sequence.join(' -> ')} (${combo.hitCount} hits, ${combo.currentMultiplier}x)`);
 
     // Check if combo is complete
     if (bestMatch.sequence.length === combo.sequence.length) {
@@ -392,24 +392,24 @@ export class ComboSystemEnhanced {
     const combo = this.activeCombos.get(entityId);
     if (!combo) return;
 
-    console.log(`${entityId} executed ${comboDefinition.name}!`);
-    console.log(`  Multiplier: ${comboDefinition.multiplier}x`);
-    console.log(`  Hit Count: ${combo.hitCount}`);
-    console.log(`  Animations: ${comboDefinition.animations.join(', ')}`);
-    console.log(`  VFX: ${comboDefinition.vfx.join(', ')}`);
-    console.log(`  Icon: ${comboDefinition.icon}`);
+    logger.info(`${entityId} executed ${comboDefinition.name}!`);
+    logger.info(`  Multiplier: ${comboDefinition.multiplier}x`);
+    logger.info(`  Hit Count: ${combo.hitCount}`);
+    logger.info(`  Animations: ${comboDefinition.animations.join(', ')}`);
+    logger.info(`  VFX: ${comboDefinition.vfx.join(', ')}`);
+    logger.info(`  Icon: ${comboDefinition.icon}`);
 
     if (comboDefinition.finisher) {
-      console.log(`  FINISHER MOVE!`);
+      logger.info(`  FINISHER MOVE!`);
       // Play special finisher effects
     }
 
     if (comboDefinition.aoeRadius) {
-      console.log(`  AOE Radius: ${comboDefinition.aoeRadius}m`);
+      logger.info(`  AOE Radius: ${comboDefinition.aoeRadius}m`);
     }
 
     if (comboDefinition.launcherMove) {
-      console.log(`  LAUNCHER - Enemy airborne!`);
+      logger.info(`  LAUNCHER - Enemy airborne!`);
     }
 
     this.endCombo(entityId);
@@ -429,7 +429,7 @@ export class ComboSystemEnhanced {
     const combo = this.activeCombos.get(entityId);
     if (combo) {
       const duration = (Date.now() - combo.startTime) / 1000;
-      console.log(`${entityId} combo ended: ${combo.hitCount} hits in ${duration.toFixed(2)}s`);
+      logger.info(`${entityId} combo ended: ${combo.hitCount} hits in ${duration.toFixed(2)}s`);
       this.activeCombos.delete(entityId);
     }
   }
@@ -438,7 +438,7 @@ export class ComboSystemEnhanced {
    * Break combo (interrupted by enemy)
    */
   breakCombo(entityId) {
-    console.log(`${entityId} combo broken!`);
+    logger.info(`${entityId} combo broken!`);
     this.endCombo(entityId);
   }
 

@@ -15,14 +15,14 @@ export class MainMenuSystem {
     init() {
         this.createMenuUI();
         this.setupKeyboardShortcuts();
-        console.log('🎮 Main Menu System initialized');
+        logger.info('🎮 Main Menu System initialized');
     }
     
     setupKeyboardShortcuts() {
         // Add ESC key listener to close menu
         this.escapeHandler = (e) => {
             if (e.key === 'Escape' && this.menuVisible) {
-                console.log('ESC pressed, starting game...');
+                logger.info('ESC pressed, starting game...');
                 this.startNewGame();
             }
         };
@@ -182,7 +182,7 @@ export class MainMenuSystem {
             // Auto-hide after 5 seconds if user doesn't interact
             this.autoHideTimeout = setTimeout(() => {
                 if (this.menuVisible) {
-                    console.log('Auto-starting game after menu timeout...');
+                    logger.info('Auto-starting game after menu timeout...');
                     this.startNewGame();
                 }
             }, 5000);
@@ -203,7 +203,7 @@ export class MainMenuSystem {
     }
     
     startNewGame() {
-        console.log('🎮 Starting new game...');
+        logger.info('🎮 Starting new game...');
         this.hide();
         // Reset game state for new game
         if (this.gameEngine.saveSystem) {
@@ -214,7 +214,7 @@ export class MainMenuSystem {
     }
     
     loadGame() {
-        console.log('📂 Loading saved game...');
+        logger.info('📂 Loading saved game...');
         if (this.gameEngine.saveSystem && this.gameEngine.saveSystem.hasSaveData()) {
             this.hide();
             this.gameEngine.saveSystem.loadGame();
@@ -224,14 +224,14 @@ export class MainMenuSystem {
     }
     
     enterSafeZone() {
-        console.log('🏰 Entering Safe Zone Hub...');
+        logger.info('🏰 Entering Safe Zone Hub...');
         this.hide();
         this.gameEngine.startFromSafeZone = true;
         // Will be handled by SafeZoneSystem
     }
     
     openSettings() {
-        console.log('⚙️ Opening settings...');
+        logger.info('⚙️ Opening settings...');
         this.createSettingsPanel();
     }
     
@@ -422,12 +422,12 @@ export class MainMenuSystem {
             }
         });
         
-        console.log('✅ Settings saved');
+        logger.info('✅ Settings saved');
         alert('Settings saved successfully!');
     }
     
     showCredits() {
-        console.log('📜 Showing credits...');
+        logger.info('📜 Showing credits...');
         const creditsText = `
 Dynasty of Emberveil
 A Psychedelic Fantasy RPG

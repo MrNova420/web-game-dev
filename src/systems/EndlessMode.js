@@ -57,7 +57,7 @@ export class EndlessMode {
         this.updateDifficulty();
         this.updateUI();
         
-        console.log('🎮 Endless Mode Started!');
+        logger.info('🎮 Endless Mode Started!');
     }
     
     update(delta) {
@@ -114,7 +114,7 @@ export class EndlessMode {
             this.engine.saveSystem.saveGame('Floor completion');
         }
         
-        console.log(`⬆️ Advanced to Floor ${this.currentFloor}`);
+        logger.info(`⬆️ Advanced to Floor ${this.currentFloor}`);
     }
     
     updateDifficulty() {
@@ -137,7 +137,7 @@ export class EndlessMode {
         // 30% chance of modifier
         if (Math.random() < 0.3) {
             this.floorModifier = modifiers[Math.floor(Math.random() * modifiers.length)];
-            console.log(`🎲 Floor Modifier: ${this.floorModifier.name}`);
+            logger.info(`🎲 Floor Modifier: ${this.floorModifier.name}`);
         } else {
             this.floorModifier = null;
         }

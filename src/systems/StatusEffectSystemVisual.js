@@ -393,13 +393,13 @@ export class StatusEffectSystemVisual {
   applyEffect(entityId, effectType, duration, source, stacks = 1) {
     const definition = this.effectDefinitions[effectType];
     if (!definition) {
-      console.error(`Unknown effect type: ${effectType}`);
+      logger.error(`Unknown effect type: ${effectType}`);
       return false;
     }
 
     // Check immunity
     if (this.hasImmunity(entityId, effectType)) {
-      console.log(`${entityId} is immune to ${effectType}`);
+      logger.info(`${entityId} is immune to ${effectType}`);
       return false;
     }
 
@@ -462,12 +462,12 @@ export class StatusEffectSystemVisual {
    */
   createVisualEffects(entityId, effectType) {
     const definition = this.effectDefinitions[effectType];
-    console.log(`Creating visual effects for ${entityId}: ${effectType}`);
-    console.log(`  Icon: ${definition.icon}`);
-    console.log(`  Particle: ${definition.particle}`);
-    console.log(`  Overlay: ${definition.overlay}`);
+    logger.info(`Creating visual effects for ${entityId}: ${effectType}`);
+    logger.info(`  Icon: ${definition.icon}`);
+    logger.info(`  Particle: ${definition.particle}`);
+    logger.info(`  Overlay: ${definition.overlay}`);
     if (definition.animation) {
-      console.log(`  Animation: ${definition.animation}`);
+      logger.info(`  Animation: ${definition.animation}`);
     }
     
     // In actual implementation, would:
@@ -481,7 +481,7 @@ export class StatusEffectSystemVisual {
    * Remove visual effects
    */
   removeVisualEffects(entityId, effectType) {
-    console.log(`Removing visual effects for ${entityId}: ${effectType}`);
+    logger.info(`Removing visual effects for ${entityId}: ${effectType}`);
     // Cleanup visual elements
   }
 
@@ -524,17 +524,17 @@ export class StatusEffectSystemVisual {
     
     if (def.damagePerTick) {
       const damage = def.damagePerTick * stacks;
-      console.log(`${entityId} takes ${damage} damage from ${effect.type}`);
+      logger.info(`${entityId} takes ${damage} damage from ${effect.type}`);
     }
     
     if (def.healPerTick) {
       const heal = def.healPerTick * stacks;
-      console.log(`${entityId} heals ${heal} from ${effect.type}`);
+      logger.info(`${entityId} heals ${heal} from ${effect.type}`);
     }
     
     // Special tick effects
     if (def.chainToNearby && Math.random() < 0.3) {
-      console.log(`${effect.type} chains to nearby entities`);
+      logger.info(`${effect.type} chains to nearby entities`);
     }
   }
 

@@ -20,7 +20,7 @@ export class LeaderboardSystem {
   }
 
   updateRanking(playerId, category, score) {
-    console.log(`${playerId} ranked in ${category}: ${score}`);
+    logger.info(`${playerId} ranked in ${category}: ${score}`);
   }
 
   /**

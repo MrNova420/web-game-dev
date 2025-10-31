@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Enemy Camp System - Spawn enemy camps throughout world with loot
  */
 import * as THREE from 'three';
@@ -113,7 +114,7 @@ export class EnemyCampSystem {
         camp.marker = marker;
         
         this.camps.push(camp);
-        console.log(`✅ Spawned ${campType.name} at (${position.x}, ${position.z})`);
+        logger.info(`✅ Spawned ${campType.name} at (${position.x}, ${position.z})`);
         
         return camp;
     }
@@ -398,7 +399,7 @@ export class EnemyCampSystem {
     }
     
     async populateWorld(biomes) {
-        console.log('🏕️ Spawning enemy camps throughout world...');
+        logger.info('🏕️ Spawning enemy camps throughout world...');
         
         // Spawn camps in each biome
         const campsPerBiome = 3;
@@ -419,7 +420,7 @@ export class EnemyCampSystem {
             }
         }
         
-        console.log(`✅ Spawned ${totalCamps} enemy camps across ${biomes.length} biomes!`);
+        logger.info(`✅ Spawned ${totalCamps} enemy camps across ${biomes.length} biomes!`);
     }
     
     update(delta) {

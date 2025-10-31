@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Boss Battle Mechanics System
  * Implements multi-phase boss battles with special mechanics, enrage timers, and unique abilities
@@ -262,7 +263,7 @@ export class BossBattleMechanicsSystem {
     startBossFight(bossId, playerLevel = 50) {
         const bossDef = this.bossDefinitions.get(bossId);
         if (!bossDef) {
-            console.error(`Boss ${bossId} not found`);
+            logger.error(`Boss ${bossId} not found`);
             return null;
         }
         
@@ -436,7 +437,7 @@ export class BossBattleMechanicsSystem {
                 break;
             // Add more abilities...
             default:
-                console.warn(`Unknown ability: ${abilityId}`);
+                logger.warn(`Unknown ability: ${abilityId}`);
         }
     }
     

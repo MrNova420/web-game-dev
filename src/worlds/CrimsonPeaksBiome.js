@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Crimson Peaks Biome - Mountain Dragon Territory
  * Level 15-30 zone with volcanic activity
  * 
@@ -35,9 +36,9 @@ export class CrimsonPeaksBiome {
      * Build complete Crimson Peaks biome
      */
     async build() {
-        console.log('🔥 Building Crimson Peaks Biome...');
-        console.log(`   Position: (${this.center.x}, ${this.center.z})`);
-        console.log('   Theme: Volcanic mountains, dragons, fire');
+        logger.info('🔥 Building Crimson Peaks Biome...');
+        logger.info(`   Position: (${this.center.x}, ${this.center.z})`);
+        logger.info('   Theme: Volcanic mountains, dragons, fire');
         
         try {
             // Environment with REAL skybox
@@ -58,14 +59,14 @@ export class CrimsonPeaksBiome {
             await this.buildDragonspineSummit();
             await this.buildForgeOfTitans();
             
-            console.log('✅ Crimson Peaks complete!');
-            console.log(`   - Mountains: ${this.mountains.length}`);
-            console.log(`   - Rocks: ${this.rocks.length}`);
-            console.log(`   - Lava flows: ${this.lavaFlows.length}`);
-            console.log(`   - Props: ${this.props.length}`);
+            logger.info('✅ Crimson Peaks complete!');
+            logger.info(`   - Mountains: ${this.mountains.length}`);
+            logger.info(`   - Rocks: ${this.rocks.length}`);
+            logger.info(`   - Lava flows: ${this.lavaFlows.length}`);
+            logger.info(`   - Props: ${this.props.length}`);
             
         } catch (error) {
-            console.error('Error building Crimson Peaks:', error);
+            logger.error('Error building Crimson Peaks:', error);
         }
     }
     
@@ -105,7 +106,7 @@ export class CrimsonPeaksBiome {
         volcanoGlow.position.set(this.center.x, 20, this.center.z);
         this.scene.add(volcanoGlow);
         
-        console.log('   🌋 Volcanic environment setup');
+        logger.info('   🌋 Volcanic environment setup');
     }
     
     /**
@@ -143,14 +144,14 @@ export class CrimsonPeaksBiome {
         this.terrain.receiveShadow = true;
         this.scene.add(this.terrain);
         
-        console.log('   ⛰️ Mountain terrain created');
+        logger.info('   ⛰️ Mountain terrain created');
     }
     
     /**
      * Add large mountain rocks
      */
     async addMountainRocks() {
-        console.log('   🪨 Adding mountain rocks...');
+        logger.info('   🪨 Adding mountain rocks...');
         
         const rockCount = 100;
         
@@ -184,14 +185,14 @@ export class CrimsonPeaksBiome {
             }
         }
         
-        console.log(`      ✅ Added ${this.rocks.length} mountain rocks`);
+        logger.info(`      ✅ Added ${this.rocks.length} mountain rocks`);
     }
     
     /**
      * Add dead/burnt trees
      */
     async addDeadTrees() {
-        console.log('   🌲 Adding dead trees...');
+        logger.info('   🌲 Adding dead trees...');
         
         const treeCount = 40;
         
@@ -233,14 +234,14 @@ export class CrimsonPeaksBiome {
             this.deadTrees.push(group);
         }
         
-        console.log(`      ✅ Added ${this.deadTrees.length} dead trees`);
+        logger.info(`      ✅ Added ${this.deadTrees.length} dead trees`);
     }
     
     /**
      * Add volcanic props
      */
     async addVolcanicProps() {
-        console.log('   🔥 Adding volcanic props...');
+        logger.info('   🔥 Adding volcanic props...');
         
         // Add some props if available
         const propCount = 20;
@@ -270,14 +271,14 @@ export class CrimsonPeaksBiome {
             }
         }
         
-        console.log(`      ✅ Added ${this.props.length} props`);
+        logger.info(`      ✅ Added ${this.props.length} props`);
     }
     
     /**
      * Create lava flows
      */
     async createLavaFlows() {
-        console.log('   🌋 Creating lava flows...');
+        logger.info('   🌋 Creating lava flows...');
         
         const lavaCount = 15;
         
@@ -310,14 +311,14 @@ export class CrimsonPeaksBiome {
             this.lavaFlows.push(lava);
         }
         
-        console.log(`      ✅ Created ${this.lavaFlows.length} lava flows`);
+        logger.info(`      ✅ Created ${this.lavaFlows.length} lava flows`);
     }
     
     /**
      * Build Dragonspine Summit
      */
     async buildDragonspineSummit() {
-        console.log('   🐉 Building Dragonspine Summit...');
+        logger.info('   🐉 Building Dragonspine Summit...');
         
         // Highest peak
         const peakGroup = new THREE.Group();
@@ -340,14 +341,14 @@ export class CrimsonPeaksBiome {
         this.scene.add(peakGroup);
         this.mountains.push(peakGroup);
         
-        console.log('      ✅ Dragonspine Summit complete');
+        logger.info('      ✅ Dragonspine Summit complete');
     }
     
     /**
      * Build Forge of Titans
      */
     async buildForgeOfTitans() {
-        console.log('   ⚒️ Building Forge of Titans...');
+        logger.info('   ⚒️ Building Forge of Titans...');
         
         const forgePos = {
             x: this.center.x + 30,
@@ -379,7 +380,7 @@ export class CrimsonPeaksBiome {
         forgeGroup.position.set(forgePos.x, this.getTerrainHeight(30, 30), forgePos.z);
         this.scene.add(forgeGroup);
         
-        console.log('      ✅ Forge of Titans complete');
+        logger.info('      ✅ Forge of Titans complete');
     }
     
     /**

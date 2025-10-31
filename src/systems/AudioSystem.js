@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AudioSystem - Manages background music and sound effects
  * Uses Web Audio API for dynamic audio control
@@ -31,7 +32,7 @@ export class AudioSystem {
         this.oscillators = {};
         
         this.init();
-        console.log('🎵 Audio System initialized');
+        logger.info('🎵 Audio System initialized');
     }
     
     init() {
@@ -64,7 +65,7 @@ export class AudioSystem {
             }, { once: true });
             
         } catch (error) {
-            console.warn('Audio not supported:', error);
+            logger.warn('Audio not supported:', error);
         }
     }
     
@@ -197,7 +198,7 @@ export class AudioSystem {
         // Play ambient drone
         this.playAmbientDrone(musicData.baseFreq, musicData.harmonic);
         
-        console.log(`🎵 Playing music for ${biome}`);
+        logger.info(`🎵 Playing music for ${biome}`);
     }
     
     getBiomeMusic(biome) {

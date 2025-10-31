@@ -15,13 +15,13 @@ export class TradingSystem {
   }
 
   initiateTrade(player1, player2) {
-    console.log(`${player1} initiates trade with ${player2}`);
-    console.log(`  UI: ${this.ui.trade_window}`);
+    logger.info(`${player1} initiates trade with ${player2}`);
+    logger.info(`  UI: ${this.ui.trade_window}`);
     this.activeTrades.set(`${player1}_${player2}`, { items1: [], items2: [], confirmed1: false, confirmed2: false });
   }
 
   completeTrade(tradeId) {
-    console.log(`Trade ${tradeId} completed successfully`);
+    logger.info(`Trade ${tradeId} completed successfully`);
     this.activeTrades.delete(tradeId);
   }
 

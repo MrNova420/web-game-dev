@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * NPCSystem - Non-Player Character management with AI and dialogue
  * Provides interactive NPCs for quests, trading, and world building
  */
@@ -114,13 +115,13 @@ export class NPCSystem {
     }
     
     init() {
-        console.log('🧑 NPC System initialized');
+        logger.info('🧑 NPC System initialized');
     }
     
     createNPC(type, position, name = null) {
         const npcType = this.npcTypes[type];
         if (!npcType) {
-            console.error(`NPC type ${type} not found`);
+            logger.error(`NPC type ${type} not found`);
             return null;
         }
         
@@ -161,7 +162,7 @@ export class NPCSystem {
         
         this.npcs.push(npc);
         
-        console.log(`Created NPC: ${npc.name} at (${position.x.toFixed(1)}, ${position.z.toFixed(1)})`);
+        logger.info(`Created NPC: ${npc.name} at (${position.x.toFixed(1)}, ${position.z.toFixed(1)})`);
         
         return npc;
     }
@@ -287,7 +288,7 @@ export class NPCSystem {
             }
         }
         
-        console.log(`Spawned ${group.length} NPCs of type ${type}`);
+        logger.info(`Spawned ${group.length} NPCs of type ${type}`);
         
         return group;
     }
@@ -327,6 +328,6 @@ export class NPCSystem {
     
     dispose() {
         this.npcs.forEach(npc => this.removeNPC(npc));
-        console.log('🧑 NPC System disposed');
+        logger.info('🧑 NPC System disposed');
     }
 }

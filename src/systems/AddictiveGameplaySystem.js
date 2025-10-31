@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Addictive Gameplay & Content System
  * Daily activities, events, rewards, progression loops, and engaging content
@@ -122,7 +123,7 @@ export class AddictiveGameplaySystem {
     }
     
     initialize() {
-        console.log('🎮 Addictive Gameplay System initialized');
+        logger.info('🎮 Addictive Gameplay System initialized');
         
         // Start timers
         this.startDailyReset();
@@ -152,7 +153,7 @@ export class AddictiveGameplaySystem {
     }
     
     performDailyReset() {
-        console.log('🌅 Daily reset triggered');
+        logger.info('🌅 Daily reset triggered');
         
         // Reset daily activities
         this.dailyActivities.completedToday.clear();
@@ -187,7 +188,7 @@ export class AddictiveGameplaySystem {
     }
     
     performWeeklyReset() {
-        console.log('📅 Weekly reset triggered');
+        logger.info('📅 Weekly reset triggered');
         
         // Reset weekly activities
         this.weeklyActivities.completedThisWeek.clear();
@@ -230,7 +231,7 @@ export class AddictiveGameplaySystem {
         // Gathering bonuses
         this.dailyActivities.dailyGathering = this.generateGatheringBonuses();
         
-        console.log('✅ Daily content refreshed');
+        logger.info('✅ Daily content refreshed');
     }
     
     /**
@@ -373,7 +374,7 @@ export class AddictiveGameplaySystem {
         
         const reward = rewards[Math.min(day, 7)];
         
-        console.log(`🎁 Daily login reward (Day ${day}):`, reward);
+        logger.info(`🎁 Daily login reward (Day ${day}):`, reward);
         
         this.grantRewards(reward);
         
@@ -404,7 +405,7 @@ export class AddictiveGameplaySystem {
     
     grantItem(itemType) {
         // Grant item to player inventory
-        console.log(`Granting item: ${itemType}`);
+        logger.info(`Granting item: ${itemType}`);
         
         if (this.gameEngine.inventorySystem) {
             // Add item to inventory
@@ -465,7 +466,7 @@ export class AddictiveGameplaySystem {
             this.battlePass.level++;
             this.battlePass.experience -= expNeeded;
             
-            console.log(`📈 Battle Pass Level Up: ${this.battlePass.level}`);
+            logger.info(`📈 Battle Pass Level Up: ${this.battlePass.level}`);
             
             // Grant rewards
             this.grantBattlePassReward(this.battlePass.level);
@@ -535,7 +536,7 @@ export class AddictiveGameplaySystem {
     }
     
     completeChallenge(challenge) {
-        console.log(`✅ Challenge completed: ${challenge.id}`);
+        logger.info(`✅ Challenge completed: ${challenge.id}`);
         
         this.challenges.completed.add(challenge.id);
         this.grantRewards(challenge.reward);
@@ -596,7 +597,7 @@ export class AddictiveGameplaySystem {
     }
     
     startEvent(event) {
-        console.log(`🎉 Event started: ${event.name}`);
+        logger.info(`🎉 Event started: ${event.name}`);
         this.activeEvents.push(event);
         this.notify('Event Started!', event);
     }
@@ -616,7 +617,7 @@ export class AddictiveGameplaySystem {
             // Generate loot
             const loot = this.generateLootFromTable(box.contents);
             
-            console.log(`📦 Opened ${rarity} loot box:`, loot);
+            logger.info(`📦 Opened ${rarity} loot box:`, loot);
             
             this.grantRewards({ item: loot });
             this.notify('Loot Box Opened!', loot);
@@ -660,7 +661,7 @@ export class AddictiveGameplaySystem {
             
             const progress = this.getCollectionProgress(category);
             
-            console.log(`📚 Collection progress (${category}): ${progress}%`);
+            logger.info(`📚 Collection progress (${category}): ${progress}%`);
             
             // Check for completion rewards
             if (progress === 100) {
@@ -675,7 +676,7 @@ export class AddictiveGameplaySystem {
     }
     
     completeCollection(category) {
-        console.log(`🏆 Collection completed: ${category}`);
+        logger.info(`🏆 Collection completed: ${category}`);
         
         const rewards = {
             monsters: { title: 'Monster Encyclopedia', mount: 'Collector Mount' },
@@ -711,7 +712,7 @@ export class AddictiveGameplaySystem {
             // Level up fishing
             if (minigame.catches % 10 === 0) {
                 minigame.level++;
-                console.log(`🎣 Fishing level up: ${minigame.level}`);
+                logger.info(`🎣 Fishing level up: ${minigame.level}`);
             }
             
             return { success: true, fish: fish };
@@ -752,7 +753,7 @@ export class AddictiveGameplaySystem {
     }
     
     displayNotification(title, content) {
-        console.log(`🔔 ${title}:`, content);
+        logger.info(`🔔 ${title}:`, content);
         
         // Would create visual notification in game
     }
@@ -794,9 +795,9 @@ export class AddictiveGameplaySystem {
                 miniGames: this.miniGames
             }));
             
-            console.log('💾 Progress saved');
+            logger.info('💾 Progress saved');
         } catch (error) {
-            console.error('Failed to save progress:', error);
+            logger.error('Failed to save progress:', error);
         }
     }
     
@@ -845,10 +846,10 @@ export class AddictiveGameplaySystem {
                 if (data.progressionSystems) this.progressionSystems = data.progressionSystems;
                 if (data.miniGames) this.miniGames = data.miniGames;
                 
-                console.log('📂 Progress loaded');
+                logger.info('📂 Progress loaded');
             }
         } catch (error) {
-            console.error('Failed to load progress:', error);
+            logger.error('Failed to load progress:', error);
         }
     }
     

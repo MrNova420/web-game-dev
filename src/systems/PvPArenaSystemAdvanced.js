@@ -5,5 +5,5 @@ export class PvPArenaSystemAdvanced {
   constructor() {
     this.arenas = { colosseum: { model: '/assets/models/pvp/colosseum.glb' } };  // Quaternius
   }
-  enterArena(playerId) { console.log(`${playerId} enters arena`); }
+  enterArena(playerId) { logger.info(`${playerId} enters arena`); }
 }

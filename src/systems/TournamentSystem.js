@@ -3,5 +3,5 @@
  */
 export class TournamentSystem {
   constructor() { this.tournaments = new Map(); this.ui = { bracket: '/assets/ui/tournament/bracket.png' }; }  // Kenney
-  createTournament(name) { console.log(`Tournament created: ${name}`); }
+  createTournament(name) { logger.info(`Tournament created: ${name}`); }
 }

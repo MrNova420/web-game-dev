@@ -3,5 +3,5 @@
  */
 export class SocialHubSystem {
   constructor() { this.hub = { model: '/assets/models/social/hub.glb' }; }  // Quaternius
-  enterHub(playerId) { console.log(`${playerId} enters social hub`); }
+  enterHub(playerId) { logger.info(`${playerId} enters social hub`); }
 }

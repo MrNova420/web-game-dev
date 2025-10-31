@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Volcanic Badlands Biome - Fire Zone (Level 55-70)
  * Per README: Active volcanoes with lava rivers
  * 
@@ -29,7 +30,7 @@ export class VolcanicBadlandsBiome {
     }
     
     async build() {
-        console.log('🌋 Building Volcanic Badlands Biome...');
+        logger.info('🌋 Building Volcanic Badlands Biome...');
         
         try {
             await this.setupEnvironment();
@@ -39,12 +40,12 @@ export class VolcanicBadlandsBiome {
             await this.buildMtInferno();
             await this.buildEmberForge();
             
-            console.log('✅ Volcanic Badlands complete!');
-            console.log(`   - Lava flows: ${this.lavaFlows.length}`);
-            console.log(`   - Volcanic rocks: ${this.volcanicRocks.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Volcanic Badlands complete!');
+            logger.info(`   - Lava flows: ${this.lavaFlows.length}`);
+            logger.info(`   - Volcanic rocks: ${this.volcanicRocks.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Volcanic Badlands:', error);
+            logger.error('Error building Volcanic Badlands:', error);
         }
     }
     
@@ -91,7 +92,7 @@ export class VolcanicBadlandsBiome {
     }
     
     async createVolcanicTerrain() {
-        console.log('🗺️ Creating volcanic terrain...');
+        logger.info('🗺️ Creating volcanic terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_UnevenBrick.gltf',
@@ -137,11 +138,11 @@ export class VolcanicBadlandsBiome {
             }
         }
         
-        console.log('   ✅ Volcanic terrain created');
+        logger.info('   ✅ Volcanic terrain created');
     }
     
     async addLavaFlows() {
-        console.log('🔥 Adding lava flows...');
+        logger.info('🔥 Adding lava flows...');
         
         const lavaCount = 50;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -184,11 +185,11 @@ export class VolcanicBadlandsBiome {
             this.lavaFlows.push(lava);
         }
         
-        console.log(`   ✅ Added ${this.lavaFlows.length} lava flows`);
+        logger.info(`   ✅ Added ${this.lavaFlows.length} lava flows`);
     }
     
     async addVolcanicRocks() {
-        console.log('🪨 Adding volcanic rocks...');
+        logger.info('🪨 Adding volcanic rocks...');
         
         const rockCount = 100;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -227,11 +228,11 @@ export class VolcanicBadlandsBiome {
             this.volcanicRocks.push(rock);
         }
         
-        console.log(`   ✅ Added ${this.volcanicRocks.length} volcanic rocks`);
+        logger.info(`   ✅ Added ${this.volcanicRocks.length} volcanic rocks`);
     }
     
     async buildMtInferno() {
-        console.log('🌋 Building Mt. Inferno (main volcano)...');
+        logger.info('🌋 Building Mt. Inferno (main volcano)...');
         
         // Build giant volcano using scaled rocks
         const rockPath = this.assetRegistry.getRandomRock();
@@ -254,12 +255,12 @@ export class VolcanicBadlandsBiome {
             
             this.scene.add(volcano);
             this.structures.push({ name: 'Mt. Inferno', type: 'volcano' });
-            console.log('   ✅ Mt. Inferno created');
+            logger.info('   ✅ Mt. Inferno created');
         }
     }
     
     async buildEmberForge() {
-        console.log('⚒️ Building Ember Forge (legendary smithy)...');
+        logger.info('⚒️ Building Ember Forge (legendary smithy)...');
         
         const buildingPath = '/assets/models/buildings/Wall_Brick.gltf';
         const forge = await this.modelLoader.load(buildingPath);
@@ -279,7 +280,7 @@ export class VolcanicBadlandsBiome {
             
             this.scene.add(forge);
             this.structures.push({ name: 'Ember Forge', type: 'smithy' });
-            console.log('   ✅ Ember Forge created');
+            logger.info('   ✅ Ember Forge created');
         }
     }
 }

@@ -50,7 +50,7 @@ export class DodgeAndParrySystem {
         this.dodgeStartTime = 0;
         this.parryStartTime = 0;
         
-        console.log('🛡️ DodgeAndParrySystem initialized');
+        logger.info('🛡️ DodgeAndParrySystem initialized');
     }
     
     /**
@@ -104,7 +104,7 @@ export class DodgeAndParrySystem {
         // Consume stamina
         this.useStamina(this.dodgeConfig.staminaCost);
         
-        console.log('⚡ Dodge executed');
+        logger.info('⚡ Dodge executed');
         return { success: true };
     }
     
@@ -138,7 +138,7 @@ export class DodgeAndParrySystem {
         // Consume stamina
         this.useStamina(this.parryConfig.staminaCost);
         
-        console.log('🛡️ Parry initiated');
+        logger.info('🛡️ Parry initiated');
         return { success: true, parryWindow: this.parryConfig.windowDuration };
     }
     
@@ -156,7 +156,7 @@ export class DodgeAndParrySystem {
             const isPerfect = timeSinceParry >= this.parryConfig.perfectWindowStart &&
                             timeSinceParry <= this.parryConfig.perfectWindowEnd;
             
-            console.log(isPerfect ? '✨ Perfect parry!' : '🛡️ Parry successful');
+            logger.info(isPerfect ? '✨ Perfect parry!' : '🛡️ Parry successful');
             
             return {
                 parried: true,
@@ -178,7 +178,7 @@ export class DodgeAndParrySystem {
         // Check if exhausted
         if (this.staminaConfig.current <= this.staminaConfig.exhaustedThreshold) {
             this.isExhausted = true;
-            console.warn('💨 Player exhausted!');
+            logger.warn('💨 Player exhausted!');
         }
     }
     

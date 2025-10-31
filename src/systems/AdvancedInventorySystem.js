@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AdvancedInventorySystem - Complete inventory management with categories
  * Handles equipment, consumables, materials, and quest items
@@ -34,7 +35,7 @@ export class AdvancedInventorySystem {
     }
     
     init() {
-        console.log('🎒 Advanced Inventory System initialized');
+        logger.info('🎒 Advanced Inventory System initialized');
     }
     
     createItemDatabase() {
@@ -156,7 +157,7 @@ export class AdvancedInventorySystem {
     addItem(itemId, quantity = 1) {
         const itemData = this.itemDatabase[itemId];
         if (!itemData) {
-            console.error(`Item ${itemId} not found`);
+            logger.error(`Item ${itemId} not found`);
             return false;
         }
         
@@ -169,7 +170,7 @@ export class AdvancedInventorySystem {
             if (existingItem) {
                 existingItem.quantity += quantity;
                 existingItem.quantity = Math.min(existingItem.quantity, itemData.maxStack || 99);
-                console.log(`Added ${quantity} ${itemData.name} (total: ${existingItem.quantity})`);
+                logger.info(`Added ${quantity} ${itemData.name} (total: ${existingItem.quantity})`);
                 return true;
             }
         }
@@ -183,7 +184,7 @@ export class AdvancedInventorySystem {
         
         category.push(newItem);
         
-        console.log(`Added ${itemData.name} to inventory`);
+        logger.info(`Added ${itemData.name} to inventory`);
         
         // Show notification
         if (this.gameEngine.modernUISystem) {
@@ -236,7 +237,7 @@ export class AdvancedInventorySystem {
         }
         
         if (!item || !item.slot) {
-            console.error('Item cannot be equipped');
+            logger.error('Item cannot be equipped');
             return false;
         }
         
@@ -252,7 +253,7 @@ export class AdvancedInventorySystem {
         // Apply stats
         this.applyEquipmentStats();
         
-        console.log(`Equipped ${item.name}`);
+        logger.info(`Equipped ${item.name}`);
         
         if (this.gameEngine.modernUISystem) {
             this.gameEngine.modernUISystem.showNotification(
@@ -275,7 +276,7 @@ export class AdvancedInventorySystem {
         // Recalculate stats
         this.applyEquipmentStats();
         
-        console.log(`Unequipped ${item.name}`);
+        logger.info(`Unequipped ${item.name}`);
         
         return true;
     }
@@ -303,13 +304,13 @@ export class AdvancedInventorySystem {
         }
         
         // Apply bonuses (simplified)
-        console.log(`Equipment bonuses: +${bonusAttack} ATK, +${bonusDefense} DEF`);
+        logger.info(`Equipment bonuses: +${bonusAttack} ATK, +${bonusDefense} DEF`);
     }
     
     useConsumable(itemId) {
         const item = this.inventory.consumables.find(i => i.id === itemId);
         if (!item) {
-            console.error('Consumable not found');
+            logger.error('Consumable not found');
             return false;
         }
         
@@ -323,7 +324,7 @@ export class AdvancedInventorySystem {
                         player.stats.hp + item.hp,
                         player.stats.maxHp
                     );
-                    console.log(`Restored ${item.hp} HP`);
+                    logger.info(`Restored ${item.hp} HP`);
                     break;
                     
                 case 'restore_mana':
@@ -331,13 +332,13 @@ export class AdvancedInventorySystem {
                         player.stats.mp + item.mp,
                         player.stats.maxMp
                     );
-                    console.log(`Restored ${item.mp} MP`);
+                    logger.info(`Restored ${item.mp} MP`);
                     break;
                     
                 case 'full_restore':
                     player.stats.hp = player.stats.maxHp;
                     player.stats.mp = player.stats.maxMp;
-                    console.log('Fully restored HP and MP');
+                    logger.info('Fully restored HP and MP');
                     break;
             }
         }
@@ -383,6 +384,6 @@ export class AdvancedInventorySystem {
     }
     
     dispose() {
-        console.log('🎒 Advanced Inventory System disposed');
+        logger.info('🎒 Advanced Inventory System disposed');
     }
 }

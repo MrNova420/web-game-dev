@@ -158,7 +158,7 @@ export class StorylineAndLoreSystem {
             majorDecisions: []
         };
         
-        console.log('📖 StorylineAndLoreSystem initialized');
+        logger.info('📖 StorylineAndLoreSystem initialized');
     }
     
     /**
@@ -168,7 +168,7 @@ export class StorylineAndLoreSystem {
         this.unlockChapter('prologue');
         this.discoverLore('world_origin');
         
-        console.log('📜 Storyline begins...');
+        logger.info('📜 Storyline begins...');
     }
     
     /**
@@ -178,8 +178,8 @@ export class StorylineAndLoreSystem {
         const chapter = this.chapters[chapterId];
         if (!chapter) return;
         
-        console.log(`📖 Chapter Unlocked: ${chapter.title}`);
-        console.log(`   ${chapter.description}`);
+        logger.info(`📖 Chapter Unlocked: ${chapter.title}`);
+        logger.info(`   ${chapter.description}`);
         
         // Unlock associated lore entries
         chapter.loreEntries.forEach(loreId => {
@@ -203,8 +203,8 @@ export class StorylineAndLoreSystem {
         if (!entry || entry.discovered) return;
         
         entry.discovered = true;
-        console.log(`📚 Lore Discovered: ${entry.title}`);
-        console.log(`   ${entry.content.substring(0, 100)}...`);
+        logger.info(`📚 Lore Discovered: ${entry.title}`);
+        logger.info(`   ${entry.content.substring(0, 100)}...`);
         
         // Show notification to player
         this.showLoreNotification(entry);
@@ -215,7 +215,7 @@ export class StorylineAndLoreSystem {
      */
     showLoreNotification(entry) {
         // This would integrate with the UI system
-        console.log(`✨ New Lore Entry: ${entry.title} (${entry.category})`);
+        logger.info(`✨ New Lore Entry: ${entry.title} (${entry.category})`);
     }
     
     /**
@@ -236,11 +236,11 @@ export class StorylineAndLoreSystem {
      * Display narrative text
      */
     displayNarrative(event) {
-        console.log(`\n═══════════════════════════════════════`);
-        console.log(`📜 ${event.title}`);
-        console.log(`───────────────────────────────────────`);
-        console.log(`   ${event.description}`);
-        console.log(`═══════════════════════════════════════\n`);
+        logger.info(`\n═══════════════════════════════════════`);
+        logger.info(`📜 ${event.title}`);
+        logger.info(`───────────────────────────────────────`);
+        logger.info(`   ${event.description}`);
+        logger.info(`═══════════════════════════════════════\n`);
     }
     
     /**
@@ -258,7 +258,7 @@ export class StorylineAndLoreSystem {
         // Apply consequences
         this.applyChoiceConsequences(choiceId, option);
         
-        console.log(`⚖️ Choice Made: ${choiceId} - ${option}`);
+        logger.info(`⚖️ Choice Made: ${choiceId} - ${option}`);
     }
     
     /**
@@ -324,7 +324,7 @@ export class StorylineAndLoreSystem {
             }
         }
         
-        console.log(`⚖️ Alignment shifted to: ${this.worldState.alignment}`);
+        logger.info(`⚖️ Alignment shifted to: ${this.worldState.alignment}`);
     }
     
     /**
@@ -355,11 +355,11 @@ export class StorylineAndLoreSystem {
         if (!character) return;
         
         character.relationship = Math.min(100, character.relationship + amount);
-        console.log(`💖 Relationship with ${character.name}: ${character.relationship}%`);
+        logger.info(`💖 Relationship with ${character.name}: ${character.relationship}%`);
         
         // Unlock new dialogues or events at certain thresholds
         if (character.relationship >= 50 && character.relationship - amount < 50) {
-            console.log(`✨ ${character.name} now trusts you more deeply`);
+            logger.info(`✨ ${character.name} now trusts you more deeply`);
         }
     }
     
@@ -388,14 +388,14 @@ export class StorylineAndLoreSystem {
         if (!chapter) return;
         
         chapter.completed = true;
-        console.log(`✅ Chapter Completed: ${chapter.title}`);
+        logger.info(`✅ Chapter Completed: ${chapter.title}`);
         
         // Unlock next chapter if available
         const nextChapterId = this.getNextChapter(chapterId);
         if (nextChapterId) {
             const nextChapter = this.chapters[nextChapterId];
             if (nextChapter) {
-                console.log(`📖 Next Chapter Available: ${nextChapter.title}`);
+                logger.info(`📖 Next Chapter Available: ${nextChapter.title}`);
             }
         }
     }
@@ -453,7 +453,7 @@ export class StorylineAndLoreSystem {
         Object.entries(this.characters).forEach(([id, character]) => {
             if (!character.unlocked && playerLevel >= (character.unlockLevel || 0)) {
                 character.unlocked = true;
-                console.log(`👤 New Character Unlocked: ${character.name} (${character.role})`);
+                logger.info(`👤 New Character Unlocked: ${character.name} (${character.role})`);
             }
         });
         

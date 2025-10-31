@@ -21,7 +21,7 @@ export class InventorySystemEnhanced {
   }
 
   addItem(playerId, itemId, quantity = 1) {
-    console.log(`${playerId} received ${quantity}x ${itemId}`);
-    console.log(`  Icon: ${this.itemIcons[itemId]}`);
+    logger.info(`${playerId} received ${quantity}x ${itemId}`);
+    logger.info(`  Icon: ${this.itemIcons[itemId]}`);
   }
 }

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BiomeDungeonsSystem.js
  * Phase 4.5 - Biome-Specific Dungeons System
@@ -323,7 +324,7 @@ export class BiomeDungeonsSystem {
         // Active dungeon instances
         this.activeDungeons = [];
         
-        console.log('🏰 BiomeDungeonsSystem initialized with', Object.keys(this.dungeonTemplates).length, 'dungeon types');
+        logger.info('🏰 BiomeDungeonsSystem initialized with', Object.keys(this.dungeonTemplates).length, 'dungeon types');
     }
     
     /**
@@ -345,7 +346,7 @@ export class BiomeDungeonsSystem {
     createDungeonInstance(dungeonId, entrancePosition) {
         const template = this.dungeonTemplates[dungeonId];
         if (!template) {
-            console.warn('Unknown dungeon:', dungeonId);
+            logger.warn('Unknown dungeon:', dungeonId);
             return null;
         }
         
@@ -362,7 +363,7 @@ export class BiomeDungeonsSystem {
         };
         
         this.activeDungeons.push(instance);
-        console.log(`🏰 Created dungeon instance: ${template.name}`);
+        logger.info(`🏰 Created dungeon instance: ${template.name}`);
         
         return instance;
     }
@@ -404,7 +405,7 @@ export class BiomeDungeonsSystem {
         instance.bossDefeated = true;
         
         // Award loot
-        console.log(`🏆 Dungeon completed: ${instance.name}`);
+        logger.info(`🏆 Dungeon completed: ${instance.name}`);
         return instance.loot;
     }
     

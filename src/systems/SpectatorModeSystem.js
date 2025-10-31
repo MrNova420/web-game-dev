@@ -3,5 +3,5 @@
  */
 export class SpectatorModeSystem {
   constructor() { this.cameras = new Map(); }
-  spectate(viewerId, targetId) { console.log(`${viewerId} spectating ${targetId}`); }
+  spectate(viewerId, targetId) { logger.info(`${viewerId} spectating ${targetId}`); }
 }

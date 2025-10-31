@@ -450,7 +450,7 @@ export class EconomySystem {
         if (merchant) {
             merchant.spawnTime = Date.now();
             this.generateShopInventory(merchant);
-            console.log('🧙 A traveling merchant has appeared!');
+            logger.info('🧙 A traveling merchant has appeared!');
             return true;
         }
         return false;
@@ -464,7 +464,7 @@ export class EconomySystem {
         if (merchant) {
             merchant.spawnTime = null;
             this.shopInventories.set('traveling_merchant', []);
-            console.log('🧙 The traveling merchant has left...');
+            logger.info('🧙 The traveling merchant has left...');
             return true;
         }
         return false;
@@ -534,12 +534,12 @@ export class EconomySystem {
         const event = events[Math.floor(Math.random() * events.length)];
         event.effect();
         
-        console.log(`🎉 Merchant Event: ${event.name} - ${event.description}`);
+        logger.info(`🎉 Merchant Event: ${event.name} - ${event.description}`);
         
         // Schedule event end
         setTimeout(() => {
             event.endEffect();
-            console.log(`Event ended: ${event.name}`);
+            logger.info(`Event ended: ${event.name}`);
         }, event.duration);
         
         this.merchantEvents.push({
@@ -561,7 +561,7 @@ export class EconomySystem {
         if (timeSinceRestock >= merchant.restockTime) {
             this.generateShopInventory(merchant);
             merchant.lastRestock = Date.now();
-            console.log(`${merchant.name} has restocked their inventory!`);
+            logger.info(`${merchant.name} has restocked their inventory!`);
             return true;
         }
         
@@ -686,7 +686,7 @@ export class EconomySystem {
         if (daysSinceReset >= 1) {
             this.dailyTransactionCount = 0;
             this.lastResetDate = now;
-            console.log('Economy daily counters reset');
+            logger.info('Economy daily counters reset');
         }
     }
     

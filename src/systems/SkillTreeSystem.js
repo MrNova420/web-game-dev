@@ -26,8 +26,8 @@ export class SkillTreeSystem {
   }
 
   unlockNode(playerId, tree, nodeId) {
-    console.log(`${playerId} unlocked ${nodeId} in ${tree} tree`);
-    console.log(`  Icon: ${this.icons.node_unlocked}`);
+    logger.info(`${playerId} unlocked ${nodeId} in ${tree} tree`);
+    logger.info(`  Icon: ${this.icons.node_unlocked}`);
   }
 
   /**

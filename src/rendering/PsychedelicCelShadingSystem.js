@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Psychedelic Cel-Shading System
  * Combines anime-style cel-shading with psychedelic cannabis theme effects
  * Phase 1, Session 1.1 of ULTIMATE_AUTONOMOUS_ROADMAP.md
@@ -34,9 +35,9 @@ export class PsychedelicCelShadingSystem {
     }
     
     init() {
-        console.log('🎨 Initializing Psychedelic Cel-Shading System...');
+        logger.info('🎨 Initializing Psychedelic Cel-Shading System...');
         this.createToonShaders();
-        console.log('✅ Psychedelic Cel-Shading System initialized');
+        logger.info('✅ Psychedelic Cel-Shading System initialized');
     }
     
     /**

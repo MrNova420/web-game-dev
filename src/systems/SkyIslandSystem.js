@@ -8,5 +8,5 @@ export class SkyIslandSystem {
       cloud_palace: { model: '/assets/models/islands/cloud_palace.glb' }  // Quaternius
     };
   }
-  teleportToIsland(islandId) { console.log(`Teleporting to: ${islandId}`); }
+  teleportToIsland(islandId) { logger.info(`Teleporting to: ${islandId}`); }
 }

@@ -57,7 +57,7 @@ export class CloudSaveSystem {
     }
     
     initialize() {
-        console.log('☁️ Cloud Save System initializing...');
+        logger.info('☁️ Cloud Save System initializing...');
         
         // Initialize IndexedDB for local caching
         this.initializeIndexedDB();
@@ -86,13 +86,13 @@ export class CloudSaveSystem {
             const request = indexedDB.open(this.dbName, this.dbVersion);
             
             request.onerror = () => {
-                console.error('Failed to open IndexedDB');
+                logger.error('Failed to open IndexedDB');
                 reject(request.error);
             };
             
             request.onsuccess = () => {
                 this.indexedDB = request.result;
-                console.log('✅ IndexedDB initialized');
+                logger.info('✅ IndexedDB initialized');
                 resolve();
             };
             
@@ -116,7 +116,7 @@ export class CloudSaveSystem {
                     db.createObjectStore('cache', { keyPath: 'key' });
                 }
                 
-                console.log('📦 IndexedDB object stores created');
+                logger.info('📦 IndexedDB object stores created');
             };
         });
     }
@@ -126,7 +126,7 @@ export class CloudSaveSystem {
      */
     async connectToServer() {
         try {
-            console.log('🔌 Connecting to game server...');
+            logger.info('🔌 Connecting to game server...');
             
             // Try to authenticate (would use real auth)
             const userId = this.getStoredUserId() || this.generateUserId();
@@ -146,11 +146,11 @@ export class CloudSaveSystem {
                 // Load cloud save
                 await this.loadFromCloud();
                 
-                console.log('✅ Connected to game server');
+                logger.info('✅ Connected to game server');
                 this.showNotification('Connected', 'Cloud save active');
             }
         } catch (error) {
-            console.warn('⚠️ Could not connect to server, using offline mode');
+            logger.warn('⚠️ Could not connect to server, using offline mode');
             this.offlineMode = true;
             
             // Load from local storage
@@ -170,7 +170,7 @@ export class CloudSaveSystem {
                 serverTime: Date.now()
             };
         } catch (error) {
-            console.error('Failed to create session:', error);
+            logger.error('Failed to create session:', error);
             return null;
         }
     }
@@ -185,13 +185,13 @@ export class CloudSaveSystem {
         
         try {
             // Would connect to real WebSocket server
-            console.log('🔌 Connecting WebSocket...');
+            logger.info('🔌 Connecting WebSocket...');
             
             // Simulated WebSocket connection
             this.websocket = {
                 connected: true,
-                send: (data) => console.log('WS Send:', data),
-                close: () => console.log('WS Closed')
+                send: (data) => logger.info('WS Send:', data),
+                close: () => logger.info('WS Closed')
             };
             
             // In real implementation:
@@ -200,9 +200,9 @@ export class CloudSaveSystem {
             // this.websocket.onerror = (error) => this.handleWebSocketError(error);
             // this.websocket.onclose = () => this.handleWebSocketClose();
             
-            console.log('✅ WebSocket connected');
+            logger.info('✅ WebSocket connected');
         } catch (error) {
-            console.error('WebSocket connection failed:', error);
+            logger.error('WebSocket connection failed:', error);
         }
     }
     
@@ -211,12 +211,12 @@ export class CloudSaveSystem {
      */
     async saveToCloud(saveData = null) {
         if (!this.connectionState.connected) {
-            console.log('💾 Offline mode - saving locally');
+            logger.info('💾 Offline mode - saving locally');
             return this.saveToLocal(saveData);
         }
         
         if (this.connectionState.syncInProgress) {
-            console.log('⏳ Sync in progress, queuing save...');
+            logger.info('⏳ Sync in progress, queuing save...');
             this.saveQueue.push(saveData || this.collectSaveData());
             return;
         }
@@ -226,7 +226,7 @@ export class CloudSaveSystem {
         try {
             const data = saveData || this.collectSaveData();
             
-            console.log('☁️ Saving to cloud...');
+            logger.info('☁️ Saving to cloud...');
             
             // Send to server (would be real API call)
             const response = await this.sendToServer('save', data);
@@ -237,13 +237,13 @@ export class CloudSaveSystem {
                 // Also save locally as backup
                 await this.saveToLocal(data);
                 
-                console.log('✅ Cloud save successful');
+                logger.info('✅ Cloud save successful');
                 this.showNotification('Saved', 'Progress saved to cloud');
                 
                 return true;
             }
         } catch (error) {
-            console.error('❌ Cloud save failed:', error);
+            logger.error('❌ Cloud save failed:', error);
             
             // Fallback to local save
             await this.saveToLocal(saveData);
@@ -270,7 +270,7 @@ export class CloudSaveSystem {
      */
     async loadFromCloud() {
         try {
-            console.log('📥 Loading from cloud...');
+            logger.info('📥 Loading from cloud...');
             
             // Request save data from server (would be real API call)
             const response = await this.sendToServer('load', {
@@ -288,11 +288,11 @@ export class CloudSaveSystem {
                     this.applySaveData(response.data);
                 }
                 
-                console.log('✅ Loaded from cloud');
+                logger.info('✅ Loaded from cloud');
                 return response.data;
             }
         } catch (error) {
-            console.error('❌ Cloud load failed:', error);
+            logger.error('❌ Cloud load failed:', error);
             
             // Fallback to local
             return this.loadFromLocal();
@@ -304,7 +304,7 @@ export class CloudSaveSystem {
      */
     async saveToLocal(saveData = null) {
         if (!this.indexedDB) {
-            console.warn('IndexedDB not available, using localStorage');
+            logger.warn('IndexedDB not available, using localStorage');
             return this.saveToLocalStorage(saveData);
         }
         
@@ -320,10 +320,10 @@ export class CloudSaveSystem {
                 timestamp: Date.now()
             });
             
-            console.log('💾 Saved locally to IndexedDB');
+            logger.info('💾 Saved locally to IndexedDB');
             return true;
         } catch (error) {
-            console.error('Local save failed:', error);
+            logger.error('Local save failed:', error);
             return this.saveToLocalStorage(saveData);
         }
     }
@@ -344,7 +344,7 @@ export class CloudSaveSystem {
             return new Promise((resolve, reject) => {
                 request.onsuccess = () => {
                     if (request.result) {
-                        console.log('📂 Loaded from IndexedDB');
+                        logger.info('📂 Loaded from IndexedDB');
                         resolve(request.result.data);
                     } else {
                         resolve(null);
@@ -352,12 +352,12 @@ export class CloudSaveSystem {
                 };
                 
                 request.onerror = () => {
-                    console.error('Failed to load from IndexedDB');
+                    logger.error('Failed to load from IndexedDB');
                     resolve(this.loadFromLocalStorage());
                 };
             });
         } catch (error) {
-            console.error('Local load failed:', error);
+            logger.error('Local load failed:', error);
             return this.loadFromLocalStorage();
         }
     }
@@ -369,10 +369,10 @@ export class CloudSaveSystem {
         try {
             const data = saveData || this.collectSaveData();
             localStorage.setItem('game_save', JSON.stringify(data));
-            console.log('💾 Saved to localStorage');
+            logger.info('💾 Saved to localStorage');
             return true;
         } catch (error) {
-            console.error('localStorage save failed:', error);
+            logger.error('localStorage save failed:', error);
             return false;
         }
     }
@@ -381,11 +381,11 @@ export class CloudSaveSystem {
         try {
             const saved = localStorage.getItem('game_save');
             if (saved) {
-                console.log('📂 Loaded from localStorage');
+                logger.info('📂 Loaded from localStorage');
                 return JSON.parse(saved);
             }
         } catch (error) {
-            console.error('localStorage load failed:', error);
+            logger.error('localStorage load failed:', error);
         }
         return null;
     }
@@ -506,7 +506,7 @@ export class CloudSaveSystem {
     applySaveData(saveData) {
         if (!saveData) return;
         
-        console.log('📥 Applying save data...');
+        logger.info('📥 Applying save data...');
         
         // Apply player data
         if (saveData.player) {
@@ -538,7 +538,7 @@ export class CloudSaveSystem {
             this.applyUnlocksData(saveData.unlocks);
         }
         
-        console.log('✅ Save data applied');
+        logger.info('✅ Save data applied');
     }
     
     applyPlayerData(data) {
@@ -604,7 +604,7 @@ export class CloudSaveSystem {
     }
     
     async resolveConflict(localData, cloudData) {
-        console.log('⚠️ Save conflict detected, resolving...');
+        logger.info('⚠️ Save conflict detected, resolving...');
         
         switch (this.conflictStrategy) {
             case 'server_wins':
@@ -650,7 +650,7 @@ export class CloudSaveSystem {
             this.saveToCloud();
         }, 60000); // Auto-save every minute
         
-        console.log('⏰ Auto-save enabled (every 60 seconds)');
+        logger.info('⏰ Auto-save enabled (every 60 seconds)');
     }
     
     /**
@@ -665,7 +665,7 @@ export class CloudSaveSystem {
     }
     
     async syncWithServer() {
-        console.log('🔄 Syncing with server...');
+        logger.info('🔄 Syncing with server...');
         
         // Sync any pending offline changes
         if (this.offlineChanges.length > 0) {
@@ -678,7 +678,7 @@ export class CloudSaveSystem {
         // Check for server updates
         const serverData = await this.loadFromCloud();
         
-        console.log('✅ Sync complete');
+        logger.info('✅ Sync complete');
     }
     
     /**
@@ -702,13 +702,13 @@ export class CloudSaveSystem {
      */
     setupConnectionMonitoring() {
         window.addEventListener('online', () => {
-            console.log('🌐 Connection restored');
+            logger.info('🌐 Connection restored');
             this.offlineMode = false;
             this.connectToServer();
         });
         
         window.addEventListener('offline', () => {
-            console.log('📴 Connection lost - switching to offline mode');
+            logger.info('📴 Connection lost - switching to offline mode');
             this.offlineMode = true;
         });
     }
@@ -762,7 +762,7 @@ export class CloudSaveSystem {
     }
     
     showNotification(title, message) {
-        console.log(`🔔 ${title}: ${message}`);
+        logger.info(`🔔 ${title}: ${message}`);
         // Would show in-game notification
     }
     
@@ -770,7 +770,7 @@ export class CloudSaveSystem {
      * Manual save trigger
      */
     async manualSave() {
-        console.log('💾 Manual save triggered');
+        logger.info('💾 Manual save triggered');
         await this.saveToCloud();
         this.showNotification('Game Saved', 'Progress saved successfully');
     }

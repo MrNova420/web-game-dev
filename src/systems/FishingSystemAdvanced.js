@@ -9,5 +9,5 @@ export class FishingSystemAdvanced {
     };
     this.animations = { cast: '/assets/animations/fishing_cast.fbx', reel: '/assets/animations/fishing_reel.fbx' };  // Mixamo
   }
-  catchFish(playerId) { console.log(`${playerId} caught fish!`); }
+  catchFish(playerId) { logger.info(`${playerId} caught fish!`); }
 }

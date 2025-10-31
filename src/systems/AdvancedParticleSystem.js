@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * AdvancedParticleSystem - EXTERNAL ASSETS ONLY
  * Enhanced particle effects with multiple types using external particle textures
  * 
@@ -45,8 +46,8 @@ export class AdvancedParticleSystem {
     }
     
     init() {
-        console.log('✨ Advanced Particle System initialized');
-        console.log('   Using Kenney Particle Pack (200+ sprites)');
+        logger.info('✨ Advanced Particle System initialized');
+        logger.info('   Using Kenney Particle Pack (200+ sprites)');
     }
     
     // Fire particles
@@ -480,6 +481,6 @@ export class AdvancedParticleSystem {
     dispose() {
         this.particleGroups.forEach(group => this.removeParticleGroup(group));
         this.particleGroups = [];
-        console.log('✨ Advanced Particle System disposed');
+        logger.info('✨ Advanced Particle System disposed');
     }
 }

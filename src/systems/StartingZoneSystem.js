@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * StartingZoneSystem - Tutorial and starting area for new players
  * Guides players through game mechanics before first dungeon
  */
@@ -24,7 +25,7 @@ export class StartingZoneSystem {
         this.setupTutorialSteps();
         this.createTutorialUI();
         
-        console.log('🎓 Starting Zone System initialized');
+        logger.info('🎓 Starting Zone System initialized');
     }
     
     createStartingZone() {
@@ -51,7 +52,7 @@ export class StartingZoneSystem {
         // Add tutorial NPCs
         this.createTutorialNPCs();
         
-        console.log('🏛️ Starting zone created');
+        logger.info('🏛️ Starting zone created');
     }
     
     createWelcomeSign() {
@@ -298,7 +299,7 @@ export class StartingZoneSystem {
             );
         }
         
-        console.log('✅ Tutorial completed');
+        logger.info('✅ Tutorial completed');
     }
     
     spawnPlayerInStartingZone() {
@@ -306,7 +307,7 @@ export class StartingZoneSystem {
             this.gameEngine.player.mesh.position.copy(this.startingPosition);
             this.gameEngine.player.mesh.position.y = 1;
             
-            console.log('👤 Player spawned in starting zone');
+            logger.info('👤 Player spawned in starting zone');
         }
     }
     
@@ -323,6 +324,6 @@ export class StartingZoneSystem {
             this.tutorialUI.parentElement.removeChild(this.tutorialUI);
         }
         
-        console.log('🎓 Starting Zone System disposed');
+        logger.info('🎓 Starting Zone System disposed');
     }
 }

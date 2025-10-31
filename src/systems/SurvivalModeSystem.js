@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * SurvivalModeSystem - Wave-Based Survival Challenge with EXTERNAL ASSETS
  * Phase 8 - Mini-Games System #127
  * 
@@ -248,12 +249,12 @@ export class SurvivalModeSystem {
     }
     
     initialize() {
-        console.log('🛡️  Survival Mode System initialized');
-        console.log('   Using Quaternius + Sketchfab Free + Kenney');
+        logger.info('🛡️  Survival Mode System initialized');
+        logger.info('   Using Quaternius + Sketchfab Free + Kenney');
     }
     
     startSurvival() {
-        console.log('🛡️  Starting Survival Mode');
+        logger.info('🛡️  Starting Survival Mode');
         this.active = true;
         this.wave = 0;
         this.enemiesKilled = 0;
@@ -266,33 +267,33 @@ export class SurvivalModeSystem {
     }
     
     loadArena(arenaType) {
-        console.log(`🏟️  Loading arena: ${arenaType} (Quaternius Arena Pack)`);
+        logger.info(`🏟️  Loading arena: ${arenaType} (Quaternius Arena Pack)`);
         this.currentArena = arenaType;
         // Arena would be loaded using GLTFLoader from external Quaternius assets
     }
     
     startNextWave() {
         this.wave++;
-        console.log(`\n🌊 WAVE ${this.wave} STARTING`);
+        logger.info(`\n🌊 WAVE ${this.wave} STARTING`);
         
         // Check for arena change
         const arenaChange = this.arenaProgression.find(p => p.wave === this.wave);
         if (arenaChange) {
-            console.log(`🏟️  Arena changing to: ${arenaChange.arena}`);
+            logger.info(`🏟️  Arena changing to: ${arenaChange.arena}`);
             this.loadArena(arenaChange.arena);
         }
         
         // Check for boss wave
         const bossEncounter = this.bossEncounters.find(b => b.wave === this.wave);
         if (bossEncounter) {
-            console.log(`👹 BOSS WAVE: ${bossEncounter.name}`);
+            logger.info(`👹 BOSS WAVE: ${bossEncounter.name}`);
             this.spawnBoss(bossEncounter);
             return;
         }
         
         // Check for elite wave
         if (this.wave % this.waveConfig.eliteWaveInterval === 0) {
-            console.log('⭐ ELITE WAVE');
+            logger.info('⭐ ELITE WAVE');
             this.spawnEliteWave();
             return;
         }
@@ -305,8 +306,8 @@ export class SurvivalModeSystem {
         const enemyCount = this.waveConfig.baseEnemyCount + 
                           (this.wave - 1) * this.waveConfig.enemyCountIncrease;
         
-        console.log(`   Spawning ${enemyCount} enemies`);
-        console.log(`   Using Quaternius Monster Pack models`);
+        logger.info(`   Spawning ${enemyCount} enemies`);
+        logger.info(`   Using Quaternius Monster Pack models`);
         
         for (let i = 0; i < enemyCount; i++) {
             const enemyType = this.selectRandomEnemyType();
@@ -316,7 +317,7 @@ export class SurvivalModeSystem {
     
     spawnEliteWave() {
         const eliteCount = Math.floor(this.wave / 5) + 2;
-        console.log(`   Spawning ${eliteCount} elite enemies`);
+        logger.info(`   Spawning ${eliteCount} elite enemies`);
         
         for (let i = 0; i < eliteCount; i++) {
             const eliteType = this.enemyTypes.find(t => t.type === 'elite');
@@ -332,9 +333,9 @@ export class SurvivalModeSystem {
     }
     
     spawnBoss(bossData) {
-        console.log(`   Boss: ${bossData.name}`);
-        console.log(`   Health: ${bossData.health}, Abilities: ${bossData.abilities.join(', ')}`);
-        console.log(`   Model: ${bossData.model} (Sketchfab Free)`);
+        logger.info(`   Boss: ${bossData.name}`);
+        logger.info(`   Health: ${bossData.health}, Abilities: ${bossData.abilities.join(', ')}`);
+        logger.info(`   Model: ${bossData.model} (Sketchfab Free)`);
         
         // Boss would be loaded using GLTFLoader from Sketchfab Free assets
         const boss = {
@@ -468,7 +469,7 @@ export class SurvivalModeSystem {
         const powerupTypes = Object.keys(this.assets.powerups);
         const randomType = powerupTypes[Math.floor(Math.random() * powerupTypes.length)];
         
-        console.log(`💊 Powerup dropped: ${randomType}`);
+        logger.info(`💊 Powerup dropped: ${randomType}`);
         
         this.powerups.push({
             type: randomType,
@@ -482,7 +483,7 @@ export class SurvivalModeSystem {
             Math.floor(Math.random() * this.assets.weaponDrops.length)
         ];
         
-        console.log(`⚔️  Weapon dropped: ${randomWeapon}`);
+        logger.info(`⚔️  Weapon dropped: ${randomWeapon}`);
         
         this.weaponDrops.push({
             model: randomWeapon,  // Sketchfab Free weapon
@@ -491,23 +492,23 @@ export class SurvivalModeSystem {
     }
     
     grantBossRewards(reward) {
-        console.log('🎁 Boss rewards granted:');
-        console.log(`   Score: +${reward.score}`);
+        logger.info('🎁 Boss rewards granted:');
+        logger.info(`   Score: +${reward.score}`);
         this.score += reward.score;
         
         if (reward.powerup) {
-            console.log(`   Powerup: ${reward.powerup}`);
+            logger.info(`   Powerup: ${reward.powerup}`);
             this.activatePowerup(reward.powerup);
         }
         
         if (reward.weaponDrop) {
-            console.log('   Legendary Weapon Drop!');
+            logger.info('   Legendary Weapon Drop!');
             this.dropWeapon(new THREE.Vector3(0, 0, 0));
         }
     }
     
     activatePowerup(type) {
-        console.log(`💊 Powerup activated: ${type}`);
+        logger.info(`💊 Powerup activated: ${type}`);
         
         switch (type) {
             case 'health':
@@ -536,7 +537,7 @@ export class SurvivalModeSystem {
     }
     
     nukeAllEnemies() {
-        console.log('💥 NUKE ACTIVATED - All enemies destroyed!');
+        logger.info('💥 NUKE ACTIVATED - All enemies destroyed!');
         const killCount = this.enemies.length;
         this.enemiesKilled += killCount;
         this.score += killCount * 50 * this.wave;
@@ -544,40 +545,40 @@ export class SurvivalModeSystem {
     }
     
     onWaveComplete() {
-        console.log(`✅ Wave ${this.wave} complete!`);
-        console.log(`   Enemies killed: ${this.enemiesKilled}`);
-        console.log(`   Score: ${this.score}`);
-        console.log(`   Time: ${Math.floor(this.survivalTime)}s`);
+        logger.info(`✅ Wave ${this.wave} complete!`);
+        logger.info(`   Enemies killed: ${this.enemiesKilled}`);
+        logger.info(`   Score: ${this.score}`);
+        logger.info(`   Time: ${Math.floor(this.survivalTime)}s`);
         
         // Brief pause before next wave
         setTimeout(() => this.startNextWave(), 3000);
     }
     
     gameOver() {
-        console.log('\n💀 SURVIVAL MODE - GAME OVER');
-        console.log(`   Final Wave: ${this.wave}`);
-        console.log(`   Total Kills: ${this.enemiesKilled}`);
-        console.log(`   Final Score: ${this.score}`);
-        console.log(`   Survival Time: ${Math.floor(this.survivalTime)}s`);
+        logger.info('\n💀 SURVIVAL MODE - GAME OVER');
+        logger.info(`   Final Wave: ${this.wave}`);
+        logger.info(`   Total Kills: ${this.enemiesKilled}`);
+        logger.info(`   Final Score: ${this.score}`);
+        logger.info(`   Survival Time: ${Math.floor(this.survivalTime)}s`);
         
         // Update personal best
         if (this.wave > this.personalBest.highestWave) {
-            console.log('🏆 NEW RECORD: Highest Wave!');
+            logger.info('🏆 NEW RECORD: Highest Wave!');
             this.personalBest.highestWave = this.wave;
         }
         
         if (this.enemiesKilled > this.personalBest.mostKills) {
-            console.log('🏆 NEW RECORD: Most Kills!');
+            logger.info('🏆 NEW RECORD: Most Kills!');
             this.personalBest.mostKills = this.enemiesKilled;
         }
         
         if (this.survivalTime > this.personalBest.longestTime) {
-            console.log('🏆 NEW RECORD: Longest Survival!');
+            logger.info('🏆 NEW RECORD: Longest Survival!');
             this.personalBest.longestTime = this.survivalTime;
         }
         
         if (this.score > this.personalBest.highScore) {
-            console.log('🏆 NEW RECORD: High Score!');
+            logger.info('🏆 NEW RECORD: High Score!');
             this.personalBest.highScore = this.score;
         }
         

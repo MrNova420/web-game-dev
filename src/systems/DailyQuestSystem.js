@@ -15,7 +15,7 @@ export class DailyQuestSystem {
   }
 
   refreshDailies(playerId) {
-    console.log(`${playerId} daily quests refreshed`);
-    console.log(`  UI: ${this.ui.daily_panel}`);
+    logger.info(`${playerId} daily quests refreshed`);
+    logger.info(`  UI: ${this.ui.daily_panel}`);
   }
 }

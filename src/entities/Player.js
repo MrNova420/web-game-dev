@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Player - Main player character class
  */
 
@@ -86,7 +87,7 @@ export class Player {
         
         this.scene.add(this.mesh);
         
-        console.log('👤 Player initialized');
+        logger.info('👤 Player initialized');
     }
     
     update(delta) {
@@ -96,7 +97,7 @@ export class Player {
         if (this.spawnProtection) {
             if (currentTime - this.spawnTime >= this.spawnProtectionDuration) {
                 this.spawnProtection = false;
-                console.log('🛡️ Spawn protection ended');
+                logger.info('🛡️ Spawn protection ended');
             }
         }
         
@@ -172,7 +173,7 @@ export class Player {
         }
         
         this.lastAttackTime = currentTime;
-        console.log('⚔️ Player attacks!');
+        logger.info('⚔️ Player attacks!');
         
         // TODO: Implement actual attack logic with hit detection
     }
@@ -180,7 +181,7 @@ export class Player {
     takeDamage(amount) {
         // Check for spawn protection
         if (this.spawnProtection) {
-            console.log('🛡️ Spawn protection active - no damage taken');
+            logger.info('🛡️ Spawn protection active - no damage taken');
             return 0;
         }
         
@@ -205,7 +206,7 @@ export class Player {
             }
         }, 100);
         
-        console.log(`💔 Player took ${actualDamage} damage (HP: ${this.stats.hp}/${this.stats.maxHp})`);
+        logger.info(`💔 Player took ${actualDamage} damage (HP: ${this.stats.hp}/${this.stats.maxHp})`);
         
         if (this.stats.hp <= 0) {
             this.die();
@@ -216,7 +217,7 @@ export class Player {
     
     heal(amount) {
         this.stats.hp = Math.min(this.stats.maxHp, this.stats.hp + amount);
-        console.log(`💚 Healed for ${amount} HP`);
+        logger.info(`💚 Healed for ${amount} HP`);
     }
     
     gainExp(amount) {
@@ -245,7 +246,7 @@ export class Player {
         this.stats.attack += 3;
         this.stats.defense += 2;
         
-        console.log(`🌟 Level Up! Now level ${this.stats.level}`);
+        logger.info(`🌟 Level Up! Now level ${this.stats.level}`);
         
         // Play level up sound
         if (window.gameEngine && window.gameEngine.audioSystem) {
@@ -284,7 +285,7 @@ export class Player {
     }
     
     die() {
-        console.log('💀 Player defeated');
+        logger.info('💀 Player defeated');
         // Trigger endless mode end
         if (window.gameEngine && window.gameEngine.endlessMode) {
             window.gameEngine.endlessMode.endRun(false);

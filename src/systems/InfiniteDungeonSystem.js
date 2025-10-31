@@ -241,7 +241,7 @@ export class InfiniteDungeonSystem {
         // Check for checkpoint
         if (this.isCheckpointFloor(this.currentFloor)) {
             this.checkpoints.add(this.currentFloor);
-            console.log(`📍 Checkpoint reached: Floor ${this.currentFloor}`);
+            logger.info(`📍 Checkpoint reached: Floor ${this.currentFloor}`);
         }
         
         // Apply floor modifiers
@@ -255,7 +255,7 @@ export class InfiniteDungeonSystem {
             this.handleMilestone();
         }
         
-        console.log(`🏢 Entered Floor ${this.currentFloor}`);
+        logger.info(`🏢 Entered Floor ${this.currentFloor}`);
         
         return {
             floor: this.currentFloor,
@@ -285,7 +285,7 @@ export class InfiniteDungeonSystem {
         this.currentFloor = floor;
         this.applyFloorModifiers();
         
-        console.log(`📍 Resumed from Floor ${floor}`);
+        logger.info(`📍 Resumed from Floor ${floor}`);
         
         return { success: true, floor };
     }
@@ -316,7 +316,7 @@ export class InfiniteDungeonSystem {
         }
         
         if (this.activeModifiers.length > 0) {
-            console.log(`⚡ Active modifiers: ${this.activeModifiers.map(m => m.name).join(', ')}`);
+            logger.info(`⚡ Active modifiers: ${this.activeModifiers.map(m => m.name).join(', ')}`);
         }
     }
     
@@ -340,7 +340,7 @@ export class InfiniteDungeonSystem {
      * Trigger floor event
      */
     triggerFloorEvent(eventId, event) {
-        console.log(`🎲 Floor Event: ${event.name}!`);
+        logger.info(`🎲 Floor Event: ${event.name}!`);
         
         // Handle different event types
         switch (eventId) {
@@ -360,7 +360,7 @@ export class InfiniteDungeonSystem {
                 this.handleDimensionalRift(event);
                 break;
             default:
-                console.log(`Event ${eventId} triggered!`);
+                logger.info(`Event ${eventId} triggered!`);
         }
     }
     
@@ -372,7 +372,7 @@ export class InfiniteDungeonSystem {
             this.gameEngine.economySystem.addCurrency('gold', event.rewards.gold);
         }
         
-        console.log(`💰 Found ${event.rewards.gold} gold and ${event.rewards.items} rare items!`);
+        logger.info(`💰 Found ${event.rewards.gold} gold and ${event.rewards.items} rare items!`);
     }
     
     /**
@@ -383,7 +383,7 @@ export class InfiniteDungeonSystem {
             this.gameEngine.tradingSystem.spawnTrader('wandering');
         }
         
-        console.log(`🛒 A traveling merchant appears!`);
+        logger.info(`🛒 A traveling merchant appears!`);
     }
     
     /**
@@ -394,12 +394,12 @@ export class InfiniteDungeonSystem {
         
         if (player && event.heals === 'full') {
             player.stats.hp = player.stats.maxHp;
-            console.log(`💚 HP restored to full!`);
+            logger.info(`💚 HP restored to full!`);
         }
         
         if (event.checkpoint) {
             this.checkpoints.add(this.currentFloor);
-            console.log(`📍 Safe checkpoint created!`);
+            logger.info(`📍 Safe checkpoint created!`);
         }
     }
     
@@ -408,7 +408,7 @@ export class InfiniteDungeonSystem {
      */
     handleChampionChallenge(event) {
         // Would spawn special boss
-        console.log(`⚔️ Champion challenge initiated!`);
+        logger.info(`⚔️ Champion challenge initiated!`);
     }
     
     /**
@@ -423,14 +423,14 @@ export class InfiniteDungeonSystem {
         this.currentFloor += skipAmount;
         this.highestFloor = Math.max(this.highestFloor, this.currentFloor);
         
-        console.log(`🌀 Dimensional rift! Skipped ${skipAmount} floors!`);
+        logger.info(`🌀 Dimensional rift! Skipped ${skipAmount} floors!`);
     }
     
     /**
      * Handle milestone floor
      */
     handleMilestone() {
-        console.log(`🏆 Milestone Floor ${this.currentFloor} reached!`);
+        logger.info(`🏆 Milestone Floor ${this.currentFloor} reached!`);
         
         // Grant bonus rewards
         if (this.gameEngine.economySystem) {
@@ -440,7 +440,7 @@ export class InfiniteDungeonSystem {
             this.gameEngine.economySystem.addCurrency('gold', goldBonus);
             this.gameEngine.economySystem.addCurrency('gems', gemsBonus);
             
-            console.log(`💎 Milestone rewards: ${goldBonus} gold, ${gemsBonus} gems!`);
+            logger.info(`💎 Milestone rewards: ${goldBonus} gold, ${gemsBonus} gems!`);
         }
         
         // Achievement unlock
@@ -572,7 +572,7 @@ export class InfiniteDungeonSystem {
     reset() {
         this.currentFloor = 1;
         this.activeModifiers = [];
-        console.log('🔄 Reset to Floor 1');
+        logger.info('🔄 Reset to Floor 1');
     }
     
     /**

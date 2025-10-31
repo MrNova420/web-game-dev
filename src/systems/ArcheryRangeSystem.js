@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Archery Range Mini-Game System
  * Complete archery mini-game with multiple ranges, targets, challenges, and tournaments
@@ -233,7 +234,7 @@ export class ArcheryRangeSystem {
     createRange(rangeId, config, position) {
         const rangeConfig = this.rangeConfigs[config];
         if (!rangeConfig) {
-            console.error('Invalid range config:', config);
+            logger.error('Invalid range config:', config);
             return null;
         }
         
@@ -274,8 +275,8 @@ export class ArcheryRangeSystem {
         });
         
         this.ranges.set(rangeId, range);
-        console.log(`Created archery range: ${rangeConfig.name} with ${range.targets.length} targets`);
-        console.log(`Using external environment: ${range.environmentModel} (${range.environmentSource})`);
+        logger.info(`Created archery range: ${rangeConfig.name} with ${range.targets.length} targets`);
+        logger.info(`Using external environment: ${range.environmentModel} (${range.environmentSource})`);
         
         return range;
     }
@@ -310,7 +311,7 @@ export class ArcheryRangeSystem {
     startSession(playerId, rangeId, mode, bowType = 'BASIC') {
         const range = this.ranges.get(rangeId);
         if (!range) {
-            console.error('Range not found:', rangeId);
+            logger.error('Range not found:', rangeId);
             return null;
         }
         
@@ -355,9 +356,9 @@ export class ArcheryRangeSystem {
         };
         
         range.activeSession = session;
-        console.log(`Started ${challengeMode.name} session at ${range.config.name}`);
-        console.log(`Using bow: ${bow.name} (${session.bowModel})`);
-        console.log(`Character: ${session.character.model} (${session.character.source})`);
+        logger.info(`Started ${challengeMode.name} session at ${range.config.name}`);
+        logger.info(`Using bow: ${bow.name} (${session.bowModel})`);
+        logger.info(`Character: ${session.character.model} (${session.character.source})`);
         
         return session;
     }
@@ -368,12 +369,12 @@ export class ArcheryRangeSystem {
     shootArrow(sessionId, aimPoint, drawStrength) {
         const session = this.getSessionById(sessionId);
         if (!session || session.state !== 'active') {
-            console.error('Invalid session or session not active');
+            logger.error('Invalid session or session not active');
             return null;
         }
         
         if (session.arrowsRemaining <= 0) {
-            console.log('No arrows remaining');
+            logger.info('No arrows remaining');
             return null;
         }
         
@@ -574,7 +575,7 @@ export class ArcheryRangeSystem {
             if (!session.achievements.includes(achievementId)) {
                 session.achievements.push(achievementId);
                 const achievement = this.achievements[achievementId];
-                console.log(`🏆 Achievement Unlocked: ${achievement.name} - ${achievement.description}`);
+                logger.info(`🏆 Achievement Unlocked: ${achievement.name} - ${achievement.description}`);
             }
         });
     }
@@ -616,11 +617,11 @@ export class ArcheryRangeSystem {
         range.leaderboard.sort((a, b) => b.score - a.score);
         range.leaderboard = range.leaderboard.slice(0, 100); // Keep top 100
         
-        console.log(`Session completed! Final Score: ${session.score}`);
-        console.log(`Accuracy: ${(session.accuracy * 100).toFixed(1)}%`);
-        console.log(`Bullseyes: ${session.bullseyes} | Perfect Shots: ${session.perfectShots}`);
-        console.log(`Trick Shots: ${session.trickShots}`);
-        console.log(`Achievements: ${session.achievements.length}`);
+        logger.info(`Session completed! Final Score: ${session.score}`);
+        logger.info(`Accuracy: ${(session.accuracy * 100).toFixed(1)}%`);
+        logger.info(`Bullseyes: ${session.bullseyes} | Perfect Shots: ${session.perfectShots}`);
+        logger.info(`Trick Shots: ${session.trickShots}`);
+        logger.info(`Achievements: ${session.achievements.length}`);
         
         return session;
     }

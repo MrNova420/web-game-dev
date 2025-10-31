@@ -344,4 +344,4 @@ export class MonsterManager {
 }
 
 export const monsterManager = new MonsterManager();
-console.log(`👹 Loaded ${Object.keys(MonsterDefinitions).length} monster definitions`);
+logger.info(`👹 Loaded ${Object.keys(MonsterDefinitions).length} monster definitions`);

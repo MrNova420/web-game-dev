@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Dungeon Builder System - Dynasty of Emberveil
  * 
  * Uses 211 dungeon assets to create hand-crafted dungeons
@@ -39,9 +40,9 @@ export class DungeonBuilder {
      * Build a complete dungeon
      */
     async buildDungeon(dungeonName, position, difficulty = 1) {
-        console.log(`🏛️ Building Dungeon: ${dungeonName}...`);
-        console.log(`   Position: (${position.x}, ${position.y}, ${position.z})`);
-        console.log(`   Difficulty: ${difficulty}`);
+        logger.info(`🏛️ Building Dungeon: ${dungeonName}...`);
+        logger.info(`   Position: (${position.x}, ${position.y}, ${position.z})`);
+        logger.info(`   Difficulty: ${difficulty}`);
         
         const basePos = new THREE.Vector3(position.x, position.y, position.z);
         
@@ -77,14 +78,14 @@ export class DungeonBuilder {
             // Add lighting
             this.addDungeonLighting(basePos);
             
-            console.log(`✅ Dungeon "${dungeonName}" complete!`);
-            console.log(`   - Rooms: 5`);
-            console.log(`   - Lights: ${this.lights.length}`);
-            console.log(`   - Treasures: ${this.treasureChests.length}`);
-            console.log(`   - Enemy spawns: ${this.enemySpawns.length}`);
+            logger.info(`✅ Dungeon "${dungeonName}" complete!`);
+            logger.info(`   - Rooms: 5`);
+            logger.info(`   - Lights: ${this.lights.length}`);
+            logger.info(`   - Treasures: ${this.treasureChests.length}`);
+            logger.info(`   - Enemy spawns: ${this.enemySpawns.length}`);
             
         } catch (error) {
-            console.error(`Error building dungeon: ${error.message}`);
+            logger.error(`Error building dungeon: ${error.message}`);
         }
     }
     
@@ -92,7 +93,7 @@ export class DungeonBuilder {
      * Build entrance room
      */
     async buildEntranceRoom(position) {
-        console.log('   🚪 Building entrance room...');
+        logger.info('   🚪 Building entrance room...');
         
         const room = this.roomTypes.entrance;
         const group = new THREE.Group();
@@ -123,14 +124,14 @@ export class DungeonBuilder {
         this.scene.add(group);
         this.dungeonObjects.push(group);
         
-        console.log('      ✅ Entrance room complete');
+        logger.info('      ✅ Entrance room complete');
     }
     
     /**
      * Build corridor
      */
     async buildCorridor(position) {
-        console.log('   🚶 Building corridor...');
+        logger.info('   🚶 Building corridor...');
         
         const room = this.roomTypes.corridor;
         const group = new THREE.Group();
@@ -160,14 +161,14 @@ export class DungeonBuilder {
         this.scene.add(group);
         this.dungeonObjects.push(group);
         
-        console.log('      ✅ Corridor complete');
+        logger.info('      ✅ Corridor complete');
     }
     
     /**
      * Build chamber room
      */
     async buildChamber(position, chamberNum) {
-        console.log(`   🏺 Building chamber ${chamberNum}...`);
+        logger.info(`   🏺 Building chamber ${chamberNum}...`);
         
         const room = this.roomTypes.chamber;
         const group = new THREE.Group();
@@ -218,14 +219,14 @@ export class DungeonBuilder {
         this.scene.add(group);
         this.dungeonObjects.push(group);
         
-        console.log(`      ✅ Chamber ${chamberNum} complete`);
+        logger.info(`      ✅ Chamber ${chamberNum} complete`);
     }
     
     /**
      * Build boss room
      */
     async buildBossRoom(position) {
-        console.log('   👑 Building boss room...');
+        logger.info('   👑 Building boss room...');
         
         const room = this.roomTypes.boss;
         const group = new THREE.Group();
@@ -271,7 +272,7 @@ export class DungeonBuilder {
         this.scene.add(group);
         this.dungeonObjects.push(group);
         
-        console.log('      ✅ Boss room complete');
+        logger.info('      ✅ Boss room complete');
     }
     
     /**
@@ -449,7 +450,7 @@ export class DungeonBuilder {
      * Add decorations throughout dungeon
      */
     async addDungeonDecorations(basePosition) {
-        console.log('   🎨 Adding dungeon decorations...');
+        logger.info('   🎨 Adding dungeon decorations...');
         
         // Try to load dungeon props
         const decorCount = 10;
@@ -477,14 +478,14 @@ export class DungeonBuilder {
             }
         }
         
-        console.log('      ✅ Decorations added');
+        logger.info('      ✅ Decorations added');
     }
     
     /**
      * Add dungeon lighting
      */
     addDungeonLighting(basePosition) {
-        console.log('   💡 Adding dungeon lighting...');
+        logger.info('   💡 Adding dungeon lighting...');
         
         // Ambient dungeon light
         const ambient = new THREE.AmbientLight(0x442222, 0.3);
@@ -497,7 +498,7 @@ export class DungeonBuilder {
         this.scene.add(entranceLight);
         this.lights.push(entranceLight);
         
-        console.log(`      ✅ Lighting complete (${this.lights.length} lights)`);
+        logger.info(`      ✅ Lighting complete (${this.lights.length} lights)`);
     }
     
     /**

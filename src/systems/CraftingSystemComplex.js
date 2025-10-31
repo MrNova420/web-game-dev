@@ -24,7 +24,7 @@ export class CraftingSystemComplex {
   }
 
   craft(playerId, recipeId, station) {
-    console.log(`${playerId} crafting ${recipeId} at ${station}`);
-    console.log(`  Station: ${this.craftingStations[station].model}`);
+    logger.info(`${playerId} crafting ${recipeId} at ${station}`);
+    logger.info(`  Station: ${this.craftingStations[station].model}`);
   }
 }

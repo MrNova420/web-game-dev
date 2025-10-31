@@ -66,7 +66,7 @@ export class ModernUISystem {
         this.enhanceExistingUI();
         this.createModernElements();
         
-        console.log('🎨 Modern UI System initialized');
+        logger.info('🎨 Modern UI System initialized');
     }
     
     injectStyles() {
@@ -355,7 +355,7 @@ export class ModernUISystem {
         root.style.setProperty('--ui-text', theme.text);
         
         this.currentTheme = themeName;
-        console.log(`🎨 UI theme changed to: ${themeName}`);
+        logger.info(`🎨 UI theme changed to: ${themeName}`);
     }
     
     enhanceExistingUI() {
@@ -579,6 +579,6 @@ export class ModernUISystem {
         if (this.notificationContainer) {
             this.notificationContainer.remove();
         }
-        console.log('🎨 Modern UI System disposed');
+        logger.info('🎨 Modern UI System disposed');
     }
 }

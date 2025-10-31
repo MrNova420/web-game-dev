@@ -11,5 +11,5 @@ export class PvPSeasonSystem {
       seasonal_armor: '/assets/models/armor/season_1_pvp.glb'           // Sketchfab Free
     };
   }
-  startSeason(seasonId) { console.log(`PvP Season ${seasonId} started`); }
+  startSeason(seasonId) { logger.info(`PvP Season ${seasonId} started`); }
 }

@@ -21,12 +21,12 @@ export class PetSystemAdvanced {
   }
 
   summonPet(playerId, petType) {
-    console.log(`${playerId} summons pet: ${petType}`);
-    console.log(`  Model: ${this.petModels[petType]}`);
-    console.log(`  Animation: ${this.animations.follow}`);
+    logger.info(`${playerId} summons pet: ${petType}`);
+    logger.info(`  Model: ${this.petModels[petType]}`);
+    logger.info(`  Animation: ${this.animations.follow}`);
   }
 
   evolvePet(playerId, petId) {
-    console.log(`${playerId}'s pet ${petId} evolved!`);
+    logger.info(`${playerId}'s pet ${petId} evolved!`);
   }
 }

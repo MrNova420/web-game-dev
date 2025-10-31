@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Combat & Enemy System - Dynasty of Emberveil
  * 
  * COMPLETE FIGHTING RPG COMBAT SYSTEM
@@ -161,14 +162,14 @@ export class CombatEnemySystem {
             legendary: ['legendary_blade', 'mythic_armor', 'lich_crown']
         };
         
-        console.log('⚔️ Combat & Enemy System initialized');
+        logger.info('⚔️ Combat & Enemy System initialized');
     }
     
     /**
      * Initialize enemy spawning across the world
      */
     async initializeEnemySpawns(biomes) {
-        console.log('💀 Setting up enemy spawn points...');
+        logger.info('💀 Setting up enemy spawn points...');
         
         let totalSpawns = 0;
         
@@ -199,7 +200,7 @@ export class CombatEnemySystem {
             }
         });
         
-        console.log(`   ✅ Created ${totalSpawns} enemy spawn points`);
+        logger.info(`   ✅ Created ${totalSpawns} enemy spawn points`);
         
         // Spawn initial enemies
         await this.spawnInitialEnemies();
@@ -222,7 +223,7 @@ export class CombatEnemySystem {
      * Spawn initial enemies in world
      */
     async spawnInitialEnemies() {
-        console.log('💀 Spawning initial enemies...');
+        logger.info('💀 Spawning initial enemies...');
         
         const spawnsToActivate = Math.min(this.maxEnemies, this.enemySpawnPoints.length);
         
@@ -231,7 +232,7 @@ export class CombatEnemySystem {
             await this.spawnEnemyAtPoint(spawnPoint);
         }
         
-        console.log(`   ✅ Spawned ${this.activeEnemies.length} enemies`);
+        logger.info(`   ✅ Spawned ${this.activeEnemies.length} enemies`);
     }
     
     /**
@@ -294,7 +295,7 @@ export class CombatEnemySystem {
             spawnPoint.lastSpawn = Date.now();
             
         } catch (error) {
-            console.warn(`Failed to spawn enemy: ${error.message}`);
+            logger.warn(`Failed to spawn enemy: ${error.message}`);
         }
     }
     
@@ -473,7 +474,7 @@ export class CombatEnemySystem {
         enemy.lastAttack = now;
         enemy.state = 'chase'; // Go back to chasing
         
-        console.log(`⚔️ ${enemy.data.name} attacks for ${enemy.damage} damage!`);
+        logger.info(`⚔️ ${enemy.data.name} attacks for ${enemy.damage} damage!`);
     }
     
     /**
@@ -528,7 +529,7 @@ export class CombatEnemySystem {
      * Kill enemy and drop loot
      */
     killEnemy(enemy) {
-        console.log(`💀 ${enemy.data.name} defeated! +${enemy.xp} XP`);
+        logger.info(`💀 ${enemy.data.name} defeated! +${enemy.xp} XP`);
         
         // Drop loot
         this.dropLoot(enemy);
@@ -702,7 +703,7 @@ export class CombatEnemySystem {
         if (!spell) return;
         
         if (this.player.mana < spell.manaCost) {
-            console.log('Not enough mana!');
+            logger.info('Not enough mana!');
             return;
         }
         
@@ -717,7 +718,7 @@ export class CombatEnemySystem {
         // Apply damage/healing
         if (spell.damage && target) {
             target.health -= spell.damage;
-            console.log(`✨ ${spell.name} hits for ${spell.damage} damage!`);
+            logger.info(`✨ ${spell.name} hits for ${spell.damage} damage!`);
         }
         
         if (spell.healing) {
@@ -725,7 +726,7 @@ export class CombatEnemySystem {
                 this.player.health + spell.healing,
                 this.player.maxHealth
             );
-            console.log(`💚 ${spell.name} heals for ${spell.healing}!`);
+            logger.info(`💚 ${spell.name} heals for ${spell.healing}!`);
         }
     }
     

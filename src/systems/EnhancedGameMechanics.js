@@ -252,7 +252,7 @@ export class EnhancedGameMechanics {
     }
 
     triggerCombo(comboName, comboData) {
-        console.log(`🔥 COMBO: ${comboName}!`);
+        logger.info(`🔥 COMBO: ${comboName}!`);
         
         this.chains.push({
             name: comboName,
@@ -285,7 +285,7 @@ export class EnhancedGameMechanics {
     }
 
     triggerReaction(reactionName, reactionData, target) {
-        console.log(`⚡ REACTION: ${reactionName}!`);
+        logger.info(`⚡ REACTION: ${reactionName}!`);
 
         const reaction = {
             name: reactionName,
@@ -317,7 +317,7 @@ export class EnhancedGameMechanics {
         // Check for momentum thresholds
         for (const [threshold, bonus] of Object.entries(this.momentum.bonuses)) {
             if (this.momentum.current >= parseInt(threshold) && !this.momentum.activeBonus) {
-                console.log(`🔥 MOMENTUM: ${bonus.name}!`);
+                logger.info(`🔥 MOMENTUM: ${bonus.name}!`);
                 this.momentum.activeBonus = bonus;
                 
                 if (bonus.invulnerable) {
@@ -355,7 +355,7 @@ export class EnhancedGameMechanics {
     }
 
     triggerStagger(enemy) {
-        console.log(`💥 STAGGER!`);
+        logger.info(`💥 STAGGER!`);
         
         enemy.staggered = true;
         enemy.staggerEndTime = Date.now() + this.staggerSystem.staggerDuration;
@@ -377,11 +377,11 @@ export class EnhancedGameMechanics {
         const timing = Math.abs(Date.now() - attackTime);
         
         if (timing <= this.parrySystem.perfectParryWindow) {
-            console.log(`⚔️ PERFECT PARRY!`);
+            logger.info(`⚔️ PERFECT PARRY!`);
             this.gainMomentum(this.momentum.gainRates.PERFECT_BLOCK * 2);
             return { success: true, perfect: true, multiplier: this.parrySystem.perfectParryMultiplier };
         } else if (timing <= this.parrySystem.parryWindow) {
-            console.log(`🛡️ Parry!`);
+            logger.info(`🛡️ Parry!`);
             this.gainMomentum(this.momentum.gainRates.PERFECT_BLOCK);
             return { success: true, perfect: false, multiplier: this.parrySystem.parryMultiplier };
         }
@@ -405,7 +405,7 @@ export class EnhancedGameMechanics {
             return { success: false, reason: 'Invalid burst mode' };
         }
 
-        console.log(`💥 BURST MODE: ${mode}!`);
+        logger.info(`💥 BURST MODE: ${mode}!`);
         
         this.burstSystem.current = 0;
         this.burstSystem.activeMode = mode;

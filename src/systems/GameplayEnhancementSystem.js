@@ -10,7 +10,7 @@ export class GameplayEnhancementSystem {
         this.activeFeatures = new Set();
         this.playerFeedback = [];
         
-        console.log('[GameplayEnhancementSystem] Initializing gameplay enhancements...');
+        logger.info('[GameplayEnhancementSystem] Initializing gameplay enhancements...');
         
         this.setupEnhancements();
     }
@@ -62,7 +62,7 @@ export class GameplayEnhancementSystem {
             friendStatus: true          // See friend online status
         });
 
-        console.log(`[GameplayEnhancementSystem] ${this.enhancements.size} enhancement categories loaded`);
+        logger.info(`[GameplayEnhancementSystem] ${this.enhancements.size} enhancement categories loaded`);
     }
 
     /**
@@ -104,7 +104,7 @@ export class GameplayEnhancementSystem {
     applyHitStop(damage) {
         const duration = Math.min(damage * 2, 100); // Max 100ms
         
-        console.log(`[GameplayEnhancementSystem] Hit stop: ${duration}ms`);
+        logger.info(`[GameplayEnhancementSystem] Hit stop: ${duration}ms`);
         
         // Freeze game for brief moment
         if (typeof window !== 'undefined' && window.game) {
@@ -123,7 +123,7 @@ export class GameplayEnhancementSystem {
      * Apply screen shake
      */
     applyScreenShake(intensity) {
-        console.log(`[GameplayEnhancementSystem] Screen shake: ${intensity}`);
+        logger.info(`[GameplayEnhancementSystem] Screen shake: ${intensity}`);
         
         // Shake camera
         if (typeof window !== 'undefined' && window.game && window.game.camera) {
@@ -153,7 +153,7 @@ export class GameplayEnhancementSystem {
      * Apply slow motion effect
      */
     applySlowMotion(timeScale, duration) {
-        console.log(`[GameplayEnhancementSystem] Slow motion: ${timeScale}x for ${duration}ms`);
+        logger.info(`[GameplayEnhancementSystem] Slow motion: ${timeScale}x for ${duration}ms`);
         
         if (typeof window !== 'undefined' && window.game) {
             const originalTimeScale = window.game.timeScale || 1.0;
@@ -185,7 +185,7 @@ export class GameplayEnhancementSystem {
 
         const color = elementColors[element] || 0xFFFFFF;
         
-        console.log(`[GameplayEnhancementSystem] Particle burst: ${element} at`, position);
+        logger.info(`[GameplayEnhancementSystem] Particle burst: ${element} at`, position);
         
         // Actual particle creation would happen here
         // Using Kenney Particle Pack sprites
@@ -198,7 +198,7 @@ export class GameplayEnhancementSystem {
         // Sound intensity based on damage
         const volume = Math.min(damage / 100, 1.0);
         
-        console.log(`[GameplayEnhancementSystem] Impact sound: ${type}, volume: ${volume}`);
+        logger.info(`[GameplayEnhancementSystem] Impact sound: ${type}, volume: ${volume}`);
         
         // Actual sound playback would happen here
         // Using Freesound audio effects
@@ -237,7 +237,7 @@ export class GameplayEnhancementSystem {
             title: discovery.rare ? `${discovery.name} Explorer` : null
         };
 
-        console.log(`[GameplayEnhancementSystem] Discovery reward:`, rewards);
+        logger.info(`[GameplayEnhancementSystem] Discovery reward:`, rewards);
         
         // Show reward notification
         this.showRewardNotification(rewards);
@@ -248,7 +248,7 @@ export class GameplayEnhancementSystem {
      */
     showRewardNotification(rewards) {
         // Display popup with rewards
-        console.log('[GameplayEnhancementSystem] Showing reward notification:', rewards);
+        logger.info('[GameplayEnhancementSystem] Showing reward notification:', rewards);
         
         // UI would display this beautifully with animations
     }
@@ -257,7 +257,7 @@ export class GameplayEnhancementSystem {
      * Add landmark marker
      */
     addLandmarkMarker(location, name) {
-        console.log(`[GameplayEnhancementSystem] Adding landmark: ${name} at`, location);
+        logger.info(`[GameplayEnhancementSystem] Adding landmark: ${name} at`, location);
         
         // Add marker to map
         // Using game-icons.net for marker icon
@@ -269,7 +269,7 @@ export class GameplayEnhancementSystem {
     provideTreasureHint(playerLocation) {
         // Check if treasure is nearby
         // Provide subtle visual/audio hint
-        console.log('[GameplayEnhancementSystem] Checking for nearby treasure...');
+        logger.info('[GameplayEnhancementSystem] Checking for nearby treasure...');
     }
 
     /**
@@ -304,7 +304,7 @@ export class GameplayEnhancementSystem {
      * Celebrate level up
      */
     celebrateLevelUp(newLevel) {
-        console.log(`[GameplayEnhancementSystem] LEVEL UP! New level: ${newLevel}`);
+        logger.info(`[GameplayEnhancementSystem] LEVEL UP! New level: ${newLevel}`);
         
         // Full screen effect
         // Particle burst from player
@@ -320,7 +320,7 @@ export class GameplayEnhancementSystem {
      * Show skill unlock effect
      */
     showSkillUnlockEffect(skill) {
-        console.log(`[GameplayEnhancementSystem] Skill unlocked: ${skill.name}`);
+        logger.info(`[GameplayEnhancementSystem] Skill unlocked: ${skill.name}`);
         
         // Flash effect
         // Skill icon appears with animation
@@ -333,7 +333,7 @@ export class GameplayEnhancementSystem {
      * Show achievement popup
      */
     showAchievementPopup(achievement) {
-        console.log(`[GameplayEnhancementSystem] Achievement unlocked: ${achievement.name}`);
+        logger.info(`[GameplayEnhancementSystem] Achievement unlocked: ${achievement.name}`);
         
         // Slide in from side
         // Achievement icon + name + description
@@ -356,7 +356,7 @@ export class GameplayEnhancementSystem {
             gold: 500
         };
 
-        console.log(`[GameplayEnhancementSystem] Milestone reward at level ${milestone.level}:`, rewards);
+        logger.info(`[GameplayEnhancementSystem] Milestone reward at level ${milestone.level}:`, rewards);
         
         this.showRewardNotification(rewards);
     }
@@ -369,7 +369,7 @@ export class GameplayEnhancementSystem {
         if (!features) return;
 
         // These would be available in settings/options
-        console.log('[GameplayEnhancementSystem] QoL features available:', features);
+        logger.info('[GameplayEnhancementSystem] QoL features available:', features);
     }
 
     /**
@@ -379,7 +379,7 @@ export class GameplayEnhancementSystem {
         const enhancements = this.enhancements.get(category);
         if (enhancements && enhancements.hasOwnProperty(featureName)) {
             enhancements[featureName] = enabled;
-            console.log(`[GameplayEnhancementSystem] ${category}.${featureName} = ${enabled}`);
+            logger.info(`[GameplayEnhancementSystem] ${category}.${featureName} = ${enabled}`);
             return true;
         }
         return false;

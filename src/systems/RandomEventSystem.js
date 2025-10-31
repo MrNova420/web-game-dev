@@ -8,5 +8,5 @@ export class RandomEventSystem {
       treasure_goblin: { model: '/assets/models/events/goblin.glb', animation: '/assets/animations/goblin_run.fbx' }  // Quaternius + Mixamo
     };
   }
-  triggerEvent(eventType) { console.log(`Event: ${eventType}`); }
+  triggerEvent(eventType) { logger.info(`Event: ${eventType}`); }
 }

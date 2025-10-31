@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Living World System - Dynasty of Emberveil
  * 
  * Makes the world come alive with:
@@ -39,8 +40,8 @@ export class LivingWorldSystem {
      * Initialize living world with pre-built data
      */
     initialize(worldData) {
-        console.log('🌍 Initializing Living World System...');
-        console.log('   Making world come alive with wandering entities!');
+        logger.info('🌍 Initializing Living World System...');
+        logger.info('   Making world come alive with wandering entities!');
         
         // Initialize NPCs in villages
         this.initializeNPCs(worldData.villages);
@@ -53,10 +54,10 @@ export class LivingWorldSystem {
         
         this.isActive = true;
         
-        console.log('✅ Living World System initialized!');
-        console.log(`   NPCs: ${this.npcs.length} wandering`);
-        console.log(`   Enemies: ${this.enemies.length} patrolling`);
-        console.log(`   Wildlife: ${this.wildlife.length} roaming`);
+        logger.info('✅ Living World System initialized!');
+        logger.info(`   NPCs: ${this.npcs.length} wandering`);
+        logger.info(`   Enemies: ${this.enemies.length} patrolling`);
+        logger.info(`   Wildlife: ${this.wildlife.length} roaming`);
     }
     
     /**
@@ -81,7 +82,7 @@ export class LivingWorldSystem {
             });
         });
         
-        console.log(`   Configured ${this.npcs.length} NPCs to wander in villages`);
+        logger.info(`   Configured ${this.npcs.length} NPCs to wander in villages`);
     }
     
     /**
@@ -142,7 +143,7 @@ export class LivingWorldSystem {
             });
         });
         
-        console.log(`   Configured ${this.enemies.length} enemies to patrol zones`);
+        logger.info(`   Configured ${this.enemies.length} enemies to patrol zones`);
     }
     
     /**
@@ -213,7 +214,7 @@ export class LivingWorldSystem {
             }
         });
         
-        console.log(`   Configured ${this.wildlife.length} wildlife to roam biomes`);
+        logger.info(`   Configured ${this.wildlife.length} wildlife to roam biomes`);
     }
     
     /**
@@ -444,7 +445,7 @@ export class LivingWorldSystem {
      */
     activate() {
         this.isActive = true;
-        console.log('🌍 Living World activated - entities are now moving!');
+        logger.info('🌍 Living World activated - entities are now moving!');
     }
     
     /**
@@ -452,7 +453,7 @@ export class LivingWorldSystem {
      */
     deactivate() {
         this.isActive = false;
-        console.log('🌍 Living World deactivated - entities frozen');
+        logger.info('🌍 Living World deactivated - entities frozen');
     }
     
     /**

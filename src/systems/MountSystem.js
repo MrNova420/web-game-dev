@@ -379,7 +379,7 @@ export class MountSystem {
         const mount = this.createMountInstance(mountType);
         this.ownedMounts.set(mount.instanceId, mount);
         
-        console.log(`🐴 Obtained new mount: ${mount.name}!`);
+        logger.info(`🐴 Obtained new mount: ${mount.name}!`);
         
         return { success: true, mount };
     }
@@ -431,7 +431,7 @@ export class MountSystem {
             this.gameEngine.player.stats.speed *= mount.stats.speed / 10;
         }
         
-        console.log(`🐴 Mounted ${mount.name}!`);
+        logger.info(`🐴 Mounted ${mount.name}!`);
         
         return { success: true, mount };
     }
@@ -449,7 +449,7 @@ export class MountSystem {
             this.gameEngine.player.stats.speed /= (this.activeMount.stats.speed / 10);
         }
         
-        console.log(`🐴 Dismounted ${this.activeMount.name}`);
+        logger.info(`🐴 Dismounted ${this.activeMount.name}`);
         
         this.isMounted = false;
         this.activeMount = null;
@@ -471,7 +471,7 @@ export class MountSystem {
         }
         
         // Check cooldown (simplified)
-        console.log(`⚡ Used mount ability: ${ability.name}!`);
+        logger.info(`⚡ Used mount ability: ${ability.name}!`);
         
         return {
             success: true,
@@ -536,7 +536,7 @@ export class MountSystem {
         
         this.breedingPairs.push(pair);
         
-        console.log(`💕 Started breeding ${mount1.name} and ${mount2.name}!`);
+        logger.info(`💕 Started breeding ${mount1.name} and ${mount2.name}!`);
         
         return { success: true, pair };
     }
@@ -555,7 +555,7 @@ export class MountSystem {
                 const egg = this.createEgg(pair);
                 this.eggs.push(egg);
                 
-                console.log(`🥚 Breeding complete! Received a mount egg!`);
+                logger.info(`🥚 Breeding complete! Received a mount egg!`);
             }
         }
     }
@@ -608,7 +608,7 @@ export class MountSystem {
             this.eggs.splice(index, 1);
         }
         
-        console.log(`🐣 Egg hatched into ${mount.name}!`);
+        logger.info(`🐣 Egg hatched into ${mount.name}!`);
         
         return { success: true, mount };
     }

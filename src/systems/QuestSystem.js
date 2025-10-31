@@ -16,7 +16,7 @@ export class QuestSystem {
         // Give player starting quest
         this.startQuest('first_steps');
         
-        console.log('📜 Quest System initialized');
+        logger.info('📜 Quest System initialized');
     }
     
     initializeQuests() {
@@ -131,7 +131,7 @@ export class QuestSystem {
         this.showQuestNotification('New Quest', quest.name);
         this.updateQuestUI();
         
-        console.log(`📜 Quest started: ${quest.name}`);
+        logger.info(`📜 Quest started: ${quest.name}`);
         return true;
     }
     
@@ -191,7 +191,7 @@ export class QuestSystem {
         // Unlock new quests
         this.unlockNewQuests();
         
-        console.log(`✅ Quest completed: ${quest.name}`);
+        logger.info(`✅ Quest completed: ${quest.name}`);
     }
     
     unlockNewQuests() {

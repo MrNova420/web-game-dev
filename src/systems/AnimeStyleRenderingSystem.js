@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * AnimeStyleRenderingSystem - Cel-shaded anime-inspired rendering
  * Provides stylized anime aesthetics with toon shading and outlines
  */
@@ -35,7 +36,7 @@ export class AnimeStyleRenderingSystem {
         this.setupCelShading();
         this.setupOutlines();
         
-        console.log('🎨 Anime Style Rendering System initialized');
+        logger.info('🎨 Anime Style Rendering System initialized');
     }
     
     setupCelShading() {
@@ -326,7 +327,7 @@ export class AnimeStyleRenderingSystem {
                 break;
         }
         
-        console.log(`🎨 Anime rendering quality: ${quality}`);
+        logger.info(`🎨 Anime rendering quality: ${quality}`);
     }
     
     update(deltaTime) {
@@ -339,6 +340,6 @@ export class AnimeStyleRenderingSystem {
         });
         this.materialCache.clear();
         
-        console.log('🎨 Anime Style Rendering System disposed');
+        logger.info('🎨 Anime Style Rendering System disposed');
     }
 }

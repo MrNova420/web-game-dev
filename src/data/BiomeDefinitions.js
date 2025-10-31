@@ -681,4 +681,4 @@ export class BiomeManager {
 }
 
 export const biomeManager = new BiomeManager();
-console.log(`🌍 Loaded ${biomeManager.getBiomeCount()} biome definitions`);
+logger.info(`🌍 Loaded ${biomeManager.getBiomeCount()} biome definitions`);

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * VolumetricLightingSystem - AAA-grade volumetric lighting and god rays
  * Provides cinematic lighting effects for immersive atmosphere
  */
@@ -33,7 +34,7 @@ export class VolumetricLightingSystem {
         this.createGodRays();
         this.setupLightShafts();
         
-        console.log('☀️ Volumetric Lighting System initialized');
+        logger.info('☀️ Volumetric Lighting System initialized');
     }
     
     setupVolumetricFog() {
@@ -297,7 +298,7 @@ export class VolumetricLightingSystem {
                 break;
         }
         
-        console.log(`☀️ Volumetric lighting quality set to: ${quality}`);
+        logger.info(`☀️ Volumetric lighting quality set to: ${quality}`);
     }
     
     update(deltaTime) {
@@ -347,6 +348,6 @@ export class VolumetricLightingSystem {
             if (ray.material) ray.material.dispose();
         });
         
-        console.log('☀️ Volumetric Lighting System disposed');
+        logger.info('☀️ Volumetric Lighting System disposed');
     }
 }

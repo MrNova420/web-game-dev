@@ -20,14 +20,14 @@ export class StealthSystem {
   }
 
   enterStealth(entityId) {
-    console.log(`${entityId} enters stealth`);
-    console.log(`  Animation: ${this.animations.enter_stealth}`);
-    console.log(`  VFX: ${this.vfx.vanish}`);
+    logger.info(`${entityId} enters stealth`);
+    logger.info(`  Animation: ${this.animations.enter_stealth}`);
+    logger.info(`  VFX: ${this.vfx.vanish}`);
     this.stealthedEntities.set(entityId, { detectionRadius: 5, backstabReady: true });
   }
 
   exitStealth(entityId) {
-    console.log(`${entityId} exits stealth`);
+    logger.info(`${entityId} exits stealth`);
     this.stealthedEntities.delete(entityId);
   }
 

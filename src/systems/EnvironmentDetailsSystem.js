@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * EnvironmentDetailsSystem - Enhanced environmental details and decorations
  * Adds foliage, rocks, ambient creatures, and atmospheric details to biomes
  */
@@ -45,7 +46,7 @@ export class EnvironmentDetailsSystem {
     }
     
     init() {
-        console.log('🌲 Environment Details System initialized');
+        logger.info('🌲 Environment Details System initialized');
     }
     
     populateBiome(biomeType, bounds) {
@@ -54,7 +55,7 @@ export class EnvironmentDetailsSystem {
         const config = this.biomeConfigs[biomeType] || this.biomeConfigs.crystal_caverns;
         const objectCount = Math.floor(this.maxObjects * config.density);
         
-        console.log(`🌲 Populating ${biomeType} with ${objectCount} objects`);
+        logger.info(`🌲 Populating ${biomeType} with ${objectCount} objects`);
         
         for (let i = 0; i < objectCount; i++) {
             const decoration = this.getRandomDecoration(config.decorations);
@@ -503,6 +504,6 @@ export class EnvironmentDetailsSystem {
     
     dispose() {
         this.clearEnvironment();
-        console.log('🌲 Environment Details System disposed');
+        logger.info('🌲 Environment Details System disposed');
     }
 }

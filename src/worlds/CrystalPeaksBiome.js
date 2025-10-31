@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Crystal Peaks Biome - Magical Zone (Level 35-50)
  * Per README: Floating crystal islands with arcane energy
  * 
@@ -28,7 +29,7 @@ export class CrystalPeaksBiome {
     }
     
     async build() {
-        console.log('💎 Building Crystal Peaks Biome...');
+        logger.info('💎 Building Crystal Peaks Biome...');
         
         try {
             await this.setupEnvironment();
@@ -38,12 +39,12 @@ export class CrystalPeaksBiome {
             await this.buildMageAcademy();
             await this.buildCrystalNexus();
             
-            console.log('✅ Crystal Peaks complete!');
-            console.log(`   - Floating Islands: ${this.islands.length}`);
-            console.log(`   - Mana Crystals: ${this.crystals.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Crystal Peaks complete!');
+            logger.info(`   - Floating Islands: ${this.islands.length}`);
+            logger.info(`   - Mana Crystals: ${this.crystals.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Crystal Peaks:', error);
+            logger.error('Error building Crystal Peaks:', error);
         }
     }
     
@@ -95,7 +96,7 @@ export class CrystalPeaksBiome {
     }
     
     async createFloatingIslands() {
-        console.log('🏝️ Creating floating crystal islands...');
+        logger.info('🏝️ Creating floating crystal islands...');
         
         const islandCount = 12;
         
@@ -134,11 +135,11 @@ export class CrystalPeaksBiome {
             }
         }
         
-        console.log(`   ✅ Created ${this.islands.length} floating islands`);
+        logger.info(`   ✅ Created ${this.islands.length} floating islands`);
     }
     
     async addManaCrystals() {
-        console.log('💠 Adding mana crystals...');
+        logger.info('💠 Adding mana crystals...');
         
         const crystalCount = 150;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -194,11 +195,11 @@ export class CrystalPeaksBiome {
             this.crystals.push(crystal);
         }
         
-        console.log(`   ✅ Added ${this.crystals.length} mana crystals`);
+        logger.info(`   ✅ Added ${this.crystals.length} mana crystals`);
     }
     
     async addArcaneEffects() {
-        console.log('✨ Adding arcane particle effects...');
+        logger.info('✨ Adding arcane particle effects...');
         
         // Add glowing particles floating around
         const particleCount = 500;
@@ -224,11 +225,11 @@ export class CrystalPeaksBiome {
         const particles = new THREE.Points(particleGeometry, particleMaterial);
         this.scene.add(particles);
         
-        console.log('   ✅ Arcane effects added');
+        logger.info('   ✅ Arcane effects added');
     }
     
     async buildMageAcademy() {
-        console.log('🏛️ Building Mage Academy (floating school)...');
+        logger.info('🏛️ Building Mage Academy (floating school)...');
         
         const buildingPaths = [
             '/assets/models/buildings/Wall_Plaster.gltf',
@@ -258,11 +259,11 @@ export class CrystalPeaksBiome {
         }
         
         this.structures.push({ name: 'Mage Academy', type: 'school', buildings: buildingCount });
-        console.log(`   ✅ Mage Academy built with ${buildingCount} structures`);
+        logger.info(`   ✅ Mage Academy built with ${buildingCount} structures`);
     }
     
     async buildCrystalNexus() {
-        console.log('⚡ Building Crystal Nexus (power source)...');
+        logger.info('⚡ Building Crystal Nexus (power source)...');
         
         // Create giant central crystal
         const rockPath = this.assetRegistry.getRandomRock();
@@ -288,7 +289,7 @@ export class CrystalPeaksBiome {
             
             this.scene.add(nexus);
             this.structures.push({ name: 'Crystal Nexus', type: 'power_source' });
-            console.log('   ✅ Crystal Nexus created');
+            logger.info('   ✅ Crystal Nexus created');
         }
     }
 }

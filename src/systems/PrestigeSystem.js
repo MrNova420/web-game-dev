@@ -381,7 +381,7 @@ export class PrestigeSystem {
         this.checkUnlocks();
         
         // Reset run (will be handled by game engine)
-        console.log(`✨ Ascended to Prestige ${this.prestigeLevel}! Gained ${essence} Astral Essence!`);
+        logger.info(`✨ Ascended to Prestige ${this.prestigeLevel}! Gained ${essence} Astral Essence!`);
         
         return {
             success: true,
@@ -399,7 +399,7 @@ export class PrestigeSystem {
         for (const [skillId, skill] of Object.entries(this.ascensionSkills)) {
             if (this.prestigeLevel >= skill.prestigeRequired && !this.unlockedSkills.has(skillId)) {
                 this.unlockedSkills.add(skillId);
-                console.log(`🌟 Unlocked ascension skill: ${skill.name}!`);
+                logger.info(`🌟 Unlocked ascension skill: ${skill.name}!`);
             }
         }
         
@@ -407,7 +407,7 @@ export class PrestigeSystem {
         for (const [zoneId, zone] of Object.entries(this.prestigeZones)) {
             if (this.prestigeLevel >= zone.prestigeRequired && !this.unlockedZones.has(zoneId)) {
                 this.unlockedZones.add(zoneId);
-                console.log(`🚪 Unlocked prestige zone: ${zone.name}!`);
+                logger.info(`🚪 Unlocked prestige zone: ${zone.name}!`);
             }
         }
         
@@ -415,7 +415,7 @@ export class PrestigeSystem {
         for (const [cosmeticId, cosmetic] of Object.entries(this.prestigeCosmetics)) {
             if (this.prestigeLevel >= cosmetic.prestigeRequired && !this.unlockedCosmetics.has(cosmeticId)) {
                 this.unlockedCosmetics.add(cosmeticId);
-                console.log(`✨ Unlocked cosmetic: ${cosmetic.name}!`);
+                logger.info(`✨ Unlocked cosmetic: ${cosmetic.name}!`);
             }
         }
     }
@@ -480,7 +480,7 @@ export class PrestigeSystem {
         // Recalculate bonuses
         this.prestigeBonuses = this.calculatePrestigeBonuses();
         
-        console.log(`⭐ Purchased ${upgrade.name} Level ${currentLevel + 1}!`);
+        logger.info(`⭐ Purchased ${upgrade.name} Level ${currentLevel + 1}!`);
         
         return {
             success: true,
@@ -515,7 +515,7 @@ export class PrestigeSystem {
         this.astralEssence -= skill.cost;
         this.unlockedSkills.add(skillId);
         
-        console.log(`🌟 Unlocked ${skill.name}!`);
+        logger.info(`🌟 Unlocked ${skill.name}!`);
         
         return { success: true, skill };
     }
@@ -653,7 +653,7 @@ export class PrestigeSystem {
         }
         
         // Starting gear would be handled by inventory system
-        console.log(`✨ Applied prestige bonuses: +${bonuses.startingLevel} levels, ${bonuses.startingGold} gold, ${bonuses.extraLives} lives`);
+        logger.info(`✨ Applied prestige bonuses: +${bonuses.startingLevel} levels, ${bonuses.startingGold} gold, ${bonuses.extraLives} lives`);
     }
     
     /**

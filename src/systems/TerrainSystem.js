@@ -113,12 +113,12 @@ export class TerrainSystem {
     }
     
     async initialize() {
-        console.log('[TerrainSystem] Initializing terrain system...');
+        logger.info('[TerrainSystem] Initializing terrain system...');
         
         // Load terrain materials from Poly Haven
         await this.loadMaterials();
         
-        console.log('[TerrainSystem] Terrain system initialized');
+        logger.info('[TerrainSystem] Terrain system initialized');
     }
     
     async loadMaterials() {
@@ -130,7 +130,7 @@ export class TerrainSystem {
             this.materials.snow = await this.textureManager.loadTerrainMaterial('snow', { x: 50, y: 50 });
         }
         
-        console.log('[TerrainSystem] Materials loaded');
+        logger.info('[TerrainSystem] Materials loaded');
     }
     
     // Generate chunk at position
@@ -158,7 +158,7 @@ export class TerrainSystem {
         this.chunks.set(key, chunk);
         
         // Add to scene (in production, would actually create Three.js Mesh)
-        console.log(`[TerrainSystem] Generated chunk at (${chunkX}, ${chunkZ})`);
+        logger.info(`[TerrainSystem] Generated chunk at (${chunkX}, ${chunkZ})`);
         
         return chunk;
     }
@@ -351,7 +351,7 @@ export class TerrainSystem {
     setTerrainType(type) {
         if (this.terrainTypes[type]) {
             this.currentTerrainType = type;
-            console.log(`[TerrainSystem] Terrain type set to: ${type}`);
+            logger.info(`[TerrainSystem] Terrain type set to: ${type}`);
         }
     }
     
@@ -409,7 +409,7 @@ export class TerrainSystem {
         
         chunksToRemove.forEach(key => {
             this.chunks.delete(key);
-            console.log(`[TerrainSystem] Unloaded chunk: ${key}`);
+            logger.info(`[TerrainSystem] Unloaded chunk: ${key}`);
         });
     }
     
@@ -426,6 +426,6 @@ export class TerrainSystem {
     // Cleanup
     dispose() {
         this.chunks.clear();
-        console.log('[TerrainSystem] Disposed');
+        logger.info('[TerrainSystem] Disposed');
     }
 }

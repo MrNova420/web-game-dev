@@ -31,7 +31,7 @@ export class DailyRewards {
         this.rewardPanel = null;
         
         this.init();
-        console.log('🎁 Daily Rewards System initialized');
+        logger.info('🎁 Daily Rewards System initialized');
     }
     
     init() {
@@ -50,7 +50,7 @@ export class DailyRewards {
             this.totalLogins = 1;
             this.lastRewardClaimed = false;
             
-            console.log('🎉 First login! Welcome to Dynasty of Emberveil!');
+            logger.info('🎉 First login! Welcome to Dynasty of Emberveil!');
             this.showWelcomeBonus();
         } else if (this.lastLoginDate !== today) {
             // New day
@@ -237,7 +237,7 @@ export class DailyRewards {
     
     claimReward() {
         if (this.lastRewardClaimed) {
-            console.log('Reward already claimed today');
+            logger.info('Reward already claimed today');
             return;
         }
         
@@ -282,7 +282,7 @@ export class DailyRewards {
         // Show celebration
         this.showRewardClaimedEffect();
         
-        console.log(`🎁 Claimed daily reward: Day ${this.currentStreak}`);
+        logger.info(`🎁 Claimed daily reward: Day ${this.currentStreak}`);
     }
     
     showDailyRewardNotification() {

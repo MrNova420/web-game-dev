@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ArchaeologySystem.js - Phase 4
  */
@@ -8,5 +9,5 @@ export class ArchaeologySystem {
       fossil: { model: '/assets/models/artifacts/fossil.glb' }  // Sketchfab Free
     };
   }
-  excavate(siteId) { console.log(`Excavating site: ${siteId}`); }
+  excavate(siteId) { logger.info(`Excavating site: ${siteId}`); }
 }

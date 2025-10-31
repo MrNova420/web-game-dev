@@ -12,7 +12,7 @@ export class GameIntegrationSystem {
         this.systemStatus = new Map();
         this.integrationChecks = [];
         
-        console.log('[GameIntegrationSystem] Initializing comprehensive system integration...');
+        logger.info('[GameIntegrationSystem] Initializing comprehensive system integration...');
     }
 
     /**
@@ -20,7 +20,7 @@ export class GameIntegrationSystem {
      */
     registerSystem(systemName, systemInstance, dependencies = []) {
         if (!systemName || !systemInstance) {
-            console.error(`[GameIntegrationSystem] Cannot register invalid system: ${systemName}`);
+            logger.error(`[GameIntegrationSystem] Cannot register invalid system: ${systemName}`);
             return false;
         }
 
@@ -28,7 +28,7 @@ export class GameIntegrationSystem {
         this.systemDependencies.set(systemName, dependencies);
         this.systemStatus.set(systemName, 'registered');
         
-        console.log(`[GameIntegrationSystem] Registered: ${systemName}`);
+        logger.info(`[GameIntegrationSystem] Registered: ${systemName}`);
         return true;
     }
 
@@ -36,7 +36,7 @@ export class GameIntegrationSystem {
      * Initialize all registered systems in correct dependency order
      */
     async initializeAllSystems() {
-        console.log('[GameIntegrationSystem] Initializing all game systems...');
+        logger.info('[GameIntegrationSystem] Initializing all game systems...');
         
         const initOrder = this.calculateInitOrder();
         const results = {
@@ -66,19 +66,19 @@ export class GameIntegrationSystem {
                 this.systemStatus.set(systemName, 'loaded');
                 results.successful.push(systemName);
                 
-                console.log(`✓ [GameIntegrationSystem] Initialized: ${systemName}`);
+                logger.info(`✓ [GameIntegrationSystem] Initialized: ${systemName}`);
                 
             } catch (error) {
-                console.error(`✗ [GameIntegrationSystem] Failed to initialize ${systemName}:`, error);
+                logger.error(`✗ [GameIntegrationSystem] Failed to initialize ${systemName}:`, error);
                 this.systemStatus.set(systemName, 'failed');
                 results.failed.push({ system: systemName, error: error.message });
             }
         }
 
-        console.log(`[GameIntegrationSystem] Initialization complete: ${results.successful.length}/${results.total} systems loaded`);
+        logger.info(`[GameIntegrationSystem] Initialization complete: ${results.successful.length}/${results.total} systems loaded`);
         
         if (results.failed.length > 0) {
-            console.warn(`[GameIntegrationSystem] Failed systems:`, results.failed);
+            logger.warn(`[GameIntegrationSystem] Failed systems:`, results.failed);
         }
 
         return results;
@@ -95,7 +95,7 @@ export class GameIntegrationSystem {
         const visit = (systemName) => {
             if (visited.has(systemName)) return;
             if (visiting.has(systemName)) {
-                console.warn(`[GameIntegrationSystem] Circular dependency detected: ${systemName}`);
+                logger.warn(`[GameIntegrationSystem] Circular dependency detected: ${systemName}`);
                 return;
             }
 
@@ -125,7 +125,7 @@ export class GameIntegrationSystem {
      * Run integration checks to ensure systems work together
      */
     async runIntegrationChecks() {
-        console.log('[GameIntegrationSystem] Running integration checks...');
+        logger.info('[GameIntegrationSystem] Running integration checks...');
         
         const checks = [
             this.checkCombatIntegration.bind(this),
@@ -141,13 +141,13 @@ export class GameIntegrationSystem {
                 const result = await check();
                 results.push(result);
             } catch (error) {
-                console.error(`[GameIntegrationSystem] Integration check failed:`, error);
+                logger.error(`[GameIntegrationSystem] Integration check failed:`, error);
                 results.push({ passed: false, error: error.message });
             }
         }
 
         const allPassed = results.every(r => r.passed);
-        console.log(`[GameIntegrationSystem] Integration checks: ${allPassed ? 'PASSED' : 'ISSUES FOUND'}`);
+        logger.info(`[GameIntegrationSystem] Integration checks: ${allPassed ? 'PASSED' : 'ISSUES FOUND'}`);
         
         return { allPassed, results };
     }
@@ -266,7 +266,7 @@ export class GameIntegrationSystem {
      * Repair failed systems
      */
     async repairFailedSystems() {
-        console.log('[GameIntegrationSystem] Attempting to repair failed systems...');
+        logger.info('[GameIntegrationSystem] Attempting to repair failed systems...');
         
         const failed = [];
         for (const [name, status] of this.systemStatus.entries()) {
@@ -276,7 +276,7 @@ export class GameIntegrationSystem {
         }
 
         if (failed.length === 0) {
-            console.log('[GameIntegrationSystem] No failed systems to repair');
+            logger.info('[GameIntegrationSystem] No failed systems to repair');
             return { repaired: 0, stillFailed: 0 };
         }
 
@@ -295,15 +295,15 @@ export class GameIntegrationSystem {
                 this.systemStatus.set(systemName, 'loaded');
                 results.repaired++;
                 
-                console.log(`✓ [GameIntegrationSystem] Repaired: ${systemName}`);
+                logger.info(`✓ [GameIntegrationSystem] Repaired: ${systemName}`);
                 
             } catch (error) {
-                console.error(`✗ [GameIntegrationSystem] Could not repair ${systemName}:`, error);
+                logger.error(`✗ [GameIntegrationSystem] Could not repair ${systemName}:`, error);
                 results.stillFailed++;
             }
         }
 
-        console.log(`[GameIntegrationSystem] Repair complete: ${results.repaired} fixed, ${results.stillFailed} still failing`);
+        logger.info(`[GameIntegrationSystem] Repair complete: ${results.repaired} fixed, ${results.stillFailed} still failing`);
         return results;
     }
 
@@ -316,7 +316,7 @@ export class GameIntegrationSystem {
                 try {
                     system.update(deltaTime);
                 } catch (error) {
-                    console.error(`[GameIntegrationSystem] Error updating ${name}:`, error);
+                    logger.error(`[GameIntegrationSystem] Error updating ${name}:`, error);
                 }
             }
         }

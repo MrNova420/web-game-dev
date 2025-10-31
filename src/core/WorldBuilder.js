@@ -1,4 +1,5 @@
 /**
+import { logger } from './core/Logger.js';
  * WorldBuilder - Integrates WorldPresets, FreeAssetLibrary, and ModelLoader
  * Builds complete immersive game worlds using already-made assets
  * 
@@ -27,23 +28,23 @@ export class WorldBuilder {
         this.builtVegetation = [];
         this.activeQuests = new Map();
         
-        console.log('🏗️ WorldBuilder initialized - Ready to build immersive worlds!');
+        logger.info('🏗️ WorldBuilder initialized - Ready to build immersive worlds!');
     }
     
     /**
      * Build a complete world from a preset
      */
     async buildWorld(presetId, playerLevel = 1) {
-        console.log(`🌍 Building world: ${presetId}...`);
+        logger.info(`🌍 Building world: ${presetId}...`);
         
         const preset = this.worldPresets.getPreset(presetId);
         if (!preset) {
-            console.error(`Preset not found: ${presetId}`);
+            logger.error(`Preset not found: ${presetId}`);
             return;
         }
         
-        console.log(`📜 Loading: ${preset.name} (Tier ${preset.tier}, Levels ${preset.recommendedLevel})`);
-        console.log(`📖 Lore: ${preset.lore.description}`);
+        logger.info(`📜 Loading: ${preset.name} (Tier ${preset.tier}, Levels ${preset.recommendedLevel})`);
+        logger.info(`📖 Lore: ${preset.lore.description}`);
         
         try {
             // Use Promise.all for parallel operations where possible
@@ -76,14 +77,14 @@ export class WorldBuilder {
             // Register events (quick)
             this.registerEvents(preset.events);
             
-            console.log(`✅ World built: ${preset.name}`);
-            console.log(`   - ${preset.npcs.length} NPCs spawned`);
-            console.log(`   - ${preset.enemies.length} enemy types available`);
-            console.log(`   - ${preset.quests.length} quests initialized`);
+            logger.info(`✅ World built: ${preset.name}`);
+            logger.info(`   - ${preset.npcs.length} NPCs spawned`);
+            logger.info(`   - ${preset.enemies.length} enemy types available`);
+            logger.info(`   - ${preset.quests.length} quests initialized`);
             
             return preset;
         } catch (error) {
-            console.error(`Error building world: ${error.message}`);
+            logger.error(`Error building world: ${error.message}`);
             // Return partial success
             return preset;
         }
@@ -124,7 +125,7 @@ export class WorldBuilder {
             this.scene.background = new THREE.Color(visuals.colors.primary);
         }
         
-        console.log('🎨 Visuals applied');
+        logger.info('🎨 Visuals applied');
     }
     
     /**
@@ -160,7 +161,7 @@ export class WorldBuilder {
         terrain.receiveShadow = true;
         this.scene.add(terrain);
         
-        console.log('🗺️ Terrain generated');
+        logger.info('🗺️ Terrain generated');
     }
     
     /**
@@ -178,7 +179,7 @@ export class WorldBuilder {
                     // Load real model from asset library
                     const asset = this.assetLibrary.getAsset('buildings', modelName);
                     if (!asset) {
-                        console.warn(`Asset not found: buildings/${modelName}`);
+                        logger.warn(`Asset not found: buildings/${modelName}`);
                         continue;
                     }
                     
@@ -208,12 +209,12 @@ export class WorldBuilder {
                     });
                     
                 } catch (error) {
-                    console.warn(`Failed to load structure ${modelName}:`, error.message);
+                    logger.warn(`Failed to load structure ${modelName}:`, error.message);
                 }
             }
         }
         
-        console.log(`🏰 Built ${this.builtStructures.length} structures`);
+        logger.info(`🏰 Built ${this.builtStructures.length} structures`);
     }
     
     /**
@@ -252,7 +253,7 @@ export class WorldBuilder {
             }
         }
         
-        console.log(`🌳 Planted ${this.builtVegetation.length} vegetation objects`);
+        logger.info(`🌳 Planted ${this.builtVegetation.length} vegetation objects`);
     }
     
     /**
@@ -286,7 +287,7 @@ export class WorldBuilder {
             }
         }
         
-        console.log('✨ Decorations added');
+        logger.info('✨ Decorations added');
     }
     
     /**
@@ -320,10 +321,10 @@ export class WorldBuilder {
                 
                 this.scene.add(model);
                 
-                console.log(`👤 Spawned NPC: ${npc.name} (${npc.type})`);
+                logger.info(`👤 Spawned NPC: ${npc.name} (${npc.type})`);
                 
             } catch (error) {
-                console.warn(`Failed to spawn NPC ${npc.name}:`, error.message);
+                logger.warn(`Failed to spawn NPC ${npc.name}:`, error.message);
             }
         }
     }
@@ -378,7 +379,7 @@ export class WorldBuilder {
             }
         }
         
-        console.log(`👾 Spawned ${this.builtEnemies.size} enemies`);
+        logger.info(`👾 Spawned ${this.builtEnemies.size} enemies`);
     }
     
     /**
@@ -396,7 +397,7 @@ export class WorldBuilder {
             });
         }
         
-        console.log(`📜 ${questData.length} quests initialized`);
+        logger.info(`📜 ${questData.length} quests initialized`);
     }
     
     /**
@@ -409,14 +410,14 @@ export class WorldBuilder {
         if (audioData.music) {
             const musicAsset = this.assetLibrary.getAsset('audio', `music_${audioData.music}`);
             if (musicAsset) {
-                console.log(`🎵 Music: ${audioData.music}`);
+                logger.info(`🎵 Music: ${audioData.music}`);
                 // this.gameEngine.audioSystem.playMusic(musicAsset.url);
             }
         }
         
         // Setup ambient sounds
         if (audioData.ambient && audioData.ambient.length > 0) {
-            console.log(`🔊 Ambient sounds: ${audioData.ambient.join(', ')}`);
+            logger.info(`🔊 Ambient sounds: ${audioData.ambient.join(', ')}`);
         }
     }
     
@@ -427,7 +428,7 @@ export class WorldBuilder {
         if (!eventData || eventData.length === 0) return;
         
         for (const event of eventData) {
-            console.log(`⚡ Registered event: ${event.name}`);
+            logger.info(`⚡ Registered event: ${event.name}`);
             // Events would be handled by event system
         }
     }
@@ -524,7 +525,7 @@ export class WorldBuilder {
         const quest = this.activeQuests.get(questId);
         if (quest) {
             quest.active = true;
-            console.log(`📜 Quest activated: ${quest.name}`);
+            logger.info(`📜 Quest activated: ${quest.name}`);
             return quest;
         }
         return null;
@@ -558,6 +559,6 @@ export class WorldBuilder {
         this.builtEnemies.clear();
         this.activeQuests.clear();
         
-        console.log('🧹 World cleaned up');
+        logger.info('🧹 World cleaned up');
     }
 }

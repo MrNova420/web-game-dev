@@ -315,7 +315,7 @@ export class MountCustomizationSystem {
         
         // Check level requirement
         if (this.gameEngine.player && armor.unlockLevel > this.gameEngine.player.level) {
-            console.log(`Requires level ${armor.unlockLevel}`);
+            logger.info(`Requires level ${armor.unlockLevel}`);
             return false;
         }
         
@@ -353,7 +353,7 @@ export class MountCustomizationSystem {
         
         // Check level requirement
         if (this.gameEngine.player && ability.unlockLevel > this.gameEngine.player.level) {
-            console.log(`Requires level ${ability.unlockLevel}`);
+            logger.info(`Requires level ${ability.unlockLevel}`);
             return false;
         }
         
@@ -364,7 +364,7 @@ export class MountCustomizationSystem {
                                (customization.equipped.body.includes('wings') || 
                                 customization.appearance.effects.includes('wings'));
                 if (!hasWings) {
-                    console.log('Requires wings to be equipped');
+                    logger.info('Requires wings to be equipped');
                     return false;
                 }
             }
@@ -373,7 +373,7 @@ export class MountCustomizationSystem {
         // Add ability
         if (!customization.abilities.includes(abilityId)) {
             customization.abilities.push(abilityId);
-            console.log(`Learned ${ability.name}!`);
+            logger.info(`Learned ${ability.name}!`);
         }
         
         return true;

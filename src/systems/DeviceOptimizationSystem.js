@@ -34,7 +34,7 @@ export class DeviceOptimizationSystem {
             pixelRatio: window.devicePixelRatio || 1
         };
         
-        console.log('📱 Device Detected:', device);
+        logger.info('📱 Device Detected:', device);
         return device;
     }
     
@@ -123,7 +123,7 @@ export class DeviceOptimizationSystem {
             settings.textureQuality = 'medium';
         }
         
-        console.log('⚙️ Optimal Settings Applied:', settings);
+        logger.info('⚙️ Optimal Settings Applied:', settings);
         return settings;
     }
     
@@ -149,7 +149,7 @@ export class DeviceOptimizationSystem {
             }
         });
         
-        console.log('✅ Device optimizations applied!');
+        logger.info('✅ Device optimizations applied!');
     }
     
     enableDynamicQuality() {
@@ -158,10 +158,10 @@ export class DeviceOptimizationSystem {
             this.updateFPS();
             
             if (this.fpsMonitor.fps < 30 && this.settings.quality !== 'low') {
-                console.warn('⚠️ Low FPS detected, reducing quality...');
+                logger.warn('⚠️ Low FPS detected, reducing quality...');
                 this.reduceQuality();
             } else if (this.fpsMonitor.fps > 55 && this.settings.quality === 'low') {
-                console.log('✅ FPS stable, increasing quality...');
+                logger.info('✅ FPS stable, increasing quality...');
                 this.increaseQuality();
             }
         }, 2000);
@@ -212,7 +212,7 @@ export class DeviceOptimizationSystem {
     optimizeForTouch() {
         if (!this.device.touch) return;
         
-        console.log('�� Optimizing for touch controls...');
+        logger.info('�� Optimizing for touch controls...');
         
         // Create touch-friendly UI
         this.createTouchControls();
@@ -276,7 +276,7 @@ export class DeviceOptimizationSystem {
             document.body.appendChild(btn);
         });
         
-        console.log('✅ Touch controls created');
+        logger.info('✅ Touch controls created');
     }
     
     enlargeClickTargets() {
@@ -292,7 +292,7 @@ export class DeviceOptimizationSystem {
     
     enableSmartBatching() {
         // Batch similar objects for better performance
-        console.log('📦 Enabling smart object batching...');
+        logger.info('📦 Enabling smart object batching...');
         
         const meshGroups = {};
         
@@ -312,7 +312,7 @@ export class DeviceOptimizationSystem {
         if (this.device.type === 'mobile') {
             Object.values(meshGroups).forEach(group => {
                 if (group.length > 10) {
-                    console.log(`   Batching ${group.length} similar objects`);
+                    logger.info(`   Batching ${group.length} similar objects`);
                 }
             });
         }
@@ -372,7 +372,7 @@ export class DeviceOptimizationSystem {
     
     enableSmartLoading() {
         // Load assets progressively based on device
-        console.log('📥 Smart loading enabled');
+        logger.info('📥 Smart loading enabled');
         
         return {
             loadHighPriority: this.device.type !== 'mobile',

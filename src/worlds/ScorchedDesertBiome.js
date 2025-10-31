@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Scorched Desert Biome - Desert Zone (Level 45-60)
  * Per README: Vast desert with sandstorms and oases
  * 
@@ -29,7 +30,7 @@ export class ScorchedDesertBiome {
     }
     
     async build() {
-        console.log('🏜️ Building Scorched Desert Biome...');
+        logger.info('🏜️ Building Scorched Desert Biome...');
         
         try {
             await this.setupEnvironment();
@@ -39,12 +40,12 @@ export class ScorchedDesertBiome {
             await this.buildPyramidOfAncients();
             await this.buildOasisHaven();
             
-            console.log('✅ Scorched Desert complete!');
-            console.log(`   - Sand dunes: ${this.sandDunes.length}`);
-            console.log(`   - Desert plants: ${this.cacti.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Scorched Desert complete!');
+            logger.info(`   - Sand dunes: ${this.sandDunes.length}`);
+            logger.info(`   - Desert plants: ${this.cacti.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Scorched Desert:', error);
+            logger.error('Error building Scorched Desert:', error);
         }
     }
     
@@ -78,7 +79,7 @@ export class ScorchedDesertBiome {
     }
     
     async createDesertTerrain() {
-        console.log('🗺️ Creating desert terrain...');
+        logger.info('🗺️ Creating desert terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_UnevenBrick.gltf',
@@ -122,11 +123,11 @@ export class ScorchedDesertBiome {
             }
         }
         
-        console.log('   ✅ Desert terrain created');
+        logger.info('   ✅ Desert terrain created');
     }
     
     async addSandDunes() {
-        console.log('⛰️ Adding sand dunes...');
+        logger.info('⛰️ Adding sand dunes...');
         
         const duneCount = 40;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -167,11 +168,11 @@ export class ScorchedDesertBiome {
             this.sandDunes.push(dune);
         }
         
-        console.log(`   ✅ Added ${this.sandDunes.length} sand dunes`);
+        logger.info(`   ✅ Added ${this.sandDunes.length} sand dunes`);
     }
     
     async addDesertPlants() {
-        console.log('🌵 Adding desert plants (cacti)...');
+        logger.info('🌵 Adding desert plants (cacti)...');
         
         const plantCount = 50;
         const plantPath = '/assets/models/nature/Plant_1.gltf';
@@ -206,11 +207,11 @@ export class ScorchedDesertBiome {
             this.cacti.push(plant);
         }
         
-        console.log(`   ✅ Added ${this.cacti.length} desert plants`);
+        logger.info(`   ✅ Added ${this.cacti.length} desert plants`);
     }
     
     async buildPyramidOfAncients() {
-        console.log('🔺 Building Pyramid of Ancients (ancient tomb)...');
+        logger.info('🔺 Building Pyramid of Ancients (ancient tomb)...');
         
         // Build pyramid using building blocks
         const buildingPath = '/assets/models/buildings/Wall_Brick.gltf';
@@ -230,12 +231,12 @@ export class ScorchedDesertBiome {
             
             this.scene.add(building);
             this.structures.push({ name: 'Pyramid of Ancients', type: 'tomb' });
-            console.log('   ✅ Pyramid of Ancients created');
+            logger.info('   ✅ Pyramid of Ancients created');
         }
     }
     
     async buildOasisHaven() {
-        console.log('🌴 Building Oasis Haven (trading post)...');
+        logger.info('🌴 Building Oasis Haven (trading post)...');
         
         // Create small oasis with structures
         const buildingPaths = [
@@ -260,6 +261,6 @@ export class ScorchedDesertBiome {
         }
         
         this.structures.push({ name: 'Oasis Haven', type: 'trading_post', buildings: buildingCount });
-        console.log(`   ✅ Oasis Haven built with ${buildingCount} structures`);
+        logger.info(`   ✅ Oasis Haven built with ${buildingCount} structures`);
     }
 }

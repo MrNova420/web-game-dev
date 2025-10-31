@@ -36,7 +36,7 @@ export class DeviceControlSystem {
   }
   
   init() {
-    console.log('🎮 Initializing Device Detection & Control System...');
+    logger.info('🎮 Initializing Device Detection & Control System...');
     
     // Detect device on startup
     this.detectDevice();
@@ -55,9 +55,9 @@ export class DeviceControlSystem {
     // Load saved preferences
     this.loadPreferences();
     
-    console.log(`✅ Device detected: ${this.deviceType}`);
-    console.log(`✅ Control scheme: ${this.controlScheme}`);
-    console.log(`✅ Screen: ${this.screenSize.width}x${this.screenSize.height}`);
+    logger.info(`✅ Device detected: ${this.deviceType}`);
+    logger.info(`✅ Control scheme: ${this.controlScheme}`);
+    logger.info(`✅ Screen: ${this.screenSize.width}x${this.screenSize.height}`);
   }
   
   detectDevice() {
@@ -127,7 +127,7 @@ export class DeviceControlSystem {
   }
   
   setControlScheme(scheme) {
-    console.log(`🎮 Setting control scheme: ${scheme}`);
+    logger.info(`🎮 Setting control scheme: ${scheme}`);
     
     // Disable all controls
     this.controls.pc.enabled = false;
@@ -165,7 +165,7 @@ export class DeviceControlSystem {
   }
   
   enablePCControls() {
-    console.log('⌨️  PC controls enabled (Keyboard + Mouse)');
+    logger.info('⌨️  PC controls enabled (Keyboard + Mouse)');
     
     // Show PC control hints
     this.showControlHints('pc');
@@ -175,7 +175,7 @@ export class DeviceControlSystem {
   }
   
   enableMobileControls() {
-    console.log('📱 Mobile controls enabled (Touch)');
+    logger.info('📱 Mobile controls enabled (Touch)');
     
     // Show mobile control hints
     this.showControlHints('mobile');
@@ -185,7 +185,7 @@ export class DeviceControlSystem {
   }
   
   enableGamepadControls() {
-    console.log('🎮 Gamepad controls enabled');
+    logger.info('🎮 Gamepad controls enabled');
     
     // Show gamepad control hints
     this.showControlHints('gamepad');
@@ -209,14 +209,14 @@ export class DeviceControlSystem {
     
     // Gamepad connect/disconnect
     window.addEventListener('gamepadconnected', (e) => {
-      console.log('🎮 Gamepad connected:', e.gamepad.id);
+      logger.info('🎮 Gamepad connected:', e.gamepad.id);
       this.controls.gamepad.connected = true;
       this.controls.gamepad.index = e.gamepad.index;
       this.showGamepadNotification();
     });
     
     window.addEventListener('gamepaddisconnected', (e) => {
-      console.log('🎮 Gamepad disconnected');
+      logger.info('🎮 Gamepad disconnected');
       this.controls.gamepad.connected = false;
       if (this.controlScheme === 'gamepad') {
         this.setControlScheme('auto');
@@ -247,7 +247,7 @@ export class DeviceControlSystem {
       if (gamepads[i]) {
         this.controls.gamepad.connected = true;
         this.controls.gamepad.index = i;
-        console.log('🎮 Gamepad detected:', gamepads[i].id);
+        logger.info('🎮 Gamepad detected:', gamepads[i].id);
         return true;
       }
     }
@@ -493,12 +493,12 @@ export class DeviceControlSystem {
   
   showMobileControls() {
     // Mobile touch controls would be created here
-    console.log('📱 Showing mobile touch controls');
+    logger.info('📱 Showing mobile touch controls');
     // TODO: Implement virtual joystick and buttons
   }
   
   hideMobileControls() {
-    console.log('📱 Hiding mobile touch controls');
+    logger.info('📱 Hiding mobile touch controls');
     // TODO: Hide virtual controls
   }
   

@@ -6,5 +6,5 @@ export class WorldQuestSystem {
     this.worldQuests = new Map();
     this.icons = { world_quest: '/assets/icons/quests/world_quest.png' };  // game-icons.net
   }
-  spawnWorldQuest(regionId) { console.log(`World quest in ${regionId}`); }
+  spawnWorldQuest(regionId) { logger.info(`World quest in ${regionId}`); }
 }

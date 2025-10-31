@@ -1,0 +1,1 @@
+class a{constructor(){this.worldBosses={dragon_king:{model:"/assets/models/bosses/dragon_king.glb",animations:"/assets/animations/dragon_*.fbx"},titan_golem:{model:"/assets/models/bosses/titan.glb",animations:"/assets/animations/golem_*.fbx"}}}spawnWorldBoss(s){logger.info(`World boss spawned: ${s}`)}}export{a as WorldBossSystem};

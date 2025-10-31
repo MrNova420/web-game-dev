@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * OpenWorldSystem - Full open-world exploration system
  * Transforms the game from dungeon crawler to open-world MMORPG
  */
@@ -38,7 +39,7 @@ export class OpenWorldSystem {
         this.createTerrain();
         this.generatePointsOfInterest();
         
-        console.log('🌍 Open World System initialized');
+        logger.info('🌍 Open World System initialized');
     }
     
     createTerrain() {
@@ -88,7 +89,7 @@ export class OpenWorldSystem {
         this.terrain.receiveShadow = true;
         this.scene.add(this.terrain);
         
-        console.log('🗺️ Terrain generated');
+        logger.info('🗺️ Terrain generated');
     }
     
     noise(x, y) {
@@ -130,7 +131,7 @@ export class OpenWorldSystem {
             });
         }
         
-        console.log(`📍 Generated ${this.pointsOfInterest.length} points of interest`);
+        logger.info(`📍 Generated ${this.pointsOfInterest.length} points of interest`);
     }
     
     getTerrainHeight(x, z) {
@@ -298,7 +299,7 @@ export class OpenWorldSystem {
                 const distance = position.distanceTo(poi.position);
                 if (distance < radius) {
                     poi.discovered = true;
-                    console.log(`🗺️ Discovered: ${poi.icon} ${poi.type}`);
+                    logger.info(`🗺️ Discovered: ${poi.icon} ${poi.type}`);
                     
                     // Trigger discovery event
                     if (this.gameEngine.modernUISystem) {
@@ -369,6 +370,6 @@ export class OpenWorldSystem {
             if (this.terrain.material) this.terrain.material.dispose();
         }
         
-        console.log('🌍 Open World System disposed');
+        logger.info('🌍 Open World System disposed');
     }
 }

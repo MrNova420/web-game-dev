@@ -3,5 +3,5 @@
  */
 export class PropertyTradingSystem {
   constructor() { this.properties = new Map(); }
-  buyProperty(playerId, propertyId) { console.log(`${playerId} bought property ${propertyId}`); }
+  buyProperty(playerId, propertyId) { logger.info(`${playerId} bought property ${propertyId}`); }
 }

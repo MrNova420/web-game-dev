@@ -120,7 +120,7 @@ export class ComboChainSystem {
             ]
         };
         
-        console.log('⚔️ ComboChainSystem initialized');
+        logger.info('⚔️ ComboChainSystem initialized');
     }
     
     /**
@@ -131,7 +131,7 @@ export class ComboChainSystem {
         const move = this.comboMoves[moveId];
         
         if (!move) {
-            console.warn('Unknown move:', moveId);
+            logger.warn('Unknown move:', moveId);
             return null;
         }
         
@@ -144,14 +144,14 @@ export class ComboChainSystem {
         if (this.comboChain.length > 0) {
             const lastMove = this.comboMoves[this.comboChain[this.comboChain.length - 1]];
             if (!lastMove.nextMoves.includes(moveId)) {
-                console.warn('Invalid combo move');
+                logger.warn('Invalid combo move');
                 return null;
             }
         }
         
         // Check finisher requirements
         if (move.isFinisher && this.currentCombo < move.minCombo) {
-            console.warn('Not enough combo for finisher');
+            logger.warn('Not enough combo for finisher');
             return null;
         }
         
@@ -180,7 +180,7 @@ export class ComboChainSystem {
         // Check for finisher availability
         this.checkFinisherAvailability();
         
-        console.log(`⚔️ ${move.name} | Combo: ${this.currentCombo} | Multiplier: ${this.comboMultiplier.toFixed(2)}x | Damage: ${finalDamage.toFixed(0)}`);
+        logger.info(`⚔️ ${move.name} | Combo: ${this.currentCombo} | Multiplier: ${this.comboMultiplier.toFixed(2)}x | Damage: ${finalDamage.toFixed(0)}`);
         
         return {
             move,
@@ -226,7 +226,7 @@ export class ComboChainSystem {
      */
     resetCombo() {
         if (this.currentCombo > 0) {
-            console.log(`💥 Combo ended! Total hits: ${this.currentCombo} | Total damage: ${this.totalDamageDealt.toFixed(0)}`);
+            logger.info(`💥 Combo ended! Total hits: ${this.currentCombo} | Total damage: ${this.totalDamageDealt.toFixed(0)}`);
         }
         
         this.currentCombo = 0;
@@ -275,12 +275,12 @@ export class ComboChainSystem {
     executePresetCombo(className, comboType) {
         const comboTree = this.classComboTrees[className];
         if (!comboTree || !comboTree[comboType]) {
-            console.warn('Unknown combo preset');
+            logger.warn('Unknown combo preset');
             return;
         }
         
         const moves = comboTree[comboType];
-        console.log(`🎯 Executing ${className} ${comboType} combo:`, moves.join(' → '));
+        logger.info(`🎯 Executing ${className} ${comboType} combo:`, moves.join(' → '));
         
         // This would execute the combo moves in sequence
         // For now, just log it

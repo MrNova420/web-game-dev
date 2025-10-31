@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Enhanced Magical Effects System - EXTERNAL ASSETS ONLY
  * Phase 9.2 - Advanced spell effects with particle systems and visual feedback
  * 
@@ -81,8 +82,8 @@ export class MagicalEffectsSystem {
     }
     
     initialize() {
-        console.log('✨ Magical Effects System initialized');
-        console.log('   Using Kenney Particle Pack + OpenGameArt VFX');
+        logger.info('✨ Magical Effects System initialized');
+        logger.info('   Using Kenney Particle Pack + OpenGameArt VFX');
     }
     
     /**
@@ -587,7 +588,7 @@ export class MagicalEffectsSystem {
     castSpell(caster, spellType, school, target = null) {
         const effect = this.spellEffects[school]?.[spellType];
         if (!effect) {
-            console.warn(`Spell ${spellType} not found in ${school} school`);
+            logger.warn(`Spell ${spellType} not found in ${school} school`);
             return;
         }
         
@@ -1008,7 +1009,7 @@ export class MagicalEffectsSystem {
     
     playSpellSound(soundName) {
         // Play sound effect
-        console.log(`Playing sound: ${soundName}`);
+        logger.info(`Playing sound: ${soundName}`);
     }
     
     /**

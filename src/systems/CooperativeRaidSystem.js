@@ -5,5 +5,5 @@ export class CooperativeRaidSystem {
   constructor() {
     this.raids = { dragon_lair: { model: '/assets/models/raids/dragon_lair.glb', bosses: 5 } };  // Quaternius
   }
-  startRaid(raidId) { console.log(`Raid started: ${raidId}`); }
+  startRaid(raidId) { logger.info(`Raid started: ${raidId}`); }
 }

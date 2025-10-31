@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Advanced Boss Mechanics System
  * Implements multi-phase boss fights with unique mechanics and patterns
@@ -484,7 +485,7 @@ export class AdvancedBossMechanics {
      */
     showTelegraph(position, type) {
         // Create visual telegraph indicator (would integrate with particle system)
-        console.log(`Telegraph: ${type} at`, position);
+        logger.info(`Telegraph: ${type} at`, position);
     }
 
     /**
@@ -492,7 +493,7 @@ export class AdvancedBossMechanics {
      */
     showPhaseNotification(phase) {
         // Create UI notification for phase change
-        console.log(`Boss entering Phase ${phase}!`);
+        logger.info(`Boss entering Phase ${phase}!`);
     }
 
     /**

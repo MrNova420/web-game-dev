@@ -393,15 +393,15 @@ export const PreBuiltWorldData = {
  * Quick load function - loads everything instantly
  */
 export function quickLoadWorld(scene, modelLoader) {
-    console.log('⚡ QUICK LOAD: Loading pre-built world data...');
-    console.log('   Everything is already generated - just rendering!');
+    logger.info('⚡ QUICK LOAD: Loading pre-built world data...');
+    logger.info('   Everything is already generated - just rendering!');
     
     const data = PreBuiltWorldData;
     const loadedObjects = [];
     
     // Load all biomes instantly
     Object.values(data.biomes).forEach(biome => {
-        console.log(`   Loading ${biome.name}...`);
+        logger.info(`   Loading ${biome.name}...`);
         
         // Trees
         biome.trees?.forEach(tree => {
@@ -422,17 +422,17 @@ export function quickLoadWorld(scene, modelLoader) {
     
     // Load villages
     Object.values(data.villages).forEach(village => {
-        console.log(`   Loading ${village.name}...`);
+        logger.info(`   Loading ${village.name}...`);
         // All buildings already positioned
     });
     
     // Load dungeons
     Object.values(data.dungeons).forEach(dungeon => {
-        console.log(`   Loading ${dungeon.name}...`);
+        logger.info(`   Loading ${dungeon.name}...`);
         // All rooms already built
     });
     
-    console.log('✅ QUICK LOAD: Complete! Game ready instantly!');
+    logger.info('✅ QUICK LOAD: Complete! Game ready instantly!');
     
     return {
         biomes: data.biomes,

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CasinoGamesSystem.js
  * Phase 8 - Casino Games System
@@ -546,7 +547,7 @@ export class CasinoGamesSystem {
             this.totalLosses = data.totalLosses || 0;
             this.stats = data.stats || this.stats;
         } catch (error) {
-            console.error('Failed to load casino data:', error);
+            logger.error('Failed to load casino data:', error);
         }
     }
 }

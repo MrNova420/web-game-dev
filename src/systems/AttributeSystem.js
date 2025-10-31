@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Attribute System - Phase 3 RPG Core
  * Manages character attributes, stat points, and stat distribution
@@ -27,7 +28,7 @@ export class AttributeSystem {
     }
     
     init() {
-        console.log('📊 Initializing Attribute System...');
+        logger.info('📊 Initializing Attribute System...');
         
         // Initialize player attributes
         Object.keys(this.attributes).forEach(attrId => {
@@ -40,7 +41,7 @@ export class AttributeSystem {
         
         this.calculateAllBonuses();
         
-        console.log('✅ Attribute System initialized with', Object.keys(this.attributes).length, 'attributes');
+        logger.info('✅ Attribute System initialized with', Object.keys(this.attributes).length, 'attributes');
     }
     
     /**
@@ -214,12 +215,12 @@ export class AttributeSystem {
      */
     allocatePoint(attributeId, amount = 1) {
         if (!this.attributes[attributeId]) {
-            console.warn(`Unknown attribute: ${attributeId}`);
+            logger.warn(`Unknown attribute: ${attributeId}`);
             return false;
         }
         
         if (this.availablePoints < amount) {
-            console.warn('Not enough attribute points available');
+            logger.warn('Not enough attribute points available');
             return false;
         }
         
@@ -230,7 +231,7 @@ export class AttributeSystem {
         this.calculateAttributeTotal(attributeId);
         this.checkMilestones(attributeId);
         
-        console.log(`+${amount} ${this.attributes[attributeId].name} (${this.playerAttributes[attributeId].base})`);
+        logger.info(`+${amount} ${this.attributes[attributeId].name} (${this.playerAttributes[attributeId].base})`);
         
         // Create magical effect
         if (this.gameEngine.magicalBackgroundSystem) {
@@ -260,7 +261,7 @@ export class AttributeSystem {
         this.availablePoints += totalPoints;
         this.usedPoints = 0;
         
-        console.log(`🔄 Attributes reset! ${totalPoints} points refunded`);
+        logger.info(`🔄 Attributes reset! ${totalPoints} points refunded`);
         return totalPoints;
     }
     
@@ -318,7 +319,7 @@ export class AttributeSystem {
             const thresholdNum = parseInt(threshold);
             if (attrValue === thresholdNum) {
                 const milestone = attrDef.milestones[threshold];
-                console.log(`🎊 Milestone reached! ${milestone.bonus}: ${milestone.description}`);
+                logger.info(`🎊 Milestone reached! ${milestone.bonus}: ${milestone.description}`);
                 
                 // Create large magical effect
                 if (this.gameEngine.magicalBackgroundSystem) {
@@ -337,7 +338,7 @@ export class AttributeSystem {
      */
     addAttributePoints(amount) {
         this.availablePoints += amount;
-        console.log(`+${amount} attribute points! (Total: ${this.availablePoints})`);
+        logger.info(`+${amount} attribute points! (Total: ${this.availablePoints})`);
     }
     
     /**
@@ -350,7 +351,7 @@ export class AttributeSystem {
         this.calculateAttributeTotal(attributeId);
         this.calculateAllBonuses();
         
-        console.log(`+${amount} ${this.attributes[attributeId].name} bonus from ${source}`);
+        logger.info(`+${amount} ${this.attributes[attributeId].name} bonus from ${source}`);
     }
     
     /**
@@ -443,7 +444,7 @@ export class AttributeSystem {
      */
     autoAllocate(className) {
         if (this.availablePoints === 0) {
-            console.warn('No points available to allocate');
+            logger.warn('No points available to allocate');
             return;
         }
         
@@ -459,7 +460,7 @@ export class AttributeSystem {
             }
         });
         
-        console.log(`🤖 Auto-allocated ${this.usedPoints} points based on ${className} build`);
+        logger.info(`🤖 Auto-allocated ${this.usedPoints} points based on ${className} build`);
     }
     
     /**

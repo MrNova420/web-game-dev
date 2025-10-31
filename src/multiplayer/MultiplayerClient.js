@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * MultiplayerClient - Client-side multiplayer integration
  * Handles real-time communication with game server
  */
@@ -19,8 +20,8 @@ export class MultiplayerClient {
     this.reconnectAttempts = 0;
     this.maxReconnectAttempts = 5;
     
-    console.log('🌐 Multiplayer Client initialized');
-    console.log(`📡 Server URL: ${this.serverURL}`);
+    logger.info('🌐 Multiplayer Client initialized');
+    logger.info(`📡 Server URL: ${this.serverURL}`);
   }
   
   detectServerURL() {
@@ -38,7 +39,7 @@ export class MultiplayerClient {
   }
   
   connect(playerData = {}) {
-    console.log('🔌 Connecting to multiplayer server...');
+    logger.info('🔌 Connecting to multiplayer server...');
     
     this.socket = io(this.serverURL, {
       transports: ['websocket', 'polling'],
@@ -52,7 +53,7 @@ export class MultiplayerClient {
     
     // Join game after connection
     this.socket.on('connect', () => {
-      console.log('✅ Connected to multiplayer server');
+      logger.info('✅ Connected to multiplayer server');
       this.connected = true;
       this.reconnectAttempts = 0;
       
@@ -71,7 +72,7 @@ export class MultiplayerClient {
       });
       
       this.socket.on('connect_error', (error) => {
-        console.error('❌ Connection error:', error.message);
+        logger.error('❌ Connection error:', error.message);
         reject(error);
       });
       
@@ -86,18 +87,18 @@ export class MultiplayerClient {
   setupEventHandlers() {
     // Connection events
     this.socket.on('disconnect', (reason) => {
-      console.log('🔌 Disconnected from server:', reason);
+      logger.info('🔌 Disconnected from server:', reason);
       this.connected = false;
       this.showDisconnectMessage(reason);
     });
     
     this.socket.on('reconnect', (attemptNumber) => {
-      console.log(`🔄 Reconnected after ${attemptNumber} attempts`);
+      logger.info(`🔄 Reconnected after ${attemptNumber} attempts`);
       this.showReconnectMessage();
     });
     
     this.socket.on('reconnect_failed', () => {
-      console.error('❌ Failed to reconnect to server');
+      logger.error('❌ Failed to reconnect to server');
       this.showReconnectFailedMessage();
     });
     
@@ -153,7 +154,7 @@ export class MultiplayerClient {
   
   // Game initialization
   handleGameInit(data) {
-    console.log('🎮 Game initialized', data);
+    logger.info('🎮 Game initialized', data);
     this.playerId = data.playerId;
     
     // Update player data
@@ -185,14 +186,14 @@ export class MultiplayerClient {
   
   // Player joined
   handlePlayerJoined(playerData) {
-    console.log(`👤 Player joined: ${playerData.username}`);
+    logger.info(`👤 Player joined: ${playerData.username}`);
     this.spawnOtherPlayer(playerData);
     this.showPlayerJoinedNotification(playerData.username);
   }
   
   // Player left
   handlePlayerLeft(data) {
-    console.log(`👋 Player left: ${data.username}`);
+    logger.info(`👋 Player left: ${data.username}`);
     this.removeOtherPlayer(data.playerId);
     this.showPlayerLeftNotification(data.username);
   }
@@ -418,7 +419,7 @@ export class MultiplayerClient {
     if (this.gameEngine.modernUISystem) {
       this.gameEngine.modernUISystem.showNotification(message, type);
     } else {
-      console.log(`[${type.toUpperCase()}] ${message}`);
+      logger.info(`[${type.toUpperCase()}] ${message}`);
     }
   }
   
@@ -426,33 +427,33 @@ export class MultiplayerClient {
     // Flash screen red
     if (this.gameEngine.scene) {
       // TODO: Add damage overlay effect
-      console.log(`💥 Took ${damage} damage!`);
+      logger.info(`💥 Took ${damage} damage!`);
     }
   }
   
   showDamageNumber(position, damage) {
     // Show floating damage number
     // TODO: Create floating text at position
-    console.log(`💥 Damage: ${damage}`);
+    logger.info(`💥 Damage: ${damage}`);
   }
   
   playAbilityEffect(player, abilityId, targetPosition) {
     // Play ability visual/sound effects
-    console.log(`✨ ${player.username || 'Player'} used ability: ${abilityId}`);
+    logger.info(`✨ ${player.username || 'Player'} used ability: ${abilityId}`);
   }
   
   playDeathAnimation(enemy) {
     // Play death animation
-    console.log(`💀 Enemy defeated: ${enemy.type}`);
+    logger.info(`💀 Enemy defeated: ${enemy.type}`);
   }
   
   playRespawnEffect(position) {
     // Play respawn particle effect
-    console.log(`✨ Enemy respawned at`, position);
+    logger.info(`✨ Enemy respawned at`, position);
   }
   
   handlePlayerDeath() {
-    console.log('💀 You died!');
+    logger.info('💀 You died!');
     // Show death screen with respawn button
     setTimeout(() => {
       this.requestRespawn();
@@ -477,7 +478,7 @@ export class MultiplayerClient {
     if (this.socket) {
       this.socket.disconnect();
       this.connected = false;
-      console.log('👋 Disconnected from multiplayer server');
+      logger.info('👋 Disconnected from multiplayer server');
     }
   }
 }

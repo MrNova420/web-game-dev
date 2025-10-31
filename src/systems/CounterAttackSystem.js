@@ -38,27 +38,27 @@ export class CounterAttackSystem {
       openedAt: now,
       expiresAt: now + this.counterWindowDuration
     });
-    console.log(`${entityId} counter window opened for ${this.counterWindowDuration}ms`);
+    logger.info(`${entityId} counter window opened for ${this.counterWindowDuration}ms`);
   }
 
   executeCounter(entityId, targetId) {
     const window = this.counterWindows.get(entityId);
     if (!window) {
-      console.log(`${entityId} no counter window active`);
+      logger.info(`${entityId} no counter window active`);
       return null;
     }
     
     const now = Date.now();
     if (now > window.expiresAt) {
-      console.log(`${entityId} counter window expired`);
+      logger.info(`${entityId} counter window expired`);
       this.counterWindows.delete(entityId);
       return null;
     }
     
     const animation = this.getCounterAnimation(window.weaponType);
-    console.log(`${entityId} counters ${targetId}!`);
-    console.log(`  Animation: ${animation}`);
-    console.log(`  VFX: ${this.vfx.counter_flash}, ${this.vfx.critical_burst}`);
+    logger.info(`${entityId} counters ${targetId}!`);
+    logger.info(`  Animation: ${animation}`);
+    logger.info(`  VFX: ${this.vfx.counter_flash}, ${this.vfx.critical_burst}`);
     
     this.counterWindows.delete(entityId);
     

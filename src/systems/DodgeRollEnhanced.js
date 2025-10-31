@@ -42,13 +42,13 @@ export class DodgeRollEnhanced {
 
   dodge(entityId, direction, hasStamina = true) {
     if (!hasStamina) {
-      console.log(`${entityId} not enough stamina to dodge`);
+      logger.info(`${entityId} not enough stamina to dodge`);
       return false;
     }
     
     const animation = this.animations[`dodge_${direction}`] || this.animations.dodge_forward;
-    console.log(`${entityId} dodge ${direction}: ${animation}`);
-    console.log(`  VFX: ${this.vfx.motion_blur}, ${this.vfx.afterimage}`);
+    logger.info(`${entityId} dodge ${direction}: ${animation}`);
+    logger.info(`  VFX: ${this.vfx.motion_blur}, ${this.vfx.afterimage}`);
     
     const now = Date.now();
     this.dodgingEntities.set(entityId, {
@@ -68,7 +68,7 @@ export class DodgeRollEnhanced {
     
     const now = Date.now();
     if (now <= state.iFrameEnd) {
-      console.log(`${entityId} has i-frames active`);
+      logger.info(`${entityId} has i-frames active`);
       return true;
     }
     

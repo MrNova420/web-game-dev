@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * SafeZoneSystem - Manages safe zone hub area where players can rest, shop, and prepare
  * Provides a peaceful starting area with various NPCs and facilities
  */
@@ -13,11 +14,11 @@ export class SafeZoneSystem {
         this.safeZoneObjects = [];
         this.npcs = [];
         
-        console.log('🏰 Safe Zone System initialized');
+        logger.info('🏰 Safe Zone System initialized');
     }
     
     createSafeZone() {
-        console.log('🏰 Creating Safe Zone Hub...');
+        logger.info('🏰 Creating Safe Zone Hub...');
         this.isInSafeZone = true;
         
         // Clear existing dungeon if any
@@ -39,7 +40,7 @@ export class SafeZoneSystem {
         // Show safe zone UI
         this.showSafeZoneUI();
         
-        console.log('✅ Safe Zone Hub created');
+        logger.info('✅ Safe Zone Hub created');
     }
     
     clearDungeon() {
@@ -332,7 +333,7 @@ export class SafeZoneSystem {
     }
     
     leaveSafeZone() {
-        console.log('🚪 Leaving Safe Zone...');
+        logger.info('🚪 Leaving Safe Zone...');
         this.isInSafeZone = false;
         
         // Remove safe zone objects

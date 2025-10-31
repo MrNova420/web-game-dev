@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * AssetLoaderSystem.js
  * Asset Loading and Management System
  * Loads FREE external 3D models, textures, audio from public/assets/
@@ -120,17 +121,17 @@ export class AssetLoaderSystem {
     async loadPlayerCharacter(characterClass) {
         const assetPath = this.assetManifest.players[characterClass];
         if (!assetPath) {
-            console.warn(`Player character ${characterClass} not found in manifest`);
+            logger.warn(`Player character ${characterClass} not found in manifest`);
             return this.createPlaceholder('player');
         }
         
         try {
             const model = await this.loadGLTF(assetPath);
             this.loadedAssets.set(`player_${characterClass}`, model);
-            console.log(`✅ Loaded FREE player model from Mixamo: ${characterClass}`);
+            logger.info(`✅ Loaded FREE player model from Mixamo: ${characterClass}`);
             return model;
         } catch (error) {
-            console.warn(`Asset not found: ${assetPath}. Using placeholder.`);
+            logger.warn(`Asset not found: ${assetPath}. Using placeholder.`);
             return this.createPlaceholder('player');
         }
     }
@@ -141,17 +142,17 @@ export class AssetLoaderSystem {
     async loadCompanionModel(companionId) {
         const assetPath = this.assetManifest.companions[companionId];
         if (!assetPath) {
-            console.warn(`Companion ${companionId} not found in manifest`);
+            logger.warn(`Companion ${companionId} not found in manifest`);
             return this.createPlaceholder('companion');
         }
         
         try {
             const model = await this.loadGLTF(assetPath);
             this.loadedAssets.set(`companion_${companionId}`, model);
-            console.log(`✅ Loaded FREE companion model: ${companionId}`);
+            logger.info(`✅ Loaded FREE companion model: ${companionId}`);
             return model;
         } catch (error) {
-            console.warn(`Asset not found: ${assetPath}. Using placeholder.`);
+            logger.warn(`Asset not found: ${assetPath}. Using placeholder.`);
             return this.createPlaceholder('companion');
         }
     }
@@ -162,17 +163,17 @@ export class AssetLoaderSystem {
     async loadEnemyModel(enemyType) {
         const assetPath = this.assetManifest.enemies[enemyType];
         if (!assetPath) {
-            console.warn(`Enemy ${enemyType} not found in manifest`);
+            logger.warn(`Enemy ${enemyType} not found in manifest`);
             return this.createPlaceholder('enemy');
         }
         
         try {
             const model = await this.loadGLTF(assetPath);
             this.loadedAssets.set(`enemy_${enemyType}`, model);
-            console.log(`✅ Loaded FREE enemy model from Quaternius: ${enemyType}`);
+            logger.info(`✅ Loaded FREE enemy model from Quaternius: ${enemyType}`);
             return model;
         } catch (error) {
-            console.warn(`Asset not found: ${assetPath}. Using placeholder.`);
+            logger.warn(`Asset not found: ${assetPath}. Using placeholder.`);
             return this.createPlaceholder('enemy');
         }
     }
@@ -183,17 +184,17 @@ export class AssetLoaderSystem {
     async loadBossModel(bossId) {
         const assetPath = this.assetManifest.bosses[bossId];
         if (!assetPath) {
-            console.warn(`Boss ${bossId} not found in manifest`);
+            logger.warn(`Boss ${bossId} not found in manifest`);
             return this.createPlaceholder('boss');
         }
         
         try {
             const model = await this.loadGLTF(assetPath);
             this.loadedAssets.set(`boss_${bossId}`, model);
-            console.log(`✅ Loaded FREE boss model from Sketchfab: ${bossId}`);
+            logger.info(`✅ Loaded FREE boss model from Sketchfab: ${bossId}`);
             return model;
         } catch (error) {
-            console.warn(`Asset not found: ${assetPath}. Using placeholder.`);
+            logger.warn(`Asset not found: ${assetPath}. Using placeholder.`);
             return this.createPlaceholder('boss');
         }
     }
@@ -204,17 +205,17 @@ export class AssetLoaderSystem {
     async loadWeaponModel(weaponId) {
         const assetPath = this.assetManifest.weapons[weaponId];
         if (!assetPath) {
-            console.warn(`Weapon ${weaponId} not found in manifest`);
+            logger.warn(`Weapon ${weaponId} not found in manifest`);
             return this.createPlaceholder('weapon');
         }
         
         try {
             const model = await this.loadGLTF(assetPath);
             this.loadedAssets.set(`weapon_${weaponId}`, model);
-            console.log(`✅ Loaded FREE weapon model: ${weaponId}`);
+            logger.info(`✅ Loaded FREE weapon model: ${weaponId}`);
             return model;
         } catch (error) {
-            console.warn(`Asset not found: ${assetPath}. Using placeholder.`);
+            logger.warn(`Asset not found: ${assetPath}. Using placeholder.`);
             return this.createPlaceholder('weapon');
         }
     }
@@ -225,17 +226,17 @@ export class AssetLoaderSystem {
     async loadEnvironmentModel(objectType) {
         const assetPath = this.assetManifest.environment[objectType];
         if (!assetPath) {
-            console.warn(`Environment object ${objectType} not found in manifest`);
+            logger.warn(`Environment object ${objectType} not found in manifest`);
             return this.createPlaceholder('environment');
         }
         
         try {
             const model = await this.loadGLTF(assetPath);
             this.loadedAssets.set(`env_${objectType}`, model);
-            console.log(`✅ Loaded FREE environment model from Quaternius/Poly Pizza: ${objectType}`);
+            logger.info(`✅ Loaded FREE environment model from Quaternius/Poly Pizza: ${objectType}`);
             return model;
         } catch (error) {
-            console.warn(`Asset not found: ${assetPath}. Using placeholder.`);
+            logger.warn(`Asset not found: ${assetPath}. Using placeholder.`);
             return this.createPlaceholder('environment');
         }
     }
@@ -246,17 +247,17 @@ export class AssetLoaderSystem {
     async loadTexture(textureId) {
         const assetPath = this.assetManifest.textures[textureId];
         if (!assetPath) {
-            console.warn(`Texture ${textureId} not found in manifest`);
+            logger.warn(`Texture ${textureId} not found in manifest`);
             return new THREE.Texture();
         }
         
         try {
             const texture = await this.loadTextureFile(assetPath);
             this.loadedAssets.set(`texture_${textureId}`, texture);
-            console.log(`✅ Loaded FREE texture from Poly Haven: ${textureId}`);
+            logger.info(`✅ Loaded FREE texture from Poly Haven: ${textureId}`);
             return texture;
         } catch (error) {
-            console.warn(`Texture not found: ${assetPath}. Using default.`);
+            logger.warn(`Texture not found: ${assetPath}. Using default.`);
             return new THREE.Texture();
         }
     }
@@ -267,17 +268,17 @@ export class AssetLoaderSystem {
     async loadAudio(audioId) {
         const assetPath = this.assetManifest.audio[audioId];
         if (!assetPath) {
-            console.warn(`Audio ${audioId} not found in manifest`);
+            logger.warn(`Audio ${audioId} not found in manifest`);
             return null;
         }
         
         try {
             const audioBuffer = await this.loadAudioFile(assetPath);
             this.loadedAssets.set(`audio_${audioId}`, audioBuffer);
-            console.log(`✅ Loaded FREE audio from Freesound/Incompetech: ${audioId}`);
+            logger.info(`✅ Loaded FREE audio from Freesound/Incompetech: ${audioId}`);
             return audioBuffer;
         } catch (error) {
-            console.warn(`Audio not found: ${assetPath}`);
+            logger.warn(`Audio not found: ${assetPath}`);
             return null;
         }
     }
@@ -376,7 +377,7 @@ export class AssetLoaderSystem {
             }
         };
         
-        console.log(`📦 Using placeholder for ${type} (download FREE asset from sources in ASSET_INTEGRATION_PLAN.md)`);
+        logger.info(`📦 Using placeholder for ${type} (download FREE asset from sources in ASSET_INTEGRATION_PLAN.md)`);
         return placeholders[type] ? placeholders[type]() : new THREE.Mesh();
     }
     

@@ -37,7 +37,7 @@ export class ProductionReadinessSystem {
         this.validateAllSystems();
         this.setupPerformanceMonitoring();
         
-        console.log('✅ Production Readiness System initialized');
+        logger.info('✅ Production Readiness System initialized');
     }
     
     setupErrorHandling() {
@@ -56,7 +56,7 @@ export class ProductionReadinessSystem {
     }
     
     validateAllSystems() {
-        console.log('🔍 Validating all game systems...');
+        logger.info('🔍 Validating all game systems...');
         
         const requiredSystems = [
             'scene',
@@ -82,19 +82,19 @@ export class ProductionReadinessSystem {
         
         requiredSystems.forEach(system => {
             if (!this.gameEngine[system]) {
-                console.warn(`⚠️ System missing: ${system}`);
+                logger.warn(`⚠️ System missing: ${system}`);
                 allSystemsValid = false;
             } else {
-                console.log(`✅ ${system} loaded`);
+                logger.info(`✅ ${system} loaded`);
             }
         });
         
         this.checks.allSystemsLoaded = allSystemsValid;
         
         if (allSystemsValid) {
-            console.log('✅ All systems validated successfully!');
+            logger.info('✅ All systems validated successfully!');
         } else {
-            console.warn('⚠️ Some systems are missing');
+            logger.warn('⚠️ Some systems are missing');
         }
         
         return allSystemsValid;
@@ -151,7 +151,7 @@ export class ProductionReadinessSystem {
         this.errorLog.push(errorEntry);
         this.checks.noErrors = false;
         
-        console.error(`❌ ${type}:`, error);
+        logger.error(`❌ ${type}:`, error);
         
         // Show error notification
         if (this.gameEngine.modernUISystem) {
@@ -164,16 +164,16 @@ export class ProductionReadinessSystem {
     }
     
     attemptAutoFix(error) {
-        console.log('🔧 Attempting auto-fix...');
+        logger.info('🔧 Attempting auto-fix...');
         
         // Try to recover from common errors
         if (error.message.includes('null') || error.message.includes('undefined')) {
-            console.log('🔧 Reinitializing null systems...');
+            logger.info('🔧 Reinitializing null systems...');
             this.reinitializeFailedSystems();
         }
         
         if (error.message.includes('memory')) {
-            console.log('🔧 Clearing memory...');
+            logger.info('🔧 Clearing memory...');
             this.clearUnusedResources();
         }
     }
@@ -182,11 +182,11 @@ export class ProductionReadinessSystem {
         // Attempt to reinitialize systems that may have failed
         try {
             if (!this.gameEngine.player) {
-                console.log('🔧 Reinitializing player...');
+                logger.info('🔧 Reinitializing player...');
                 // Player reinitialization would go here
             }
         } catch (e) {
-            console.error('Failed to reinitialize:', e);
+            logger.error('Failed to reinitialize:', e);
         }
     }
     
@@ -223,11 +223,11 @@ export class ProductionReadinessSystem {
             this.gameEngine.volumetricLightingSystem.setQuality('medium');
         }
         
-        console.log('⚡ Performance optimizations applied');
+        logger.info('⚡ Performance optimizations applied');
     }
     
     runFullDiagnostic() {
-        console.log('🔍 Running full diagnostic...');
+        logger.info('🔍 Running full diagnostic...');
         
         const report = {
             systems: this.validateAllSystems(),
@@ -238,7 +238,7 @@ export class ProductionReadinessSystem {
             timestamp: new Date().toISOString()
         };
         
-        console.log('📊 Diagnostic Report:', report);
+        logger.info('📊 Diagnostic Report:', report);
         
         return report;
     }
@@ -300,7 +300,7 @@ export class ProductionReadinessSystem {
     }
     
     autoPolish() {
-        console.log('✨ Applying auto-polish...');
+        logger.info('✨ Applying auto-polish...');
         
         // Ensure smooth animations
         if (this.gameEngine.renderer) {
@@ -323,14 +323,14 @@ export class ProductionReadinessSystem {
             this.gameEngine.weatherSystem.setRandomWeather();
         }
         
-        console.log('✨ Auto-polish complete!');
+        logger.info('✨ Auto-polish complete!');
     }
     
     startProductionMode() {
-        console.log('🚀 Starting Production Mode...');
+        logger.info('🚀 Starting Production Mode...');
         
         // Disable debug features
-        console.log('Disabling debug features...');
+        logger.info('Disabling debug features...');
         
         // Enable all polish features
         this.autoPolish();
@@ -339,8 +339,8 @@ export class ProductionReadinessSystem {
         const report = this.runFullDiagnostic();
         
         if (report.systems && report.errors && report.performance) {
-            console.log('✅ PRODUCTION MODE ACTIVE');
-            console.log('🎮 Game is ready to play!');
+            logger.info('✅ PRODUCTION MODE ACTIVE');
+            logger.info('🎮 Game is ready to play!');
             
             if (this.gameEngine.modernUISystem) {
                 this.gameEngine.modernUISystem.showNotification(
@@ -350,7 +350,7 @@ export class ProductionReadinessSystem {
                 );
             }
         } else {
-            console.warn('⚠️ Some issues detected, but game is playable');
+            logger.warn('⚠️ Some issues detected, but game is playable');
         }
     }
     
@@ -365,6 +365,6 @@ export class ProductionReadinessSystem {
     }
     
     dispose() {
-        console.log('✅ Production Readiness System disposed');
+        logger.info('✅ Production Readiness System disposed');
     }
 }

@@ -119,11 +119,11 @@ export class DiceGameSystem {
    * Initialize the dice game system
    */
   init() {
-    console.log('DiceGameSystem: Initializing with external assets');
-    console.log(`  - Dice models: Sketchfab Free (4 types)`);
-    console.log(`  - Casino tables: Sketchfab Free`);
-    console.log(`  - Environment: Quaternius Casino Pack`);
-    console.log(`  - UI: Kenney UI Pack + game-icons.net`);
+    logger.info('DiceGameSystem: Initializing with external assets');
+    logger.info(`  - Dice models: Sketchfab Free (4 types)`);
+    logger.info(`  - Casino tables: Sketchfab Free`);
+    logger.info(`  - Environment: Quaternius Casino Pack`);
+    logger.info(`  - UI: Kenney UI Pack + game-icons.net`);
     this.enabled = true;
   }
   
@@ -132,7 +132,7 @@ export class DiceGameSystem {
    */
   startGame(mode, betAmount = 10) {
     if (this.playerStats.balance < betAmount) {
-      console.log('DiceGameSystem: Insufficient balance');
+      logger.info('DiceGameSystem: Insufficient balance');
       return false;
     }
     
@@ -144,7 +144,7 @@ export class DiceGameSystem {
       score: 0
     };
     
-    console.log(`DiceGameSystem: Starting ${mode} game with bet ${betAmount}`);
+    logger.info(`DiceGameSystem: Starting ${mode} game with bet ${betAmount}`);
     return true;
   }
   
@@ -155,7 +155,7 @@ export class DiceGameSystem {
     const results = [];
     const model = this.assets.diceModels[diceType];
     
-    console.log(`DiceGameSystem: Rolling ${count} ${diceType} dice (${model})`);
+    logger.info(`DiceGameSystem: Rolling ${count} ${diceType} dice (${model})`);
     
     for (let i = 0; i < count; i++) {
       const result = Math.floor(Math.random() * 6) + 1;
@@ -186,7 +186,7 @@ export class DiceGameSystem {
     const dice = this.rollDice(2);
     const total = dice[0].value + dice[1].value;
     
-    console.log(`DiceGameSystem: Craps roll: ${total} (${dice[0].value} + ${dice[1].value})`);
+    logger.info(`DiceGameSystem: Craps roll: ${total} (${dice[0].value} + ${dice[1].value})`);
     
     let win = false;
     let payout = 0;
@@ -201,7 +201,7 @@ export class DiceGameSystem {
       } else {
         this.crapsGame.point = total;
         this.crapsGame.phase = 'point';
-        console.log(`DiceGameSystem: Point established: ${total}`);
+        logger.info(`DiceGameSystem: Point established: ${total}`);
       }
     } else if (this.crapsGame.phase === 'point') {
       if (total === this.crapsGame.point) {
@@ -231,7 +231,7 @@ export class DiceGameSystem {
     const dice = this.rollDice(5, 'golden');
     const values = dice.map(d => d.value).sort((a, b) => a - b);
     
-    console.log(`DiceGameSystem: Poker dice: [${values.join(', ')}]`);
+    logger.info(`DiceGameSystem: Poker dice: [${values.join(', ')}]`);
     
     // Check for hands (highest first)
     let hand = null;
@@ -351,12 +351,12 @@ export class DiceGameSystem {
         }
       }
       
-      console.log(`DiceGameSystem: Won ${payout}! Balance: ${this.playerStats.balance}`);
+      logger.info(`DiceGameSystem: Won ${payout}! Balance: ${this.playerStats.balance}`);
     } else {
       this.playerStats.balance -= bet;
       this.playerStats.totalLost += bet;
       this.playerStats.currentStreak = 0;
-      console.log(`DiceGameSystem: Lost ${bet}. Balance: ${this.playerStats.balance}`);
+      logger.info(`DiceGameSystem: Lost ${bet}. Balance: ${this.playerStats.balance}`);
     }
   }
   
@@ -367,7 +367,7 @@ export class DiceGameSystem {
     const achievement = this.achievements.find(a => a.id === id);
     if (achievement && !achievement.unlocked) {
       achievement.unlocked = true;
-      console.log(`DiceGameSystem: Achievement unlocked: ${achievement.name}`);
+      logger.info(`DiceGameSystem: Achievement unlocked: ${achievement.name}`);
     }
   }
   

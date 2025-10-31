@@ -166,7 +166,7 @@ export class TacticalCombatAI {
             'heal_support' // Healers prioritize allies
         ];
         
-        console.log('🧠 TacticalCombatAI initialized');
+        logger.info('🧠 TacticalCombatAI initialized');
     }
     
     /**
@@ -175,7 +175,7 @@ export class TacticalCombatAI {
     createEnemyGroup(centerPosition, enemyCount, formationType = 'circle') {
         const formation = this.formations[formationType];
         if (!formation) {
-            console.warn('Unknown formation:', formationType);
+            logger.warn('Unknown formation:', formationType);
             return null;
         }
         
@@ -206,7 +206,7 @@ export class TacticalCombatAI {
         });
         
         this.enemyGroups.push(group);
-        console.log(`👥 Created ${formationType} formation with ${enemyCount} enemies`);
+        logger.info(`👥 Created ${formationType} formation with ${enemyCount} enemies`);
         
         return group;
     }
@@ -241,7 +241,7 @@ export class TacticalCombatAI {
      * Handle boss phase transition
      */
     onBossPhaseTransition(boss, newPhase) {
-        console.log(`⚡ Boss entered ${newPhase.name} phase!`);
+        logger.info(`⚡ Boss entered ${newPhase.name} phase!`);
         
         // Apply phase bonuses
         boss.speed = boss.baseSpeed * newPhase.speed;
@@ -249,9 +249,9 @@ export class TacticalCombatAI {
         
         // Special phase transition effects
         if (newPhase.name === 'Enraged') {
-            console.log('💢 Boss is now enraged!');
+            logger.info('💢 Boss is now enraged!');
         } else if (newPhase.name === 'Berserk') {
-            console.log('🔥 Boss has entered berserk mode!');
+            logger.info('🔥 Boss has entered berserk mode!');
         }
     }
     
@@ -330,7 +330,7 @@ export class TacticalCombatAI {
      * Boss executes an attack
      */
     bossAttack(boss, ability) {
-        console.log(`💥 Boss uses ${ability}!`);
+        logger.info(`💥 Boss uses ${ability}!`);
         // Actual attack logic would go here
     }
     
@@ -599,7 +599,7 @@ export class TacticalCombatAI {
         const currentIndex = levels.indexOf(this.currentDifficulty);
         if (currentIndex < levels.length - 1) {
             this.currentDifficulty = levels[currentIndex + 1];
-            console.log(`⚡ AI Difficulty increased to: ${this.currentDifficulty}`);
+            logger.info(`⚡ AI Difficulty increased to: ${this.currentDifficulty}`);
         }
     }
     
@@ -611,7 +611,7 @@ export class TacticalCombatAI {
         const currentIndex = levels.indexOf(this.currentDifficulty);
         if (currentIndex > 0) {
             this.currentDifficulty = levels[currentIndex - 1];
-            console.log(`📉 AI Difficulty decreased to: ${this.currentDifficulty}`);
+            logger.info(`📉 AI Difficulty decreased to: ${this.currentDifficulty}`);
         }
     }
     

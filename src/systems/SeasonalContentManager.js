@@ -21,10 +21,10 @@ export class SeasonalContentManager {
     }
     
     init() {
-        console.log('🎄 Initializing Seasonal Content Manager...');
+        logger.info('🎄 Initializing Seasonal Content Manager...');
         this.updateCurrentSeason();
         this.checkHolidays();
-        console.log('✅ Seasonal Content Manager initialized');
+        logger.info('✅ Seasonal Content Manager initialized');
     }
     
     /**
@@ -186,7 +186,7 @@ export class SeasonalContentManager {
                     this.currentSeason = seasonId;
                     this.activeTheme = season;
                     this.applySeasonalTheme();
-                    console.log(`🌸 Season changed to: ${season.name}`);
+                    logger.info(`🌸 Season changed to: ${season.name}`);
                 }
                 break;
             }
@@ -213,7 +213,7 @@ export class SeasonalContentManager {
             this.activateSeasonalEffect(effect);
         });
         
-        console.log(`✨ Applied ${theme.name} theme`);
+        logger.info(`✨ Applied ${theme.name} theme`);
         
         // Create magical effect
         if (this.gameEngine.magicalBackgroundSystem) {
@@ -229,7 +229,7 @@ export class SeasonalContentManager {
      * Activate a seasonal effect
      */
     activateSeasonalEffect(effectId) {
-        console.log(`🎨 Activating seasonal effect: ${effectId}`);
+        logger.info(`🎨 Activating seasonal effect: ${effectId}`);
         // Implementation would add visual effects to the scene
     }
     
@@ -285,14 +285,14 @@ export class SeasonalContentManager {
         
         this.activeHolidays.push(holidayId);
         
-        console.log(`🎉 Holiday event started: ${holiday.name}!`);
+        logger.info(`🎉 Holiday event started: ${holiday.name}!`);
         
         // Apply holiday decorations
         this.applyHolidayDecorations(holiday);
         
         // Start holiday events
         holiday.events.forEach(eventId => {
-            console.log(`🎯 Holiday event active: ${eventId}`);
+            logger.info(`🎯 Holiday event active: ${eventId}`);
         });
         
         // Create celebration effect
@@ -315,7 +315,7 @@ export class SeasonalContentManager {
         }
         
         const holiday = this.holidays[holidayId];
-        console.log(`Holiday event ended: ${holiday.name}`);
+        logger.info(`Holiday event ended: ${holiday.name}`);
         
         // Remove holiday decorations
         this.removeHolidayDecorations(holiday);
@@ -325,7 +325,7 @@ export class SeasonalContentManager {
      * Apply holiday decorations
      */
     applyHolidayDecorations(holiday) {
-        console.log(`🎄 Applying decorations for ${holiday.name}`);
+        logger.info(`🎄 Applying decorations for ${holiday.name}`);
         // Implementation would add holiday decorations to the scene
     }
     
@@ -333,7 +333,7 @@ export class SeasonalContentManager {
      * Remove holiday decorations
      */
     removeHolidayDecorations(holiday) {
-        console.log(`Removing decorations for ${holiday.name}`);
+        logger.info(`Removing decorations for ${holiday.name}`);
         // Implementation would remove holiday decorations from the scene
     }
     

@@ -1,3 +1,4 @@
+import { logger } from './core/Logger.js';
 /**
  * Dynasty of Emberveil - Main Entry Point
  * A browser-based psychedelic fantasy RPG
@@ -29,7 +30,7 @@ class Game {
         // Monitor online/offline status
         window.addEventListener('online', () => {
             this.connectionStatus = 'online';
-            console.log('🌐 Connection restored');
+            logger.info('🌐 Connection restored');
             if (this.loadingText.textContent.includes('offline')) {
                 this.loadingText.textContent = 'Connection restored, resuming...';
             }
@@ -37,7 +38,7 @@ class Game {
         
         window.addEventListener('offline', () => {
             this.connectionStatus = 'offline';
-            console.warn('📡 Connection lost');
+            logger.warn('📡 Connection lost');
             this.loadingText.textContent = 'You appear to be offline. Waiting for connection...';
             this.loadingText.style.color = '#ffaa00';
         });
@@ -45,7 +46,7 @@ class Game {
     
     async init() {
         try {
-            console.log('🎮 Starting optimized game loading...');
+            logger.info('🎮 Starting optimized game loading...');
             
             // Simple, fast loading - no complex timeouts
             this.updateLoading(10, 'Initializing...');
@@ -88,14 +89,14 @@ class Game {
             }, 500);
             
         } catch (error) {
-            console.error('Failed to initialize game:', error);
+            logger.error('Failed to initialize game:', error);
             this.handleLoadError(error);
         }
     }
     
     handleLoadError(error) {
-        console.error('Failed to initialize game:', error);
-        console.error('Stack trace:', error.stack);
+        logger.error('Failed to initialize game:', error);
+        logger.error('Stack trace:', error.stack);
         
         // Show detailed error to user
         this.loadingText.innerHTML = `
@@ -116,13 +117,13 @@ class Game {
     }
     
     start() {
-        console.log('🎮 Dynasty of Emberveil - NEW COMPLETE GAME STARTING!');
-        console.log('   🌟 This is the UPDATED version with all new systems!');
-        console.log('   ✅ Complete UI/UX System');
-        console.log('   ✅ Universal Input (Mobile + Desktop)');
-        console.log('   ✅ 3 Playable Biomes');
-        console.log('   ✅ Combat & Magic System');
-        console.log('   ✅ Dungeon System');
+        logger.info('🎮 Dynasty of Emberveil - NEW COMPLETE GAME STARTING!');
+        logger.info('   🌟 This is the UPDATED version with all new systems!');
+        logger.info('   ✅ Complete UI/UX System');
+        logger.info('   ✅ Universal Input (Mobile + Desktop)');
+        logger.info('   ✅ 3 Playable Biomes');
+        logger.info('   ✅ Combat & Magic System');
+        logger.info('   ✅ Dungeon System');
         
         this.engine.start();
         
@@ -132,11 +133,11 @@ class Game {
         
         // NEW: Check if Complete Game Integration is available
         if (this.engine.completeGameIntegration) {
-            console.log('   ✅ Complete Game Integration Active!');
+            logger.info('   ✅ Complete Game Integration Active!');
             
             // Show the NEW UI system (not old beta UI)
             if (this.engine.enhancedUISystem) {
-                console.log('   ✅ NEW Enhanced UI System loaded');
+                logger.info('   ✅ NEW Enhanced UI System loaded');
                 // UI is already initialized and showing main menu
             }
             
@@ -144,7 +145,7 @@ class Game {
             window.completeGame = this.engine.completeGameIntegration;
             
         } else {
-            console.warn('   ⚠️ Complete Game Integration not found - using fallback');
+            logger.warn('   ⚠️ Complete Game Integration not found - using fallback');
             
             // Fallback to old main menu if new system isn't loaded
             if (this.engine.mainMenuSystem) {
@@ -152,9 +153,9 @@ class Game {
             }
         }
         
-        console.log('');
-        console.log('🎉 GAME READY! The NEW complete game is now running!');
-        console.log('   Click "Start Adventure" in the menu to begin!');
+        logger.info('');
+        logger.info('🎉 GAME READY! The NEW complete game is now running!');
+        logger.info('   Click "Start Adventure" in the menu to begin!');
         
         // Start game loop
         this.gameLoop();
@@ -166,7 +167,7 @@ class Game {
             if (this.engine && this.engine.isRunning) {
                 // Check for common issues
                 if (!this.engine.player) {
-                    console.warn('⚠️ Player reference lost, attempting recovery...');
+                    logger.warn('⚠️ Player reference lost, attempting recovery...');
                     // The game will auto-recover on next update
                 }
                 
@@ -174,7 +175,7 @@ class Game {
                 if (this.engine.performanceOptimizer) {
                     const fps = this.engine.performanceOptimizer.currentFPS || 0;
                     if (fps < 10 && fps > 0) {
-                        console.warn(`⚠️ Low FPS detected: ${fps.toFixed(1)}`);
+                        logger.warn(`⚠️ Low FPS detected: ${fps.toFixed(1)}`);
                     }
                 }
             }
@@ -189,7 +190,7 @@ class Game {
                 this.engine.update();
                 this.engine.render();
             } catch (error) {
-                console.error('Error in game loop:', error);
+                logger.error('Error in game loop:', error);
                 // Don't crash the game, just log the error
                 // The performance optimizer will handle degraded performance
             }
@@ -199,12 +200,12 @@ class Game {
     // Handle visibility change to pause/resume game
     handleVisibilityChange() {
         if (document.hidden) {
-            console.log('⏸️ Game paused (tab hidden)');
+            logger.info('⏸️ Game paused (tab hidden)');
             if (this.engine) {
                 this.engine.isRunning = false;
             }
         } else {
-            console.log('▶️ Game resumed (tab visible)');
+            logger.info('▶️ Game resumed (tab visible)');
             if (this.engine) {
                 this.engine.isRunning = true;
             }
@@ -223,14 +224,14 @@ window.addEventListener('DOMContentLoaded', () => {
     
     // Add error handler for uncaught errors
     window.addEventListener('error', (event) => {
-        console.error('Uncaught error:', event.error);
+        logger.error('Uncaught error:', event.error);
         // Don't let uncaught errors crash the game
         event.preventDefault();
     });
     
     // Handle unhandled promise rejections
     window.addEventListener('unhandledrejection', (event) => {
-        console.error('Unhandled promise rejection:', event.reason);
+        logger.error('Unhandled promise rejection:', event.reason);
         event.preventDefault();
     });
 });

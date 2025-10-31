@@ -49,7 +49,7 @@ export class MultiplayerEngagementSystem {
   setupReferralSystem() {
     return {
       referrerRewards: {
-        friend joins: { gold: 1000, icon: '/assets/icons/friend.png' },
+        'friendJoins': { gold: 1000, icon: '/assets/icons/friend.png' },
         friendLevel10: { gold: 2000, mount: 'Friendship Mount', icon: '/assets/icons/mount.png' },
         friendLevel30: { gold: 5000, pet: 'Buddy Pet', icon: '/assets/icons/pet.png' },
         friendLevel60: { gold: 10000, title: 'Master Recruiter', icon: '/assets/icons/title.png' }
@@ -85,10 +85,10 @@ export class MultiplayerEngagementSystem {
   setupCoopRewards() {
     return {
       partyBonus: {
-        2players: '5% XP bonus',
-        3players: '10% XP bonus',
-        4players: '15% XP bonus',
-        5players: '20% XP bonus'
+        '2players': '5% XP bonus',
+        '3players': '10% XP bonus',
+        '4players': '15% XP bonus',
+        '5players': '20% XP bonus'
       },
       guildGroupBonus: {
         guildMembers: '25% XP bonus',
@@ -159,7 +159,7 @@ export class MultiplayerEngagementSystem {
   applyRoleBonus(player) {
     const bonus = this.partyFinder.roleBonus[player.role.toLowerCase()];
     if (bonus) {
-      console.log(`Role bonus applied: ${bonus.bonus}`);
+      logger.info(`Role bonus applied: ${bonus.bonus}`);
     }
   }
 
@@ -186,7 +186,7 @@ export class MultiplayerEngagementSystem {
 
   applyToGuild(player, guildId) {
     // Auto-apply to guild
-    console.log(`${player.name} applied to guild ${guildId}`);
+    logger.info(`${player.name} applied to guild ${guildId}`);
   }
 
   getGuildPerks(guildLevel) {
@@ -343,6 +343,6 @@ export class MultiplayerEngagementSystem {
   }
 
   showReferralReward(player, rewards) {
-    console.log('Referral reward:', rewards);
+    logger.info('Referral reward:', rewards);
   }
 }

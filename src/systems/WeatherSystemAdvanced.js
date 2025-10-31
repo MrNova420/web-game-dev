@@ -121,18 +121,18 @@ export class WeatherSystemAdvanced {
     }
     
     initialize() {
-        console.log('[WeatherSystemAdvanced] Initializing weather system...');
+        logger.info('[WeatherSystemAdvanced] Initializing weather system...');
         
         // Set initial weather
         this.setWeather('clear', 0);
         
-        console.log('[WeatherSystemAdvanced] Weather system initialized');
+        logger.info('[WeatherSystemAdvanced] Weather system initialized');
     }
     
     // Set weather type with optional transition time
     setWeather(weatherType, transitionTime = 5.0) {
         if (!this.weatherTypes[weatherType]) {
-            console.warn(`[WeatherSystemAdvanced] Unknown weather type: ${weatherType}`);
+            logger.warn(`[WeatherSystemAdvanced] Unknown weather type: ${weatherType}`);
             return;
         }
         
@@ -140,7 +140,7 @@ export class WeatherSystemAdvanced {
             return;
         }
         
-        console.log(`[WeatherSystemAdvanced] Changing weather from ${this.currentWeather} to ${weatherType}`);
+        logger.info(`[WeatherSystemAdvanced] Changing weather from ${this.currentWeather} to ${weatherType}`);
         
         this.targetWeather = weatherType;
         this.transitionDuration = transitionTime;
@@ -259,7 +259,7 @@ export class WeatherSystemAdvanced {
     triggerLightning() {
         if (!this.lightning.enabled) return;
         
-        console.log('[WeatherSystemAdvanced] Lightning strike!');
+        logger.info('[WeatherSystemAdvanced] Lightning strike!');
         
         // Flash effect
         this.lightning.currentFlash = this.lightning.flashDuration;
@@ -305,7 +305,7 @@ export class WeatherSystemAdvanced {
             if (this.transitionProgress >= 1.0) {
                 this.transitionProgress = 1.0;
                 this.currentWeather = this.targetWeather;
-                console.log(`[WeatherSystemAdvanced] Weather transition complete: ${this.currentWeather}`);
+                logger.info(`[WeatherSystemAdvanced] Weather transition complete: ${this.currentWeather}`);
             }
             
             this.updateWeatherEffects();
@@ -376,13 +376,13 @@ export class WeatherSystemAdvanced {
             this.setRandomWeather();
         }, interval * 1000);
         
-        console.log(`[WeatherSystemAdvanced] Weather cycle started (${interval}s interval)`);
+        logger.info(`[WeatherSystemAdvanced] Weather cycle started (${interval}s interval)`);
     }
     
     // Cleanup
     dispose() {
         this.clearParticleEmitters();
         this.weatherChangeCallbacks = [];
-        console.log('[WeatherSystemAdvanced] Disposed');
+        logger.info('[WeatherSystemAdvanced] Disposed');
     }
 }

@@ -16,7 +16,7 @@ export class WorldExplorationSystem {
   }
 
   discoverRegion(playerId, regionId) {
-    console.log(`${playerId} discovered: ${regionId}`);
-    console.log(`  Model: ${this.regions[regionId].model}`);
+    logger.info(`${playerId} discovered: ${regionId}`);
+    logger.info(`  Model: ${this.regions[regionId].model}`);
   }
 }

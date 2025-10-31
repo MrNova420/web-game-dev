@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * ThreeDSceneSystem - Advanced 3D Scene Management
  * 
  * Core 3D rendering system for the ADVANCED 3D ANIME FANTASY MAGIC RPG.
@@ -119,7 +120,7 @@ export class ThreeDSceneSystem {
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
         
-        console.log('ThreeDSceneSystem initialized - Advanced 3D rendering active');
+        logger.info('ThreeDSceneSystem initialized - Advanced 3D rendering active');
     }
     
     setupPostProcessing() {
@@ -204,7 +205,7 @@ export class ThreeDSceneSystem {
             this.scene.environment = texture;
             return texture;
         } catch (error) {
-            console.warn(`Skybox ${skyboxName} not found, using color background`);
+            logger.warn(`Skybox ${skyboxName} not found, using color background`);
             return null;
         }
     }

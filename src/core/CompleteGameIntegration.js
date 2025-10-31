@@ -1,4 +1,5 @@
 /**
+import { logger } from './core/Logger.js';
  * Complete Game Integration - Dynasty of Emberveil
  * 
  * This file integrates ALL systems to make the game fully playable:
@@ -56,7 +57,7 @@ export class CompleteGameIntegration {
             jump: () => this.handlePlayerJump(),
             sprint: (active) => this.handlePlayerSprint(active),
             attack: () => this.handlePlayerAttack(),
-            useSecondaryAction: () => console.log('Secondary action'),
+            useSecondaryAction: () => logger.info('Secondary action'),
             useSkill: (slot) => this.handleUseSkill(slot)
         };
         
@@ -67,26 +68,26 @@ export class CompleteGameIntegration {
      * Initialize complete game
      */
     async initialize() {
-        console.log('🎮 Initializing Complete Game Integration...');
-        console.log('   This connects ALL systems for full gameplay');
+        logger.info('🎮 Initializing Complete Game Integration...');
+        logger.info('   This connects ALL systems for full gameplay');
         
         try {
             // Step 1: Initialize UI System
-            console.log('   📱 Step 1/5: Initializing UI...');
+            logger.info('   📱 Step 1/5: Initializing UI...');
             this.ui = new EnhancedUISystem();
             window.enhancedUI = this.ui; // Make globally available
             
             // Step 2: Initialize Input System
-            console.log('   🎮 Step 2/5: Initializing Input...');
+            logger.info('   🎮 Step 2/5: Initializing Input...');
             this.input = new UniversalInputSystem(this.camera, this.player);
             
             // Step 3: Initialize World
-            console.log('   🌍 Step 3/5: Initializing World...');
+            logger.info('   🌍 Step 3/5: Initializing World...');
             this.world = new MassiveOpenWorld(this.scene, this.modelLoader);
             await this.world.initialize();
             
             // Step 4: Initialize Combat System
-            console.log('   ⚔️ Step 4/5: Initializing Combat...');
+            logger.info('   ⚔️ Step 4/5: Initializing Combat...');
             this.combat = new CombatEnemySystem(this.scene, this.modelLoader, this.player);
             
             // Spawn enemies in the world
@@ -96,7 +97,7 @@ export class CompleteGameIntegration {
             }
             
             // Step 5: Initialize Dungeon System
-            console.log('   🏛️ Step 5/5: Initializing Dungeons...');
+            logger.info('   🏛️ Step 5/5: Initializing Dungeons...');
             this.dungeonBuilder = new DungeonBuilder(this.scene, this.modelLoader);
             
             // Build first dungeon near starting area
@@ -114,28 +115,28 @@ export class CompleteGameIntegration {
             
             this.isInitialized = true;
             
-            console.log('✅ Complete Game Integration initialized!');
-            console.log('   🎉 GAME IS FULLY PLAYABLE!');
-            console.log('');
-            console.log('   Controls:');
-            console.log('   - WASD / Arrow Keys: Move');
-            console.log('   - Space: Jump');
-            console.log('   - Mouse: Look around');
-            console.log('   - Left Click: Attack');
-            console.log('   - 1-6: Use skills');
-            console.log('   - I/Tab: Inventory');
-            console.log('   - C: Character sheet');
-            console.log('   - K: Skill tree');
-            console.log('   - M: Map');
-            console.log('   - ESC: Menu');
-            console.log('');
-            console.log('   Mobile: Virtual joystick + touch buttons appear automatically');
+            logger.info('✅ Complete Game Integration initialized!');
+            logger.info('   🎉 GAME IS FULLY PLAYABLE!');
+            logger.info('');
+            logger.info('   Controls:');
+            logger.info('   - WASD / Arrow Keys: Move');
+            logger.info('   - Space: Jump');
+            logger.info('   - Mouse: Look around');
+            logger.info('   - Left Click: Attack');
+            logger.info('   - 1-6: Use skills');
+            logger.info('   - I/Tab: Inventory');
+            logger.info('   - C: Character sheet');
+            logger.info('   - K: Skill tree');
+            logger.info('   - M: Map');
+            logger.info('   - ESC: Menu');
+            logger.info('');
+            logger.info('   Mobile: Virtual joystick + touch buttons appear automatically');
             
             // Show notification
             this.ui.showNotification('🎮 Dynasty of Emberveil loaded! Press Start to begin.', 'success');
             
         } catch (error) {
-            console.error('❌ Error initializing game:', error);
+            logger.error('❌ Error initializing game:', error);
             throw error;
         }
     }
@@ -286,7 +287,7 @@ export class CompleteGameIntegration {
             jumpAnimation();
         }
         
-        console.log('Player jumped!');
+        logger.info('Player jumped!');
     }
     
     /**
@@ -295,14 +296,14 @@ export class CompleteGameIntegration {
     handlePlayerSprint(active) {
         // Increase movement speed when sprinting
         // This would modify the speed multiplier in handlePlayerMove
-        console.log('Sprint:', active);
+        logger.info('Sprint:', active);
     }
     
     /**
      * Handle player attack
      */
     handlePlayerAttack() {
-        console.log('Player attacked!');
+        logger.info('Player attacked!');
         
         // Visual feedback
         this.ui.showNotification('⚔️ Attack!', 'info');
@@ -320,7 +321,7 @@ export class CompleteGameIntegration {
      * Handle skill use
      */
     handleUseSkill(slot) {
-        console.log(`Using skill in slot ${slot}`);
+        logger.info(`Using skill in slot ${slot}`);
         
         // Check if player has enough mana
         const manaCost = 20;
@@ -384,7 +385,7 @@ export class CompleteGameIntegration {
      * Start game (called when user clicks "Start Adventure")
      */
     startGame() {
-        console.log('🎮 Starting game...');
+        logger.info('🎮 Starting game...');
         
         if (this.ui) {
             this.ui.startGame();
@@ -396,7 +397,7 @@ export class CompleteGameIntegration {
             this.camera.lookAt(50, 0, 60);
         }
         
-        console.log('✅ Game started! Explore the world!');
+        logger.info('✅ Game started! Explore the world!');
     }
     
     /**

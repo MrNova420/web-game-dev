@@ -99,7 +99,7 @@ export class GuildAndHousingSystem {
         // Guild wars
         this.guildWars = [];
         
-        console.log('🏰 GuildAndHousingSystem initialized');
+        logger.info('🏰 GuildAndHousingSystem initialized');
     }
     
     /**
@@ -139,7 +139,7 @@ export class GuildAndHousingSystem {
         this.guilds.set(guild.id, guild);
         this.guildMembers.set(founderId, guild.id);
         
-        console.log(`🏰 Guild created: ${guildName} [${tag}]`);
+        logger.info(`🏰 Guild created: ${guildName} [${tag}]`);
         
         return { success: true, guildId: guild.id };
     }
@@ -162,7 +162,7 @@ export class GuildAndHousingSystem {
         }
         
         // In real implementation, would send invitation to target
-        console.log(`📨 Guild invitation sent to ${targetId} from ${guild.name}`);
+        logger.info(`📨 Guild invitation sent to ${targetId} from ${guild.name}`);
         
         return { success: true };
     }
@@ -178,7 +178,7 @@ export class GuildAndHousingSystem {
         guild.ranks[playerId] = 'member';
         this.guildMembers.set(playerId, guildId);
         
-        console.log(`✅ ${playerId} joined ${guild.name}`);
+        logger.info(`✅ ${playerId} joined ${guild.name}`);
         
         return { success: true };
     }
@@ -207,7 +207,7 @@ export class GuildAndHousingSystem {
             }
         }
         
-        console.log(`💰 ${playerId} contributed ${amount} ${type} to ${guild.name}`);
+        logger.info(`💰 ${playerId} contributed ${amount} ${type} to ${guild.name}`);
         
         return { success: true };
     }
@@ -216,19 +216,19 @@ export class GuildAndHousingSystem {
      * Handle guild level up
      */
     onGuildLevelUp(guild) {
-        console.log(`🎉 ${guild.name} reached level ${guild.level}!`);
+        logger.info(`🎉 ${guild.name} reached level ${guild.level}!`);
         
         // Unlock perks
         const perk = this.guildPerks[guild.level];
         if (perk) {
             guild.perks.push(perk);
-            console.log(`✨ Unlocked perk: ${perk.name}`);
+            logger.info(`✨ Unlocked perk: ${perk.name}`);
         }
         
         // Upgrade hall
         if (guild.level % 10 === 0) {
             guild.hall.level++;
-            console.log(`🏰 Guild hall upgraded to level ${guild.hall.level}!`);
+            logger.info(`🏰 Guild hall upgraded to level ${guild.hall.level}!`);
         }
     }
     
@@ -256,7 +256,7 @@ export class GuildAndHousingSystem {
         
         this.guildWars.push(war);
         
-        console.log(`⚔️ Guild war declared: ${attacker.name} vs ${defender.name}!`);
+        logger.info(`⚔️ Guild war declared: ${attacker.name} vs ${defender.name}!`);
         
         return { success: true, warId: war.id };
     }
@@ -298,7 +298,7 @@ export class GuildAndHousingSystem {
         
         this.playerHouses.set(playerId, house);
         
-        console.log(`🏠 ${playerId} purchased ${houseConfig.name}`);
+        logger.info(`🏠 ${playerId} purchased ${houseConfig.name}`);
         
         return { success: true, house };
     }
@@ -325,7 +325,7 @@ export class GuildAndHousingSystem {
             placedAt: Date.now()
         });
         
-        console.log(`🪑 Placed ${furnitureItem.name} in house`);
+        logger.info(`🪑 Placed ${furnitureItem.name} in house`);
         
         return { success: true };
     }
@@ -350,7 +350,7 @@ export class GuildAndHousingSystem {
         
         house.garden.plants.push(plant);
         
-        console.log(`🌱 Planted ${plantType} in garden`);
+        logger.info(`🌱 Planted ${plantType} in garden`);
         
         return { success: true };
     }
@@ -374,7 +374,7 @@ export class GuildAndHousingSystem {
         });
         
         if (harvested.length > 0) {
-            console.log(`🌾 Harvested from garden: ${harvested.join(', ')}`);
+            logger.info(`🌾 Harvested from garden: ${harvested.join(', ')}`);
         }
         
         return { success: true, harvested };
@@ -397,7 +397,7 @@ export class GuildAndHousingSystem {
         
         this.marketplace.listings.push(listing);
         
-        console.log(`🏪 Item listed: ${itemId} for ${price} gold`);
+        logger.info(`🏪 Item listed: ${itemId} for ${price} gold`);
         
         return { success: true, listingId: listing.id };
     }
@@ -430,7 +430,7 @@ export class GuildAndHousingSystem {
             timestamp: Date.now()
         });
         
-        console.log(`💰 ${buyerId} bought ${listing.itemId} for ${totalCost} gold`);
+        logger.info(`💰 ${buyerId} bought ${listing.itemId} for ${totalCost} gold`);
         
         return { success: true, totalCost, sellerProfit };
     }
@@ -539,7 +539,7 @@ export class GuildAndHousingSystem {
         war.winner = winner;
         
         const winnerGuild = this.guilds.get(winner);
-        console.log(`🏆 Guild war ended! Winner: ${winnerGuild.name}`);
+        logger.info(`🏆 Guild war ended! Winner: ${winnerGuild.name}`);
         
         // Award rewards
         winnerGuild.treasury += 50000;

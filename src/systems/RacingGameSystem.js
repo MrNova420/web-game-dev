@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * RacingGameSystem - Arcade Racing Mini-Game
  * 
  * Phase 8, System 121 of AUTONOMOUS_EXECUTION_PLAN
@@ -187,12 +188,12 @@ export class RacingGameSystem {
         const mount = this.mounts[mountId];
         
         if (!track || !track.unlocked) {
-            console.warn(`Track ${trackId} not available`);
+            logger.warn(`Track ${trackId} not available`);
             return false;
         }
         
         if (!mount || !mount.unlocked) {
-            console.warn(`Mount ${mountId} not available`);
+            logger.warn(`Mount ${mountId} not available`);
             return false;
         }
         

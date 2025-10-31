@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * World Beautification System  
  * Phase 9.3 - Environmental details, animations, architecture, and immersive world elements
  */
@@ -27,7 +28,7 @@ export class WorldBeautificationSystem {
     }
     
     initialize() {
-        console.log('🌸 World Beautification System initialized');
+        logger.info('🌸 World Beautification System initialized');
         
         // Create beautiful world elements
         this.createFlora();
@@ -1139,7 +1140,7 @@ export class WorldBeautificationSystem {
     
     createGodRays() {
         // Simplified - would use volumetric lighting in production
-        console.log('God rays created (requires post-processing)');
+        logger.info('God rays created (requires post-processing)');
     }
     
     createMysticalMist() {

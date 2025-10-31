@@ -15,12 +15,12 @@ export class PartySystem {
   }
 
   createParty(leaderId) {
-    console.log(`${leaderId} created party`);
-    console.log(`  UI: ${this.ui.party_frames}`);
+    logger.info(`${leaderId} created party`);
+    logger.info(`  UI: ${this.ui.party_frames}`);
     this.parties.set(leaderId, { members: [leaderId], leader: leaderId });
   }
 
   inviteToParty(partyId, playerId) {
-    console.log(`Invited ${playerId} to party ${partyId}`);
+    logger.info(`Invited ${playerId} to party ${partyId}`);
   }
 }

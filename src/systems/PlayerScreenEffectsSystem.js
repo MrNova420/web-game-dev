@@ -58,10 +58,10 @@ export class PlayerScreenEffectsSystem {
     }
     
     init() {
-        console.log('PlayerScreenEffectsSystem initialized with external assets');
-        console.log('- Vignette texture: Kenney');
-        console.log('- Particle overlays: Kenney Particle Pack');
-        console.log('- Post-processing: Three.js built-in');
+        logger.info('PlayerScreenEffectsSystem initialized with external assets');
+        logger.info('- Vignette texture: Kenney');
+        logger.info('- Particle overlays: Kenney Particle Pack');
+        logger.info('- Post-processing: Three.js built-in');
     }
     
     /**
@@ -70,7 +70,7 @@ export class PlayerScreenEffectsSystem {
      */
     triggerDamageFlash(intensity = 0.5) {
         this.damageFlashIntensity = Math.min(intensity, 1.0);
-        console.log(`Damage flash triggered (intensity: ${intensity})`);
+        logger.info(`Damage flash triggered (intensity: ${intensity})`);
     }
     
     /**
@@ -79,7 +79,7 @@ export class PlayerScreenEffectsSystem {
      */
     triggerHealingGlow(intensity = 0.4) {
         this.healingGlowIntensity = Math.min(intensity, 1.0);
-        console.log(`Healing glow triggered (intensity: ${intensity})`);
+        logger.info(`Healing glow triggered (intensity: ${intensity})`);
     }
     
     /**
@@ -87,7 +87,7 @@ export class PlayerScreenEffectsSystem {
      */
     triggerLevelUpBurst() {
         this.levelUpBurstActive = true;
-        console.log('Level-up burst triggered! (Kenney particles)');
+        logger.info('Level-up burst triggered! (Kenney particles)');
         
         // Create particle burst using Kenney Particle Pack
         // Gold particles explode from player position
@@ -102,7 +102,7 @@ export class PlayerScreenEffectsSystem {
      */
     triggerCriticalSlowMo(duration = 300) {
         this.criticalSlowMoActive = true;
-        console.log(`Critical slow-mo triggered (${duration}ms)`);
+        logger.info(`Critical slow-mo triggered (${duration}ms)`);
         
         setTimeout(() => {
             this.criticalSlowMoActive = false;
@@ -117,7 +117,7 @@ export class PlayerScreenEffectsSystem {
     setElementTint(element, intensity = 0.3) {
         if (this.elementTints[element]) {
             this.elementTintColor.copy(this.elementTints[element]);
-            console.log(`Element tint set: ${element} (intensity: ${intensity})`);
+            logger.info(`Element tint set: ${element} (intensity: ${intensity})`);
         }
     }
     

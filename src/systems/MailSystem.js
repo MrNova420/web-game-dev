@@ -14,7 +14,7 @@ export class MailSystem {
   }
 
   sendMail(senderId, recipientId, subject, body, attachments = []) {
-    console.log(`${senderId} sent mail to ${recipientId}: ${subject}`);
-    console.log(`  UI: ${this.ui.mailbox}`);
+    logger.info(`${senderId} sent mail to ${recipientId}: ${subject}`);
+    logger.info(`  UI: ${this.ui.mailbox}`);
   }
 }

@@ -15,12 +15,12 @@ export class WeatherSystem {
   setWeather(weatherType, intensity = 1.0) {
     const weather = this.weatherEffects[weatherType];
     if (!weather) {
-      console.warn(`Unknown weather type: ${weatherType}`);
+      logger.warn(`Unknown weather type: ${weatherType}`);
       return;
     }
-    console.log(`Setting weather: ${weatherType} (intensity: ${intensity})`);
-    console.log(`  Particles: ${weather.particles}`);
-    console.log(`  Sound: ${weather.sound}`);
+    logger.info(`Setting weather: ${weatherType} (intensity: ${intensity})`);
+    logger.info(`  Particles: ${weather.particles}`);
+    logger.info(`  Sound: ${weather.sound}`);
   }
 
   update(delta) {

@@ -50,9 +50,9 @@ export class UniversalInputSystem {
      * Initialize input system
      */
     init() {
-        console.log('🎮 Initializing Universal Input System...');
-        console.log(`   Platform: ${this.getPlatformName()}`);
-        console.log(`   Touch Device: ${this.isTouchDevice}`);
+        logger.info('🎮 Initializing Universal Input System...');
+        logger.info(`   Platform: ${this.getPlatformName()}`);
+        logger.info(`   Touch Device: ${this.isTouchDevice}`);
         
         // Setup keyboard
         this.setupKeyboard();
@@ -72,7 +72,7 @@ export class UniversalInputSystem {
         // Setup window resize
         window.addEventListener('resize', () => this.handleResize());
         
-        console.log('✅ Universal Input System initialized');
+        logger.info('✅ Universal Input System initialized');
     }
     
     /**
@@ -114,7 +114,7 @@ export class UniversalInputSystem {
             this.handleKeyPress(e.code, false);
         });
         
-        console.log('   ⌨️ Keyboard controls enabled');
+        logger.info('   ⌨️ Keyboard controls enabled');
     }
     
     /**
@@ -142,7 +142,7 @@ export class UniversalInputSystem {
             this.handleMouseWheel(e.deltaY);
         });
         
-        console.log('   🖱️ Mouse controls enabled');
+        logger.info('   🖱️ Mouse controls enabled');
     }
     
     /**
@@ -181,7 +181,7 @@ export class UniversalInputSystem {
             this.handleTouchEnd(e);
         }, { passive: false });
         
-        console.log('   📱 Touch controls enabled');
+        logger.info('   📱 Touch controls enabled');
     }
     
     /**
@@ -189,12 +189,12 @@ export class UniversalInputSystem {
      */
     setupGamepad() {
         window.addEventListener('gamepadconnected', (e) => {
-            console.log(`   🎮 Gamepad connected: ${e.gamepad.id}`);
+            logger.info(`   🎮 Gamepad connected: ${e.gamepad.id}`);
             this.gamepad = e.gamepad;
         });
         
         window.addEventListener('gamepaddisconnected', (e) => {
-            console.log(`   🎮 Gamepad disconnected`);
+            logger.info(`   🎮 Gamepad disconnected`);
             this.gamepad = null;
         });
     }
@@ -203,7 +203,7 @@ export class UniversalInputSystem {
      * Create mobile controls (virtual joystick + buttons)
      */
     createMobileControls() {
-        console.log('   📱 Creating mobile controls...');
+        logger.info('   📱 Creating mobile controls...');
         
         // Create container
         const container = document.createElement('div');
@@ -226,7 +226,7 @@ export class UniversalInputSystem {
         
         document.body.appendChild(container);
         
-        console.log('      ✅ Mobile controls created');
+        logger.info('      ✅ Mobile controls created');
     }
     
     /**
@@ -667,6 +667,6 @@ export class UniversalInputSystem {
         const container = document.getElementById('mobile-controls');
         if (container) container.remove();
         
-        console.log('🎮 Universal Input System destroyed');
+        logger.info('🎮 Universal Input System destroyed');
     }
 }

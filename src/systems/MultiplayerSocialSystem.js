@@ -40,7 +40,7 @@ export class MultiplayerSocialSystem {
         this.setupChatUI();
         this.setupSocialHub();
         
-        console.log('👥 Multiplayer Social System initialized');
+        logger.info('👥 Multiplayer Social System initialized');
     }
     
     setupChatUI() {
@@ -104,7 +104,7 @@ export class MultiplayerSocialSystem {
     
     setupSocialHub() {
         // Social hub for player gathering
-        console.log('🏛️ Social hub initialized');
+        logger.info('🏛️ Social hub initialized');
     }
     
     sendChatMessage(message, channel = 'global') {
@@ -126,7 +126,7 @@ export class MultiplayerSocialSystem {
         this.displayChatMessage(chatMessage);
         
         // Broadcast to other players (simulated for now)
-        console.log(`[${channel}] ${chatMessage.player}: ${message}`);
+        logger.info(`[${channel}] ${chatMessage.player}: ${message}`);
     }
     
     displayChatMessage(chatMessage) {
@@ -180,7 +180,7 @@ export class MultiplayerSocialSystem {
         // Show join message
         this.sendChatMessage(`${playerData.name} joined the game`, 'system');
         
-        console.log(`👤 Player joined: ${playerData.name}`);
+        logger.info(`👤 Player joined: ${playerData.name}`);
     }
     
     removePlayer(playerId) {
@@ -247,7 +247,7 @@ export class MultiplayerSocialSystem {
         this.sendChatMessage(`${emote.icon} *${emoteName}*`, 'system');
         
         // Trigger animation
-        console.log(`Performing emote: ${emoteName}`);
+        logger.info(`Performing emote: ${emoteName}`);
     }
     
     addFriend(playerId) {
@@ -285,6 +285,6 @@ export class MultiplayerSocialSystem {
             this.chatContainer.parentElement.remove();
         }
         
-        console.log('👥 Multiplayer Social System disposed');
+        logger.info('👥 Multiplayer Social System disposed');
     }
 }

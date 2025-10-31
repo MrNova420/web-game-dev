@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Advanced Auto-Management System
  * Comprehensive system for automatic performance optimization, resource management,
  * reliability monitoring, and intelligent game management
@@ -189,7 +190,7 @@ export class AdvancedAutoManagementSystem {
     }
     
     initialize() {
-        console.log('🔧 Advanced Auto-Management System initialized');
+        logger.info('🔧 Advanced Auto-Management System initialized');
         
         // Start monitoring
         this.startPerformanceMonitoring();
@@ -335,7 +336,7 @@ export class AdvancedAutoManagementSystem {
         if (currentIndex < tiers.length - 1) {
             this.currentQuality = tiers[currentIndex + 1];
             this.applyQualitySettings(this.currentQuality);
-            console.log(`🔽 Quality decreased to ${this.currentQuality}`);
+            logger.info(`🔽 Quality decreased to ${this.currentQuality}`);
         }
     }
     
@@ -349,7 +350,7 @@ export class AdvancedAutoManagementSystem {
         if (currentIndex > 0) {
             this.currentQuality = tiers[currentIndex - 1];
             this.applyQualitySettings(this.currentQuality);
-            console.log(`🔼 Quality increased to ${this.currentQuality}`);
+            logger.info(`🔼 Quality increased to ${this.currentQuality}`);
         }
     }
     
@@ -386,7 +387,7 @@ export class AdvancedAutoManagementSystem {
         
         // Antialiasing
         if (this.renderer.getContext().getContextAttributes().antialias !== settings.antialias) {
-            console.log(`Antialiasing change requires renderer recreation`);
+            logger.info(`Antialiasing change requires renderer recreation`);
         }
         
         // Particle count adjustment
@@ -399,14 +400,14 @@ export class AdvancedAutoManagementSystem {
             this.scene.fog.far = settings.drawDistance;
         }
         
-        console.log(`✅ Applied ${settings.name} quality settings`);
+        logger.info(`✅ Applied ${settings.name} quality settings`);
     }
     
     /**
      * Handle low performance
      */
     handleLowPerformance() {
-        console.warn('⚠️ Low performance detected, applying optimizations...');
+        logger.warn('⚠️ Low performance detected, applying optimizations...');
         
         // Reduce particle count
         this.reduceParticles(0.7);
@@ -441,7 +442,7 @@ export class AdvancedAutoManagementSystem {
      * Optimize draw calls by batching
      */
     optimizeDrawCalls() {
-        console.log('🔧 Optimizing draw calls...');
+        logger.info('🔧 Optimizing draw calls...');
         
         // Merge similar geometries
         this.mergeStaticGeometries();
@@ -457,7 +458,7 @@ export class AdvancedAutoManagementSystem {
      * Handle high memory usage
      */
     handleHighMemory() {
-        console.warn('⚠️ High memory usage detected, cleaning up...');
+        logger.warn('⚠️ High memory usage detected, cleaning up...');
         
         // Clear unused resources
         this.clearUnusedResources();
@@ -499,7 +500,7 @@ export class AdvancedAutoManagementSystem {
         
         // Log if exceeding limits
         if (this.resourcePool.meshes.size > this.resourceLimits.maxMeshes) {
-            console.warn(`⚠️ Mesh count (${this.resourcePool.meshes.size}) exceeds limit`);
+            logger.warn(`⚠️ Mesh count (${this.resourcePool.meshes.size}) exceeds limit`);
             this.reduceMeshCount();
         }
     }
@@ -555,7 +556,7 @@ export class AdvancedAutoManagementSystem {
             }
         });
         
-        console.log(`🧹 Cleared ${cleared} unused resources`);
+        logger.info(`🧹 Cleared ${cleared} unused resources`);
     }
     
     /**
@@ -643,10 +644,10 @@ export class AdvancedAutoManagementSystem {
      */
     checkSystemHealth() {
         if (this.systemHealth.overall < 50) {
-            console.error('🚨 System health critical! Taking emergency actions...');
+            logger.error('🚨 System health critical! Taking emergency actions...');
             this.emergencyOptimization();
         } else if (this.systemHealth.overall < 70) {
-            console.warn('⚠️ System health low, optimizing...');
+            logger.warn('⚠️ System health low, optimizing...');
             this.handleLowPerformance();
         }
     }
@@ -655,7 +656,7 @@ export class AdvancedAutoManagementSystem {
      * Emergency optimization
      */
     emergencyOptimization() {
-        console.log('🚨 Emergency optimization activated');
+        logger.info('🚨 Emergency optimization activated');
         
         // Force lowest quality
         this.currentQuality = 'POTATO';
@@ -692,10 +693,10 @@ export class AdvancedAutoManagementSystem {
                 this.gameEngine.saveSystem.quickSave();
                 this.autoSave.lastSave = Date.now();
                 this.autoSave.savesThisSession++;
-                console.log(`💾 Auto-save #${this.autoSave.savesThisSession} completed`);
+                logger.info(`💾 Auto-save #${this.autoSave.savesThisSession} completed`);
             }
         } catch (error) {
-            console.error('Auto-save failed:', error);
+            logger.error('Auto-save failed:', error);
         }
     }
     
@@ -730,7 +731,7 @@ export class AdvancedAutoManagementSystem {
      * Handle errors with recovery
      */
     handleError(error) {
-        console.error('❌ Error caught:', error);
+        logger.error('❌ Error caught:', error);
         
         this.errorRecovery.lastError = {
             error: error,
@@ -749,19 +750,19 @@ export class AdvancedAutoManagementSystem {
         this.errorRecovery.restartCount++;
         
         if (this.errorRecovery.restartCount > this.errorRecovery.maxRestarts) {
-            console.error('❌ Max restart attempts reached, giving up');
+            logger.error('❌ Max restart attempts reached, giving up');
             return;
         }
         
-        console.log(`🔄 Attempting recovery (attempt ${this.errorRecovery.restartCount})...`);
+        logger.info(`🔄 Attempting recovery (attempt ${this.errorRecovery.restartCount})...`);
         
         // Try to recover
         try {
             this.performRecovery();
-            console.log('✅ Recovery successful');
+            logger.info('✅ Recovery successful');
             this.errorRecovery.restartCount = 0;
         } catch (recoveryError) {
-            console.error('❌ Recovery failed:', recoveryError);
+            logger.error('❌ Recovery failed:', recoveryError);
         }
     }
     
@@ -790,7 +791,7 @@ export class AdvancedAutoManagementSystem {
      * Handle WebGL context lost
      */
     handleWebGLContextLost() {
-        console.error('🔴 WebGL context lost!');
+        logger.error('🔴 WebGL context lost!');
         
         // Stop rendering
         this.isContextLost = true;
@@ -803,7 +804,7 @@ export class AdvancedAutoManagementSystem {
      * Handle WebGL context restored
      */
     handleWebGLContextRestored() {
-        console.log('🟢 WebGL context restored, reinitializing...');
+        logger.info('🟢 WebGL context restored, reinitializing...');
         
         this.isContextLost = false;
         
@@ -889,7 +890,7 @@ export class AdvancedAutoManagementSystem {
             }
         });
         
-        console.log(`🧹 Cleared ${cleared} cache entries`);
+        logger.info(`🧹 Cleared ${cleared} cache entries`);
     }
     
     /**
@@ -947,17 +948,17 @@ export class AdvancedAutoManagementSystem {
     
     mergeStaticGeometries() {
         // Implementation would merge geometries that don't move
-        console.log('Merging static geometries...');
+        logger.info('Merging static geometries...');
     }
     
     setupInstancedRendering() {
         // Implementation would use InstancedMesh for repeated objects
-        console.log('Setting up instanced rendering...');
+        logger.info('Setting up instanced rendering...');
     }
     
     combineMaterials() {
         // Implementation would combine similar materials
-        console.log('Combining materials...');
+        logger.info('Combining materials...');
     }
     
     reduceTextureQuality() {
@@ -977,7 +978,7 @@ export class AdvancedAutoManagementSystem {
     
     reduceMeshCount() {
         // Remove least important meshes
-        console.log('Reducing mesh count...');
+        logger.info('Reducing mesh count...');
     }
     
     despawnMesh(mesh) {
@@ -1028,7 +1029,7 @@ export class AdvancedAutoManagementSystem {
     }
     
     disableNonEssentialFeatures() {
-        console.log('Disabling non-essential features...');
+        logger.info('Disabling non-essential features...');
         
         // Disable particles
         this.reduceParticles(0.1);
@@ -1061,7 +1062,7 @@ export class AdvancedAutoManagementSystem {
     
     loadResourcesNear(position) {
         // Implementation would load resources near position
-        console.log('Prefetching resources near', position);
+        logger.info('Prefetching resources near', position);
     }
     
     /**

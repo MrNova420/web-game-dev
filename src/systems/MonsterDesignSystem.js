@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Monster Design System - EXTERNAL ASSETS ONLY
  * Phase 9.4 - 3D monster models with animations, boss designs, and transformations
  * 
@@ -54,8 +55,8 @@ export class MonsterDesignSystem {
     }
     
     initialize() {
-        console.log('👹 Monster Design System initialized with 50+ monster types from external sources');
-        console.log('   Sources: Quaternius Monster Pack, Mixamo, Sketchfab Free');
+        logger.info('👹 Monster Design System initialized with 50+ monster types from external sources');
+        logger.info('   Sources: Quaternius Monster Pack, Mixamo, Sketchfab Free');
     }
     
     /**
@@ -685,7 +686,7 @@ export class MonsterDesignSystem {
     spawnMonster(type, position, level = 1) {
         const monsterData = this.monsterTypes[type];
         if (!monsterData) {
-            console.error(`Monster type ${type} not found`);
+            logger.error(`Monster type ${type} not found`);
             return null;
         }
         
@@ -704,7 +705,7 @@ export class MonsterDesignSystem {
     spawnBoss(type, position) {
         const bossData = this.bossTypes[type];
         if (!bossData) {
-            console.error(`Boss type ${type} not found`);
+            logger.error(`Boss type ${type} not found`);
             return null;
         }
         
@@ -1106,7 +1107,7 @@ export class MonsterDesignSystem {
         // Simplified animation creation
         return {
             name: name,
-            play: () => console.log(`Playing ${name} animation`)
+            play: () => logger.info(`Playing ${name} animation`)
         };
     }
     
@@ -1115,7 +1116,7 @@ export class MonsterDesignSystem {
      */
     addMonsterParticles(monster, type) {
         // Add particle system based on type
-        console.log(`Adding ${type} particles to monster`);
+        logger.info(`Adding ${type} particles to monster`);
     }
     
     /**
@@ -1139,11 +1140,11 @@ export class MonsterDesignSystem {
     addBossHealthBar(boss) {
         // Create health bar above boss
         boss.healthBarVisible = true;
-        console.log('Boss health bar added');
+        logger.info('Boss health bar added');
     }
     
     startBossEncounter(boss) {
-        console.log(`🎵 Boss encounter started: ${boss.type}`);
+        logger.info(`🎵 Boss encounter started: ${boss.type}`);
         // Play boss music, show health bar, etc.
     }
     
@@ -1153,7 +1154,7 @@ export class MonsterDesignSystem {
     transitionBossPhase(boss) {
         boss.currentPhase++;
         
-        console.log(`Boss ${boss.type} entering phase ${boss.currentPhase}`);
+        logger.info(`Boss ${boss.type} entering phase ${boss.currentPhase}`);
         
         // Check for transformations
         const healthPercent = (boss.health / boss.maxHealth) * 100;
@@ -1166,7 +1167,7 @@ export class MonsterDesignSystem {
     }
     
     applyTransformation(boss, transform) {
-        console.log(`✨ Boss transformation: ${transform.effect}`);
+        logger.info(`✨ Boss transformation: ${transform.effect}`);
         
         if (transform.sizeIncrease) {
             boss.mesh.scale.multiplyScalar(transform.sizeIncrease);
@@ -1195,7 +1196,7 @@ export class MonsterDesignSystem {
     
     playTransformationEffect(boss, transform) {
         // Create epic transformation particles
-        console.log(`Playing transformation effect for ${boss.type}`);
+        logger.info(`Playing transformation effect for ${boss.type}`);
     }
     
     /**

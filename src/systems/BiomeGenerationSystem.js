@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BiomeGenerationSystem.js
  * Phase 4.1 - Biome Expansion System with EXTERNAL ASSETS ONLY
@@ -246,7 +247,7 @@ export class BiomeGenerationSystem {
         this.lastGenerationTime = 0;
         this.generationInterval = 1000; // Generate new chunks every second
         
-        console.log('🌍 BiomeGenerationSystem initialized with', Object.keys(this.biomes).length, 'biomes');
+        logger.info('🌍 BiomeGenerationSystem initialized with', Object.keys(this.biomes).length, 'biomes');
     }
     
     /**
@@ -263,7 +264,7 @@ export class BiomeGenerationSystem {
      */
     setCurrentBiome(biomeId) {
         if (!this.biomes[biomeId]) {
-            console.warn('Biome not found:', biomeId);
+            logger.warn('Biome not found:', biomeId);
             return;
         }
         
@@ -274,7 +275,7 @@ export class BiomeGenerationSystem {
             startTime: Date.now()
         };
         
-        console.log('🌲 Entered biome:', biome.name);
+        logger.info('🌲 Entered biome:', biome.name);
         return biome;
     }
     
@@ -407,7 +408,7 @@ export class BiomeGenerationSystem {
         const oldBiome = this.currentBiome;
         this.setCurrentBiome(targetBiomeId);
         
-        console.log(`🔄 Transitioning from ${oldBiome.data.name} to ${this.currentBiome.data.name}`);
+        logger.info(`🔄 Transitioning from ${oldBiome.data.name} to ${this.currentBiome.data.name}`);
         
         // Animate transition over time
         const transitionInterval = setInterval(() => {
@@ -416,7 +417,7 @@ export class BiomeGenerationSystem {
             if (this.transitionProgress >= 100) {
                 clearInterval(transitionInterval);
                 this.isTransitioning = false;
-                console.log('✅ Biome transition complete');
+                logger.info('✅ Biome transition complete');
             }
         }, 100);
     }

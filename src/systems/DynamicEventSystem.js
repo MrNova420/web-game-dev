@@ -23,9 +23,9 @@ export class DynamicEventSystem {
     }
     
     init() {
-        console.log('🎉 Initializing Dynamic Event System...');
+        logger.info('🎉 Initializing Dynamic Event System...');
         this.scheduleNextEvent();
-        console.log('✅ Dynamic Event System initialized');
+        logger.info('✅ Dynamic Event System initialized');
     }
     
     /**
@@ -231,7 +231,7 @@ export class DynamicEventSystem {
         const interval = this.minEventInterval + 
             Math.random() * (this.maxEventInterval - this.minEventInterval);
         this.nextEventTime = Date.now() / 1000 + interval;
-        console.log(`📅 Next event scheduled in ${Math.floor(interval / 60)} minutes`);
+        logger.info(`📅 Next event scheduled in ${Math.floor(interval / 60)} minutes`);
     }
     
     /**
@@ -239,7 +239,7 @@ export class DynamicEventSystem {
      */
     startEvent(eventId, forced = false) {
         if (!this.eventTypes[eventId]) {
-            console.warn(`Unknown event: ${eventId}`);
+            logger.warn(`Unknown event: ${eventId}`);
             return false;
         }
         
@@ -249,7 +249,7 @@ export class DynamicEventSystem {
         if (!forced && this.eventCooldowns.has(eventId)) {
             const cooldownEnd = this.eventCooldowns.get(eventId);
             if (Date.now() / 1000 < cooldownEnd) {
-                console.log(`Event ${eventType.name} is on cooldown`);
+                logger.info(`Event ${eventType.name} is on cooldown`);
                 return false;
             }
         }
@@ -272,7 +272,7 @@ export class DynamicEventSystem {
         // Set cooldown
         this.eventCooldowns.set(eventId, event.endTime + eventType.cooldown);
         
-        console.log(`🎉 Event started: ${eventType.name}!`);
+        logger.info(`🎉 Event started: ${eventType.name}!`);
         
         // Apply event effects
         this.applyEventEffects(event);
@@ -401,7 +401,7 @@ export class DynamicEventSystem {
         event.active = false;
         this.removeEventEffects(event);
         
-        console.log(`Event ended: ${event.type.name}`);
+        logger.info(`Event ended: ${event.type.name}`);
         
         // Remove from active events
         const index = this.activeEvents.indexOf(event);
@@ -415,7 +415,7 @@ export class DynamicEventSystem {
      */
     spawnMeteors(spawnRate) {
         // Implementation would spawn meteor objects
-        console.log(`☄️ Spawning meteors at rate: ${spawnRate}/second`);
+        logger.info(`☄️ Spawning meteors at rate: ${spawnRate}/second`);
     }
     
     /**
@@ -423,21 +423,21 @@ export class DynamicEventSystem {
      */
     spawnBoss(bossTypes) {
         const bossType = bossTypes[Math.floor(Math.random() * bossTypes.length)];
-        console.log(`👹 Boss spawned: ${bossType}`);
+        logger.info(`👹 Boss spawned: ${bossType}`);
     }
     
     /**
      * Spawn treasure chests
      */
     spawnTreasures(count) {
-        console.log(`💎 Spawning ${count} treasure chests`);
+        logger.info(`💎 Spawning ${count} treasure chests`);
     }
     
     /**
      * Spawn chaos rifts
      */
     spawnChaosRifts(count) {
-        console.log(`🌀 Spawning ${count} chaos rifts`);
+        logger.info(`🌀 Spawning ${count} chaos rifts`);
     }
     
     /**

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * BiomeWeatherEffects.js
  * Phase 4.3 - Biome-Specific Weather Effects
  * Creates dynamic weather effects for each biome
@@ -112,7 +113,7 @@ export class BiomeWeatherEffects {
         this.particlePositions = [];
         this.particleVelocities = [];
         
-        console.log('🌦️ BiomeWeatherEffects initialized');
+        logger.info('🌦️ BiomeWeatherEffects initialized');
     }
     
     /**
@@ -191,7 +192,7 @@ export class BiomeWeatherEffects {
      */
     setWeather(weatherType) {
         if (!this.weatherTypes[weatherType]) {
-            console.warn('Unknown weather type:', weatherType);
+            logger.warn('Unknown weather type:', weatherType);
             return;
         }
         
@@ -211,7 +212,7 @@ export class BiomeWeatherEffects {
             this.deactivateParticles();
         }
         
-        console.log('🌦️ Weather set to:', weatherType);
+        logger.info('🌦️ Weather set to:', weatherType);
     }
     
     /**

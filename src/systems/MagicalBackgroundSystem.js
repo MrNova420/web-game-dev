@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Magical Background System
  * Creates vibrant, colorful, anime-style magical particles floating in the background
  * Adds sparkles, stars, and magical auras to enhance the fantasy atmosphere
@@ -21,14 +22,14 @@ export class MagicalBackgroundSystem {
     }
     
     init() {
-        console.log('✨ Initializing Magical Background System...');
+        logger.info('✨ Initializing Magical Background System...');
         
         this.createFloatingSparkles();
         this.createMagicalStars();
         this.createFloatingMagicOrbs();
         this.createRainbowAuras();
         
-        console.log('✅ Magical Background System initialized');
+        logger.info('✅ Magical Background System initialized');
     }
     
     /**

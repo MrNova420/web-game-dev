@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Complete Player Control & Settings System
  * Comprehensive user controls, settings, customization, and quality of life features
  */
@@ -210,7 +211,7 @@ export class PlayerControlSettingsSystem {
     }
     
     initialize() {
-        console.log('🎮 Complete Player Control & Settings System initialized');
+        logger.info('🎮 Complete Player Control & Settings System initialized');
         
         // Load saved settings
         this.loadSettings();
@@ -331,7 +332,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.particleSystem.enabled = g.particles;
         }
         
-        console.log(`✅ Applied graphics settings: ${g.quality}`);
+        logger.info(`✅ Applied graphics settings: ${g.quality}`);
     }
     
     /**
@@ -348,7 +349,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.audioSystem.setMuted(a.mute);
         }
         
-        console.log('✅ Applied audio settings');
+        logger.info('✅ Applied audio settings');
     }
     
     /**
@@ -374,7 +375,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.combatSystem.showCriticals = g.showCriticals;
         }
         
-        console.log('✅ Applied gameplay settings');
+        logger.info('✅ Applied gameplay settings');
     }
     
     /**
@@ -396,7 +397,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.miniMapSystem.setRotate(ui.miniMapRotate);
         }
         
-        console.log('✅ Applied UI settings');
+        logger.info('✅ Applied UI settings');
     }
     
     /**
@@ -415,7 +416,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.cameraController.setSensitivity(c.mouseSensitivity);
         }
         
-        console.log('✅ Applied camera settings');
+        logger.info('✅ Applied camera settings');
     }
     
     /**
@@ -432,7 +433,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.inputManager.setKeyBindings(c.keyBindings);
         }
         
-        console.log('✅ Applied control settings');
+        logger.info('✅ Applied control settings');
     }
     
     /**
@@ -467,7 +468,7 @@ export class PlayerControlSettingsSystem {
             }
         }
         
-        console.log('✅ Applied accessibility settings');
+        logger.info('✅ Applied accessibility settings');
     }
     
     /**
@@ -491,7 +492,7 @@ export class PlayerControlSettingsSystem {
             this.gameEngine.enemyManager.setMaxEnemies(p.maxEnemies);
         }
         
-        console.log('✅ Applied performance settings');
+        logger.info('✅ Applied performance settings');
     }
     
     /**
@@ -557,7 +558,7 @@ export class PlayerControlSettingsSystem {
      * Execute action
      */
     executeAction(action) {
-        console.log(`Executing action: ${action}`);
+        logger.info(`Executing action: ${action}`);
         
         // Route action to appropriate system
         switch (action) {
@@ -611,9 +612,9 @@ export class PlayerControlSettingsSystem {
                 dungeons: Array.from(this.unlocks.dungeons),
                 features: Array.from(this.unlocks.features)
             }));
-            console.log('💾 Settings saved');
+            logger.info('💾 Settings saved');
         } catch (error) {
-            console.error('Failed to save settings:', error);
+            logger.error('Failed to save settings:', error);
         }
     }
     
@@ -650,9 +651,9 @@ export class PlayerControlSettingsSystem {
                 this.unlocks.features = new Set(u.features || ['basic_combat', 'inventory']);
             }
             
-            console.log('📂 Settings loaded');
+            logger.info('📂 Settings loaded');
         } catch (error) {
-            console.error('Failed to load settings:', error);
+            logger.error('Failed to load settings:', error);
         }
     }
     
@@ -675,7 +676,7 @@ export class PlayerControlSettingsSystem {
     unlock(category, item) {
         if (this.unlocks[category]) {
             this.unlocks[category].add(item);
-            console.log(`🎉 Unlocked ${category}: ${item}`);
+            logger.info(`🎉 Unlocked ${category}: ${item}`);
             this.saveSettings();
         }
     }
@@ -693,7 +694,7 @@ export class PlayerControlSettingsSystem {
     awardAchievement(achievementId) {
         if (!this.achievements.has(achievementId)) {
             this.achievements.add(achievementId);
-            console.log(`🏆 Achievement Unlocked: ${achievementId}`);
+            logger.info(`🏆 Achievement Unlocked: ${achievementId}`);
             
             // Show notification
             this.showAchievementNotification(achievementId);
@@ -703,7 +704,7 @@ export class PlayerControlSettingsSystem {
     
     showAchievementNotification(achievementId) {
         // Create achievement popup
-        console.log(`Achievement: ${achievementId}`);
+        logger.info(`Achievement: ${achievementId}`);
     }
     
     /**
@@ -735,7 +736,7 @@ export class PlayerControlSettingsSystem {
      */
     applyColorBlindFilter(mode) {
         // Would apply shader-based color correction
-        console.log(`Applying color blind mode: ${mode}`);
+        logger.info(`Applying color blind mode: ${mode}`);
     }
     
     /**
@@ -745,7 +746,7 @@ export class PlayerControlSettingsSystem {
         this.settings = this.getDefaultSettings();
         this.applyAllSettings();
         this.saveSettings();
-        console.log('🔄 Settings reset to defaults');
+        logger.info('🔄 Settings reset to defaults');
     }
     
     getDefaultSettings() {
@@ -843,9 +844,9 @@ export class PlayerControlSettingsSystem {
             this.applyAllSettings();
             this.saveSettings();
             
-            console.log('✅ Settings imported successfully');
+            logger.info('✅ Settings imported successfully');
         } catch (error) {
-            console.error('Failed to import settings:', error);
+            logger.error('Failed to import settings:', error);
         }
     }
 }

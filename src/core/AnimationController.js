@@ -1,4 +1,5 @@
 /**
+import { logger } from './core/Logger.js';
  * Animation Controller System
  * 
  * Manages all character and entity animations using the Animation Library
@@ -100,7 +101,7 @@ export class AnimationController {
      * Load the animation library FBX file
      */
     async loadAnimationLibrary() {
-        console.log('🎭 Loading Animation Library (100+ animations)...');
+        logger.info('🎭 Loading Animation Library (100+ animations)...');
         
         try {
             // Try to load from extracted location
@@ -110,7 +111,7 @@ export class AnimationController {
                 this.fbxLoader.load(
                     libraryPath,
                     (fbx) => {
-                        console.log('✅ Animation Library loaded!');
+                        logger.info('✅ Animation Library loaded!');
                         this.parseAnimationLibrary(fbx);
                         this.loadedLibrary = true;
                         resolve(fbx);
@@ -118,18 +119,18 @@ export class AnimationController {
                     (xhr) => {
                         const percent = (xhr.loaded / xhr.total * 100).toFixed(0);
                         if (percent % 20 === 0) {
-                            console.log(`   Loading animations: ${percent}%`);
+                            logger.info(`   Loading animations: ${percent}%`);
                         }
                     },
                     (error) => {
-                        console.warn('Animation library not found, using fallback animations');
+                        logger.warn('Animation library not found, using fallback animations');
                         this.createFallbackAnimations();
                         resolve(null);
                     }
                 );
             });
         } catch (error) {
-            console.warn('Could not load animation library:', error);
+            logger.warn('Could not load animation library:', error);
             this.createFallbackAnimations();
         }
     }
@@ -139,11 +140,11 @@ export class AnimationController {
      */
     parseAnimationLibrary(fbx) {
         if (!fbx.animations || fbx.animations.length === 0) {
-            console.warn('No animations found in library');
+            logger.warn('No animations found in library');
             return;
         }
         
-        console.log(`   Found ${fbx.animations.length} animations in library`);
+        logger.info(`   Found ${fbx.animations.length} animations in library`);
         
         // Store all animations
         fbx.animations.forEach((clip, index) => {
@@ -151,14 +152,14 @@ export class AnimationController {
             this.animations.set(name.toLowerCase(), clip);
         });
         
-        console.log(`   ✅ ${this.animations.size} animations ready`);
+        logger.info(`   ✅ ${this.animations.size} animations ready`);
     }
     
     /**
      * Create simple fallback animations if library not available
      */
     createFallbackAnimations() {
-        console.log('   Creating fallback animations...');
+        logger.info('   Creating fallback animations...');
         
         // Create basic keyframe animations
         const createSimpleAnimation = (name, duration = 1.0) => {
@@ -180,7 +181,7 @@ export class AnimationController {
             createSimpleAnimation(animType);
         });
         
-        console.log(`   ✅ ${this.animations.size} fallback animations created`);
+        logger.info(`   ✅ ${this.animations.size} fallback animations created`);
     }
     
     /**
@@ -206,14 +207,14 @@ export class AnimationController {
         
         const mixer = this.mixers.get(modelId);
         if (!mixer) {
-            console.warn(`No mixer found for model: ${modelId}`);
+            logger.warn(`No mixer found for model: ${modelId}`);
             return null;
         }
         
         // Get animation clip
         const clip = this.animations.get(animationType);
         if (!clip) {
-            console.warn(`Animation not found: ${animationType}`);
+            logger.warn(`Animation not found: ${animationType}`);
             return null;
         }
         

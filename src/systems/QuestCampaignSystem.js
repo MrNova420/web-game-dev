@@ -22,8 +22,8 @@ export class QuestCampaignSystem {
     }
     
     init() {
-        console.log('📖 Initializing Quest Campaign System...');
-        console.log('✅ Quest Campaign System initialized with', Object.keys(this.campaigns).length, 'campaigns');
+        logger.info('📖 Initializing Quest Campaign System...');
+        logger.info('✅ Quest Campaign System initialized with', Object.keys(this.campaigns).length, 'campaigns');
     }
     
     /**
@@ -241,19 +241,19 @@ export class QuestCampaignSystem {
     startQuest(questId) {
         const quest = this.findQuest(questId);
         if (!quest) {
-            console.warn(`Quest not found: ${questId}`);
+            logger.warn(`Quest not found: ${questId}`);
             return false;
         }
         
         // Check if already active
         if (this.activeQuests.some(q => q.id === questId)) {
-            console.log('Quest already active');
+            logger.info('Quest already active');
             return false;
         }
         
         // Check if completed (non-repeatable)
         if (this.completedQuests.has(questId) && !quest.repeatable) {
-            console.log('Quest already completed');
+            logger.info('Quest already completed');
             return false;
         }
         
@@ -265,7 +265,7 @@ export class QuestCampaignSystem {
         
         this.activeQuests.push({ id: questId, ...quest });
         
-        console.log(`📜 Quest started: ${quest.name}`);
+        logger.info(`📜 Quest started: ${quest.name}`);
         
         // Create magical effect
         if (this.gameEngine.magicalBackgroundSystem) {
@@ -294,7 +294,7 @@ export class QuestCampaignSystem {
                 
                 if (obj.current >= obj.count && !obj.completed) {
                     obj.completed = true;
-                    console.log(`✅ Objective completed: ${obj.type} ${obj.target}`);
+                    logger.info(`✅ Objective completed: ${obj.type} ${obj.target}`);
                 }
             }
         });
@@ -327,7 +327,7 @@ export class QuestCampaignSystem {
             }
             if (quest.rewards.items) {
                 quest.rewards.items.forEach(itemId => {
-                    console.log(`🎁 Reward: ${itemId}`);
+                    logger.info(`🎁 Reward: ${itemId}`);
                 });
             }
         }
@@ -337,7 +337,7 @@ export class QuestCampaignSystem {
         this.activeQuests.splice(questIndex, 1);
         this.questProgress.delete(questId);
         
-        console.log(`🎉 Quest completed: ${quest.name}!`);
+        logger.info(`🎉 Quest completed: ${quest.name}!`);
         
         // Create completion effect
         if (this.gameEngine.magicalBackgroundSystem) {
@@ -445,6 +445,6 @@ export class QuestCampaignSystem {
                 });
             }
         });
-        console.log('🔄 Daily quests reset');
+        logger.info('🔄 Daily quests reset');
     }
 }

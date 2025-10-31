@@ -466,7 +466,7 @@ export class PetSystem {
         const pet = this.createPetInstance(petType);
         this.ownedPets.set(pet.instanceId, pet);
         
-        console.log(`🐾 Obtained new pet: ${pet.name}!`);
+        logger.info(`🐾 Obtained new pet: ${pet.name}!`);
         
         return { success: true, pet };
     }
@@ -535,7 +535,7 @@ export class PetSystem {
         // Apply equipment bonuses
         this.applyEquipmentBonuses(pet);
         
-        console.log(`🐾 ${pet.name} leveled up to ${pet.level}!`);
+        logger.info(`🐾 ${pet.name} leveled up to ${pet.level}!`);
         
         // Check for evolution
         if (pet.evolvesTo && pet.level >= pet.evolveLevel) {
@@ -582,7 +582,7 @@ export class PetSystem {
         // Reapply equipment
         this.applyEquipmentBonuses(pet);
         
-        console.log(`✨ ${oldName} evolved into ${pet.name}!`);
+        logger.info(`✨ ${oldName} evolved into ${pet.name}!`);
         
         return { success: true, pet, oldName };
     }
@@ -706,7 +706,7 @@ export class PetSystem {
         }
         
         this.activePet = pet;
-        console.log(`🐾 ${pet.name} is now active!`);
+        logger.info(`🐾 ${pet.name} is now active!`);
         
         return { success: true, pet };
     }

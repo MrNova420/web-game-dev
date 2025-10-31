@@ -1,0 +1,1 @@
+class o{constructor(){this.waypoints=new Map,this.ui={map:"/assets/ui/travel/world_map.png"},this.vfx={teleport:"/assets/particles/teleport.png"}}teleport(t,e){logger.info(`${t} teleporting to ${e}`),logger.info(`  VFX: ${this.vfx.teleport}`)}}export{o as FastTravelSystem};

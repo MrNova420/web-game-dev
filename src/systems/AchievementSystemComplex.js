@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AchievementSystemComplex.js
  * Complex achievements with tiers, rewards, and tracking.
@@ -21,7 +22,7 @@ export class AchievementSystemComplex {
   }
 
   unlockAchievement(playerId, achievementId) {
-    console.log(`${playerId} unlocked achievement: ${achievementId}`);
-    console.log(`  UI: ${this.ui.achievement_popup}`);
+    logger.info(`${playerId} unlocked achievement: ${achievementId}`);
+    logger.info(`  UI: ${this.ui.achievement_popup}`);
   }
 }

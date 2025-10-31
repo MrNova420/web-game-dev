@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Mystic Forest Biome - First Complete Biome Implementation
  * The starting zone as described in README
  * 
@@ -35,7 +36,7 @@ export class MysticForestBiome {
      * After this, all trees/rocks/plants will clone from cache instantly
      */
     async preloadCommonModels() {
-        console.log('📦 Preloading forest models for fast cloning...');
+        logger.info('📦 Preloading forest models for fast cloning...');
         
         const commonPaths = [
             this.assetRegistry.getRandomTree(),  // Load one tree model
@@ -48,14 +49,14 @@ export class MysticForestBiome {
             await this.modelLoader.load(path);
         }
         
-        console.log('   ✅ Models preloaded and cached!');
+        logger.info('   ✅ Models preloaded and cached!');
     }
     
     /**
      * Build the complete Mystic Forest biome
      */
     async build() {
-        console.log('🌲 Building Mystic Forest Biome...');
+        logger.info('🌲 Building Mystic Forest Biome...');
         
         try {
             // Setup environment with REAL skybox
@@ -84,13 +85,13 @@ export class MysticForestBiome {
             this.addMist();
             this.addGlowingParticles();
             
-            console.log('✅ Mystic Forest complete!');
-            console.log(`   - Trees: ${this.trees.length}`);
-            console.log(`   - Rocks: ${this.rocks.length}`);
-            console.log(`   - Plants: ${this.plants.length}`);
+            logger.info('✅ Mystic Forest complete!');
+            logger.info(`   - Trees: ${this.trees.length}`);
+            logger.info(`   - Rocks: ${this.rocks.length}`);
+            logger.info(`   - Plants: ${this.plants.length}`);
             
         } catch (error) {
-            console.error('Error building Mystic Forest:', error);
+            logger.error('Error building Mystic Forest:', error);
         }
     }
     
@@ -122,9 +123,9 @@ export class MysticForestBiome {
             const sky = new THREE.Mesh(skyGeo, skyMat);
             this.scene.add(sky);
             
-            console.log('   ✅ Loaded GreenSky.png skybox from your assets');
+            logger.info('   ✅ Loaded GreenSky.png skybox from your assets');
         } catch (error) {
-            console.error('   ⚠️ Failed to load skybox, using fallback color');
+            logger.error('   ⚠️ Failed to load skybox, using fallback color');
             this.scene.background = new THREE.Color(0x1a2f3a);
         }
         
@@ -163,7 +164,7 @@ export class MysticForestBiome {
             this.scene.add(light);
         }
         
-        console.log('🌄 Environment setup complete');
+        logger.info('🌄 Environment setup complete');
     }
     
     /**
@@ -171,7 +172,7 @@ export class MysticForestBiome {
      * NO MORE CODED GEOMETRY - USING YOUR ACTUAL ASSETS!
      */
     async createTerrain() {
-        console.log('🗺️ Creating terrain from ground tile models...');
+        logger.info('🗺️ Creating terrain from ground tile models...');
         
         // Use actual ground path models from Nature MegaKit
         const groundTiles = [
@@ -188,11 +189,11 @@ export class MysticForestBiome {
         }
         
         if (tileVariants.length === 0) {
-            console.error('❌ No ground tiles loaded! Cannot create terrain.');
+            logger.error('❌ No ground tiles loaded! Cannot create terrain.');
             return;
         }
         
-        console.log(`   Using ${tileVariants.length} ground tile variants`);
+        logger.info(`   Using ${tileVariants.length} ground tile variants`);
         
         // Create terrain grid using actual tile models
         const tileSize = 10; // Size of each tile
@@ -226,7 +227,7 @@ export class MysticForestBiome {
             }
         }
         
-        console.log(`   ✅ Created terrain with ${tileCount} ground tile models`);
+        logger.info(`   ✅ Created terrain with ${tileCount} ground tile models`);
     }
     
     /**
@@ -242,7 +243,7 @@ export class MysticForestBiome {
      * OPTIMIZED: Uses model caching - only loads each unique tree once, then clones!
      */
     async plantForest() {
-        console.log('🌲 Planting forest...');
+        logger.info('🌲 Planting forest...');
         
         const treeCount = 150; // Dense forest
         
@@ -254,7 +255,7 @@ export class MysticForestBiome {
         ].filter(t => t !== null);
         
         if (treeVariants.length === 0) {
-            console.warn('   ⚠️ No tree models loaded, using fallbacks');
+            logger.warn('   ⚠️ No tree models loaded, using fallbacks');
             // Create all fallback trees
             for (let i = 0; i < treeCount; i++) {
                 this.createFallbackTree(i);
@@ -262,7 +263,7 @@ export class MysticForestBiome {
             return;
         }
         
-        console.log(`   Using ${treeVariants.length} tree variants for ${treeCount} trees`);
+        logger.info(`   Using ${treeVariants.length} tree variants for ${treeCount} trees`);
         
         // Now plant trees by cloning the loaded variants (instant!)
         for (let i = 0; i < treeCount; i++) {
@@ -292,14 +293,14 @@ export class MysticForestBiome {
                 
                 // Progress feedback every 25 trees
                 if ((i + 1) % 25 === 0) {
-                    console.log(`   🌲 Planted ${i + 1}/${treeCount} trees...`);
+                    logger.info(`   🌲 Planted ${i + 1}/${treeCount} trees...`);
                 }
             } catch (error) {
                 this.createFallbackTree(i);
             }
         }
         
-        console.log(`   ✅ Planted ${this.trees.length} trees`);
+        logger.info(`   ✅ Planted ${this.trees.length} trees`);
     }
     
     /**
@@ -388,7 +389,7 @@ export class MysticForestBiome {
      * OPTIMIZED: Load once, clone many times!
      */
     async addRocks() {
-        console.log('🪨 Adding rocks...');
+        logger.info('🪨 Adding rocks...');
         
         const rockCount = 80;
         
@@ -399,7 +400,7 @@ export class MysticForestBiome {
         ].filter(r => r !== null);
         
         if (rockVariants.length === 0) {
-            console.warn('   ⚠️ No rock models, using fallbacks');
+            logger.warn('   ⚠️ No rock models, using fallbacks');
             for (let i = 0; i < rockCount; i++) {
                 this.createFallbackRock(i);
             }
@@ -437,7 +438,7 @@ export class MysticForestBiome {
             }
         }
         
-        console.log(`   ✅ Added ${this.rocks.length} rocks`);
+        logger.info(`   ✅ Added ${this.rocks.length} rocks`);
     }
     
     /**
@@ -478,7 +479,7 @@ export class MysticForestBiome {
      * OPTIMIZED: Load once, clone many times!
      */
     async addGroundCover() {
-        console.log('🌿 Adding ground cover...');
+        logger.info('🌿 Adding ground cover...');
         
         const plantCount = 200;
         
@@ -489,7 +490,7 @@ export class MysticForestBiome {
         ].filter(p => p !== null);
         
         if (plantVariants.length === 0) {
-            console.warn('   ⚠️ No plant models loaded, skipping ground cover');
+            logger.warn('   ⚠️ No plant models loaded, skipping ground cover');
             return;
         }
         
@@ -517,14 +518,14 @@ export class MysticForestBiome {
             }
         }
         
-        console.log(`   ✅ Added ${this.plants.length} plants`);
+        logger.info(`   ✅ Added ${this.plants.length} plants`);
     }
     
     /**
      * Build the Ancient Tree of Beginnings (centerpiece)
      */
     async buildAncientTree() {
-        console.log('🌳 Building Ancient Tree of Beginnings...');
+        logger.info('🌳 Building Ancient Tree of Beginnings...');
         
         // Massive tree in center
         const group = new THREE.Group();
@@ -560,14 +561,14 @@ export class MysticForestBiome {
         group.position.set(0, 0, 0);
         this.scene.add(group);
         
-        console.log('   ✅ Ancient Tree created');
+        logger.info('   ✅ Ancient Tree created');
     }
     
     /**
      * Build Moonlit Glade (hidden village area)
      */
     async buildMoonlitGlade() {
-        console.log('🏘️ Building Moonlit Glade...');
+        logger.info('🏘️ Building Moonlit Glade...');
         
         const gladeCenter = { x: 50, z: 50 };
         
@@ -606,7 +607,7 @@ export class MysticForestBiome {
         gladeLight.position.set(gladeCenter.x, 10, gladeCenter.z);
         this.scene.add(gladeLight);
         
-        console.log('   ✅ Moonlit Glade created');
+        logger.info('   ✅ Moonlit Glade created');
     }
     
     /**

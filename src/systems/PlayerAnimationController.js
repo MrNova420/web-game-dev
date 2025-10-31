@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { logger } from '../core/Logger.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 /**
@@ -60,7 +61,7 @@ export class PlayerAnimationController {
      */
     async init(playerModel) {
         if (!playerModel) {
-            console.warn('PlayerAnimationController: No player model provided');
+            logger.warn('PlayerAnimationController: No player model provided');
             return;
         }
         
@@ -80,14 +81,14 @@ export class PlayerAnimationController {
                     }
                 });
                 
-                console.log('PlayerAnimationController: Loaded', animationLib.animations.length, 'animations');
+                logger.info('PlayerAnimationController: Loaded', animationLib.animations.length, 'animations');
                 this.isLoaded = true;
                 
                 // Start with idle animation
                 this.playAnimation('idle');
             }
         } catch (error) {
-            console.error('Failed to load animation library:', error);
+            logger.error('Failed to load animation library:', error);
             // Fallback: create basic animations
             this.createFallbackAnimations(playerModel);
         }
@@ -105,7 +106,7 @@ export class PlayerAnimationController {
      * Create basic fallback animations if FBX loading fails
      */
     createFallbackAnimations(model) {
-        console.log('Using fallback animations');
+        logger.info('Using fallback animations');
         // Create simple idle animation
         const idleClip = new THREE.AnimationClip('idle', 2, []);
         this.states.idle = this.mixer.clipAction(idleClip);
@@ -120,7 +121,7 @@ export class PlayerAnimationController {
         
         const newAction = this.states[stateName];
         if (!newAction) {
-            console.warn('Animation state not found:', stateName);
+            logger.warn('Animation state not found:', stateName);
             return;
         }
         

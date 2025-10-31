@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * CinematicCameraSystem - AAA cinematic camera controls and effects
  * Provides professional camera work for an immersive experience
  */
@@ -59,7 +60,7 @@ export class CinematicCameraSystem {
     
     init() {
         this.setupCameraEffects();
-        console.log('🎥 Cinematic Camera System initialized');
+        logger.info('🎥 Cinematic Camera System initialized');
     }
     
     setupCameraEffects() {
@@ -87,7 +88,7 @@ export class CinematicCameraSystem {
                 break;
         }
         
-        console.log(`🎥 Camera mode: ${mode}`);
+        logger.info(`🎥 Camera mode: ${mode}`);
     }
     
     updateThirdPerson(target, deltaTime) {
@@ -372,6 +373,6 @@ export class CinematicCameraSystem {
             this.scene.remove(this.cameraRig);
         }
         
-        console.log('🎥 Cinematic Camera System disposed');
+        logger.info('🎥 Cinematic Camera System disposed');
     }
 }

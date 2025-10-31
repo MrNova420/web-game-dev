@@ -26,8 +26,8 @@ export class SummonSystemAdvanced {
 
   summon(summonerId, summonType) {
     const summonData = this.summonTypes[summonType];
-    console.log(`${summonerId} summons ${summonType}!`);
-    console.log(`  Model: ${summonData.model}`);
+    logger.info(`${summonerId} summons ${summonType}!`);
+    logger.info(`  Model: ${summonData.model}`);
     
     const summon = {
       id: `summon_${Date.now()}`,

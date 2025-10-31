@@ -184,7 +184,7 @@ export class MasterGameSystem {
     }
 
     async initialize() {
-        console.log('🎮 Master Game System: Initializing...');
+        logger.info('🎮 Master Game System: Initializing...');
         
         try {
             // Phase 1: Load and register all systems
@@ -207,24 +207,24 @@ export class MasterGameSystem {
             
             this.initialized = true;
             this.state = 'running';
-            console.log('✅ Master Game System: Initialization complete!');
-            console.log(`📊 Total Systems Active: ${Object.keys(this.systems).length}`);
-            console.log('🧠 Master Brain: Online and operational');
+            logger.info('✅ Master Game System: Initialization complete!');
+            logger.info(`📊 Total Systems Active: ${Object.keys(this.systems).length}`);
+            logger.info('🧠 Master Brain: Online and operational');
             
             return true;
         } catch (error) {
-            console.error('❌ Master Game System: Initialization failed!', error);
+            logger.error('❌ Master Game System: Initialization failed!', error);
             this.state = 'error';
             return false;
         }
     }
 
     async loadAllSystems() {
-        console.log('📦 Loading all game systems...');
+        logger.info('📦 Loading all game systems...');
         
         // Load systems by category in order
         for (const [category, systemNames] of Object.entries(this.systemRegistry)) {
-            console.log(`  Loading ${category} systems...`);
+            logger.info(`  Loading ${category} systems...`);
             
             for (const systemName of systemNames) {
                 try {
@@ -234,11 +234,11 @@ export class MasterGameSystem {
                     if (SystemClass) {
                         this.systems[systemName] = new SystemClass();
                         this.updateOrder.push(systemName);
-                        console.log(`    ✓ ${systemName}`);
+                        logger.info(`    ✓ ${systemName}`);
                     }
                 } catch (error) {
                     // System doesn't exist yet - that's okay
-                    console.log(`    ⚠ ${systemName} - Not found (will use fallback)`);
+                    logger.info(`    ⚠ ${systemName} - Not found (will use fallback)`);
                 }
             }
         }
@@ -289,7 +289,7 @@ export class MasterGameSystem {
     }
 
     async initializeSystems() {
-        console.log('🔧 Initializing systems...');
+        logger.info('🔧 Initializing systems...');
         
         for (const systemName of this.updateOrder) {
             const system = this.systems[systemName];
@@ -297,97 +297,97 @@ export class MasterGameSystem {
             if (system && typeof system.initialize === 'function') {
                 try {
                     await system.initialize();
-                    console.log(`  ✓ ${systemName} initialized`);
+                    logger.info(`  ✓ ${systemName} initialized`);
                 } catch (error) {
-                    console.error(`  ✗ ${systemName} initialization failed:`, error);
+                    logger.error(`  ✗ ${systemName} initialization failed:`, error);
                 }
             }
         }
     }
 
     async connectSystems() {
-        console.log('🔗 Connecting systems...');
+        logger.info('🔗 Connecting systems...');
         
         // Phase 8-9 systems integration
         if (this.systems.IntelligentAISystem && this.systems.EnemySystem) {
             this.systems.EnemySystem.setAI(this.systems.IntelligentAISystem);
-            console.log('  ✓ AI system connected to enemies');
+            logger.info('  ✓ AI system connected to enemies');
         }
 
         if (this.systems.DynamicDifficultySystem && this.systems.ProgressionSystem) {
             this.systems.DynamicDifficultySystem.setPlayerTracking(this.systems.ProgressionSystem);
-            console.log('  ✓ Difficulty system tracking player');
+            logger.info('  ✓ Difficulty system tracking player');
         }
 
         if (this.systems.ProgressiveWorldSystem && this.systems.WorldGenerator) {
             this.systems.WorldGenerator.setProgressiveSystem(this.systems.ProgressiveWorldSystem);
-            console.log('  ✓ World evolution connected');
+            logger.info('  ✓ World evolution connected');
         }
 
         if (this.systems.MagicalEffectsSystem && this.systems.MagicSystem) {
             this.systems.MagicSystem.setEffectsSystem(this.systems.MagicalEffectsSystem);
-            console.log('  ✓ Magic effects integrated');
+            logger.info('  ✓ Magic effects integrated');
         }
 
         if (this.systems.WorldBeautificationSystem && this.systems.RenderingSystem) {
             this.systems.RenderingSystem.setBeautification(this.systems.WorldBeautificationSystem);
-            console.log('  ✓ World beautification rendering');
+            logger.info('  ✓ World beautification rendering');
         }
 
         if (this.systems.MonsterDesignSystem && this.systems.EnemySystem) {
             this.systems.EnemySystem.setDesignSystem(this.systems.MonsterDesignSystem);
-            console.log('  ✓ Monster designs loaded');
+            logger.info('  ✓ Monster designs loaded');
         }
 
         // Player experience integrations
         if (this.systems.AddictiveGameplaySystem && this.systems.QuestSystem) {
             this.systems.QuestSystem.setDailySystem(this.systems.AddictiveGameplaySystem);
-            console.log('  ✓ Daily activities connected');
+            logger.info('  ✓ Daily activities connected');
         }
 
         if (this.systems.CloudSaveSystem && this.systems.SaveLoadSystem) {
             this.systems.SaveLoadSystem.setCloudBackend(this.systems.CloudSaveSystem);
-            console.log('  ✓ Cloud saves enabled');
+            logger.info('  ✓ Cloud saves enabled');
         }
 
         if (this.systems.AdvancedAutoManagementSystem && this.systems.PerformanceMonitor) {
             this.systems.PerformanceMonitor.setAutoManagement(this.systems.AdvancedAutoManagementSystem);
-            console.log('  ✓ Auto-optimization active');
+            logger.info('  ✓ Auto-optimization active');
         }
 
         // UI integrations
         if (this.systems.ResponsiveUISystem && this.systems.UISystem) {
             this.systems.UISystem.setResponsive(this.systems.ResponsiveUISystem);
-            console.log('  ✓ Responsive UI enabled');
+            logger.info('  ✓ Responsive UI enabled');
         }
 
         // Inventory integration
         if (this.systems.AdvancedInventorySystem && this.systems.PlayerSystem) {
             this.systems.PlayerSystem.setInventory(this.systems.AdvancedInventorySystem);
-            console.log('  ✓ Advanced inventory connected');
+            logger.info('  ✓ Advanced inventory connected');
         }
 
         // Data loading
         if (this.systems.ItemDatabase) {
             await this.loadItemDatabase();
-            console.log('  ✓ 1000+ items loaded');
+            logger.info('  ✓ 1000+ items loaded');
         }
 
         if (this.systems.BiomeDefinitions) {
             await this.loadBiomeDefinitions();
-            console.log('  ✓ 15 biomes loaded');
+            logger.info('  ✓ 15 biomes loaded');
         }
 
         if (this.systems.MonsterDefinitions) {
             await this.loadMonsterDefinitions();
-            console.log('  ✓ 100+ monsters loaded');
+            logger.info('  ✓ 100+ monsters loaded');
         }
 
-        console.log('✅ All systems connected!');
+        logger.info('✅ All systems connected!');
     }
 
     async verifySystems() {
-        console.log('🔍 Verifying system integrity...');
+        logger.info('🔍 Verifying system integrity...');
         
         let issuesFound = 0;
         
@@ -401,7 +401,7 @@ export class MasterGameSystem {
 
         for (const systemName of criticalSystems) {
             if (!this.systems[systemName]) {
-                console.error(`  ✗ Critical system missing: ${systemName}`);
+                logger.error(`  ✗ Critical system missing: ${systemName}`);
                 issuesFound++;
             }
         }
@@ -422,18 +422,18 @@ export class MasterGameSystem {
                 phase89Active++;
             }
         }
-        console.log(`  ℹ Phase 8-9 systems: ${phase89Active}/${phase89Systems.length} active`);
+        logger.info(`  ℹ Phase 8-9 systems: ${phase89Active}/${phase89Systems.length} active`);
 
         // Verify data loaded
         if (this.systems.ItemDatabase && this.systems.ItemDatabase.items) {
-            console.log(`  ✓ Items loaded: ${this.systems.ItemDatabase.items.length}`);
+            logger.info(`  ✓ Items loaded: ${this.systems.ItemDatabase.items.length}`);
         }
 
         if (issuesFound === 0) {
-            console.log('✅ All systems verified!');
+            logger.info('✅ All systems verified!');
             return true;
         } else {
-            console.warn(`⚠ ${issuesFound} issues found, but game can continue`);
+            logger.warn(`⚠ ${issuesFound} issues found, but game can continue`);
             return true; // Non-critical issues
         }
     }
@@ -446,7 +446,7 @@ export class MasterGameSystem {
         const itemCount = this.systems.ItemDatabase.getAllItems ? 
             this.systems.ItemDatabase.getAllItems().length : 1000;
         
-        console.log(`    Items in database: ${itemCount}`);
+        logger.info(`    Items in database: ${itemCount}`);
     }
 
     async loadBiomeDefinitions() {
@@ -456,7 +456,7 @@ export class MasterGameSystem {
         const biomeCount = this.systems.BiomeDefinitions.biomes ? 
             this.systems.BiomeDefinitions.biomes.length : 15;
         
-        console.log(`    Biomes defined: ${biomeCount}`);
+        logger.info(`    Biomes defined: ${biomeCount}`);
     }
 
     async loadMonsterDefinitions() {
@@ -466,11 +466,11 @@ export class MasterGameSystem {
         const monsterCount = this.systems.MonsterDefinitions.monsters ? 
             this.systems.MonsterDefinitions.monsters.length : 100;
         
-        console.log(`    Monsters defined: ${monsterCount}`);
+        logger.info(`    Monsters defined: ${monsterCount}`);
     }
 
     startGameLoop() {
-        console.log('🎬 Starting main game loop...');
+        logger.info('🎬 Starting main game loop...');
         
         const loop = () => {
             if (this.state !== 'running') {
@@ -511,13 +511,13 @@ export class MasterGameSystem {
                 }
             }
         } catch (error) {
-            console.error('Error in game loop:', error);
+            logger.error('Error in game loop:', error);
             this.handleError(error);
         }
     }
 
     handleError(error) {
-        console.error('🚨 Game error:', error);
+        logger.error('🚨 Game error:', error);
         
         // Try to recover
         if (this.systems.AdvancedAutoManagementSystem) {
@@ -546,18 +546,18 @@ export class MasterGameSystem {
     pause() {
         this.isPaused = true;
         this.state = 'paused';
-        console.log('⏸ Game paused');
+        logger.info('⏸ Game paused');
     }
 
     resume() {
         this.isPaused = false;
         this.state = 'running';
         this.lastUpdateTime = Date.now(); // Reset delta time
-        console.log('▶️ Game resumed');
+        logger.info('▶️ Game resumed');
     }
 
     async save() {
-        console.log('💾 Saving game state...');
+        logger.info('💾 Saving game state...');
         
         const saveData = {
             version: this.version,
@@ -579,21 +579,21 @@ export class MasterGameSystem {
             await this.systems.SaveLoadSystem.save(saveData);
         }
 
-        console.log('✅ Game saved!');
+        logger.info('✅ Game saved!');
         return saveData;
     }
 
     async load(saveData) {
-        console.log('📂 Loading game state...');
+        logger.info('📂 Loading game state...');
         
         if (!saveData) {
-            console.warn('No save data provided');
+            logger.warn('No save data provided');
             return false;
         }
 
         // Verify version compatibility
         if (saveData.version !== this.version) {
-            console.warn(`Save version mismatch: ${saveData.version} vs ${this.version}`);
+            logger.warn(`Save version mismatch: ${saveData.version} vs ${this.version}`);
             // Could implement migration here
         }
 
@@ -605,7 +605,7 @@ export class MasterGameSystem {
             }
         }
 
-        console.log('✅ Game loaded!');
+        logger.info('✅ Game loaded!');
         return true;
     }
 
@@ -632,20 +632,20 @@ export class MasterGameSystem {
     }
 
     printSystemReport() {
-        console.log('📊 Master Game System Report');
-        console.log('='.repeat(50));
-        console.log(`Version: ${this.version}`);
-        console.log(`State: ${this.state}`);
-        console.log(`Total Systems: ${this.getSystemCount()}`);
-        console.log('');
-        console.log('Systems by Category:');
+        logger.info('📊 Master Game System Report');
+        logger.info('='.repeat(50));
+        logger.info(`Version: ${this.version}`);
+        logger.info(`State: ${this.state}`);
+        logger.info(`Total Systems: ${this.getSystemCount()}`);
+        logger.info('');
+        logger.info('Systems by Category:');
         
         for (const [category, systemNames] of Object.entries(this.systemRegistry)) {
             const active = systemNames.filter(name => this.systems[name]).length;
-            console.log(`  ${category}: ${active}/${systemNames.length}`);
+            logger.info(`  ${category}: ${active}/${systemNames.length}`);
         }
         
-        console.log('='.repeat(50));
+        logger.info('='.repeat(50));
     }
 
     // Health check
@@ -694,12 +694,12 @@ export class MasterGameSystem {
      * Initialize the Brain - Connect to performance and optimization systems
      */
     initializeBrain() {
-        console.log('🧠 Initializing Master Brain...');
+        logger.info('🧠 Initializing Master Brain...');
         
         // Connect to AdvancedAutoManagementSystem
         if (this.systems.AdvancedAutoManagementSystem) {
             this.brain.performance = this.systems.AdvancedAutoManagementSystem;
-            console.log('  ✓ Brain connected to Performance System');
+            logger.info('  ✓ Brain connected to Performance System');
         }
         
         // Initialize decision maker
@@ -725,7 +725,7 @@ export class MasterGameSystem {
             adaptations: []
         };
         
-        console.log('✅ Master Brain initialized and operational');
+        logger.info('✅ Master Brain initialized and operational');
     }
     
     /**
@@ -928,7 +928,7 @@ export class MasterGameSystem {
     attemptAutoRecovery() {
         // Check for critical issues
         if (this.systemHealth.overall < 50) {
-            console.warn('🚨 System health critical! Attempting recovery...');
+            logger.warn('🚨 System health critical! Attempting recovery...');
             
             this.systemHealth.recoveryAttempts++;
             
@@ -946,15 +946,15 @@ export class MasterGameSystem {
                         const system = this.systems[name];
                         if (system && typeof system.restart === 'function') {
                             system.restart();
-                            console.log(`  ↻ Restarted ${name}`);
+                            logger.info(`  ↻ Restarted ${name}`);
                         }
                     }
                 }
                 
-                console.log('✅ Recovery attempt complete');
+                logger.info('✅ Recovery attempt complete');
             } else {
                 // Too many recovery attempts - alert user
-                console.error('❌ Auto-recovery failed. Manual intervention needed.');
+                logger.error('❌ Auto-recovery failed. Manual intervention needed.');
                 this.state = 'error';
             }
         } else {
@@ -1033,13 +1033,13 @@ if (typeof window !== 'undefined') {
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             masterGame.initialize().then(() => {
-                console.log('🎮 Dynasty of Emberveil - Ready to Play!');
+                logger.info('🎮 Dynasty of Emberveil - Ready to Play!');
                 masterGame.printSystemReport();
             });
         });
     } else {
         masterGame.initialize().then(() => {
-            console.log('🎮 Dynasty of Emberveil - Ready to Play!');
+            logger.info('🎮 Dynasty of Emberveil - Ready to Play!');
             masterGame.printSystemReport();
         });
     }

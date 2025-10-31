@@ -37,10 +37,10 @@ export class TransformationSystem {
 
   transform(entityId, transformationType) {
     const transformData = this.transformations[transformationType];
-    console.log(`${entityId} transforms into ${transformationType}!`);
-    console.log(`  Model: ${transformData.model}`);
-    console.log(`  Animation: ${transformData.animations.transform}`);
-    console.log(`  VFX: ${this.vfx.transform_burst}, ${this.vfx.aura}`);
+    logger.info(`${entityId} transforms into ${transformationType}!`);
+    logger.info(`  Model: ${transformData.model}`);
+    logger.info(`  Animation: ${transformData.animations.transform}`);
+    logger.info(`  VFX: ${this.vfx.transform_burst}, ${this.vfx.aura}`);
     
     this.transformedEntities.set(entityId, {
       type: transformationType,
@@ -51,7 +51,7 @@ export class TransformationSystem {
   }
 
   revertTransformation(entityId) {
-    console.log(`${entityId} reverts to normal form`);
+    logger.info(`${entityId} reverts to normal form`);
     this.transformedEntities.delete(entityId);
   }
 

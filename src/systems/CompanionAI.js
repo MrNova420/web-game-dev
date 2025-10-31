@@ -325,7 +325,7 @@ export class CompanionAI {
     setBehavior(behaviorName) {
         if (this.behaviors[behaviorName]) {
             this.currentBehavior = behaviorName;
-            console.log(`🤖 Companion AI set to ${behaviorName} behavior`);
+            logger.info(`🤖 Companion AI set to ${behaviorName} behavior`);
             return true;
         }
         return false;
@@ -337,7 +337,7 @@ export class CompanionAI {
     setFormation(formationName) {
         if (this.formations[formationName]) {
             this.currentFormation = formationName;
-            console.log(`⚔️ Formation changed to ${this.formations[formationName].name}`);
+            logger.info(`⚔️ Formation changed to ${this.formations[formationName].name}`);
             this.updateCompanionPositions();
             return true;
         }
@@ -437,7 +437,7 @@ export class CompanionAI {
         // Use ultimate
         this.ultimateCooldowns.set(companion, Date.now());
         
-        console.log(`💥 ${ultimate.name} activated!`);
+        logger.info(`💥 ${ultimate.name} activated!`);
         
         // Apply effects (simplified)
         this.applyUltimateEffects(ultimate);
@@ -455,7 +455,7 @@ export class CompanionAI {
     applyUltimateEffects(ultimate) {
         // This would integrate with combat system
         // For now, simplified
-        console.log(`⚡ Ultimate effect: ${ultimate.effect.type}`);
+        logger.info(`⚡ Ultimate effect: ${ultimate.effect.type}`);
     }
     
     /**
@@ -677,12 +677,12 @@ export class CompanionAI {
         const stage = quest.stages[quest.currentStage];
         
         // Grant rewards
-        console.log(`✨ Completed quest stage: ${stage.objective}`);
+        logger.info(`✨ Completed quest stage: ${stage.objective}`);
         
         quest.currentStage++;
         
         if (quest.currentStage >= quest.stages.length) {
-            console.log(`🏆 Completed companion quest: ${quest.name}!`);
+            logger.info(`🏆 Completed companion quest: ${quest.name}!`);
         }
     }
     

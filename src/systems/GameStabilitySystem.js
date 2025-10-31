@@ -31,7 +31,7 @@ class GameStabilitySystem {
     }
     
     initialize() {
-        console.log('[GameStability] Initializing stability system...');
+        logger.info('[GameStability] Initializing stability system...');
         
         // Run comprehensive stability checks
         this.runStabilityChecks();
@@ -45,11 +45,11 @@ class GameStabilitySystem {
         // Set up performance tracking
         this.setupPerformanceTracking();
         
-        console.log('[GameStability] Stability system initialized');
+        logger.info('[GameStability] Stability system initialized');
     }
     
     runStabilityChecks() {
-        console.log('[GameStability] Running stability checks...');
+        logger.info('[GameStability] Running stability checks...');
         
         // Check rendering system
         this.stabilityChecks.rendering = this.checkRenderingSystem();
@@ -75,9 +75,9 @@ class GameStabilitySystem {
         const allStable = Object.values(this.stabilityChecks).every(check => check);
         
         if (allStable) {
-            console.log('[GameStability] ✅ All systems stable!');
+            logger.info('[GameStability] ✅ All systems stable!');
         } else {
-            console.warn('[GameStability] ⚠️ Some systems unstable:', this.stabilityChecks);
+            logger.warn('[GameStability] ⚠️ Some systems unstable:', this.stabilityChecks);
             this.attemptRecovery();
         }
         
@@ -201,7 +201,7 @@ class GameStabilitySystem {
                 
                 // Check for performance issues
                 if (this.performanceMetrics.fps < 30) {
-                    console.warn('[GameStability] Low FPS detected:', this.performanceMetrics.fps);
+                    logger.warn('[GameStability] Low FPS detected:', this.performanceMetrics.fps);
                 }
             }
             
@@ -220,13 +220,13 @@ class GameStabilitySystem {
     
     attemptRecovery() {
         if (this.recoveryAttempts >= this.maxRecoveryAttempts) {
-            console.error('[GameStability] Max recovery attempts reached. Manual intervention required.');
+            logger.error('[GameStability] Max recovery attempts reached. Manual intervention required.');
             this.showCriticalError();
             return;
         }
         
         this.recoveryAttempts++;
-        console.log(`[GameStability] Attempting recovery (${this.recoveryAttempts}/${this.maxRecoveryAttempts})...`);
+        logger.info(`[GameStability] Attempting recovery (${this.recoveryAttempts}/${this.maxRecoveryAttempts})...`);
         
         // Clear caches
         this.clearCaches();
@@ -239,7 +239,7 @@ class GameStabilitySystem {
             const stable = this.runStabilityChecks();
             if (stable) {
                 this.recoveryAttempts = 0;
-                console.log('[GameStability] Recovery successful!');
+                logger.info('[GameStability] Recovery successful!');
             }
         }, 1000);
     }
@@ -261,7 +261,7 @@ class GameStabilitySystem {
         // Attempt to reinitialize failed systems
         Object.keys(this.stabilityChecks).forEach(system => {
             if (!this.stabilityChecks[system]) {
-                console.log(`[GameStability] Reinitializing ${system}...`);
+                logger.info(`[GameStability] Reinitializing ${system}...`);
                 // System-specific reinitialization logic
             }
         });
@@ -276,7 +276,7 @@ class GameStabilitySystem {
         };
         
         this.errorLog.push(errorEntry);
-        console.error('[GameStability]', message, error);
+        logger.error('[GameStability]', message, error);
         
         // Keep only last 100 errors
         if (this.errorLog.length > 100) {

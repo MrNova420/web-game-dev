@@ -45,10 +45,10 @@ export class RangedCombatAdvanced {
     const animation = this.getShootAnimation(weaponType);
     const projectileModel = this.getProjectileModel(weaponType);
     
-    console.log(`${shooter.id} shoots ${weaponType}`);
-    console.log(`  Animation: ${animation}`);
-    console.log(`  Projectile: ${projectileModel}`);
-    console.log(`  Charge: ${(chargeLevel * 100).toFixed(0)}%`);
+    logger.info(`${shooter.id} shoots ${weaponType}`);
+    logger.info(`  Animation: ${animation}`);
+    logger.info(`  Projectile: ${projectileModel}`);
+    logger.info(`  Charge: ${(chargeLevel * 100).toFixed(0)}%`);
     
     const velocity = 50 * chargeLevel;
     const trajectory = this.calculateTrajectory(shooter.position, target.position, velocity);
@@ -81,8 +81,8 @@ export class RangedCombatAdvanced {
   }
 
   multiShot(shooter, targetPositions) {
-    console.log(`${shooter.id} MULTI-SHOT (${targetPositions.length} arrows)`);
-    console.log(`  Animation: ${this.animations.bow_shoot}`);
+    logger.info(`${shooter.id} MULTI-SHOT (${targetPositions.length} arrows)`);
+    logger.info(`  Animation: ${this.animations.bow_shoot}`);
     
     const results = [];
     for (const target of targetPositions) {
@@ -105,8 +105,8 @@ export class RangedCombatAdvanced {
       
       // Check ground collision
       if (proj.position.y <= 0) {
-        console.log(`Projectile hit ground`);
-        console.log(`  VFX: ${this.vfx.impact}`);
+        logger.info(`Projectile hit ground`);
+        logger.info(`  VFX: ${this.vfx.impact}`);
         this.activeProjectiles.splice(i, 1);
       }
     }

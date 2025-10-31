@@ -1,3 +1,4 @@
+import { logger } from "./Logger.js";
 /**
  * AssetLoader - Loads and manages game assets
  */
@@ -52,10 +53,10 @@ export class AssetLoader {
                     }
                 } catch (error) {
                     attempts++;
-                    console.warn(`Failed to load ${asset.name}, attempt ${attempts}/${maxAttempts}`);
+                    logger.warn(`Failed to load ${asset.name}, attempt ${attempts}/${maxAttempts}`);
                     
                     if (attempts >= maxAttempts) {
-                        console.error(`Failed to load ${asset.name} after ${maxAttempts} attempts`);
+                        logger.error(`Failed to load ${asset.name} after ${maxAttempts} attempts`);
                         // Mark as loaded anyway to prevent freezing
                         this.loadedAssets++;
                         if (progressCallback) {
@@ -69,7 +70,7 @@ export class AssetLoader {
             }
         }
         
-        console.log('✅ All assets loaded');
+        logger.info('✅ All assets loaded');
         return true;
     }
     

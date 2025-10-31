@@ -8,5 +8,5 @@ export class TreasureHuntingSystem {
       buried: { model: '/assets/models/treasures/buried.glb', vfx: '/assets/particles/dig.png' }  // Quaternius + Kenney
     };
   }
-  findTreasure(playerId) { console.log(`${playerId} found treasure!`); }
+  findTreasure(playerId) { logger.info(`${playerId} found treasure!`); }
 }
