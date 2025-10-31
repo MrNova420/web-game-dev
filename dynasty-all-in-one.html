@@ -2877,7 +2877,9 @@
                 for (let i = 0; i < toSpawn; i++) {
                     const creatureData = currentBiome.creatures[Math.floor(Math.random() * currentBiome.creatures.length)];
                     const angle = Math.random() * Math.PI * 2;
-                    const dist = 400 + Math.random() * 800;
+                    // Spawn enemies OUTSIDE immediate view (800-1400 units away)
+                    // This makes it feel like discovered enemies, not spawned
+                    const dist = 800 + Math.random() * 600;
                     const ex = x + Math.cos(angle) * dist;
                     const ey = y + Math.sin(angle) * dist;
                     
