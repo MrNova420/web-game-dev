@@ -4399,9 +4399,29 @@
                 }
             }
 
-            // PLAYER with glow and equipped weapon
-            ctx.shadowColor = '#FFD700';
-            ctx.shadowBlur = 20;
+            // PLAYER with enhanced combat feedback (NO SCALE - just glow)
+            const isAttacking = Date.now() - (gameState.lastAttackTime || 0) < 300;
+            
+            // Attack glow effect only
+            let attackGlow = 0;
+            if (isAttacking) {
+                const attackProgress = (Date.now() - gameState.lastAttackTime) / 300;
+                attackGlow = (1.0 - attackProgress) * 25;
+            }
+            
+            // Player glow based on combo or attack
+            if (gameState.comboCount > 0) {
+                const comboGlow = Math.min(gameState.comboCount * 3, 30);
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = comboGlow + attackGlow;
+            } else if (attackGlow > 0) {
+                ctx.shadowColor = '#FF4500';
+                ctx.shadowBlur = attackGlow;
+            } else {
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 20;
+            }
+            
             ctx.fillStyle = '#FFD700';
             ctx.strokeStyle = '#FFFFFF';
             ctx.lineWidth = 5;
@@ -4480,19 +4500,127 @@
             // Restore context
             ctx.restore();
 
-            // === SCREEN SPACE RENDERING ===
+            // === ENHANCED UI RENDERING ===
             
-            // Biome name at top
-            ctx.font = 'bold 40px Arial';
+            // TOP BAR - Biome & Stats
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, 100);
+            
+            // Biome name with enhanced styling
+            ctx.font = 'bold 32px Arial';
             ctx.fillStyle = '#FFD700';
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 4;
             const biomeName = `${biome.emoji} ${biome.name}`;
             const nameW = ctx.measureText(biomeName).width;
-            ctx.strokeText(biomeName, canvas.width / 2 - nameW / 2, 60);
-            ctx.fillText(biomeName, canvas.width / 2 - nameW / 2, 60);
+            ctx.strokeText(biomeName, canvas.width / 2 - nameW / 2, 40);
+            ctx.fillText(biomeName, canvas.width / 2 - nameW / 2, 40);
+            
+            // Player stats in top bar
+            ctx.font = 'bold 18px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'left';
+            
+            // Level and Class
+            ctx.fillText(`Lv ${gameState.player.level} ${gameState.player.class?.name || 'Adventurer'}`, 20, 75);
+            
+            // Gold
+            ctx.fillStyle = '#FFD700';
+            ctx.fillText(`💰 ${gameState.player.gold}`, 20, 95);
+            
+            // Enemies defeated
+            ctx.fillStyle = '#FF6B6B';
+            ctx.fillText(`⚔️ ${gameState.enemiesDefeated}`, 200, 75);
+            
+            // Bosses defeated
+            ctx.fillStyle = '#FF4500';
+            ctx.fillText(`👑 ${gameState.bossesDefeated}`, 200, 95);
+            
+            // Current time
+            ctx.fillStyle = '#87CEEB';
+            const timeHour = TIME_SYSTEM ? TIME_SYSTEM.timeOfDay : 12;
+            const timeStr = `🕐 ${Math.floor(timeHour)}:${Math.floor((timeHour % 1) * 60).toString().padStart(2, '0')}`;
+            ctx.fillText(timeStr, 380, 75);
+            
+            // Current weather
+            ctx.fillStyle = '#FFFFFF';
+            const weatherEmoji = weather === 'rain' ? '🌧️' : weather === 'snow' ? '❄️' : 
+                                weather === 'fog' ? '🌫️' : weather === 'storm' ? '⛈️' : 
+                                weather === 'sandstorm' ? '🌪️' : '☀️';
+            ctx.fillText(`${weatherEmoji} ${weather || 'Clear'}`, 380, 95);
+            
+            // Combo counter in top right
+            if (gameState.comboCount > 1) {
+                ctx.font = 'bold 36px Arial';
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 5;
+                ctx.textAlign = 'right';
+                ctx.strokeText(`${gameState.comboCount}x COMBO!`, canvas.width - 20, 50);
+                ctx.fillText(`${gameState.comboCount}x COMBO!`, canvas.width - 20, 50);
+            }
 
-            // Mini-map
+            // ENHANCED MINI-MAP with entities
+            const mapSize = 180;
+            const mapX = canvas.width - mapSize - 20;
+            const mapY = 120;
+            
+            // Map background
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(mapX, mapY, mapSize, mapSize);
+            
+            // Map border
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(mapX, mapY, mapSize, mapSize);
+            
+            // Draw biome regions on map
+            const mapScale = mapSize / gameState.worldSize;
+            for (const region of (gameState.biomeRegions || [])) {
+                ctx.fillStyle = region.biome.color + '40';
+                ctx.fillRect(
+                    mapX + region.x * mapScale,
+                    mapY + region.y * mapScale,
+                    region.width * mapScale,
+                    region.height * mapScale
+                );
+            }
+            
+            // Draw player position
+            const playerMapX = mapX + (gameState.player.x * mapScale);
+            const playerMapY = mapY + (gameState.player.y * mapScale);
+            ctx.fillStyle = '#00FF00';
+            ctx.beginPath();
+            ctx.arc(playerMapX, playerMapY, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw nearby enemies on map (within 2000 units)
+            ctx.fillStyle = '#FF0000';
+            for (const enemy of gameState.enemies) {
+                const dist = Math.sqrt(
+                    Math.pow(enemy.x - gameState.player.x, 2) +
+                    Math.pow(enemy.y - gameState.player.y, 2)
+                );
+                if (dist < 2000) {
+                    const enemyMapX = mapX + (enemy.x * mapScale);
+                    const enemyMapY = mapY + (enemy.y * mapScale);
+                    ctx.fillRect(enemyMapX - 1, enemyMapY - 1, 2, 2);
+                }
+            }
+            
+            // Draw cities on map
+            ctx.fillStyle = '#FFD700';
+            for (const city of (gameState.cities || [])) {
+                const cityMapX = mapX + (city.x * mapScale);
+                const cityMapY = mapY + (city.y * mapScale);
+                ctx.fillRect(cityMapX - 2, cityMapY - 2, 4, 4);
+            }
+            
+            // Map title
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'center';
+            ctx.fillText('MAP', mapX + mapSize / 2, mapY - 5);
             drawMiniMap();
 
             // Weather effects
