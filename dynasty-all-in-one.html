@@ -2783,6 +2783,7 @@
             gameState.enemies = [];
             gameState.dungeonPortals = [];
             gameState.biomeRegions = [];
+            gameState.enemyCamps = []; // NEW: Enemy camps for raiding!
             
             // Create biome grid (3x4 = 12 biomes)
             const biomeLayout = [
@@ -2846,6 +2847,48 @@
                     }
                 }
             }
+            
+            // Generate Enemy Camps across the world (20-30 camps)
+            const campCount = 20 + Math.floor(Math.random() * 11);
+            for (let i = 0; i < campCount; i++) {
+                // Pick random biome region
+                const region = gameState.biomeRegions[Math.floor(Math.random() * gameState.biomeRegions.length)];
+                const biome = region.biome;
+                
+                // Place camp randomly in biome (avoid edges)
+                const cx = region.x + 500 + Math.random() * (region.width - 1000);
+                const cy = region.y + 500 + Math.random() * (region.height - 1000);
+                
+                // Camp size and difficulty based on biome level
+                const level = Math.floor(Math.random() * 10) + parseInt(biome.level.split('-')[0]);
+                const enemyCount = 5 + Math.floor(Math.random() * 8); // 5-12 enemies
+                const lootQuality = level > 30 ? 'epic' : level > 15 ? 'rare' : 'common';
+                
+                gameState.enemyCamps.push({
+                    x: cx,
+                    y: cy,
+                    biome: biome.name,
+                    biomeId: biome.id,
+                    level: level,
+                    enemyCount: enemyCount,
+                    enemiesAlive: enemyCount,
+                    enemies: [], // Will be populated when player approaches
+                    loot: {
+                        gold: level * (50 + Math.random() * 100),
+                        items: Math.floor(Math.random() * 3) + 1,
+                        quality: lootQuality
+                    },
+                    radius: 200, // Camp size
+                    discovered: false,
+                    cleared: false,
+                    respawnTimer: 0,
+                    respawnTime: 600, // 10 minutes in game time
+                    emoji: level > 30 ? '🏴‍☠️' : level > 15 ? '⚔️' : '🏕️',
+                    type: level > 30 ? 'fortress' : level > 15 ? 'outpost' : 'camp'
+                });
+            }
+            
+            console.log(`✅ Generated ${campCount} enemy camps across the world!`);
             
             // IMPORTANT: Only spawn enemies/NPCs near player's starting position
             // More will spawn dynamically as player moves
