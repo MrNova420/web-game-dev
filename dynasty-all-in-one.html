@@ -786,7 +786,7 @@
                 x: 0, // Will be set on game start
                 y: 0, // Will be set on game start
                 radius: 20,
-                speed: 5, // Increased for better open world feel
+                speed: 8, // FASTER speed for bigger world!
                 hp: 100,
                 maxHp: 100,
                 mp: 50,
@@ -808,16 +808,18 @@
             camera: {
                 x: 0,
                 y: 0,
-                smoothing: 0.1
+                smoothing: 0.15 // Faster camera
             },
             // Larger open world
-            worldSize: 5000, // 5000x5000 pixel world
+            worldSize: 10000, // 10000x10000 pixel world - MUCH BIGGER!
             currentBiomeIndex: 0,
             enemies: [],
             particles: [],
             bosses: [],
             npcs: [], // Add NPCs for immersion
             landmarks: [], // Add landmarks for exploration
+            buildings: [], // Add buildings
+            villages: [], // Add villages
             enemiesDefeated: 0,
             bossesDefeated: 0,
             keys: {},
@@ -1417,19 +1419,48 @@
         
         function generateLandmarks() {
             gameState.landmarks = [];
+            gameState.buildings = [];
+            gameState.villages = [];
+            
             const landmarkTypes = [
-                { name: 'Ancient Tree', emoji: '🌳', reward: 'gold' },
-                { name: 'Mystical Shrine', emoji: '⛩️', reward: 'exp' },
-                { name: 'Hidden Cave', emoji: '🕳️', reward: 'item' },
-                { name: 'Treasure Chest', emoji: '💎', reward: 'gold' },
-                { name: 'Magic Fountain', emoji: '⛲', reward: 'heal' },
-                { name: 'Ancient Ruins', emoji: '🏛️', reward: 'exp' },
-                { name: 'Crystal Formation', emoji: '💠', reward: 'item' },
-                { name: 'Portal Stone', emoji: '🌀', reward: 'teleport' }
+                { name: 'Ancient Tree', emoji: '🌳', reward: 'gold', size: 60 },
+                { name: 'Mystical Shrine', emoji: '⛩️', reward: 'exp', size: 50 },
+                { name: 'Hidden Cave', emoji: '🕳️', reward: 'item', size: 55 },
+                { name: 'Treasure Chest', emoji: '💎', reward: 'gold', size: 40 },
+                { name: 'Magic Fountain', emoji: '⛲', reward: 'heal', size: 50 },
+                { name: 'Ancient Ruins', emoji: '🏛️', reward: 'exp', size: 70 },
+                { name: 'Crystal Formation', emoji: '💠', reward: 'item', size: 45 },
+                { name: 'Portal Stone', emoji: '🌀', reward: 'teleport', size: 50 },
+                { name: 'Windmill', emoji: '🏰', reward: 'gold', size: 65 },
+                { name: 'Temple', emoji: '⛪', reward: 'heal', size: 80 }
             ];
             
-            // Generate 50 landmarks across the world
-            for (let i = 0; i < 50; i++) {
+            // Create 5 villages with buildings clustered together
+            for (let v = 0; v < 5; v++) {
+                const villageX = 1000 + Math.random() * (gameState.worldSize - 2000);
+                const villageY = 1000 + Math.random() * (gameState.worldSize - 2000);
+                
+                gameState.villages.push({ x: villageX, y: villageY, name: `Village ${v + 1}` });
+                
+                // Add 8-12 buildings per village
+                const buildingCount = 8 + Math.floor(Math.random() * 5);
+                for (let b = 0; b < buildingCount; b++) {
+                    const angle = (b / buildingCount) * Math.PI * 2;
+                    const dist = 100 + Math.random() * 200;
+                    const bx = villageX + Math.cos(angle) * dist;
+                    const by = villageY + Math.sin(angle) * dist;
+                    
+                    gameState.buildings.push({
+                        x: bx,
+                        y: by,
+                        emoji: ['🏠', '🏘️', '🏪', '⛺'][Math.floor(Math.random() * 4)],
+                        radius: 35
+                    });
+                }
+            }
+            
+            // Generate 80 scattered landmarks across the world
+            for (let i = 0; i < 80; i++) {
                 const type = landmarkTypes[Math.floor(Math.random() * landmarkTypes.length)];
                 gameState.landmarks.push({
                     x: Math.random() * gameState.worldSize,
@@ -1438,7 +1469,7 @@
                     emoji: type.emoji,
                     reward: type.reward,
                     discovered: false,
-                    radius: 40
+                    radius: type.size
                 });
             }
         }
@@ -1446,16 +1477,38 @@
         function generateNPCs() {
             gameState.npcs = [];
             const npcTypes = [
-                { name: 'Merchant', emoji: '🧙', dialogue: 'Welcome traveler! I have wares!' },
-                { name: 'Quest Giver', emoji: '🧝', dialogue: 'I need your help, hero!' },
-                { name: 'Blacksmith', emoji: '⚒️', dialogue: 'I can forge powerful weapons!' },
-                { name: 'Healer', emoji: '💊', dialogue: 'Let me heal your wounds.' },
-                { name: 'Sage', emoji: '📚', dialogue: 'Seek knowledge and wisdom.' },
-                { name: 'Guard', emoji: '🛡️', dialogue: 'Safe travels, adventurer.' }
+                { name: 'Merchant', emoji: '🧙', dialogue: 'Welcome traveler! I have wares!', gives: 'shop' },
+                { name: 'Quest Giver', emoji: '🧝', dialogue: 'I need your help, hero!', gives: 'quest' },
+                { name: 'Blacksmith', emoji: '⚒️', dialogue: 'I can forge powerful weapons!', gives: 'item' },
+                { name: 'Healer', emoji: '💊', dialogue: 'Let me heal your wounds.', gives: 'heal' },
+                { name: 'Sage', emoji: '📚', dialogue: 'Seek knowledge and wisdom.', gives: 'exp' },
+                { name: 'Guard', emoji: '🛡️', dialogue: 'Safe travels, adventurer.', gives: 'gold' },
+                { name: 'Farmer', emoji: '🧑‍🌾', dialogue: 'Hard work yields rewards!', gives: 'gold' },
+                { name: 'Innkeeper', emoji: '🏨', dialogue: 'Rest here, weary traveler.', gives: 'heal' }
             ];
             
-            // Generate 30 NPCs across the world
-            for (let i = 0; i < 30; i++) {
+            // Place NPCs in and around villages
+            for (const village of gameState.villages) {
+                for (let i = 0; i < 8; i++) {
+                    const type = npcTypes[Math.floor(Math.random() * npcTypes.length)];
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = 50 + Math.random() * 250;
+                    
+                    gameState.npcs.push({
+                        x: village.x + Math.cos(angle) * dist,
+                        y: village.y + Math.sin(angle) * dist,
+                        name: type.name,
+                        emoji: type.emoji,
+                        dialogue: type.dialogue,
+                        gives: type.gives,
+                        radius: 35,
+                        interacted: false
+                    });
+                }
+            }
+            
+            // Add 20 random wandering NPCs
+            for (let i = 0; i < 20; i++) {
                 const type = npcTypes[Math.floor(Math.random() * npcTypes.length)];
                 gameState.npcs.push({
                     x: Math.random() * gameState.worldSize,
@@ -1463,7 +1516,8 @@
                     name: type.name,
                     emoji: type.emoji,
                     dialogue: type.dialogue,
-                    radius: 30,
+                    gives: type.gives,
+                    radius: 35,
                     interacted: false
                 });
             }
@@ -1477,24 +1531,31 @@
             // Clear existing non-boss enemies
             gameState.enemies = gameState.enemies.filter(e => e.isBoss);
             
-            // Spawn enemies across open world (not just around player)
-            const count = 20 + gameState.player.level * 2; // More enemies for open world
+            // Spawn enemies in clusters (more realistic)
+            const clusterCount = 15;
+            const enemiesPerCluster = 3 + gameState.player.level;
             
-            for (let i = 0; i < count; i++) {
-                // Spawn in random locations around the world
-                const x = Math.random() * gameState.worldSize;
-                const y = Math.random() * gameState.worldSize;
+            for (let c = 0; c < clusterCount; c++) {
+                // Random cluster center
+                const clusterX = 500 + Math.random() * (gameState.worldSize - 1000);
+                const clusterY = 500 + Math.random() * (gameState.worldSize - 1000);
                 
-                gameState.enemies.push({
-                    x: x,
-                    y: y,
-                    radius: 15,
-                    hp: 30 + gameState.player.level * 5,
-                    maxHp: 30 + gameState.player.level * 5,
-                    speed: 1 + Math.random() * 0.5,
-                    color: BIOMES[gameState.currentBiomeIndex].color,
-                    type: Math.floor(Math.random() * 5)
-                });
+                for (let i = 0; i < enemiesPerCluster; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = Math.random() * 150;
+                    
+                    gameState.enemies.push({
+                        x: clusterX + Math.cos(angle) * dist,
+                        y: clusterY + Math.sin(angle) * dist,
+                        radius: 18,
+                        hp: 30 + gameState.player.level * 5,
+                        maxHp: 30 + gameState.player.level * 5,
+                        speed: 1.5 + Math.random() * 1,
+                        color: BIOMES[gameState.currentBiomeIndex].color,
+                        type: Math.floor(Math.random() * 5),
+                        wanderAngle: Math.random() * Math.PI * 2
+                    });
+                }
             }
         }
 
@@ -1868,32 +1929,54 @@
                 }
             }
 
-            // Update enemies (only move if on screen for performance)
+            // Update enemies with better AI (only move if near camera for performance)
             for (const enemy of gameState.enemies) {
                 const screenDist = distance(gameState.camera, enemy);
                 
                 // Only update enemies near camera
-                if (screenDist < Math.max(canvas.width, canvas.height) + 500) {
+                if (screenDist < Math.max(canvas.width, canvas.height) + 800) {
                     const dx = gameState.player.x - enemy.x;
                     const dy = gameState.player.y - enemy.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist > 50) {
+                    // Better AI: Chase if close, wander if far
+                    if (dist < 400) {
+                        // Chase player
                         enemy.x += (dx / dist) * enemy.speed;
                         enemy.y += (dy / dist) * enemy.speed;
+                    } else {
+                        // Wander around
+                        if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
+                            enemy.wanderAngle = Math.random() * Math.PI * 2;
+                            enemy.wanderTimer = 60 + Math.random() * 120;
+                        }
+                        enemy.wanderTimer--;
+                        
+                        enemy.x += Math.cos(enemy.wanderAngle) * enemy.speed * 0.3;
+                        enemy.y += Math.sin(enemy.wanderAngle) * enemy.speed * 0.3;
+                        
+                        // Keep in world bounds
+                        enemy.x = Math.max(50, Math.min(gameState.worldSize - 50, enemy.x));
+                        enemy.y = Math.max(50, Math.min(gameState.worldSize - 50, enemy.y));
                     }
 
                     // Enemy attacks player
-                    if (dist < 30) {
-                        const damage = 1 + Math.floor(Math.random() * 5);
-                        gameState.player.hp -= damage * 0.1;
+                    if (dist < 35) {
+                        const damage = 2 + Math.floor(Math.random() * 8);
+                        const actualDamage = Math.max(1, damage - gameState.player.defense * 0.1);
+                        gameState.player.hp -= actualDamage * 0.15;
+                        
                         if (gameState.player.hp <= 0) {
                             gameState.player.hp = 0;
-                            // Respawn player at world center
-                            gameState.player.hp = gameState.player.maxHp;
+                            // Respawn player at world center with penalty
+                            gameState.player.hp = gameState.player.maxHp * 0.5;
                             gameState.player.x = gameState.worldSize / 2;
                             gameState.player.y = gameState.worldSize / 2;
-                            createParticle(gameState.player.x, gameState.player.y, '💀 Respawned!', '#ff0000');
+                            gameState.player.gold = Math.max(0, Math.floor(gameState.player.gold * 0.9));
+                            createParticle(gameState.player.x, gameState.player.y, '💀 Respawned! -10% Gold', '#ff0000');
+                            
+                            // Reset combo
+                            gameState.comboCount = 0;
                         }
                     }
                 }
@@ -1949,28 +2032,32 @@
         }
 
         function render() {
-            // Clear canvas
+            // Clear with biome color
             const biome = BIOMES[gameState.currentBiomeIndex];
             ctx.fillStyle = biome.color;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Apply day/night lighting
-            ctx.globalAlpha = TIME_SYSTEM.ambientLight;
 
-            // Save context state
+            // Save and translate for camera
             ctx.save();
-            
-            // Translate to camera position (camera follows player)
             ctx.translate(canvas.width / 2 - gameState.camera.x, canvas.height / 2 - gameState.camera.y);
 
-            // Draw world grid
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            // === WORLD SPACE RENDERING ===
+            
+            // Calculate visible area
+            const viewPadding = 500;
+            const minX = gameState.camera.x - canvas.width / 2 - viewPadding;
+            const maxX = gameState.camera.x + canvas.width / 2 + viewPadding;
+            const minY = gameState.camera.y - canvas.height / 2 - viewPadding;
+            const maxY = gameState.camera.y + canvas.height / 2 + viewPadding;
+            
+            // Grid (only visible area)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
             ctx.lineWidth = 1;
-            const gridSize = 100;
-            const startX = Math.floor((gameState.camera.x - canvas.width) / gridSize) * gridSize;
-            const endX = Math.ceil((gameState.camera.x + canvas.width) / gridSize) * gridSize;
-            const startY = Math.floor((gameState.camera.y - canvas.height) / gridSize) * gridSize;
-            const endY = Math.ceil((gameState.camera.y + canvas.height) / gridSize) * gridSize;
+            const gridSize = 200;
+            const startX = Math.floor(minX / gridSize) * gridSize;
+            const endX = Math.ceil(maxX / gridSize) * gridSize;
+            const startY = Math.floor(minY / gridSize) * gridSize;
+            const endY = Math.ceil(maxY / gridSize) * gridSize;
             
             for (let x = startX; x <= endX; x += gridSize) {
                 ctx.beginPath();
@@ -1985,222 +2072,208 @@
                 ctx.stroke();
             }
 
-            // Draw biome decorations across world
-            ctx.font = '48px Arial';
-            for (let x = 0; x < gameState.worldSize; x += 300) {
-                for (let y = 0; y < gameState.worldSize; y += 300) {
-                    const dist = distance({ x, y }, gameState.camera);
-                    if (dist < Math.max(canvas.width, canvas.height) + 500) {
-                        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                        ctx.fillText(biome.emoji, x, y);
-                    }
+            // Biome decorations (only visible)
+            ctx.font = '60px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+            for (let x = startX; x < endX; x += 500) {
+                for (let y = startY; y < endY; y += 500) {
+                    ctx.fillText(biome.emoji, x, y);
                 }
             }
 
-            // Draw landmarks
+            // Villages (only visible)
+            ctx.font = 'bold 20px Arial';
+            for (const village of gameState.villages) {
+                if (village.x < minX || village.x > maxX || village.y < minY || village.y > maxY) continue;
+                
+                ctx.fillStyle = 'rgba(139, 69, 19, 0.3)';
+                ctx.beginPath();
+                ctx.arc(village.x, village.y, 300, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 3;
+                ctx.strokeText(village.name, village.x - 50, village.y - 320);
+                ctx.fillText(village.name, village.x - 50, village.y - 320);
+            }
+
+            // Buildings (only visible)
+            ctx.font = '45px Arial';
+            for (const building of gameState.buildings) {
+                if (building.x < minX || building.x > maxX || building.y < minY || building.y > maxY) continue;
+                
+                ctx.fillStyle = 'rgba(139, 69, 19, 0.8)';
+                ctx.beginPath();
+                ctx.arc(building.x, building.y, building.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.fillStyle = '#FFFFFF';
+                ctx.fillText(building.emoji, building.x - 22, building.y + 15);
+            }
+
+            // Landmarks (only visible)
+            ctx.font = '50px Arial';
             for (const landmark of gameState.landmarks) {
-                const dist = distance(landmark, gameState.camera);
-                if (dist < Math.max(canvas.width, canvas.height) + 200) {
-                    // Landmark glow effect
-                    if (!landmark.discovered) {
-                        ctx.shadowColor = '#ffd700';
-                        ctx.shadowBlur = 15;
-                    }
-                    
-                    ctx.fillStyle = landmark.discovered ? 'rgba(100, 100, 100, 0.5)' : 'rgba(255, 215, 0, 0.8)';
-                    ctx.beginPath();
-                    ctx.arc(landmark.x, landmark.y, landmark.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                    
-                    ctx.font = '40px Arial';
-                    ctx.fillText(landmark.emoji, landmark.x - 20, landmark.y + 15);
-                    
-                    if (!landmark.discovered) {
-                        ctx.font = '14px Arial';
-                        ctx.fillStyle = '#ffd700';
-                        ctx.fillText(landmark.name, landmark.x - 50, landmark.y - landmark.radius - 10);
-                    }
-                }
-            }
-
-            // Draw NPCs
-            for (const npc of gameState.npcs) {
-                const dist = distance(npc, gameState.camera);
-                if (dist < Math.max(canvas.width, canvas.height) + 200) {
-                    // NPC with interaction indicator
-                    ctx.fillStyle = npc.interacted ? 'rgba(150, 150, 150, 0.7)' : 'rgba(0, 255, 0, 0.7)';
-                    ctx.beginPath();
-                    ctx.arc(npc.x, npc.y, npc.radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    ctx.font = '35px Arial';
-                    ctx.fillText(npc.emoji, npc.x - 17, npc.y + 12);
-                    
-                    // Show name above NPC
-                    ctx.font = 'bold 12px Arial';
-                    ctx.fillStyle = '#00ff00';
+                if (landmark.x < minX || landmark.x > maxX || landmark.y < minY || landmark.y > maxY) continue;
+                
+                ctx.fillStyle = landmark.discovered ? '#666666' : '#FFD700';
+                ctx.beginPath();
+                ctx.arc(landmark.x, landmark.y, landmark.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(landmark.emoji, landmark.x - 25, landmark.y + 18);
+                
+                if (!landmark.discovered) {
+                    ctx.font = 'bold 16px Arial';
+                    ctx.fillStyle = '#FFD700';
                     ctx.strokeStyle = '#000000';
-                    ctx.lineWidth = 2;
-                    ctx.strokeText(npc.name, npc.x - 30, npc.y - npc.radius - 10);
-                    ctx.fillText(npc.name, npc.x - 30, npc.y - npc.radius - 10);
-                    
-                    // Show interaction prompt if nearby
-                    const playerDist = distance(gameState.player, npc);
-                    if (playerDist < npc.radius + 50 && !npc.interacted) {
-                        ctx.font = '10px Arial';
-                        ctx.fillStyle = '#ffff00';
-                        ctx.fillText('[E] to interact', npc.x - 30, npc.y + npc.radius + 20);
-                    }
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(landmark.name, landmark.x - 60, landmark.y - landmark.radius - 10);
+                    ctx.fillText(landmark.name, landmark.x - 60, landmark.y - landmark.radius - 10);
+                    ctx.font = '50px Arial';
                 }
             }
 
-            // Draw enemies
+            // NPCs (only visible)
+            ctx.font = '40px Arial';
+            for (const npc of gameState.npcs) {
+                if (npc.x < minX || npc.x > maxX || npc.y < minY || npc.y > maxY) continue;
+                ctx.fillStyle = npc.interacted ? '#888888' : '#00FF00';
+                ctx.beginPath();
+                ctx.arc(npc.x, npc.y, npc.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillText(npc.emoji, npc.x - 20, npc.y + 14);
+                
+                ctx.font = 'bold 14px Arial';
+                ctx.fillStyle = '#00FF00';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeText(npc.name, npc.x - 40, npc.y - 40);
+                ctx.fillText(npc.name, npc.x - 40, npc.y - 40);
+                ctx.font = '40px Arial';
+            }
+
+            // Enemies
             for (const enemy of gameState.enemies) {
-                const dist = distance(enemy, gameState.camera);
-                if (dist < Math.max(canvas.width, canvas.height) + 200) {
-                    // Boss special rendering
-                    if (enemy.isBoss) {
-                        // Boss body with glow
-                        ctx.fillStyle = enemy.color;
-                        ctx.shadowColor = '#ff0000';
-                        ctx.shadowBlur = 20;
-                        ctx.beginPath();
-                        ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.shadowBlur = 0;
-                        ctx.strokeStyle = '#ffd700';
-                        ctx.lineWidth = 4;
-                        ctx.stroke();
-
-                        // Boss emoji/icon
-                        ctx.font = '40px Arial';
-                        ctx.fillText(enemy.emoji, enemy.x - 20, enemy.y + 15);
-
-                        // Boss name
-                        ctx.font = 'bold 16px Arial';
-                        ctx.fillStyle = '#ffd700';
-                        ctx.strokeStyle = '#000000';
-                        ctx.lineWidth = 2;
-                        ctx.strokeText(enemy.name, enemy.x - 50, enemy.y - enemy.radius - 20);
-                        ctx.fillText(enemy.name, enemy.x - 50, enemy.y - enemy.radius - 20);
-
-                        // Boss HP bar (larger)
-                        const hpWidth = enemy.radius * 2;
-                        const hpHeight = 8;
-                        const hpPercent = enemy.hp / enemy.maxHp;
-                        
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-                        ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 12, 
-                            hpWidth, hpHeight);
-                        ctx.fillStyle = '#ff0000';
-                        ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 12, 
-                            hpWidth * hpPercent, hpHeight);
-                        
-                        // HP text
-                        ctx.font = '12px Arial';
-                        ctx.fillStyle = '#ffffff';
-                        ctx.fillText(`${Math.floor(enemy.hp)}/${enemy.maxHp}`, 
-                            enemy.x - 30, enemy.y - enemy.radius - 15);
-                    } else {
-                        // Regular enemy body
-                        ctx.fillStyle = enemy.color;
-                        ctx.beginPath();
-                        ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
-                        ctx.fill();
-                        ctx.strokeStyle = '#ffffff';
-                        ctx.lineWidth = 2;
-                        ctx.stroke();
-
-                        // Enemy type indicator
-                        const enemyEmojis = ['👾', '👹', '👻', '💀', '🐉'];
-                        ctx.font = '20px Arial';
-                        ctx.fillText(enemyEmojis[enemy.type], enemy.x - 10, enemy.y + 5);
-
-                        // Enemy HP bar
-                        const hpWidth = enemy.radius * 2;
-                        const hpHeight = 4;
-                        const hpPercent = enemy.hp / enemy.maxHp;
-                        
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-                        ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 10, 
-                            hpWidth, hpHeight);
-                        ctx.fillStyle = '#ff0000';
-                        ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 10, 
-                            hpWidth * hpPercent, hpHeight);
-                    }
+                if (enemy.isBoss) {
+                    // Boss
+                    ctx.fillStyle = '#FF0000';
+                    ctx.strokeStyle = '#FFD700';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    ctx.font = '50px Arial';
+                    ctx.fillText(enemy.emoji, enemy.x - 25, enemy.y + 18);
+                    
+                    ctx.font = 'bold 18px Arial';
+                    ctx.fillStyle = '#FFD700';
+                    ctx.strokeStyle = '#000000';
+                    ctx.lineWidth = 3;
+                    ctx.strokeText(enemy.name, enemy.x - 70, enemy.y - 60);
+                    ctx.fillText(enemy.name, enemy.x - 70, enemy.y - 60);
+                    
+                    // HP bar
+                    const hpW = enemy.radius * 2;
+                    const hpH = 10;
+                    const hpP = enemy.hp / enemy.maxHp;
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 15, hpW, hpH);
+                    ctx.fillStyle = '#FF0000';
+                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 15, hpW * hpP, hpH);
+                } else {
+                    // Regular enemy
+                    ctx.fillStyle = enemy.color;
+                    ctx.strokeStyle = '#FFFFFF';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    const enemyEmojis = ['👾', '👹', '👻', '💀', '🐉'];
+                    ctx.font = '25px Arial';
+                    ctx.fillStyle = '#FFFFFF';
+                    ctx.fillText(enemyEmojis[enemy.type], enemy.x - 12, enemy.y + 8);
+                    
+                    // HP bar
+                    const hpW = enemy.radius * 2;
+                    const hpH = 5;
+                    const hpP = enemy.hp / enemy.maxHp;
+                    ctx.fillStyle = '#000000';
+                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 8, hpW, hpH);
+                    ctx.fillStyle = '#FF0000';
+                    ctx.fillRect(enemy.x - enemy.radius, enemy.y - enemy.radius - 8, hpW * hpP, hpH);
                 }
             }
 
-            // Draw player (always centered)
-            ctx.fillStyle = '#ffd700';
-            ctx.shadowColor = '#ffd700';
-            ctx.shadowBlur = 10;
+            // Player
+            ctx.fillStyle = '#FFD700';
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 4;
+            ctx.shadowColor = '#FFD700';
+            ctx.shadowBlur = 15;
             ctx.beginPath();
-            ctx.arc(gameState.player.x, gameState.player.y, 
-                gameState.player.radius, 0, Math.PI * 2);
+            ctx.arc(gameState.player.x, gameState.player.y, gameState.player.radius, 0, Math.PI * 2);
             ctx.fill();
             ctx.shadowBlur = 0;
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 3;
             ctx.stroke();
+            
+            ctx.font = '35px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillText(gameState.player.class?.icon || '⚔️', gameState.player.x - 17, gameState.player.y + 12);
 
-            // Player class icon
-            ctx.font = '30px Arial';
-            ctx.fillText(gameState.player.class?.icon || '⚔️', 
-                gameState.player.x - 15, gameState.player.y + 10);
-
-            // Draw particles
+            // Particles
+            ctx.font = '18px Arial';
             for (const p of gameState.particles) {
                 ctx.globalAlpha = p.life / p.maxLife;
                 ctx.fillStyle = p.color;
-                ctx.font = '16px Arial';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                ctx.strokeText(p.text, p.x, p.y);
                 ctx.fillText(p.text, p.x, p.y);
             }
             ctx.globalAlpha = 1;
 
-            // Restore context (back to screen space)
+            // Restore context
             ctx.restore();
+
+            // === SCREEN SPACE RENDERING ===
             
-            // Reset global alpha for screen-space elements
-            ctx.globalAlpha = 1;
-            
-            // Draw biome name (screen space - top center)
-            const biome = BIOMES[gameState.currentBiomeIndex];
-            ctx.font = 'bold 32px Arial';
-            ctx.fillStyle = 'rgba(255, 215, 0, 0.9)';
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.9)';
+            // Biome name at top
+            ctx.font = 'bold 40px Arial';
+            ctx.fillStyle = '#FFD700';
+            ctx.strokeStyle = '#000000';
             ctx.lineWidth = 4;
             const biomeName = `${biome.emoji} ${biome.name}`;
-            const biomeNameWidth = ctx.measureText(biomeName).width;
-            ctx.strokeText(biomeName, canvas.width / 2 - biomeNameWidth / 2, 50);
-            ctx.fillText(biomeName, canvas.width / 2 - biomeNameWidth / 2, 50);
-            
-            // Draw weather effects (screen space)
-            drawWeatherEffects();
-            
-            // Draw mini-map (screen space, not world space)
-            if (gameState.miniMapEnabled) {
-                drawMiniMap();
-            }
+            const nameW = ctx.measureText(biomeName).width;
+            ctx.strokeText(biomeName, canvas.width / 2 - nameW / 2, 60);
+            ctx.fillText(biomeName, canvas.width / 2 - nameW / 2, 60);
 
-            // Draw world coordinates and game info
-            ctx.font = '14px Arial';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.lineWidth = 2;
+            // Mini-map
+            drawMiniMap();
+
+            // Weather effects
+            drawWeatherEffects();
+
+            // Game info at bottom
+            ctx.font = 'bold 16px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 3;
             
-            const infoLines = [
-                `🗺️ World: ${Math.floor(gameState.player.x)}, ${Math.floor(gameState.player.y)}`,
-                `⏰ Time: ${getTimeOfDayString()} | ${currentWeather}`,
+            const info = [
+                `🗺️ Pos: ${Math.floor(gameState.player.x)}, ${Math.floor(gameState.player.y)}`,
+                `⏰ ${getTimeOfDayString()} | ${currentWeather}`,
                 `👾 Enemies: ${gameState.enemies.length} | 🏛️ Landmarks: ${gameState.landmarks.filter(l => l.discovered).length}/${gameState.landmarks.length}`,
-                `📜 Active Quests: ${QUESTS.filter(q => q.active && !q.completed).length}`
+                `📜 Quests: ${QUESTS.filter(q => q.active).length} | 🏆 Combo: ${gameState.comboCount || 0}x`
             ];
             
-            infoLines.forEach((line, i) => {
-                const y = canvas.height - 70 + (i * 18);
-                ctx.strokeText(line, 10, y);
-                ctx.fillText(line, 10, y);
+            info.forEach((line, i) => {
+                ctx.strokeText(line, 10, canvas.height - 65 + i * 20);
+                ctx.fillText(line, 10, canvas.height - 65 + i * 20);
             });
         }
 
