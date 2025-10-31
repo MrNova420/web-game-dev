@@ -951,6 +951,189 @@
         }
 
         // ========================================
+        // QUEST SYSTEM (from README)
+        // ========================================
+
+        const QUESTS = [
+            { id: 'starter1', name: 'First Steps', desc: 'Explore the world and defeat 5 enemies', goal: 5, type: 'combat', reward: { exp: 100, gold: 50 }, active: true, progress: 0 },
+            { id: 'explorer1', name: 'World Explorer', desc: 'Discover 5 landmarks', goal: 5, type: 'explore', reward: { exp: 200, gold: 100 }, active: false, progress: 0 },
+            { id: 'social1', name: 'Making Friends', desc: 'Interact with 5 NPCs', goal: 5, type: 'social', reward: { exp: 150, gold: 75 }, active: false, progress: 0 },
+            { id: 'boss1', name: 'Boss Hunter', desc: 'Defeat your first boss', goal: 1, type: 'boss', reward: { exp: 500, gold: 250, item: 'Epic' }, active: false, progress: 0 },
+            { id: 'wealth1', name: 'Treasure Seeker', desc: 'Collect 1000 gold', goal: 1000, type: 'gold', reward: { exp: 300, gold: 0 }, active: false, progress: 0 }
+        ];
+
+        function updateQuests() {
+            for (const quest of QUESTS) {
+                if (!quest.active) continue;
+                
+                let currentProgress = 0;
+                switch(quest.type) {
+                    case 'combat':
+                        currentProgress = gameState.enemiesDefeated;
+                        break;
+                    case 'explore':
+                        currentProgress = gameState.landmarks.filter(l => l.discovered).length;
+                        break;
+                    case 'social':
+                        currentProgress = gameState.npcs.filter(n => n.interacted).length;
+                        break;
+                    case 'boss':
+                        currentProgress = gameState.bossesDefeated;
+                        break;
+                    case 'gold':
+                        currentProgress = gameState.player.gold;
+                        break;
+                }
+                
+                quest.progress = currentProgress;
+                
+                // Check completion
+                if (quest.progress >= quest.goal && !quest.completed) {
+                    quest.completed = true;
+                    quest.active = false;
+                    completeQuest(quest);
+                }
+            }
+        }
+
+        function completeQuest(quest) {
+            createParticle(gameState.player.x, gameState.player.y, `✨ Quest Complete: ${quest.name}!`, '#00ff00');
+            
+            // Give rewards
+            if (quest.reward.exp) {
+                gainExp(quest.reward.exp);
+                createParticle(gameState.player.x, gameState.player.y, `+${quest.reward.exp} EXP`, '#00ff00');
+            }
+            if (quest.reward.gold) {
+                gameState.player.gold += quest.reward.gold;
+                createParticle(gameState.player.x, gameState.player.y, `+${quest.reward.gold} Gold`, '#ffd700');
+            }
+            if (quest.reward.item) {
+                const items = LOOT_ITEMS.filter(i => i.rarity === quest.reward.item);
+                if (items.length > 0) {
+                    const item = items[Math.floor(Math.random() * items.length)];
+                    gameState.player.inventory.push({...item});
+                    createParticle(gameState.player.x, gameState.player.y, `Received: ${item.name}!`, RARITY_COLORS[item.rarity]);
+                }
+            }
+            
+            // Activate next quest
+            const nextQuestIndex = QUESTS.findIndex(q => q.id === quest.id) + 1;
+            if (nextQuestIndex < QUESTS.length) {
+                QUESTS[nextQuestIndex].active = true;
+                createParticle(gameState.player.x, gameState.player.y, `New Quest: ${QUESTS[nextQuestIndex].name}`, '#ffff00');
+            }
+            
+            checkAchievements();
+        }
+
+        // ========================================
+        // DAY/NIGHT CYCLE
+        // ========================================
+
+        const TIME_SYSTEM = {
+            timeOfDay: 0, // 0-24 hours
+            timeSpeed: 0.01, // Game hours per real second
+            ambientLight: 1.0
+        };
+
+        function updateDayNightCycle(dt) {
+            TIME_SYSTEM.timeOfDay += TIME_SYSTEM.timeSpeed * dt;
+            if (TIME_SYSTEM.timeOfDay >= 24) {
+                TIME_SYSTEM.timeOfDay = 0;
+            }
+            
+            // Calculate ambient light (darkest at midnight, brightest at noon)
+            const hour = TIME_SYSTEM.timeOfDay;
+            if (hour >= 6 && hour < 18) {
+                // Daytime (6 AM - 6 PM)
+                TIME_SYSTEM.ambientLight = 0.7 + 0.3 * Math.sin((hour - 6) / 12 * Math.PI);
+            } else {
+                // Nighttime
+                TIME_SYSTEM.ambientLight = 0.3 + 0.2 * Math.sin((hour >= 18 ? hour - 18 : hour + 6) / 12 * Math.PI);
+            }
+        }
+
+        function getTimeOfDayString() {
+            const hour = Math.floor(TIME_SYSTEM.timeOfDay);
+            const minute = Math.floor((TIME_SYSTEM.timeOfDay - hour) * 60);
+            const ampm = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+            return `${displayHour}:${minute.toString().padStart(2, '0')} ${ampm}`;
+        }
+
+        // ========================================
+        // SKILL TREE SYSTEM (from README)
+        // ========================================
+
+        const SKILL_TREES = {
+            warrior: [
+                { name: 'Power Strike', level: 1, unlocked: true, effect: 'damage' },
+                { name: 'Iron Skin', level: 5, unlocked: false, effect: 'defense' },
+                { name: 'Berserker Rage', level: 10, unlocked: false, effect: 'speed' },
+                { name: 'Titan Strength', level: 15, unlocked: false, effect: 'damage' }
+            ],
+            mage: [
+                { name: 'Arcane Mastery', level: 1, unlocked: true, effect: 'damage' },
+                { name: 'Mana Shield', level: 5, unlocked: false, effect: 'defense' },
+                { name: 'Spell Haste', level: 10, unlocked: false, effect: 'speed' },
+                { name: 'Elemental Fusion', level: 15, unlocked: false, effect: 'damage' }
+            ],
+            rogue: [
+                { name: 'Shadow Step', level: 1, unlocked: true, effect: 'speed' },
+                { name: 'Deadly Precision', level: 5, unlocked: false, effect: 'damage' },
+                { name: 'Evasion', level: 10, unlocked: false, effect: 'defense' },
+                { name: 'Assassination', level: 15, unlocked: false, effect: 'damage' }
+            ]
+        };
+
+        function unlockSkills() {
+            if (!selectedClass || !SKILL_TREES[selectedClass]) return;
+            
+            const skills = SKILL_TREES[selectedClass];
+            for (const skill of skills) {
+                if (gameState.player.level >= skill.level && !skill.unlocked) {
+                    skill.unlocked = true;
+                    applySkillEffect(skill);
+                    createParticle(gameState.player.x, gameState.player.y, 
+                        `🌟 Skill Unlocked: ${skill.name}!`, '#00ffff');
+                }
+            }
+        }
+
+        function applySkillEffect(skill) {
+            switch(skill.effect) {
+                case 'damage':
+                    gameState.player.attack += 5;
+                    break;
+                case 'defense':
+                    gameState.player.defense += 3;
+                    break;
+                case 'speed':
+                    gameState.player.speed += 0.5;
+                    break;
+            }
+        }
+
+        // ========================================
+        // WEATHER SYSTEM
+        // ========================================
+
+        const WEATHER_STATES = ['Clear', 'Rainy', 'Stormy', 'Foggy', 'Snowy'];
+        let currentWeather = 'Clear';
+        let weatherTimer = 0;
+
+        function updateWeather(dt) {
+            weatherTimer += dt;
+            if (weatherTimer > 60) { // Change weather every 60 seconds
+                weatherTimer = 0;
+                currentWeather = WEATHER_STATES[Math.floor(Math.random() * WEATHER_STATES.length)];
+                createParticle(gameState.player.x, gameState.player.y, 
+                    `Weather: ${currentWeather}`, '#87ceeb');
+            }
+        }
+
+        // ========================================
         // CLASS SELECTION
         // ========================================
 
@@ -1515,6 +1698,9 @@
                 document.getElementById('player-class').textContent = 
                     `Level ${gameState.player.level} ${gameState.player.class.name}`;
                 
+                // Unlock skills on level up
+                unlockSkills();
+                
                 // Check level achievements
                 checkAchievements();
             }
@@ -1695,6 +1881,11 @@
                 }
             }
 
+            // Update all game systems
+            updateQuests();
+            updateDayNightCycle(dt);
+            updateWeather(dt);
+            
             updateStats();
         }
 
@@ -1732,6 +1923,9 @@
             const biome = BIOMES[gameState.currentBiomeIndex];
             ctx.fillStyle = biome.color;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Apply day/night lighting
+            ctx.globalAlpha = TIME_SYSTEM.ambientLight;
 
             // Save context state
             ctx.save();
@@ -1938,16 +2132,32 @@
             // Restore context
             ctx.restore();
             
+            // Draw weather effects (screen space)
+            drawWeatherEffects();
+            
             // Draw mini-map (screen space, not world space)
             if (gameState.miniMapEnabled) {
                 drawMiniMap();
             }
 
-            // Draw world coordinates (debug info)
-            ctx.font = '12px Arial';
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-            ctx.fillText(`World: ${Math.floor(gameState.player.x)}, ${Math.floor(gameState.player.y)}`, 10, canvas.height - 40);
-            ctx.fillText(`Enemies: ${gameState.enemies.length} | Landmarks: ${gameState.landmarks.filter(l => l.discovered).length}/${gameState.landmarks.length}`, 10, canvas.height - 20);
+            // Draw world coordinates and game info
+            ctx.font = '14px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.lineWidth = 2;
+            
+            const infoLines = [
+                `🗺️ World: ${Math.floor(gameState.player.x)}, ${Math.floor(gameState.player.y)}`,
+                `⏰ Time: ${getTimeOfDayString()} | ${currentWeather}`,
+                `👾 Enemies: ${gameState.enemies.length} | 🏛️ Landmarks: ${gameState.landmarks.filter(l => l.discovered).length}/${gameState.landmarks.length}`,
+                `📜 Active Quests: ${QUESTS.filter(q => q.active && !q.completed).length}`
+            ];
+            
+            infoLines.forEach((line, i) => {
+                const y = canvas.height - 70 + (i * 18);
+                ctx.strokeText(line, 10, y);
+                ctx.fillText(line, 10, y);
+            });
         }
 
         function drawMiniMap() {
@@ -1988,6 +2198,62 @@
             ctx.beginPath();
             ctx.arc(playerX, playerY, 4, 0, Math.PI * 2);
             ctx.fill();
+        }
+
+        function drawWeatherEffects() {
+            ctx.globalAlpha = 0.6;
+            
+            switch(currentWeather) {
+                case 'Rainy':
+                    ctx.strokeStyle = '#87ceeb';
+                    ctx.lineWidth = 1;
+                    for (let i = 0; i < 100; i++) {
+                        const x = Math.random() * canvas.width;
+                        const y = (Math.random() * canvas.height + Date.now() * 0.5) % canvas.height;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x - 2, y + 10);
+                        ctx.stroke();
+                    }
+                    break;
+                    
+                case 'Snowy':
+                    ctx.fillStyle = '#ffffff';
+                    for (let i = 0; i < 50; i++) {
+                        const x = Math.random() * canvas.width;
+                        const y = (Math.random() * canvas.height + Date.now() * 0.2) % canvas.height;
+                        ctx.beginPath();
+                        ctx.arc(x, y, 2, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    break;
+                    
+                case 'Foggy':
+                    ctx.fillStyle = 'rgba(200, 200, 200, 0.3)';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    break;
+                    
+                case 'Stormy':
+                    // Lightning flash effect
+                    if (Math.random() < 0.01) {
+                        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    }
+                    // Rain
+                    ctx.strokeStyle = '#4682b4';
+                    ctx.lineWidth = 2;
+                    for (let i = 0; i < 150; i++) {
+                        const x = Math.random() * canvas.width;
+                        const y = (Math.random() * canvas.height + Date.now() * 0.7) % canvas.height;
+                        ctx.beginPath();
+                        ctx.moveTo(x, y);
+                        ctx.lineTo(x - 3, y + 15);
+                        ctx.stroke();
+                    }
+                    break;
+            }
+            
+            ctx.globalAlpha = 1;
         }
                 ctx.globalAlpha = p.life / p.maxLife;
                 ctx.fillStyle = p.color;
