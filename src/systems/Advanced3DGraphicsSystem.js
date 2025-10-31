@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Advanced3DGraphicsSystem - Enhanced 3D rendering with post-processing
  * Transforms basic geometric shapes into realistic 3D models and effects
  */
@@ -30,7 +31,7 @@ export class Advanced3DGraphicsSystem {
         this.setupFog();
         this.createSkybox();
         
-        console.log('🎮 Advanced 3D Graphics System initialized');
+        logger.info('🎮 Advanced 3D Graphics System initialized');
     }
     
     setupAdvancedLighting() {
@@ -84,12 +85,12 @@ export class Advanced3DGraphicsSystem {
         // this.scene.fog = new THREE.FogExp2(fogColor, 0.015);
         // KEEP SKY BLUE BACKGROUND FOR VISIBILITY
         // this.scene.background = fogColor;
-        console.log('⚠️ Fog disabled for better 3D world visibility');
+        logger.info('⚠️ Fog disabled for better 3D world visibility');
     }
     
     createSkybox() {
         // Skybox DISABLED for better visibility - was blocking 3D world view
-        console.log('⚠️ Skybox disabled for better 3D world visibility');
+        logger.info('⚠️ Skybox disabled for better 3D world visibility');
         // The original dark skybox was preventing players from seeing the 3D world
         // Keeping scene.background = sky blue (set in GameEngine.js) for visibility
     }
@@ -627,6 +628,6 @@ export class Advanced3DGraphicsSystem {
         
         this.postProcessing.enabled = config.postProcessing;
         
-        console.log(`🎮 Graphics quality set to: ${quality}`);
+        logger.info(`🎮 Graphics quality set to: ${quality}`);
     }
 }

@@ -27,7 +27,7 @@ export class ComboSystem {
         this.comboDisplay = null;
         
         this.init();
-        console.log('💥 Combo System initialized');
+        logger.info('💥 Combo System initialized');
     }
     
     init() {

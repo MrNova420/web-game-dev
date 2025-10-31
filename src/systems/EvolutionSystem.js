@@ -358,7 +358,7 @@ export class EvolutionSystem {
         
         const check = this.canEvolve('player', null, tier);
         if (!check.can) {
-            console.log('Cannot evolve:', check.reason, check.missing);
+            logger.info('Cannot evolve:', check.reason, check.missing);
             return false;
         }
         
@@ -393,7 +393,7 @@ export class EvolutionSystem {
             timestamp: Date.now()
         });
         
-        console.log(`Player evolved to ${evolutionData.name}!`);
+        logger.info(`Player evolved to ${evolutionData.name}!`);
         return true;
     }
     
@@ -403,7 +403,7 @@ export class EvolutionSystem {
     evolvePet(petId, tier) {
         const check = this.canEvolve('pets', petId, tier);
         if (!check.can) {
-            console.log('Cannot evolve:', check.reason, check.missing);
+            logger.info('Cannot evolve:', check.reason, check.missing);
             return false;
         }
         
@@ -413,7 +413,7 @@ export class EvolutionSystem {
         // Get pet from pet system
         const pet = this.gameEngine.petSystem?.getPet(petId);
         if (!pet || !pet.stats) {
-            console.log('Invalid pet or missing stats');
+            logger.info('Invalid pet or missing stats');
             return false;
         }
         
@@ -423,7 +423,7 @@ export class EvolutionSystem {
         pet.abilities = [...evolutionData.abilities];
         pet.tier = tier;
         
-        console.log(`Pet evolved to ${evolutionData.name}!`);
+        logger.info(`Pet evolved to ${evolutionData.name}!`);
         return true;
     }
     
@@ -433,7 +433,7 @@ export class EvolutionSystem {
     evolveWeapon(weaponId, tier) {
         const check = this.canEvolve('weapons', weaponId, tier);
         if (!check.can) {
-            console.log('Cannot evolve:', check.reason, check.missing);
+            logger.info('Cannot evolve:', check.reason, check.missing);
             return false;
         }
         
@@ -443,7 +443,7 @@ export class EvolutionSystem {
         // Get weapon from inventory
         const weapon = this.gameEngine.inventorySystem?.getItem(weaponId);
         if (!weapon || typeof weapon.damage === 'undefined') {
-            console.log('Invalid weapon or missing damage property');
+            logger.info('Invalid weapon or missing damage property');
             return false;
         }
         
@@ -459,7 +459,7 @@ export class EvolutionSystem {
         weapon.effects = [...evolutionData.effects];
         weapon.tier = tier;
         
-        console.log(`Weapon evolved to ${evolutionData.name}!`);
+        logger.info(`Weapon evolved to ${evolutionData.name}!`);
         return true;
     }
     
@@ -520,7 +520,7 @@ export class EvolutionSystem {
     changeAppearance(player, appearanceId) {
         if (player.mesh && player.mesh.material) {
             // Apply skin/appearance changes
-            console.log(`Appearance changed to ${appearanceId}`);
+            logger.info(`Appearance changed to ${appearanceId}`);
         }
     }
     

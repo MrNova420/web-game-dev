@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ChallengeModeSystem.js
  * Phase 6 - Challenge Mode System
@@ -294,8 +295,8 @@ export class ChallengeModeSystem {
             this.updateRank();
         }
         
-        console.log(`🏆 Challenge Complete: ${challenge.name}`);
-        console.log(`Rewards: ${challenge.rewards.gold} gold, ${challenge.rewards.xp} XP, ${challenge.rewards.points} points`);
+        logger.info(`🏆 Challenge Complete: ${challenge.name}`);
+        logger.info(`Rewards: ${challenge.rewards.gold} gold, ${challenge.rewards.xp} XP, ${challenge.rewards.points} points`);
     }
     
     /**
@@ -385,7 +386,7 @@ export class ChallengeModeSystem {
             this.updateRank();
         }
         
-        console.log(`🗼 Tower Floor ${floor} Complete!`);
+        logger.info(`🗼 Tower Floor ${floor} Complete!`);
         
         return { success: true, rewards: challenge.rewards };
     }
@@ -496,7 +497,7 @@ export class ChallengeModeSystem {
             this.lastDailyReset = data.lastDailyReset || Date.now();
             this.lastWeeklyReset = data.lastWeeklyReset || Date.now();
         } catch (error) {
-            console.error('Failed to load challenge data:', error);
+            logger.error('Failed to load challenge data:', error);
         }
     }
 }

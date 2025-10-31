@@ -20,7 +20,7 @@ export class FriendSystem {
   }
 
   addFriend(playerId, friendId) {
-    console.log(`${playerId} added friend: ${friendId}`);
-    console.log(`  Icon: ${this.icons.online}`);
+    logger.info(`${playerId} added friend: ${friendId}`);
+    logger.info(`  Icon: ${this.icons.online}`);
   }
 }

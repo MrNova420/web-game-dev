@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * EnemyManager - Manages enemy spawning and behavior
  */
 
@@ -32,7 +33,7 @@ export class EnemyManager {
             spawned++;
         }
         
-        console.log(`👾 Spawned ${spawned} enemies in ${dungeon.name}`);
+        logger.info(`👾 Spawned ${spawned} enemies in ${dungeon.name}`);
     }
     
     getEnemyTypesForBiome(biome) {
@@ -107,7 +108,7 @@ export class EnemyManager {
         const boss = new Boss(this.scene, bossType, spawnPosition);
         this.enemies.push(boss);
         
-        console.log(`👑 Boss spawned: ${boss.stats.name} in ${dungeon.name}`);
+        logger.info(`👑 Boss spawned: ${boss.stats.name} in ${dungeon.name}`);
         
         // Show boss intro
         this.showBossIntro(boss.stats.name);

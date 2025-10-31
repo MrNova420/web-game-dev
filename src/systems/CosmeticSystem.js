@@ -16,6 +16,6 @@ export class CosmeticSystem {
   }
 
   applyCosmetic(playerId, cosmeticId) {
-    console.log(`${playerId} applied cosmetic: ${cosmeticId}`);
+    logger.info(`${playerId} applied cosmetic: ${cosmeticId}`);
   }
 }

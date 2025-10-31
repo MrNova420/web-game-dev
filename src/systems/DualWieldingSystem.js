@@ -34,37 +34,37 @@ export class DualWieldingSystem {
   }
 
   attackLeft(entityId) {
-    console.log(`${entityId} left hand attack`);
-    console.log(`  Animation: ${this.animations.left_slash}`);
-    console.log(`  VFX: ${this.vfx.left_trail}`);
+    logger.info(`${entityId} left hand attack`);
+    logger.info(`  Animation: ${this.animations.left_slash}`);
+    logger.info(`  VFX: ${this.vfx.left_trail}`);
     return { damage: 75, hand: 'left' };
   }
 
   attackRight(entityId) {
-    console.log(`${entityId} right hand attack`);
-    console.log(`  Animation: ${this.animations.right_slash}`);
-    console.log(`  VFX: ${this.vfx.right_trail}`);
+    logger.info(`${entityId} right hand attack`);
+    logger.info(`  Animation: ${this.animations.right_slash}`);
+    logger.info(`  VFX: ${this.vfx.right_trail}`);
     return { damage: 75, hand: 'right' };
   }
 
   synchronizedStrike(entityId) {
-    console.log(`${entityId} SYNCHRONIZED STRIKE`);
-    console.log(`  Animation: ${this.animations.synchronized_strike}`);
-    console.log(`  VFX: ${this.vfx.left_trail}, ${this.vfx.right_trail}`);
+    logger.info(`${entityId} SYNCHRONIZED STRIKE`);
+    logger.info(`  Animation: ${this.animations.synchronized_strike}`);
+    logger.info(`  VFX: ${this.vfx.left_trail}, ${this.vfx.right_trail}`);
     return { damage: 180, bonus: 'Both weapons strike simultaneously' };
   }
 
   crossSlash(entityId) {
-    console.log(`${entityId} CROSS SLASH`);
-    console.log(`  Animation: ${this.animations.cross_slash}`);
-    console.log(`  VFX: ${this.vfx.cross_impact}`);
+    logger.info(`${entityId} CROSS SLASH`);
+    logger.info(`  Animation: ${this.animations.cross_slash}`);
+    logger.info(`  VFX: ${this.vfx.cross_impact}`);
     return { damage: 250, aoe: true, radius: 3 };
   }
 
   bladeDance(entityId) {
-    console.log(`${entityId} BLADE DANCE`);
-    console.log(`  Animation: ${this.animations.blade_dance}`);
-    console.log(`  VFX: ${this.vfx.blade_storm}`);
+    logger.info(`${entityId} BLADE DANCE`);
+    logger.info(`  Animation: ${this.animations.blade_dance}`);
+    logger.info(`  VFX: ${this.vfx.blade_storm}`);
     return { damage: 400, hits: 8, duration: 3.0 };
   }
 }

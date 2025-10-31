@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AutoSaveSystem.js
  * Robust auto-save system with redundancy, versioning, and corruption protection
@@ -46,7 +47,7 @@ export class AutoSaveSystem {
             localStorage.removeItem(test);
             return true;
         } catch (e) {
-            console.warn('localStorage not available, using IndexedDB only');
+            logger.warn('localStorage not available, using IndexedDB only');
             return false;
         }
     }
@@ -91,7 +92,7 @@ export class AutoSaveSystem {
             this.performAutoSave();
         }, this.saveInterval);
 
-        console.log(`✅ Auto-save started (every ${this.saveInterval / 1000}s)`);
+        logger.info(`✅ Auto-save started (every ${this.saveInterval / 1000}s)`);
     }
 
     stopAutoSave() {
@@ -99,7 +100,7 @@ export class AutoSaveSystem {
             clearInterval(this.saveTimer);
             this.saveTimer = null;
         }
-        console.log('⏸️ Auto-save stopped');
+        logger.info('⏸️ Auto-save stopped');
     }
 
     setSaveInterval(intervalMs) {
@@ -109,16 +110,16 @@ export class AutoSaveSystem {
 
     async performAutoSave() {
         if (this.saveInProgress) {
-            console.log('⏳ Save in progress, skipping this cycle');
+            logger.info('⏳ Save in progress, skipping this cycle');
             return;
         }
 
         try {
-            console.log('💾 Auto-saving...');
+            logger.info('💾 Auto-saving...');
             await this.saveGame('auto');
-            console.log('✅ Auto-save complete');
+            logger.info('✅ Auto-save complete');
         } catch (error) {
-            console.error('❌ Auto-save failed:', error);
+            logger.error('❌ Auto-save failed:', error);
             this.handleSaveFailure(error);
         }
     }
@@ -164,7 +165,7 @@ export class AutoSaveSystem {
             return { success: true, timestamp: this.lastSaveTime };
             
         } catch (error) {
-            console.error('Save failed:', error);
+            logger.error('Save failed:', error);
             throw error;
         } finally {
             this.saveInProgress = false;
@@ -222,7 +223,7 @@ export class AutoSaveSystem {
         try {
             return JSON.parse(atob(compressed));
         } catch (e) {
-            console.error('Decompression failed:', e);
+            logger.error('Decompression failed:', e);
             return null;
         }
     }
@@ -262,7 +263,7 @@ export class AutoSaveSystem {
             localStorage.setItem(key, serialized);
         } catch (e) {
             if (e.name === 'QuotaExceededError') {
-                console.warn('LocalStorage quota exceeded, cleaning old saves');
+                logger.warn('LocalStorage quota exceeded, cleaning old saves');
                 this.cleanOldSaves();
                 localStorage.setItem(key, JSON.stringify(data));
             } else {
@@ -349,19 +350,19 @@ export class AutoSaveSystem {
 
     // Load methods
     async loadGame() {
-        console.log('📂 Loading game...');
+        logger.info('📂 Loading game...');
 
         try {
             // Try loading from primary save
             let saveData = await this.loadFromPrimary();
             
             if (!saveData || !this.verifyIntegrity(saveData)) {
-                console.warn('Primary save corrupted or missing, trying backups...');
+                logger.warn('Primary save corrupted or missing, trying backups...');
                 saveData = await this.loadFromBackups();
             }
 
             if (!saveData) {
-                console.warn('All saves corrupted, trying recovery save...');
+                logger.warn('All saves corrupted, trying recovery save...');
                 saveData = await this.loadFromRecovery();
             }
 
@@ -376,11 +377,11 @@ export class AutoSaveSystem {
                 throw new Error('Failed to decompress save data');
             }
 
-            console.log('✅ Game loaded successfully');
+            logger.info('✅ Game loaded successfully');
             return gameState;
             
         } catch (error) {
-            console.error('❌ Load failed:', error);
+            logger.error('❌ Load failed:', error);
             throw error;
         }
     }
@@ -398,7 +399,7 @@ export class AutoSaveSystem {
             // Try IndexedDB
             return await this.loadFromIndexedDB('saves');
         } catch (e) {
-            console.error('Primary load failed:', e);
+            logger.error('Primary load failed:', e);
             return null;
         }
     }
@@ -416,7 +417,7 @@ export class AutoSaveSystem {
                 if (data) {
                     const saveData = JSON.parse(data);
                     if (this.verifyIntegrity(saveData)) {
-                        console.log(`Loaded from backup: ${key}`);
+                        logger.info(`Loaded from backup: ${key}`);
                         return saveData;
                     }
                 }
@@ -434,12 +435,12 @@ export class AutoSaveSystem {
             if (data) {
                 const saveData = JSON.parse(data);
                 if (this.verifyIntegrity(saveData)) {
-                    console.log('Loaded from recovery save');
+                    logger.info('Loaded from recovery save');
                     return saveData;
                 }
             }
         } catch (e) {
-            console.error('Recovery load failed:', e);
+            logger.error('Recovery load failed:', e);
         }
         return null;
     }
@@ -477,7 +478,7 @@ export class AutoSaveSystem {
 
         try {
             // This would sync to actual cloud service
-            console.log('☁️ Syncing to cloud...');
+            logger.info('☁️ Syncing to cloud...');
             
             await this.saveToIndexedDB('cloudSync', {
                 syncId: 'latest',
@@ -488,27 +489,27 @@ export class AutoSaveSystem {
 
             // Simulate cloud upload
             // In production, this would be an actual API call
-            console.log('✅ Cloud sync queued');
+            logger.info('✅ Cloud sync queued');
         } catch (error) {
-            console.error('Cloud sync failed:', error);
+            logger.error('Cloud sync failed:', error);
         }
     }
 
     async downloadFromCloud() {
         // Would download from cloud service
-        console.log('☁️ Downloading from cloud...');
+        logger.info('☁️ Downloading from cloud...');
         // Placeholder
         return null;
     }
 
     enableCloudSync() {
         this.cloudSyncEnabled = true;
-        console.log('☁️ Cloud sync enabled');
+        logger.info('☁️ Cloud sync enabled');
     }
 
     disableCloudSync() {
         this.cloudSyncEnabled = false;
-        console.log('Cloud sync disabled');
+        logger.info('Cloud sync disabled');
     }
 
     // Utility methods
@@ -535,7 +536,7 @@ export class AutoSaveSystem {
     }
 
     handleSaveFailure(error) {
-        console.error('Save system encountered an error:', error);
+        logger.error('Save system encountered an error:', error);
         
         // Notify user
         if (window.gameEngine?.ui) {
@@ -547,9 +548,9 @@ export class AutoSaveSystem {
             const state = this.collectGameState();
             const saveData = this.prepareSaveData(state, 'emergency');
             this.saveToLocalStorage(this.storageKeys.RECOVERY, saveData);
-            console.log('Emergency save completed');
+            logger.info('Emergency save completed');
         } catch (e) {
-            console.error('Emergency save also failed:', e);
+            logger.error('Emergency save also failed:', e);
         }
     }
 
@@ -569,7 +570,7 @@ export class AutoSaveSystem {
         a.click();
         
         URL.revokeObjectURL(url);
-        console.log('✅ Save exported');
+        logger.info('✅ Save exported');
     }
 
     async importSave(file) {
@@ -585,7 +586,7 @@ export class AutoSaveSystem {
                     }
 
                     await this.saveGame('import', saveData.state);
-                    console.log('✅ Save imported');
+                    logger.info('✅ Save imported');
                     resolve(saveData);
                 } catch (error) {
                     reject(error);

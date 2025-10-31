@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AlchemyBrewingSystem.js
  * Phase 8 - Alchemy and Brewing System
@@ -338,7 +339,7 @@ export class AlchemyBrewingSystem {
         
         this.activeBrews.set(brewId, brew);
         
-        console.log(`Started brewing ${recipe.name}`);
+        logger.info(`Started brewing ${recipe.name}`);
         return { success: true, brewId: brewId };
     }
     
@@ -460,7 +461,7 @@ export class AlchemyBrewingSystem {
             this.gameEngine.inventorySystem.addItem(potion);
         }
         
-        console.log(`Completed ${brew.recipe.name} with ${(brew.finalQuality * 100).toFixed(0)}% quality`);
+        logger.info(`Completed ${brew.recipe.name} with ${(brew.finalQuality * 100).toFixed(0)}% quality`);
         
         // Remove from active brews
         this.activeBrews.delete(brewId);
@@ -502,13 +503,13 @@ export class AlchemyBrewingSystem {
             // Check if ingredients match
             if (this.ingredientsMatch(ingredients, recipe.ingredients)) {
                 this.discoveredRecipes.add(recipeId);
-                console.log(`Discovered recipe: ${recipe.name}!`);
+                logger.info(`Discovered recipe: ${recipe.name}!`);
                 return { success: true, recipe: recipe };
             }
         }
         
         // Failed experiment
-        console.log('Experiment failed - no recipe discovered');
+        logger.info('Experiment failed - no recipe discovered');
         return { success: false };
     }
     
@@ -547,7 +548,7 @@ export class AlchemyBrewingSystem {
             this.alchemyLevel++;
             this.alchemyXPToNext = Math.floor(this.alchemyXPToNext * 1.5);
             
-            console.log(`Alchemy Level Up! Now level ${this.alchemyLevel}`);
+            logger.info(`Alchemy Level Up! Now level ${this.alchemyLevel}`);
             this.onLevelUp();
         }
     }
@@ -560,7 +561,7 @@ export class AlchemyBrewingSystem {
         for (const [recipeId, recipe] of Object.entries(this.recipes)) {
             if (recipe.unlockLevel === this.alchemyLevel) {
                 this.discoveredRecipes.add(recipeId);
-                console.log(`Unlocked recipe: ${recipe.name}`);
+                logger.info(`Unlocked recipe: ${recipe.name}`);
             }
         }
     }

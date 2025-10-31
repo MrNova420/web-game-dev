@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CharacterCustomization - Player appearance and cosmetic customization
  * Allows players to personalize their character with unlockable options
@@ -51,7 +52,7 @@ export class CharacterCustomization {
         this.customizationPanel = null;
         
         this.init();
-        console.log('💄 Character Customization initialized');
+        logger.info('💄 Character Customization initialized');
     }
     
     init() {
@@ -240,7 +241,7 @@ export class CharacterCustomization {
                 const found = this.options[key].find(opt => opt.id === optionId);
                 if (found) {
                     if (!found.unlocked) {
-                        console.log('Option locked:', found.name);
+                        logger.info('Option locked:', found.name);
                         return;
                     }
                     
@@ -258,7 +259,7 @@ export class CharacterCustomization {
                         this.engine.saveSystem.saveGame('Customization changed');
                     }
                     
-                    console.log(`✨ Equipped ${found.name}`);
+                    logger.info(`✨ Equipped ${found.name}`);
                     return;
                 }
             }
@@ -266,7 +267,7 @@ export class CharacterCustomization {
         }
         
         if (!option.unlocked) {
-            console.log('Option locked:', option.name);
+            logger.info('Option locked:', option.name);
             return;
         }
         
@@ -284,7 +285,7 @@ export class CharacterCustomization {
             this.engine.saveSystem.saveGame('Customization changed');
         }
         
-        console.log(`✨ Equipped ${option.name}`);
+        logger.info(`✨ Equipped ${option.name}`);
     }
     
     applyCustomization() {
@@ -315,7 +316,7 @@ export class CharacterCustomization {
         
         if (option && !option.unlocked) {
             option.unlocked = true;
-            console.log(`🎉 Unlocked: ${option.name}`);
+            logger.info(`🎉 Unlocked: ${option.name}`);
             
             // Show notification
             this.showUnlockNotification(option);

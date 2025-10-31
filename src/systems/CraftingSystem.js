@@ -656,7 +656,7 @@ export class CraftingSystem {
         // Add to player's crafting skill (if system exists)
         if (this.gameEngine.player) {
             // This would integrate with a skill system
-            console.log(`Gained ${exp} crafting experience from ${recipe.name}`);
+            logger.info(`Gained ${exp} crafting experience from ${recipe.name}`);
         }
     }
     
@@ -685,7 +685,7 @@ export class CraftingSystem {
         const recipe = this.recipes.get(recipeId);
         if (recipe && !this.unlockedRecipes.has(recipeId)) {
             this.unlockedRecipes.add(recipeId);
-            console.log(`Discovered recipe: ${recipe.name}!`);
+            logger.info(`Discovered recipe: ${recipe.name}!`);
             return true;
         }
         return false;
@@ -707,7 +707,7 @@ export class CraftingSystem {
             }
             
             station.unlocked = true;
-            console.log(`Unlocked crafting station: ${station.name}!`);
+            logger.info(`Unlocked crafting station: ${station.name}!`);
             return true;
         }
         return false;
@@ -732,7 +732,7 @@ export class CraftingSystem {
         }
         
         station.level++;
-        console.log(`Upgraded ${station.name} to level ${station.level}!`);
+        logger.info(`Upgraded ${station.name} to level ${station.level}!`);
         return true;
     }
     

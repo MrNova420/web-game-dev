@@ -11,7 +11,7 @@ export class FastTravelSystem {
   }
 
   teleport(playerId, waypointId) {
-    console.log(`${playerId} teleporting to ${waypointId}`);
-    console.log(`  VFX: ${this.vfx.teleport}`);
+    logger.info(`${playerId} teleporting to ${waypointId}`);
+    logger.info(`  VFX: ${this.vfx.teleport}`);
   }
 }

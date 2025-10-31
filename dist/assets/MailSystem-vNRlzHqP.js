@@ -1,1 +1,0 @@
-class e{constructor(){this.mailboxes=new Map,this.ui={mailbox:"/assets/ui/mail/mailbox.png",new_mail:"/assets/ui/mail/new_mail_icon.png"}}sendMail(i,s,a,o,t=[]){console.log(`${i} sent mail to ${s}: ${a}`),console.log(`  UI: ${this.ui.mailbox}`)}}export{e as MailSystem};

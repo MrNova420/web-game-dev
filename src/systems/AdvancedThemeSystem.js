@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * AdvancedThemeSystem - Rich fantasy color themes with dynamic switching
  * Replaces simple purple theme with immersive, multi-layered color palettes
  */
@@ -188,12 +189,12 @@ export class AdvancedThemeSystem {
     
     init() {
         this.applyTheme(this.currentTheme);
-        console.log('🎨 Advanced Theme System initialized with', this.themes[this.currentTheme].name);
+        logger.info('🎨 Advanced Theme System initialized with', this.themes[this.currentTheme].name);
     }
     
     applyTheme(themeName) {
         if (!this.themes[themeName]) {
-            console.warn(`Theme ${themeName} not found, using default`);
+            logger.warn(`Theme ${themeName} not found, using default`);
             themeName = 'fantasy_realm';
         }
         
@@ -214,7 +215,7 @@ export class AdvancedThemeSystem {
             this.updateParticleColors(theme);
         }
         
-        console.log(`🎨 Theme switched to: ${theme.name}`);
+        logger.info(`🎨 Theme switched to: ${theme.name}`);
     }
     
     applyCSSVariables(theme) {

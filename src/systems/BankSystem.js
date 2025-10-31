@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BankSystem.js
  * Expanded storage with upgradeable slots.
@@ -20,10 +21,10 @@ export class BankSystem {
   }
 
   depositItem(playerId, itemId, quantity) {
-    console.log(`${playerId} deposited ${quantity}x ${itemId} to bank`);
+    logger.info(`${playerId} deposited ${quantity}x ${itemId} to bank`);
   }
 
   withdrawItem(playerId, itemId, quantity) {
-    console.log(`${playerId} withdrew ${quantity}x ${itemId} from bank`);
+    logger.info(`${playerId} withdrew ${quantity}x ${itemId} from bank`);
   }
 }

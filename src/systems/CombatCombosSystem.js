@@ -149,7 +149,7 @@ class CombatCombosSystem {
     startCombo(entityId, comboType) {
         const definition = this.comboDefinitions[comboType];
         if (!definition) {
-            console.warn(`Combo type ${comboType} not found`);
+            logger.warn(`Combo type ${comboType} not found`);
             return false;
         }
         

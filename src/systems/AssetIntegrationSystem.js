@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * AssetIntegrationSystem - Manages ALL external asset loading
  * 100% External Professional Assets - ZERO custom content
  * 
@@ -119,7 +120,7 @@ export class AssetIntegrationSystem {
       }
     };
     
-    console.log('AssetIntegrationSystem initialized - 100% external assets');
+    logger.info('AssetIntegrationSystem initialized - 100% external assets');
   }
 
   /**
@@ -138,10 +139,10 @@ export class AssetIntegrationSystem {
       
       const scene = type === 'gltf' ? model.scene : model;
       this.assetCache.set(path, scene);
-      console.log(`✅ Loaded external model: ${path}`);
+      logger.info(`✅ Loaded external model: ${path}`);
       return scene.clone();
     } catch (error) {
-      console.error(`Failed to load external model: ${path}`, error);
+      logger.error(`Failed to load external model: ${path}`, error);
       // Return fallback (placeholder only if external load fails)
       return this.createFallbackMesh();
     }
@@ -161,10 +162,10 @@ export class AssetIntegrationSystem {
       });
       
       this.assetCache.set(path, texture);
-      console.log(`✅ Loaded external texture: ${path}`);
+      logger.info(`✅ Loaded external texture: ${path}`);
       return texture;
     } catch (error) {
-      console.error(`Failed to load external texture: ${path}`, error);
+      logger.error(`Failed to load external texture: ${path}`, error);
       return null;
     }
   }
@@ -184,10 +185,10 @@ export class AssetIntegrationSystem {
       
       const animation = fbx.animations[0];
       this.assetCache.set(path, animation);
-      console.log(`✅ Loaded Mixamo animation: ${path}`);
+      logger.info(`✅ Loaded Mixamo animation: ${path}`);
       return animation;
     } catch (error) {
-      console.error(`Failed to load Mixamo animation: ${path}`, error);
+      logger.error(`Failed to load Mixamo animation: ${path}`, error);
       return null;
     }
   }
@@ -220,13 +221,13 @@ export class AssetIntegrationSystem {
    * Batch load assets
    */
   async batchLoad(assetList) {
-    console.log(`📦 Batch loading ${assetList.length} external assets...`);
+    logger.info(`📦 Batch loading ${assetList.length} external assets...`);
     const results = await Promise.allSettled(
       assetList.map(asset => this.loadModel(asset.path, asset.type))
     );
     
     const loaded = results.filter(r => r.status === 'fulfilled').length;
-    console.log(`✅ Loaded ${loaded}/${assetList.length} external assets`);
+    logger.info(`✅ Loaded ${loaded}/${assetList.length} external assets`);
     return results;
   }
 
@@ -234,7 +235,7 @@ export class AssetIntegrationSystem {
    * Preload essential assets
    */
   async preloadEssentials() {
-    console.log('🚀 Preloading essential external assets...');
+    logger.info('🚀 Preloading essential external assets...');
     
     const essentials = [
       // Characters (Mixamo)
@@ -247,14 +248,14 @@ export class AssetIntegrationSystem {
     ];
 
     await this.batchLoad(essentials.map(path => ({ path, type: 'gltf' })));
-    console.log('✅ Essential external assets preloaded');
+    logger.info('✅ Essential external assets preloaded');
   }
 
   /**
    * Fallback mesh (only used if external asset fails to load)
    */
   createFallbackMesh() {
-    console.warn('⚠️ Using fallback mesh - external asset failed to load');
+    logger.warn('⚠️ Using fallback mesh - external asset failed to load');
     const geometry = new THREE.BoxGeometry(1, 1, 1);
     const material = new THREE.MeshBasicMaterial({ 
       color: 0xff00ff,

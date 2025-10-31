@@ -20,7 +20,7 @@ export class MountCollectionSystem {
   }
 
   collectMount(playerId, mountType) {
-    console.log(`${playerId} collected mount: ${mountType}`);
-    console.log(`  Model: ${this.mountModels[mountType]}`);
+    logger.info(`${playerId} collected mount: ${mountType}`);
+    logger.info(`  Model: ${this.mountModels[mountType]}`);
   }
 }

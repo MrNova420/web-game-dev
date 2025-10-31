@@ -66,7 +66,7 @@ export class IntelligentAISystem {
     }
     
     initializeAI() {
-        console.log('🤖 Intelligent AI System initialized');
+        logger.info('🤖 Intelligent AI System initialized');
         this.lastUpdate = Date.now();
     }
     

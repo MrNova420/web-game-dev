@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AscensionSystem.js
  * Phase 7 - Ascension System
@@ -257,7 +258,7 @@ export class AscensionSystem {
      */
     ascend() {
         if (this.ascensionLevel >= this.maxAscensionLevel) {
-            console.log('Already at maximum ascension level');
+            logger.info('Already at maximum ascension level');
             return false;
         }
         
@@ -266,7 +267,7 @@ export class AscensionSystem {
         
         // Check requirement
         if (this.divineEssence < nextTier.requirement) {
-            console.log(`Need ${nextTier.requirement} Divine Essence (have ${this.divineEssence})`);
+            logger.info(`Need ${nextTier.requirement} Divine Essence (have ${this.divineEssence})`);
             return false;
         }
         
@@ -285,7 +286,7 @@ export class AscensionSystem {
         // Visual effects
         this.triggerAscensionEffect(nextTier);
         
-        console.log(`Ascended to ${nextTier.name}!`);
+        logger.info(`Ascended to ${nextTier.name}!`);
         
         // Save progress
         this.saveAscension();
@@ -322,7 +323,7 @@ export class AscensionSystem {
         for (const [abilityId, ability] of Object.entries(this.divineAbilities)) {
             if (ability.tier === tier) {
                 this.ascendedAbilities.add(abilityId);
-                console.log(`Unlocked: ${ability.name}`);
+                logger.info(`Unlocked: ${ability.name}`);
             }
         }
     }
@@ -336,14 +337,14 @@ export class AscensionSystem {
         
         // Check tier requirement
         if (perk.tier > this.ascensionLevel) {
-            console.log(`Requires Ascension Level ${perk.tier}`);
+            logger.info(`Requires Ascension Level ${perk.tier}`);
             return false;
         }
         
         // Check cost
         const cost = perk.tier * 100;
         if (this.celestialFragments < cost) {
-            console.log(`Need ${cost} Celestial Fragments`);
+            logger.info(`Need ${cost} Celestial Fragments`);
             return false;
         }
         
@@ -354,7 +355,7 @@ export class AscensionSystem {
         // Apply perk effects
         this.applyPerkEffect(perk);
         
-        console.log(`Learned: ${perk.name}`);
+        logger.info(`Learned: ${perk.name}`);
         return true;
     }
     
@@ -410,7 +411,7 @@ export class AscensionSystem {
      */
     useDivineAbility(abilityId) {
         if (!this.ascendedAbilities.has(abilityId)) {
-            console.log('Ability not unlocked');
+            logger.info('Ability not unlocked');
             return false;
         }
         
@@ -419,18 +420,18 @@ export class AscensionSystem {
         
         // Check cooldown
         if (this.isOnCooldown(abilityId)) {
-            console.log('Ability on cooldown');
+            logger.info('Ability on cooldown');
             return false;
         }
         
         // Check cost
         if (ability.cost) {
             if (ability.cost.divineEssence && this.divineEssence < ability.cost.divineEssence) {
-                console.log('Not enough Divine Essence');
+                logger.info('Not enough Divine Essence');
                 return false;
             }
             if (ability.cost.celestialFragments && this.celestialFragments < ability.cost.celestialFragments) {
-                console.log('Not enough Celestial Fragments');
+                logger.info('Not enough Celestial Fragments');
                 return false;
             }
         }
@@ -453,7 +454,7 @@ export class AscensionSystem {
             this.setCooldown(abilityId, ability.cooldown);
         }
         
-        console.log(`Used: ${ability.name}`);
+        logger.info(`Used: ${ability.name}`);
         return true;
     }
     
@@ -506,7 +507,7 @@ export class AscensionSystem {
      */
     unlockPlane(planeId) {
         this.unlockedPlanes.add(planeId);
-        console.log(`Unlocked plane: ${planeId}`);
+        logger.info(`Unlocked plane: ${planeId}`);
     }
     
     /**
@@ -514,12 +515,12 @@ export class AscensionSystem {
      */
     travelToPlane(planeId) {
         if (!this.unlockedPlanes.has(planeId)) {
-            console.log('Plane not unlocked');
+            logger.info('Plane not unlocked');
             return false;
         }
         
         this.currentPlane = planeId;
-        console.log(`Traveled to: ${planeId}`);
+        logger.info(`Traveled to: ${planeId}`);
         
         // Trigger plane transition
         if (this.gameEngine.worldSystem) {
@@ -669,7 +670,7 @@ export class AscensionSystem {
             this.learnedPerks = new Set(data.learnedPerks || []);
             this.unlockedPlanes = new Set(data.unlockedPlanes || ['material']);
         } catch (error) {
-            console.error('Failed to load ascension data:', error);
+            logger.error('Failed to load ascension data:', error);
         }
     }
 }

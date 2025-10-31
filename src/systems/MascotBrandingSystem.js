@@ -10,7 +10,7 @@ export class MascotBrandingSystem {
         this.iconLibrary = this.initializeIconLibrary();
         this.currentMascot = 'emberveil_guardian';
         
-        console.log('🎭 Mascot & Branding System initialized');
+        logger.info('🎭 Mascot & Branding System initialized');
     }
     
     initializeMascots() {
@@ -528,7 +528,7 @@ export class MascotBrandingSystem {
     setCurrentMascot(mascotId) {
         if (this.mascots[mascotId]) {
             this.currentMascot = mascotId;
-            console.log(`🎭 Mascot changed to: ${this.mascots[mascotId].name}`);
+            logger.info(`🎭 Mascot changed to: ${this.mascots[mascotId].name}`);
         }
     }
     

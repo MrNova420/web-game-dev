@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BlockParrySystemAdvanced.js
  * 
@@ -53,7 +54,7 @@ export class BlockParrySystemAdvanced {
 
   startBlocking(entityId, direction = 'front') {
     const animation = this.animations[`block_${direction}`];
-    console.log(`${entityId} starts blocking ${direction}: ${animation}`);
+    logger.info(`${entityId} starts blocking ${direction}: ${animation}`);
     
     this.blockingEntities.set(entityId, {
       direction: direction,
@@ -70,8 +71,8 @@ export class BlockParrySystemAdvanced {
       endTime: now + this.perfectParryWindow
     });
     
-    console.log(`${entityId} attempts parry (${this.perfectParryWindow}ms window)`);
-    console.log(`  Animation: ${this.animations.parry_perfect}`);
+    logger.info(`${entityId} attempts parry (${this.perfectParryWindow}ms window)`);
+    logger.info(`  Animation: ${this.animations.parry_perfect}`);
   }
 
   checkParry(entityId, incomingAttackTime) {
@@ -81,8 +82,8 @@ export class BlockParrySystemAdvanced {
     const timingDiff = Math.abs(incomingAttackTime - parryWindow.startTime);
     
     if (timingDiff <= this.perfectParryWindow) {
-      console.log(`${entityId} PERFECT PARRY! (${timingDiff}ms)`);
-      console.log(`  VFX: ${this.vfx.perfect_parry}`);
+      logger.info(`${entityId} PERFECT PARRY! (${timingDiff}ms)`);
+      logger.info(`  VFX: ${this.vfx.perfect_parry}`);
       this.parryWindows.delete(entityId);
       return {
         success: true,
@@ -96,9 +97,9 @@ export class BlockParrySystemAdvanced {
   }
 
   shieldBash(entityId, targetId) {
-    console.log(`${entityId} shield bash -> ${targetId}`);
-    console.log(`  Animation: ${this.animations.shield_bash}`);
-    console.log(`  VFX: ${this.vfx.shield_impact}`);
+    logger.info(`${entityId} shield bash -> ${targetId}`);
+    logger.info(`  Animation: ${this.animations.shield_bash}`);
+    logger.info(`  VFX: ${this.vfx.shield_impact}`);
     return { damage: 50, stunDuration: 1.5 };
   }
 
@@ -107,9 +108,9 @@ export class BlockParrySystemAdvanced {
     if (!blocking) return false;
     
     if (blocking.stamina <= 0) {
-      console.log(`${defenderId} guard broken!`);
-      console.log(`  Animation: ${this.animations.guard_break}`);
-      console.log(`  VFX: ${this.vfx.guard_shatter}`);
+      logger.info(`${defenderId} guard broken!`);
+      logger.info(`  Animation: ${this.animations.guard_break}`);
+      logger.info(`  VFX: ${this.vfx.guard_shatter}`);
       this.blockingEntities.delete(defenderId);
       return true;
     }
@@ -119,7 +120,7 @@ export class BlockParrySystemAdvanced {
 
   stopBlocking(entityId) {
     this.blockingEntities.delete(entityId);
-    console.log(`${entityId} stops blocking`);
+    logger.info(`${entityId} stops blocking`);
   }
 
   update(deltaTime) {

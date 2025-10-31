@@ -1,0 +1,1 @@
+import{l as i}from"./index-CGDjDhhy.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.tiers={BRONZE:1,SILVER:2,GOLD:3,PLATINUM:4,DIAMOND:5},this.icons={tier_badge:"/assets/icons/challenges/tier_badge.png"}}completeTier(e,t){i.info(`${e} completed ${t} tier`)}}export{c as ChallengeModeTiers};

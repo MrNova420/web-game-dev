@@ -41,21 +41,21 @@ export class LimitBreakSystem {
     this.limitGauges.set(entityId, newValue);
     
     if (newValue >= this.maxLimit) {
-      console.log(`${entityId} LIMIT BREAK READY!`);
+      logger.info(`${entityId} LIMIT BREAK READY!`);
     }
   }
 
   executeLimitBreak(entityId, limitBreakName) {
     const gauge = this.limitGauges.get(entityId) || 0;
     if (gauge < this.maxLimit) {
-      console.log(`${entityId} limit gauge not full (${gauge}/${this.maxLimit})`);
+      logger.info(`${entityId} limit gauge not full (${gauge}/${this.maxLimit})`);
       return null;
     }
     
     const lb = this.limitBreaks[limitBreakName];
-    console.log(`${entityId} executes ${lb.name}!`);
-    console.log(`  Animation: ${lb.animation}`);
-    console.log(`  VFX: ${lb.vfx}`);
+    logger.info(`${entityId} executes ${lb.name}!`);
+    logger.info(`  Animation: ${lb.animation}`);
+    logger.info(`  VFX: ${lb.vfx}`);
     
     this.limitGauges.set(entityId, 0);
     return lb;

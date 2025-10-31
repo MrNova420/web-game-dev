@@ -1,1 +1,0 @@
-class t{constructor(){this.landmarks={ancient_tower:{model:"/assets/models/landmarks/ancient_tower.glb"},mystical_fountain:{model:"/assets/models/landmarks/fountain.glb",vfx:"/assets/particles/magic_water.png"}}}visitLandmark(s){console.log(`Visited: ${s}`)}}export{t as LandmarkSystem};

@@ -24,12 +24,12 @@ export class InventorySystem {
             legendary: { color: '#ffd60a', multiplier: 3.0 }
         };
         
-        console.log('🎒 Inventory System initialized');
+        logger.info('🎒 Inventory System initialized');
     }
     
     addItem(item) {
         if (this.items.length >= this.maxSlots) {
-            console.log('Inventory full!');
+            logger.info('Inventory full!');
             return false;
         }
         
@@ -87,7 +87,7 @@ export class InventorySystem {
         // Apply stats
         this.applyEquipmentStats(item, true);
         
-        console.log(`Equipped ${item.name}`);
+        logger.info(`Equipped ${item.name}`);
         this.updateUI();
         return true;
     }
@@ -103,7 +103,7 @@ export class InventorySystem {
         this.applyEquipmentStats(item, false);
         
         this.equipment[slot] = null;
-        console.log(`Unequipped ${item.name}`);
+        logger.info(`Unequipped ${item.name}`);
         this.updateUI();
         return true;
     }

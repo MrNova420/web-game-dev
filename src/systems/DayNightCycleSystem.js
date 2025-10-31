@@ -17,7 +17,7 @@ export class DayNightCycleSystem {
   update(deltaTime) {
     this.currentTime = (this.currentTime + deltaTime / 3600) % 24;
     const timeOfDay = this.getTimeOfDay();
-    console.log(`Time: ${this.currentTime.toFixed(2)}:00 (${timeOfDay})`);
+    logger.info(`Time: ${this.currentTime.toFixed(2)}:00 (${timeOfDay})`);
   }
 
   getTimeOfDay() {
@@ -29,6 +29,6 @@ export class DayNightCycleSystem {
   
   setTime(hour) {
     this.currentTime = hour % 24;
-    console.log(`⏰ Time set to ${this.currentTime}:00`);
+    logger.info(`⏰ Time set to ${this.currentTime}:00`);
   }
 }

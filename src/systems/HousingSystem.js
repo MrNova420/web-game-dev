@@ -19,12 +19,12 @@ export class HousingSystem {
   }
 
   purchaseHouse(playerId, houseType) {
-    console.log(`${playerId} purchased ${houseType}`);
-    console.log(`  Model: ${this.houseModels[houseType]}`);
+    logger.info(`${playerId} purchased ${houseType}`);
+    logger.info(`  Model: ${this.houseModels[houseType]}`);
   }
 
   placeFurniture(houseId, furnitureType, position) {
-    console.log(`Placing ${furnitureType} in house ${houseId}`);
-    console.log(`  Model: ${this.furniture[furnitureType]}`);
+    logger.info(`Placing ${furnitureType} in house ${houseId}`);
+    logger.info(`  Model: ${this.furniture[furnitureType]}`);
   }
 }

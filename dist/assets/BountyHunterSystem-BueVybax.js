@@ -1,0 +1,1 @@
+import{l as s}from"./index-CGDjDhhy.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class e{constructor(){this.bounties=new Map,this.ui={board:"/assets/ui/bounty/bounty_board.png"}}postBounty(o,t){s.info(`Bounty posted: ${o} - ${t} gold`)}}export{e as BountyHunterSystem};

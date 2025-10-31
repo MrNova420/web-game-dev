@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * ModelLoaderSystem - 3D Model Loading & Management
  * 
  * Loads 3D models from external FREE sources:
@@ -112,7 +113,7 @@ export class ModelLoaderSystem {
     async loadPlayerCharacter(className) {
         const modelPath = this.manifest.characters[className];
         if (!modelPath) {
-            console.warn(`Character ${className} not found in manifest`);
+            logger.warn(`Character ${className} not found in manifest`);
             return this.createPlaceholder('character');
         }
         
@@ -151,7 +152,7 @@ export class ModelLoaderSystem {
                 animations: animations
             };
         } catch (error) {
-            console.warn(`Failed to load character ${className}:`, error);
+            logger.warn(`Failed to load character ${className}:`, error);
             return this.createPlaceholder('character');
         }
     }
@@ -181,7 +182,7 @@ export class ModelLoaderSystem {
             
             return { model, animations: gltf.animations };
         } catch (error) {
-            console.warn(`Failed to load companion ${companionId}:`, error);
+            logger.warn(`Failed to load companion ${companionId}:`, error);
             return this.createPlaceholder('companion');
         }
     }
@@ -211,7 +212,7 @@ export class ModelLoaderSystem {
             
             return model;
         } catch (error) {
-            console.warn(`Failed to load enemy ${enemyType}:`, error);
+            logger.warn(`Failed to load enemy ${enemyType}:`, error);
             return this.createPlaceholder('enemy');
         }
     }
@@ -244,7 +245,7 @@ export class ModelLoaderSystem {
             
             return model;
         } catch (error) {
-            console.warn(`Failed to load boss ${bossId}:`, error);
+            logger.warn(`Failed to load boss ${bossId}:`, error);
             return this.createPlaceholder('boss', 2);
         }
     }
@@ -274,7 +275,7 @@ export class ModelLoaderSystem {
             
             return model;
         } catch (error) {
-            console.warn(`Failed to load weapon ${weaponId}:`, error);
+            logger.warn(`Failed to load weapon ${weaponId}:`, error);
             return this.createPlaceholder('weapon');
         }
     }
@@ -304,7 +305,7 @@ export class ModelLoaderSystem {
             
             return model;
         } catch (error) {
-            console.warn(`Failed to load environment ${envType}:`, error);
+            logger.warn(`Failed to load environment ${envType}:`, error);
             return this.createPlaceholder('environment');
         }
     }
@@ -320,7 +321,7 @@ export class ModelLoaderSystem {
                 (xhr) => {
                     // Progress callback
                     const percentComplete = (xhr.loaded / xhr.total) * 100;
-                    // console.log(`Loading ${path}: ${percentComplete.toFixed(2)}%`);
+                    // logger.info(`Loading ${path}: ${percentComplete.toFixed(2)}%`);
                 },
                 (error) => reject(error)
             );
@@ -425,7 +426,7 @@ export class ModelLoaderSystem {
         const group = new THREE.Group();
         group.add(mesh);
         
-        console.log(`Created placeholder for ${type}`);
+        logger.info(`Created placeholder for ${type}`);
         return type === 'character' || type === 'companion' ? 
             { model: group, animations: [] } : group;
     }

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Enhanced3DGraphicsSystem.js
  * Advanced 3D graphics, models, animations, and visual effects
  * Creates amazing visuals for players, monsters, world, weather, and all game elements
@@ -50,7 +51,7 @@ export class Enhanced3DGraphicsSystem {
             colorGrading: true
         };
         
-        console.log('🎨 Enhanced3DGraphicsSystem initialized');
+        logger.info('🎨 Enhanced3DGraphicsSystem initialized');
     }
     
     /**
@@ -62,7 +63,7 @@ export class Enhanced3DGraphicsSystem {
         this.setupShadows();
         this.setupPostProcessing();
         
-        console.log('✨ Advanced 3D graphics initialized');
+        logger.info('✨ Advanced 3D graphics initialized');
     }
     
     /**
@@ -671,6 +672,6 @@ export class Enhanced3DGraphicsSystem {
             light.castShadow = this.settings.shadows;
         });
         
-        console.log(`🎨 Graphics quality set to: ${this.settings.quality}`);
+        logger.info(`🎨 Graphics quality set to: ${this.settings.quality}`);
     }
 }

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AchievementSystem - Tracks player achievements and milestones
  * Provides goals and rewards for various accomplishments
@@ -15,7 +16,7 @@ export class AchievementSystem {
         this.notificationQueue = [];
         
         this.init();
-        console.log('🏆 Achievement System initialized');
+        logger.info('🏆 Achievement System initialized');
     }
     
     init() {
@@ -421,7 +422,7 @@ export class AchievementSystem {
         const achievement = this.achievements[achievementId];
         this.unlockedAchievements.add(achievementId);
         
-        console.log(`🏆 Achievement Unlocked: ${achievement.name}`);
+        logger.info(`🏆 Achievement Unlocked: ${achievement.name}`);
         
         // Give rewards
         if (achievement.reward) {

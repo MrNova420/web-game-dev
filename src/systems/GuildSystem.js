@@ -20,8 +20,8 @@ export class GuildSystem {
   }
 
   createGuild(leaderId, guildName) {
-    console.log(`${leaderId} created guild: ${guildName}`);
-    console.log(`  UI: ${this.ui.guild_panel}`);
+    logger.info(`${leaderId} created guild: ${guildName}`);
+    logger.info(`  UI: ${this.ui.guild_panel}`);
   }
 
   update(delta) {

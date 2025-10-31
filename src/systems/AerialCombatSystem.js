@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AerialCombatSystem.js
  * Combat in the air with aerial combos and juggling.
@@ -19,7 +20,7 @@ export class AerialCombatSystem {
   }
 
   launch(entityId, targetId) {
-    console.log(`${entityId} launches ${targetId} into air!`);
+    logger.info(`${entityId} launches ${targetId} into air!`);
     this.airborneEntities.set(targetId, { launchedBy: entityId, juggleCount: 0 });
   }
 
@@ -28,16 +29,16 @@ export class AerialCombatSystem {
     if (!airborne) return null;
     
     airborne.juggleCount++;
-    console.log(`${attackerId} AIR COMBO (${airborne.juggleCount} hits)`);
-    console.log(`  Animation: ${this.animations.air_combo}`);
-    console.log(`  VFX: ${this.vfx.air_trail}`);
+    logger.info(`${attackerId} AIR COMBO (${airborne.juggleCount} hits)`);
+    logger.info(`  Animation: ${this.animations.air_combo}`);
+    logger.info(`  VFX: ${this.vfx.air_trail}`);
     return { damage: 100 * airborne.juggleCount };
   }
 
   groundSlam(attackerId, targetId) {
-    console.log(`${attackerId} GROUND SLAM!`);
-    console.log(`  Animation: ${this.animations.ground_slam}`);
-    console.log(`  VFX: ${this.vfx.impact_crater}`);
+    logger.info(`${attackerId} GROUND SLAM!`);
+    logger.info(`  Animation: ${this.animations.ground_slam}`);
+    logger.info(`  VFX: ${this.vfx.impact_crater}`);
     this.airborneEntities.delete(targetId);
     return { damage: 300, aoe: true, radius: 5 };
   }

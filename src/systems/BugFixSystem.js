@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BugFixSystem - Prevents and fixes common game bugs
  * Ensures: Assets load, display properly, functions work, nothing is broken
@@ -11,7 +12,7 @@ export class BugFixSystem {
         this.activeFixes = new Map();
         this.healthChecks = [];
         
-        console.log('[BugFixSystem] Bug prevention and fixing system initialized');
+        logger.info('[BugFixSystem] Bug prevention and fixing system initialized');
         
         this.setupAutomaticFixes();
     }
@@ -35,14 +36,14 @@ export class BugFixSystem {
         // Fix 5: Performance issues
         this.activeFixes.set('performance', this.fixPerformanceIssues.bind(this));
         
-        console.log(`[BugFixSystem] ${this.activeFixes.size} automatic fixes active`);
+        logger.info(`[BugFixSystem] ${this.activeFixes.size} automatic fixes active`);
     }
 
     /**
      * Run all health checks
      */
     async runHealthChecks() {
-        console.log('[BugFixSystem] Running comprehensive health checks...');
+        logger.info('[BugFixSystem] Running comprehensive health checks...');
         
         const results = {
             timestamp: Date.now(),
@@ -92,10 +93,10 @@ export class BugFixSystem {
         }
 
         const status = results.healthy ? 'HEALTHY' : 'ISSUES FOUND';
-        console.log(`[BugFixSystem] Health check complete: ${status}`);
+        logger.info(`[BugFixSystem] Health check complete: ${status}`);
         
         if (!results.healthy) {
-            console.warn('[BugFixSystem] Issues found:', results.issues);
+            logger.warn('[BugFixSystem] Issues found:', results.issues);
             await this.applyAutomaticFixes(results.issues);
         }
 
@@ -223,7 +224,7 @@ export class BugFixSystem {
      * Apply automatic fixes for detected issues
      */
     async applyAutomaticFixes(issues) {
-        console.log('[BugFixSystem] Applying automatic fixes...');
+        logger.info('[BugFixSystem] Applying automatic fixes...');
         
         const fixes = [];
         
@@ -242,7 +243,7 @@ export class BugFixSystem {
         const results = await Promise.all(fixes);
         const successful = results.filter(r => r.success).length;
         
-        console.log(`[BugFixSystem] Applied ${successful}/${fixes.length} fixes successfully`);
+        logger.info(`[BugFixSystem] Applied ${successful}/${fixes.length} fixes successfully`);
         
         return { applied: successful, total: fixes.length };
     }
@@ -251,7 +252,7 @@ export class BugFixSystem {
      * Fix asset loading issues
      */
     async fixAssetLoading() {
-        console.log('[BugFixSystem] Fixing asset loading issues...');
+        logger.info('[BugFixSystem] Fixing asset loading issues...');
         
         try {
             // Clear failed assets cache
@@ -264,7 +265,7 @@ export class BugFixSystem {
 
             return { success: true, message: 'Asset loading fixed' };
         } catch (error) {
-            console.error('[BugFixSystem] Asset loading fix failed:', error);
+            logger.error('[BugFixSystem] Asset loading fix failed:', error);
             return { success: false, error: error.message };
         }
     }
@@ -273,7 +274,7 @@ export class BugFixSystem {
      * Fix display issues
      */
     async fixDisplayIssues() {
-        console.log('[BugFixSystem] Fixing display issues...');
+        logger.info('[BugFixSystem] Fixing display issues...');
         
         try {
             // Ensure canvas is properly sized
@@ -290,7 +291,7 @@ export class BugFixSystem {
 
             return { success: true, message: 'Display issues fixed' };
         } catch (error) {
-            console.error('[BugFixSystem] Display fix failed:', error);
+            logger.error('[BugFixSystem] Display fix failed:', error);
             return { success: false, error: error.message };
         }
     }
@@ -299,7 +300,7 @@ export class BugFixSystem {
      * Fix functional issues
      */
     async fixFunctionalIssues() {
-        console.log('[BugFixSystem] Fixing functional issues...');
+        logger.info('[BugFixSystem] Fixing functional issues...');
         
         try {
             // Reset any stuck states
@@ -308,7 +309,7 @@ export class BugFixSystem {
 
             return { success: true, message: 'Functional issues fixed' };
         } catch (error) {
-            console.error('[BugFixSystem] Functional fix failed:', error);
+            logger.error('[BugFixSystem] Functional fix failed:', error);
             return { success: false, error: error.message };
         }
     }
@@ -317,7 +318,7 @@ export class BugFixSystem {
      * Fix memory leaks
      */
     async fixMemoryLeaks() {
-        console.log('[BugFixSystem] Fixing memory leaks...');
+        logger.info('[BugFixSystem] Fixing memory leaks...');
         
         try {
             // Clear unused caches
@@ -329,7 +330,7 @@ export class BugFixSystem {
 
             return { success: true, message: 'Memory leaks fixed' };
         } catch (error) {
-            console.error('[BugFixSystem] Memory fix failed:', error);
+            logger.error('[BugFixSystem] Memory fix failed:', error);
             return { success: false, error: error.message };
         }
     }
@@ -338,7 +339,7 @@ export class BugFixSystem {
      * Fix performance issues
      */
     async fixPerformanceIssues() {
-        console.log('[BugFixSystem] Fixing performance issues...');
+        logger.info('[BugFixSystem] Fixing performance issues...');
         
         try {
             // Reduce particle counts if needed
@@ -347,7 +348,7 @@ export class BugFixSystem {
 
             return { success: true, message: 'Performance issues fixed' };
         } catch (error) {
-            console.error('[BugFixSystem] Performance fix failed:', error);
+            logger.error('[BugFixSystem] Performance fix failed:', error);
             return { success: false, error: error.message };
         }
     }
@@ -365,7 +366,7 @@ export class BugFixSystem {
         };
 
         this.bugReports.push(report);
-        console.warn('[BugFixSystem] Bug reported:', report);
+        logger.warn('[BugFixSystem] Bug reported:', report);
 
         // Attempt automatic fix
         this.attemptAutoFix(report);
@@ -375,7 +376,7 @@ export class BugFixSystem {
      * Attempt to automatically fix a reported bug
      */
     async attemptAutoFix(bug) {
-        console.log(`[BugFixSystem] Attempting automatic fix for: ${bug.type}`);
+        logger.info(`[BugFixSystem] Attempting automatic fix for: ${bug.type}`);
         
         const fix = this.activeFixes.get(bug.type);
         if (fix) {
@@ -386,7 +387,7 @@ export class BugFixSystem {
                     fix: result,
                     timestamp: Date.now()
                 });
-                console.log(`✓ [BugFixSystem] Auto-fixed: ${bug.type}`);
+                logger.info(`✓ [BugFixSystem] Auto-fixed: ${bug.type}`);
             }
         }
     }

@@ -3,5 +3,5 @@
  */
 export class ClanAlliance {
   constructor() { this.alliances = new Map(); }
-  formAlliance(clan1, clan2) { console.log(`Alliance: ${clan1} + ${clan2}`); }
+  formAlliance(clan1, clan2) { logger.info(`Alliance: ${clan1} + ${clan2}`); }
 }

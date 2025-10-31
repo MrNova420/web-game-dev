@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Dynamic Difficulty Scaling System
  * Phase 8.2 - Adaptive difficulty that scales with player skill and performance
  */
@@ -64,7 +65,7 @@ export class DynamicDifficultySystem {
     }
     
     initialize() {
-        console.log('⚖️ Dynamic Difficulty Scaling System initialized');
+        logger.info('⚖️ Dynamic Difficulty Scaling System initialized');
         
         // Create challenge zones
         this.createChallengeZones();
@@ -393,7 +394,7 @@ export class DynamicDifficultySystem {
         const recentDeaths = Math.min(5, this.playerSkillData.deathCount);
         this.deathPenalty.reductionAmount = 0.1 + (recentDeaths * 0.05);
         
-        console.log(`💀 Death penalty active: -${Math.floor(this.deathPenalty.reductionAmount * 100)}% difficulty for 5 minutes`);
+        logger.info(`💀 Death penalty active: -${Math.floor(this.deathPenalty.reductionAmount * 100)}% difficulty for 5 minutes`);
     }
     
     /**
@@ -406,7 +407,7 @@ export class DynamicDifficultySystem {
         
         if (elapsed > this.deathPenalty.duration) {
             this.deathPenalty.active = false;
-            console.log('✅ Death penalty expired - difficulty normalized');
+            logger.info('✅ Death penalty expired - difficulty normalized');
         }
     }
     
@@ -439,7 +440,7 @@ export class DynamicDifficultySystem {
      * Handle mastery level up
      */
     onMasteryLevelUp(oldLevel, newLevel) {
-        console.log(`🏆 Mastery Level Up: ${oldLevel} → ${newLevel}`);
+        logger.info(`🏆 Mastery Level Up: ${oldLevel} → ${newLevel}`);
         
         // Award mastery rewards
         const rewards = this.getMasteryRewards(newLevel);
@@ -516,7 +517,7 @@ export class DynamicDifficultySystem {
             this.currentZone = closestZone;
             
             if (closestZone) {
-                console.log(`🗺️ Entered ${closestZone.name} (Difficulty: ${closestZone.difficultyMultiplier}x)`);
+                logger.info(`🗺️ Entered ${closestZone.name} (Difficulty: ${closestZone.difficultyMultiplier}x)`);
             }
         }
     }

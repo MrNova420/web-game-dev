@@ -10,5 +10,5 @@ export class EndgameGearSystem {
       GLADIATOR: { model: '/assets/models/gear/gladiator_set.glb', particles: '/assets/particles/pvp_aura.png' }              // Sketchfab + Kenney
     };
   }
-  equipGear(playerId, setId) { console.log(`${playerId} equipped ${setId} set`); }
+  equipGear(playerId, setId) { logger.info(`${playerId} equipped ${setId} set`); }
 }

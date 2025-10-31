@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CharacterClassSystem - Multiple playable character classes with unique abilities
  * Provides different playstyles for an RPG experience
@@ -133,13 +134,13 @@ export class CharacterClassSystem {
     }
     
     init() {
-        console.log('👤 Character Class System initialized');
-        console.log(`Available classes: ${Object.keys(this.classes).length}`);
+        logger.info('👤 Character Class System initialized');
+        logger.info(`Available classes: ${Object.keys(this.classes).length}`);
     }
     
     selectClass(className) {
         if (!this.classes[className]) {
-            console.error(`Class ${className} not found`);
+            logger.error(`Class ${className} not found`);
             return false;
         }
         
@@ -153,7 +154,7 @@ export class CharacterClassSystem {
             this.gameEngine.player.stats.maxMp = classData.baseStats.mp;
         }
         
-        console.log(`✅ Selected class: ${classData.name} ${classData.icon}`);
+        logger.info(`✅ Selected class: ${classData.name} ${classData.icon}`);
         
         // Show notification
         if (this.gameEngine.modernUISystem) {
@@ -195,7 +196,7 @@ export class CharacterClassSystem {
         
         // Check if player has enough MP
         if (this.gameEngine.player && this.gameEngine.player.stats.mp < ability.cost) {
-            console.log(`Not enough MP for ${abilityName}`);
+            logger.info(`Not enough MP for ${abilityName}`);
             return null;
         }
         
@@ -235,7 +236,7 @@ export class CharacterClassSystem {
             player.stats.mp = player.stats.maxMp;
         }
         
-        console.log(`🎉 Level Up! Now level ${this.level}`);
+        logger.info(`🎉 Level Up! Now level ${this.level}`);
         
         // Show notification
         if (this.gameEngine.modernUISystem) {
@@ -259,6 +260,6 @@ export class CharacterClassSystem {
     }
     
     dispose() {
-        console.log('👤 Character Class System disposed');
+        logger.info('👤 Character Class System disposed');
     }
 }

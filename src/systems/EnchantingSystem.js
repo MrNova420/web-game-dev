@@ -22,8 +22,8 @@ export class EnchantingSystem {
 
   enchantItem(itemId, runeType) {
     const rune = this.runes[runeType];
-    console.log(`Enchanting ${itemId} with ${runeType}`);
-    console.log(`  Rune: ${rune.model}`);
-    console.log(`  VFX: ${rune.vfx}`);
+    logger.info(`Enchanting ${itemId} with ${runeType}`);
+    logger.info(`  Rune: ${rune.model}`);
+    logger.info(`  VFX: ${rune.vfx}`);
   }
 }

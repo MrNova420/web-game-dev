@@ -135,7 +135,7 @@ export class CompanionManager {
     setActiveCompanion(companionId) {
         if (this.companions[companionId] && this.companions[companionId].unlocked) {
             this.activeCompanion = companionId;
-            console.log(`💜 Active companion: ${this.companions[companionId].name}`);
+            logger.info(`💜 Active companion: ${this.companions[companionId].name}`);
             return true;
         }
         return false;
@@ -148,7 +148,7 @@ export class CompanionManager {
     unlockCompanion(companionId) {
         if (this.companions[companionId]) {
             this.companions[companionId].unlocked = true;
-            console.log(`✨ Unlocked companion: ${this.companions[companionId].name}`);
+            logger.info(`✨ Unlocked companion: ${this.companions[companionId].name}`);
             return true;
         }
         return false;
@@ -166,7 +166,7 @@ export class CompanionManager {
 // Extend companion abilities
 const companionAbilities = {
     smoke_siren: (engine) => {
-        console.log('💨 Smoke Siren uses Mind Cloud!');
+        logger.info('💨 Smoke Siren uses Mind Cloud!');
         // Create confusion effect on enemies
         const enemies = engine.enemyManager.getEnemies();
         enemies.forEach(enemy => {
@@ -182,7 +182,7 @@ const companionAbilities = {
     },
     
     blade_muse: (engine) => {
-        console.log('⚔️ Blade Muse performs Rhythm Strike!');
+        logger.info('⚔️ Blade Muse performs Rhythm Strike!');
         // Deal damage to multiple enemies in sequence
         let delay = 0;
         const enemies = engine.enemyManager.getEnemies().slice(0, 3);
@@ -207,7 +207,7 @@ const companionAbilities = {
     },
     
     herb_witch: (engine) => {
-        console.log('🌿 Herb Witch casts Greenfire Burst!');
+        logger.info('🌿 Herb Witch casts Greenfire Burst!');
         // Heal player and damage enemies
         if (engine.player) {
             engine.player.heal(40);
@@ -231,7 +231,7 @@ const companionAbilities = {
     },
     
     cyber_dryad: (engine) => {
-        console.log('⚡ Cyber Dryad activates Tech-Nature Fusion!');
+        logger.info('⚡ Cyber Dryad activates Tech-Nature Fusion!');
         // Drain energy from all enemies
         const enemies = engine.enemyManager.getEnemies();
         enemies.forEach(enemy => {

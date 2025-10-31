@@ -37,15 +37,15 @@ export class MagicCastingSystem {
   }
 
   castSpell(casterId, spellName, castTime, manaCost) {
-    console.log(`${casterId} casting ${spellName} (${castTime}s, ${manaCost} mana)`);
+    logger.info(`${casterId} casting ${spellName} (${castTime}s, ${manaCost} mana)`);
     
     if (castTime === 0) {
-      console.log(`  Instant cast!`);
-      console.log(`  Animation: ${this.castAnimations.instant_cast}`);
+      logger.info(`  Instant cast!`);
+      logger.info(`  Animation: ${this.castAnimations.instant_cast}`);
       return { success: true, instant: true };
     }
     
-    console.log(`  Animation: ${this.castAnimations.channel_start}`);
+    logger.info(`  Animation: ${this.castAnimations.channel_start}`);
     this.castingEntities.set(casterId, {
       spell: spellName,
       startTime: Date.now(),
@@ -59,7 +59,7 @@ export class MagicCastingSystem {
   interruptCast(casterId) {
     const casting = this.castingEntities.get(casterId);
     if (casting && casting.interruptible) {
-      console.log(`${casterId} spell interrupted!`);
+      logger.info(`${casterId} spell interrupted!`);
       this.castingEntities.delete(casterId);
       return true;
     }
@@ -73,10 +73,10 @@ export class MagicCastingSystem {
       const elapsed = now - state.startTime;
       
       if (elapsed >= state.castTime) {
-        console.log(`${casterId} completed ${state.spell}!`);
-        console.log(`  Animation: ${this.castAnimations.cast_finish}`);
+        logger.info(`${casterId} completed ${state.spell}!`);
+        logger.info(`  Animation: ${this.castAnimations.cast_finish}`);
         const vfx = this.spellVFX[state.spell.toLowerCase()] || this.spellVFX.fireball;
-        console.log(`  VFX: ${vfx}`);
+        logger.info(`  VFX: ${vfx}`);
         this.castingEntities.delete(casterId);
       }
     }

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ChainAttackSystem.js
  * Chain attacks that hit multiple enemies in sequence.
@@ -17,9 +18,9 @@ export class ChainAttackSystem {
   }
 
   chainAttack(attackerId, targets) {
-    console.log(`${attackerId} CHAIN ATTACK (${targets.length} targets)`);
-    console.log(`  Animation: ${this.animations.chain_slash}`);
-    console.log(`  VFX: ${this.vfx.chain_effect}`);
+    logger.info(`${attackerId} CHAIN ATTACK (${targets.length} targets)`);
+    logger.info(`  Animation: ${this.animations.chain_slash}`);
+    logger.info(`  VFX: ${this.vfx.chain_effect}`);
     
     let damage = 100;
     const results = [];
@@ -27,7 +28,7 @@ export class ChainAttackSystem {
     for (let i = 0; i < targets.length; i++) {
       const reducedDamage = damage * Math.pow(0.8, i); // 20% reduction per chain
       results.push({ target: targets[i], damage: Math.floor(reducedDamage) });
-      console.log(`  Chain ${i+1}: ${targets[i]} takes ${Math.floor(reducedDamage)} damage`);
+      logger.info(`  Chain ${i+1}: ${targets[i]} takes ${Math.floor(reducedDamage)} damage`);
     }
     
     return results;

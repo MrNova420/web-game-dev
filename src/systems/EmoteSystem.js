@@ -17,8 +17,8 @@ export class EmoteSystem {
 
   playEmote(playerId, emoteName) {
     const emote = this.emotes[emoteName];
-    console.log(`${playerId} emote: ${emoteName}`);
-    console.log(`  Animation: ${emote.animation}`);
-    console.log(`  Icon: ${emote.icon}`);
+    logger.info(`${playerId} emote: ${emoteName}`);
+    logger.info(`  Animation: ${emote.animation}`);
+    logger.info(`  Icon: ${emote.icon}`);
   }
 }

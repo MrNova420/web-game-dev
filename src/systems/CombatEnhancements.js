@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Combat Enhancements System
  * Adds dodge, parry, blocking, and advanced combat mechanics
  */
@@ -554,7 +555,7 @@ export class CombatEnhancements {
      * Show combo notification
      */
     showComboNotification(comboName) {
-        console.log(`Combo: ${comboName}!`);
+        logger.info(`Combo: ${comboName}!`);
     }
 
     /**

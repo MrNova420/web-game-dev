@@ -159,7 +159,7 @@ export class MultiplayerEngagementSystem {
   applyRoleBonus(player) {
     const bonus = this.partyFinder.roleBonus[player.role.toLowerCase()];
     if (bonus) {
-      console.log(`Role bonus applied: ${bonus.bonus}`);
+      logger.info(`Role bonus applied: ${bonus.bonus}`);
     }
   }
 
@@ -186,7 +186,7 @@ export class MultiplayerEngagementSystem {
 
   applyToGuild(player, guildId) {
     // Auto-apply to guild
-    console.log(`${player.name} applied to guild ${guildId}`);
+    logger.info(`${player.name} applied to guild ${guildId}`);
   }
 
   getGuildPerks(guildLevel) {
@@ -343,6 +343,6 @@ export class MultiplayerEngagementSystem {
   }
 
   showReferralReward(player, rewards) {
-    console.log('Referral reward:', rewards);
+    logger.info('Referral reward:', rewards);
   }
 }

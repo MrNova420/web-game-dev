@@ -31,8 +31,8 @@ export class MountCombatSystem {
 
   mount(riderId, mountType) {
     const mountData = this.mounts[mountType];
-    console.log(`${riderId} mounts ${mountType}`);
-    console.log(`  Model: ${mountData.model}`);
+    logger.info(`${riderId} mounts ${mountType}`);
+    logger.info(`  Model: ${mountData.model}`);
     this.mountedEntities.set(riderId, { mount: mountType, data: mountData });
   }
 
@@ -40,8 +40,8 @@ export class MountCombatSystem {
     const mounted = this.mountedEntities.get(riderId);
     if (!mounted) return null;
     
-    console.log(`${riderId} CHARGE ATTACK on ${mounted.mount}!`);
-    console.log(`  Bonus: ${mounted.data.chargeBonus}x`);
+    logger.info(`${riderId} CHARGE ATTACK on ${mounted.mount}!`);
+    logger.info(`  Bonus: ${mounted.data.chargeBonus}x`);
     return { damage: 200 * mounted.data.chargeBonus };
   }
 }

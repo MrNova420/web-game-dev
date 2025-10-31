@@ -3,5 +3,5 @@
  */
 export class InvestmentSystem {
   constructor() { this.investments = new Map(); }
-  invest(playerId, target, amount) { console.log(`${playerId} invested ${amount} in ${target}`); }
+  invest(playerId, target, amount) { logger.info(`${playerId} invested ${amount} in ${target}`); }
 }

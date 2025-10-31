@@ -666,7 +666,7 @@ export class IdleGameSystem {
             
             return true;
         } catch (error) {
-            console.error('Failed to load idle game save:', error);
+            logger.error('Failed to load idle game save:', error);
             return false;
         }
     }

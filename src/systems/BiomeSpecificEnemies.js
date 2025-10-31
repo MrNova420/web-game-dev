@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BiomeSpecificEnemies.js
  * Phase 4.2 - Biome-Specific Enemy System
@@ -366,7 +367,7 @@ export class BiomeSpecificEnemies {
         this.spawnInterval = 5000; // 5 seconds
         this.lastSpawnTime = 0;
         
-        console.log('👾 BiomeSpecificEnemies initialized with', Object.keys(this.enemyTemplates).length, 'enemy types');
+        logger.info('👾 BiomeSpecificEnemies initialized with', Object.keys(this.enemyTemplates).length, 'enemy types');
     }
     
     /**
@@ -374,7 +375,7 @@ export class BiomeSpecificEnemies {
      */
     spawnEnemy(enemyType, position, biomeId) {
         if (!this.enemyTemplates[enemyType]) {
-            console.warn('Unknown enemy type:', enemyType);
+            logger.warn('Unknown enemy type:', enemyType);
             return null;
         }
         

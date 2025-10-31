@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * BossRushModeSystem - Boss Rush Challenge Mode
  * 
  * Phase 8, System 125 of AUTONOMOUS_EXECUTION_PLAN
@@ -269,7 +270,7 @@ export class BossRushModeSystem {
                 this.scene.add(model);
             }
         } catch (error) {
-            console.warn(`Failed to load boss model: ${boss.model}`, error);
+            logger.warn(`Failed to load boss model: ${boss.model}`, error);
             // Create placeholder
             bossEntity.model = this.createPlaceholderBoss();
             this.scene.add(bossEntity.model);
@@ -282,7 +283,7 @@ export class BossRushModeSystem {
                 this.scene.add(arena);
             }
         } catch (error) {
-            console.warn(`Failed to load arena: ${boss.arena}`, error);
+            logger.warn(`Failed to load arena: ${boss.arena}`, error);
         }
         
         // Register with combat system
@@ -301,8 +302,8 @@ export class BossRushModeSystem {
         // This is a placeholder showing the integration pattern
         return new Promise((resolve, reject) => {
             // Simulated loading
-            console.log(`Loading external model from: ${path}`);
-            console.log(`Source: Sketchfab Free / Quaternius / Mixamo`);
+            logger.info(`Loading external model from: ${path}`);
+            logger.info(`Source: Sketchfab Free / Quaternius / Mixamo`);
             
             // In production, would use:
             // const loader = new GLTFLoader();

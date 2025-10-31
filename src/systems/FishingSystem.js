@@ -124,7 +124,7 @@ export class FishingSystem {
         if (this.gameEngine.audioSystem) {
             this.gameEngine.audioSystem.playSound('fishing_bite');
         }
-        console.log('🎣 Bite! Press the button to hook!');
+        logger.info('🎣 Bite! Press the button to hook!');
     }
     
     /**
@@ -219,7 +219,7 @@ export class FishingSystem {
         this.isFishing = false;
         this.currentCast = null;
         
-        console.log(`🎣 Caught ${caught.name}! Weight: ${weight.toFixed(2)}kg`);
+        logger.info(`🎣 Caught ${caught.name}! Weight: ${weight.toFixed(2)}kg`);
         
         return { success: true, fish: caught };
     }
@@ -258,7 +258,7 @@ export class FishingSystem {
      * Fail to catch
      */
     failCatch() {
-        console.log('❌ The fish got away!');
+        logger.info('❌ The fish got away!');
         this.isFishing = false;
         this.currentCast = null;
         return { success: false, message: 'Fish got away' };
@@ -274,7 +274,7 @@ export class FishingSystem {
             this.fishingXP -= this.fishingXPToNext;
             this.fishingLevel++;
             this.fishingXPToNext = Math.floor(this.fishingXPToNext * 1.5);
-            console.log(`🎣 Fishing Level Up! Now level ${this.fishingLevel}`);
+            logger.info(`🎣 Fishing Level Up! Now level ${this.fishingLevel}`);
         }
     }
     

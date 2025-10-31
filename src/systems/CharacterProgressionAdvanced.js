@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CharacterProgressionAdvanced.js
  * Advanced character progression with multiple leveling paths.
@@ -16,12 +17,12 @@ export class CharacterProgressionAdvanced {
   }
 
   gainExperience(playerId, path, amount) {
-    console.log(`${playerId} gains ${amount} ${path} XP`);
-    console.log(`  Icon: ${this.icons.exp_bar}`);
+    logger.info(`${playerId} gains ${amount} ${path} XP`);
+    logger.info(`  Icon: ${this.icons.exp_bar}`);
   }
 
   levelUp(playerId, path) {
-    console.log(`${playerId} leveled up in ${path}!`);
-    console.log(`  Icon: ${this.icons.level_up}`);
+    logger.info(`${playerId} leveled up in ${path}!`);
+    logger.info(`  Icon: ${this.icons.level_up}`);
   }
 }

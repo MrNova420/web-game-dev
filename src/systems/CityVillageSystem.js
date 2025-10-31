@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * City & Village System - Create living, breathing settlements
  * Complete with economy, shops, NPCs, quests, and progression
  */
@@ -17,7 +18,7 @@ export class CityVillageSystem {
     }
     
     async createWorld() {
-        console.log('🏙️ BUILDING CITIES AND VILLAGES...');
+        logger.info('🏙️ BUILDING CITIES AND VILLAGES...');
         
         // Major Cities
         await this.createCity('Capital City', { x: 0, z: 0 }, 'large');
@@ -36,14 +37,14 @@ export class CityVillageSystem {
         await this.createOutpost('Border Outpost', { x: 180, z: 180 });
         await this.createOutpost('Desert Outpost', { x: 170, z: -70 });
         
-        console.log(`✅ Created ${this.settlements.length} settlements!`);
+        logger.info(`✅ Created ${this.settlements.length} settlements!`);
         
         // Initialize economy
         this.initializeEconomy();
     }
     
     async createCity(name, position, size) {
-        console.log(`   🏛️ Building ${name}...`);
+        logger.info(`   🏛️ Building ${name}...`);
         
         const city = {
             name,
@@ -102,7 +103,7 @@ export class CityVillageSystem {
         city.quests = this.generateCityQuests(name, 10);
         
         this.settlements.push(city);
-        console.log(`      ✅ ${name}: ${buildingCount} buildings, ${npcCount} NPCs`);
+        logger.info(`      ✅ ${name}: ${buildingCount} buildings, ${npcCount} NPCs`);
         
         return city;
     }
@@ -288,7 +289,7 @@ export class CityVillageSystem {
     }
     
     async buildCityWalls(city, center, radius) {
-        console.log(`      Building city walls...`);
+        logger.info(`      Building city walls...`);
         
         const wallSegments = 24;
         for (let i = 0; i < wallSegments; i++) {
@@ -318,7 +319,7 @@ export class CityVillageSystem {
     }
     
     async createVillage(name, position, specialty) {
-        console.log(`   🏘️ Building ${name}...`);
+        logger.info(`   🏘️ Building ${name}...`);
         
         const village = {
             name,
@@ -378,7 +379,7 @@ export class CityVillageSystem {
         }
         
         this.settlements.push(village);
-        console.log(`      ✅ ${name}: ${village.buildings.length} buildings, ${npcCount} NPCs`);
+        logger.info(`      ✅ ${name}: ${village.buildings.length} buildings, ${npcCount} NPCs`);
         
         return village;
     }
@@ -613,7 +614,7 @@ export class CityVillageSystem {
     }
     
     initializeEconomy() {
-        console.log('💰 Initializing global economy...');
+        logger.info('💰 Initializing global economy...');
         
         // Set base prices for all items
         this.economy.globalMarket.set('iron_sword', 500);
@@ -623,7 +624,7 @@ export class CityVillageSystem {
         // Economy will fluctuate based on supply/demand
         setInterval(() => this.updateEconomy(), 60000); // Update every minute
         
-        console.log('   ✅ Economy initialized with dynamic pricing');
+        logger.info('   ✅ Economy initialized with dynamic pricing');
     }
     
     updateEconomy() {

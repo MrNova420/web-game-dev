@@ -451,7 +451,7 @@ export class CompanionQuestSystem {
         // Check unlock requirement
         if (quest.unlockRequirement) {
             if (quest.unlockRequirement.relationship > companion.relationshipPoints) {
-                console.log(`Quest requires ${quest.unlockRequirement.relationship} relationship points`);
+                logger.info(`Quest requires ${quest.unlockRequirement.relationship} relationship points`);
                 return null;
             }
         }
@@ -662,7 +662,7 @@ export class CompanionQuestSystem {
         if (this.gameEngine.eventSystem) {
             this.gameEngine.eventSystem.emit('companion_quest', { type: eventType, ...data });
         }
-        console.log(`[CompanionQuest] ${eventType}:`, data);
+        logger.info(`[CompanionQuest] ${eventType}:`, data);
     }
     
     /**

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * AuctionHouseSystem.js
  * Global auction house for buying/selling items.
@@ -19,13 +20,13 @@ export class AuctionHouseSystem {
   }
 
   listItem(sellerId, itemId, price, duration) {
-    console.log(`${sellerId} lists ${itemId} for ${price} gold`);
-    console.log(`  Icon: ${this.icons.gold_coin}`);
+    logger.info(`${sellerId} lists ${itemId} for ${price} gold`);
+    logger.info(`  Icon: ${this.icons.gold_coin}`);
     this.listings.set(`listing_${Date.now()}`, { seller: sellerId, item: itemId, price: price, expiresAt: Date.now() + duration });
   }
 
   buyItem(buyerId, listingId) {
-    console.log(`${buyerId} purchases listing ${listingId}`);
+    logger.info(`${buyerId} purchases listing ${listingId}`);
     this.listings.delete(listingId);
   }
 }

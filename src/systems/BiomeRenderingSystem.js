@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BiomeRenderingSystem.js
  * 
@@ -154,8 +155,8 @@ export class BiomeRenderingSystem {
     }
     
     initialize() {
-        console.log('[BiomeRenderingSystem] Initializing biome system...');
-        console.log(`[BiomeRenderingSystem] ${Object.keys(this.biomes).length} biomes available`);
+        logger.info('[BiomeRenderingSystem] Initializing biome system...');
+        logger.info(`[BiomeRenderingSystem] ${Object.keys(this.biomes).length} biomes available`);
     }
     
     createBiomeConfig(id, config) {
@@ -197,7 +198,7 @@ export class BiomeRenderingSystem {
         
         this.activeBiomes.set(key, biome);
         
-        console.log(`[BiomeRenderingSystem] Applied biome ${biome.id} at (${position.x}, ${position.z})`);
+        logger.info(`[BiomeRenderingSystem] Applied biome ${biome.id} at (${position.x}, ${position.z})`);
         
         // Apply biome effects
         this.applyBiomeEffects(biome);
@@ -224,7 +225,7 @@ export class BiomeRenderingSystem {
     // Apply biome lighting
     applyBiomeLighting(biome) {
         // Would adjust ambient light and color tint
-        console.log(`[BiomeRenderingSystem] Applying lighting for ${biome.id}`);
+        logger.info(`[BiomeRenderingSystem] Applying lighting for ${biome.id}`);
     }
     
     // Apply biome fog
@@ -282,6 +283,6 @@ export class BiomeRenderingSystem {
     // Cleanup
     dispose() {
         this.activeBiomes.clear();
-        console.log('[BiomeRenderingSystem] Disposed');
+        logger.info('[BiomeRenderingSystem] Disposed');
     }
 }

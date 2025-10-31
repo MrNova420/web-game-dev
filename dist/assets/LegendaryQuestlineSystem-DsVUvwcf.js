@@ -1,1 +1,0 @@
-class l{constructor(){this.questlines={BLADE_OF_DESTINY:{chapters:10,finalReward:"/assets/models/legendary/blade_of_destiny.glb",cutscenes:["/assets/videos/blade_chapter1.mp4"],npcModels:["/assets/models/npcs/legendary_smith.glb"]}}}startQuestline(e,s){console.log(`${e} started legendary: ${s}`)}}export{l as LegendaryQuestlineSystem};

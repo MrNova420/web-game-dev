@@ -1,1 +1,0 @@
-class e{constructor(){this.fish={salmon:{model:"/assets/models/fish/salmon.glb"},legendary_fish:{model:"/assets/models/fish/legendary.glb"}},this.animations={cast:"/assets/animations/fishing_cast.fbx",reel:"/assets/animations/fishing_reel.fbx"}}catchFish(s){console.log(`${s} caught fish!`)}}export{e as FishingSystemAdvanced};

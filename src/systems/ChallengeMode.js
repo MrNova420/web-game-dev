@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ChallengeMode.js
  * Handles daily, weekly, and special challenge modes with modifiers
@@ -417,7 +418,7 @@ export class ChallengeMode {
         // Apply modifiers
         this.applyModifiers(challenge.modifiers);
         
-        console.log(`🎯 Started challenge: ${challenge.name}`);
+        logger.info(`🎯 Started challenge: ${challenge.name}`);
         
         return { success: true, challenge };
     }
@@ -431,7 +432,7 @@ export class ChallengeMode {
             if (!modifier) continue;
             
             // Apply effects (simplified - would integrate with game systems)
-            console.log(`⚡ Applied modifier: ${modifier.name}`);
+            logger.info(`⚡ Applied modifier: ${modifier.name}`);
             
             // Store active modifiers for game to read
             if (!this.activeModifiers) {
@@ -446,7 +447,7 @@ export class ChallengeMode {
      */
     removeModifiers() {
         this.activeModifiers = [];
-        console.log('⚡ Removed all challenge modifiers');
+        logger.info('⚡ Removed all challenge modifiers');
     }
     
     /**
@@ -564,7 +565,7 @@ export class ChallengeMode {
         }
         this.completedChallenges.push(challenge);
         
-        console.log(`🏆 Completed challenge: ${challenge.name}!`);
+        logger.info(`🏆 Completed challenge: ${challenge.name}!`);
         
         // Submit to leaderboard if applicable
         if (this.gameEngine.leaderboardSystem) {
@@ -594,7 +595,7 @@ export class ChallengeMode {
         
         if (rewards.item) {
             // Generate reward item
-            console.log(`📦 Received ${rewards.item.rarity} item!`);
+            logger.info(`📦 Received ${rewards.item.rarity} item!`);
         }
         
         if (rewards.materials) {
@@ -606,11 +607,11 @@ export class ChallengeMode {
         }
         
         if (rewards.title) {
-            console.log(`👑 Earned title: ${rewards.title}!`);
+            logger.info(`👑 Earned title: ${rewards.title}!`);
         }
         
         if (rewards.cosmetic) {
-            console.log(`✨ Unlocked cosmetic: ${rewards.cosmetic}!`);
+            logger.info(`✨ Unlocked cosmetic: ${rewards.cosmetic}!`);
         }
     }
     
@@ -620,7 +621,7 @@ export class ChallengeMode {
     submitChallengeScore(challenge) {
         // Would integrate with leaderboard system
         const score = this.calculateChallengeScore(challenge);
-        console.log(`📊 Challenge score: ${score}`);
+        logger.info(`📊 Challenge score: ${score}`);
     }
     
     /**
@@ -666,7 +667,7 @@ export class ChallengeMode {
         this.challengeTokens -= item.cost;
         
         // Grant item (simplified)
-        console.log(`🛒 Purchased: ${item.name}`);
+        logger.info(`🛒 Purchased: ${item.name}`);
         
         return { success: true, item };
     }
@@ -707,7 +708,7 @@ export class ChallengeMode {
         const newChallenge = this.generateDailyChallenge();
         this.activeChallenges.push(newChallenge);
         
-        console.log('🔄 Daily challenge reset');
+        logger.info('🔄 Daily challenge reset');
     }
     
     /**
@@ -719,7 +720,7 @@ export class ChallengeMode {
         const newChallenge = this.generateWeeklyChallenge();
         this.activeChallenges.push(newChallenge);
         
-        console.log('🔄 Weekly challenge reset');
+        logger.info('🔄 Weekly challenge reset');
     }
     
     /**
@@ -731,7 +732,7 @@ export class ChallengeMode {
         const newChallenge = this.generateMonthlyChallenge();
         this.activeChallenges.push(newChallenge);
         
-        console.log('🔄 Monthly challenge reset');
+        logger.info('🔄 Monthly challenge reset');
     }
     
     /**
@@ -799,7 +800,7 @@ export class ChallengeMode {
                 // Challenge failed due to timeout
                 challenge.active = false;
                 this.removeModifiers();
-                console.log(`⏰ Challenge expired: ${challenge.name}`);
+                logger.info(`⏰ Challenge expired: ${challenge.name}`);
             }
         }
     }

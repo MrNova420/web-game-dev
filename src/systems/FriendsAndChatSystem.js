@@ -112,7 +112,7 @@ export class FriendsAndChatSystem {
         
         this.friendRequests.set(requestId, request);
         
-        console.log(`Sent friend request to ${targetUserId}`);
+        logger.info(`Sent friend request to ${targetUserId}`);
         return { success: true, requestId: requestId };
     }
     
@@ -145,7 +145,7 @@ export class FriendsAndChatSystem {
         // Create private conversation
         this.createPrivateConversation(request.from);
         
-        console.log(`Accepted friend request from ${request.from}`);
+        logger.info(`Accepted friend request from ${request.from}`);
         return { success: true, friend: friend };
     }
     
@@ -161,7 +161,7 @@ export class FriendsAndChatSystem {
         request.status = 'declined';
         request.declinedDate = Date.now();
         
-        console.log(`Declined friend request from ${request.from}`);
+        logger.info(`Declined friend request from ${request.from}`);
         return { success: true };
     }
     
@@ -179,7 +179,7 @@ export class FriendsAndChatSystem {
         const conversationId = this.getConversationId(friendId);
         this.privateMessages.delete(conversationId);
         
-        console.log(`Removed friend ${friendId}`);
+        logger.info(`Removed friend ${friendId}`);
         return { success: true };
     }
     
@@ -195,7 +195,7 @@ export class FriendsAndChatSystem {
         // Add to blocked list
         this.blockedUsers.add(userId);
         
-        console.log(`Blocked user ${userId}`);
+        logger.info(`Blocked user ${userId}`);
         return { success: true };
     }
     
@@ -209,7 +209,7 @@ export class FriendsAndChatSystem {
         
         this.blockedUsers.delete(userId);
         
-        console.log(`Unblocked user ${userId}`);
+        logger.info(`Unblocked user ${userId}`);
         return { success: true };
     }
     
@@ -464,7 +464,7 @@ export class FriendsAndChatSystem {
      */
     broadcastStatusChange() {
         // Would send to server in multiplayer
-        console.log(`Status changed to ${this.onlineStatus}`);
+        logger.info(`Status changed to ${this.onlineStatus}`);
     }
     
     /**
@@ -504,7 +504,7 @@ export class FriendsAndChatSystem {
         }
         
         // Show notification
-        console.log(`[${message.channelId}] ${message.username}: ${message.message}`);
+        logger.info(`[${message.channelId}] ${message.username}: ${message.message}`);
     }
     
     /**
@@ -519,7 +519,7 @@ export class FriendsAndChatSystem {
         }
         
         // Show notification
-        console.log(`[PM] New message from ${message.from}`);
+        logger.info(`[PM] New message from ${message.from}`);
     }
     
     /**
@@ -639,7 +639,7 @@ export class FriendsAndChatSystem {
             this.customStatus = data.customStatus || '';
             this.settings = data.settings || this.settings;
         } catch (error) {
-            console.error('Failed to load social data:', error);
+            logger.error('Failed to load social data:', error);
         }
     }
     

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * ContentIntegrationSystem - Ensures all game content is accessible and properly linked
  * Integrates characters, monsters, items, abilities, and external assets
  */
@@ -36,7 +37,7 @@ export class ContentIntegrationSystem {
         };
         
         this.initializeContent();
-        console.log('🎮 Content Integration System initialized - All content accessible!');
+        logger.info('🎮 Content Integration System initialized - All content accessible!');
     }
     
     initializeContent() {
@@ -129,7 +130,7 @@ export class ContentIntegrationSystem {
             this.characters.set(char.id, char);
         });
         
-        console.log(`✅ ${characters.length} playable characters registered`);
+        logger.info(`✅ ${characters.length} playable characters registered`);
     }
     
     registerMonsters() {
@@ -207,7 +208,7 @@ export class ContentIntegrationSystem {
             this.monsters.set(monster.id, monster);
         });
         
-        console.log(`✅ ${monsters.length} monster types registered`);
+        logger.info(`✅ ${monsters.length} monster types registered`);
     }
     
     registerItems() {
@@ -239,7 +240,7 @@ export class ContentIntegrationSystem {
             this.items.set(item.id, item);
         });
         
-        console.log(`✅ ${items.length} items registered`);
+        logger.info(`✅ ${items.length} items registered`);
     }
     
     registerAbilities() {
@@ -277,7 +278,7 @@ export class ContentIntegrationSystem {
             this.abilities.set(ability.id, ability);
         });
         
-        console.log(`✅ ${abilities.length} abilities registered`);
+        logger.info(`✅ ${abilities.length} abilities registered`);
     }
     
     registerNPCs() {
@@ -292,7 +293,7 @@ export class ContentIntegrationSystem {
             this.npcs.set(npc.id, npc);
         });
         
-        console.log(`✅ ${npcs.length} NPCs registered`);
+        logger.info(`✅ ${npcs.length} NPCs registered`);
     }
     
     linkSystems() {
@@ -323,7 +324,7 @@ export class ContentIntegrationSystem {
             this.gameEngine.modernUISystem.brandingSystem = this.brandingSystem;
         }
         
-        console.log('🔗 All systems linked and integrated!');
+        logger.info('🔗 All systems linked and integrated!');
     }
     
     // Utility Methods

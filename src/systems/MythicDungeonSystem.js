@@ -59,12 +59,12 @@ export class MythicDungeonSystem {
 
   startMythicDungeon(partyId, dungeonId, keystoneLevel) {
     const dungeon = this.mythicDungeons[dungeonId];
-    console.log(`=== MYTHIC DUNGEON STARTED ===`);
-    console.log(`Dungeon: ${dungeonId} (Level ${keystoneLevel})`);
-    console.log(`Environment: ${dungeon.model}`);
-    console.log(`Skybox: ${dungeon.skybox}`);
-    console.log(`Ambient Audio: ${dungeon.ambient}`);
-    console.log(`Difficulty Multiplier: ${1 + (keystoneLevel * 0.1)}x`);
+    logger.info(`=== MYTHIC DUNGEON STARTED ===`);
+    logger.info(`Dungeon: ${dungeonId} (Level ${keystoneLevel})`);
+    logger.info(`Environment: ${dungeon.model}`);
+    logger.info(`Skybox: ${dungeon.skybox}`);
+    logger.info(`Ambient Audio: ${dungeon.ambient}`);
+    logger.info(`Difficulty Multiplier: ${1 + (keystoneLevel * 0.1)}x`);
     
     return {
       dungeonId,
@@ -88,10 +88,10 @@ export class MythicDungeonSystem {
     const timeElapsed = Date.now() - dungeonRun.startTime;
     const success = timeElapsed < dungeonRun.timerLimit;
     
-    console.log(`=== MYTHIC DUNGEON COMPLETE ===`);
-    console.log(`Success: ${success}`);
-    console.log(`Time: ${(timeElapsed / 1000 / 60).toFixed(2)} minutes`);
-    console.log(`Rewards: ${this.mythicLoot.legendary_weapon}, ${this.mythicLoot.artifact}`);
+    logger.info(`=== MYTHIC DUNGEON COMPLETE ===`);
+    logger.info(`Success: ${success}`);
+    logger.info(`Time: ${(timeElapsed / 1000 / 60).toFixed(2)} minutes`);
+    logger.info(`Rewards: ${this.mythicLoot.legendary_weapon}, ${this.mythicLoot.artifact}`);
     
     return { success, timeElapsed, rewards: [this.mythicLoot.legendary_weapon, this.mythicLoot.artifact] };
   }

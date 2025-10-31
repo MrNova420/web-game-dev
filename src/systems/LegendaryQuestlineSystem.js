@@ -14,5 +14,5 @@ export class LegendaryQuestlineSystem {
       }
     };
   }
-  startQuestline(playerId, questlineId) { console.log(`${playerId} started legendary: ${questlineId}`); }
+  startQuestline(playerId, questlineId) { logger.info(`${playerId} started legendary: ${questlineId}`); }
 }

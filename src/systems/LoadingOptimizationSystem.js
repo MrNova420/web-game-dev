@@ -5,5 +5,5 @@
 
 export class LoadingOptimizationSystem {
   constructor() { this.loadQueue = []; }
-  preloadAssets(assetList) { console.log(`Preloading ${assetList.length} assets`); }
+  preloadAssets(assetList) { logger.info(`Preloading ${assetList.length} assets`); }
 }

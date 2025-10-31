@@ -12,7 +12,7 @@ export class DungeonGenerationSystem {
   }
 
   generateDungeon(type, difficulty) {
-    console.log(`Generating ${type} dungeon (difficulty: ${difficulty})`);
-    console.log(`  Tileset: ${this.dungeonTilesets[type]}`);
+    logger.info(`Generating ${type} dungeon (difficulty: ${difficulty})`);
+    logger.info(`  Tileset: ${this.dungeonTilesets[type]}`);
   }
 }

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * CombatSystemOverhauled - Advanced 3D Real-time Combat System
  * 
  * Phase 2, System 16 of AUTONOMOUS_EXECUTION_PLAN
@@ -220,7 +221,7 @@ export class CombatSystemOverhauled {
     createHitbox(entity, weaponType, attackType, direction) {
         const template = this.hitboxTemplates[weaponType];
         if (!template) {
-            console.warn(`Unknown weapon type: ${weaponType}`);
+            logger.warn(`Unknown weapon type: ${weaponType}`);
             return null;
         }
         

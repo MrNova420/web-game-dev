@@ -10,14 +10,14 @@ export class GameReadinessSystem {
         this.verificationResults = [];
         this.readyToPlay = false;
         
-        console.log('[GameReadinessSystem] Game readiness verification initialized');
+        logger.info('[GameReadinessSystem] Game readiness verification initialized');
     }
 
     /**
      * Run full game readiness verification
      */
     async verifyGameReadiness() {
-        console.log('[GameReadinessSystem] Running comprehensive readiness verification...');
+        logger.info('[GameReadinessSystem] Running comprehensive readiness verification...');
         
         const checks = [
             this.verifySystemsLoaded.bind(this),
@@ -39,7 +39,7 @@ export class GameReadinessSystem {
                 results.push(result);
                 this.verificationResults.push(result);
             } catch (error) {
-                console.error('[GameReadinessSystem] Verification check failed:', error);
+                logger.error('[GameReadinessSystem] Verification check failed:', error);
                 results.push({
                     name: 'Unknown Check',
                     passed: false,
@@ -52,12 +52,12 @@ export class GameReadinessSystem {
         this.readyToPlay = allPassed;
 
         const status = allPassed ? '✓ GAME READY TO PLAY' : '✗ ISSUES FOUND';
-        console.log(`[GameReadinessSystem] Verification complete: ${status}`);
-        console.log(`[GameReadinessSystem] Passed: ${results.filter(r => r.passed).length}/${results.length}`);
+        logger.info(`[GameReadinessSystem] Verification complete: ${status}`);
+        logger.info(`[GameReadinessSystem] Passed: ${results.filter(r => r.passed).length}/${results.length}`);
         
         if (!allPassed) {
             const failed = results.filter(r => !r.passed);
-            console.warn('[GameReadinessSystem] Failed checks:', failed);
+            logger.warn('[GameReadinessSystem] Failed checks:', failed);
         }
 
         return {
@@ -71,7 +71,7 @@ export class GameReadinessSystem {
      * Verify all systems are loaded
      */
     async verifySystemsLoaded() {
-        console.log('[GameReadinessSystem] Verifying systems loaded...');
+        logger.info('[GameReadinessSystem] Verifying systems loaded...');
         
         const requiredSystems = [
             'GameIntegrationSystem',
@@ -109,7 +109,7 @@ export class GameReadinessSystem {
      * Verify assets are available
      */
     async verifyAssetsAvailable() {
-        console.log('[GameReadinessSystem] Verifying assets available...');
+        logger.info('[GameReadinessSystem] Verifying assets available...');
         
         const assetCategories = [
             'models',      // Quaternius, Sketchfab Free, Mixamo
@@ -135,7 +135,7 @@ export class GameReadinessSystem {
      * Verify no critical bugs
      */
     async verifyNoBugs() {
-        console.log('[GameReadinessSystem] Verifying no critical bugs...');
+        logger.info('[GameReadinessSystem] Verifying no critical bugs...');
         
         // Check for:
         // - Things not showing up
@@ -169,7 +169,7 @@ export class GameReadinessSystem {
      * Verify performance is good
      */
     async verifyPerformance() {
-        console.log('[GameReadinessSystem] Verifying performance...');
+        logger.info('[GameReadinessSystem] Verifying performance...');
         
         // Check:
         // - FPS is at least 30 (target 60)
@@ -199,7 +199,7 @@ export class GameReadinessSystem {
      * Verify gameplay features work
      */
     async verifyGameplayFeatures() {
-        console.log('[GameReadinessSystem] Verifying gameplay features...');
+        logger.info('[GameReadinessSystem] Verifying gameplay features...');
         
         const features = [
             'Combat system',
@@ -228,7 +228,7 @@ export class GameReadinessSystem {
      * Verify UI is functional
      */
     async verifyUIFunctional() {
-        console.log('[GameReadinessSystem] Verifying UI functional...');
+        logger.info('[GameReadinessSystem] Verifying UI functional...');
         
         const uiElements = [
             'Health bar',
@@ -256,7 +256,7 @@ export class GameReadinessSystem {
      * Verify content is complete
      */
     async verifyContentComplete() {
-        console.log('[GameReadinessSystem] Verifying content complete...');
+        logger.info('[GameReadinessSystem] Verifying content complete...');
         
         const content = {
             systems: 265,
@@ -283,7 +283,7 @@ export class GameReadinessSystem {
      * Verify network ready (for multiplayer)
      */
     async verifyNetworkReady() {
-        console.log('[GameReadinessSystem] Verifying network ready...');
+        logger.info('[GameReadinessSystem] Verifying network ready...');
         
         // Check network systems
         const passed = true; // Network systems implemented
@@ -299,7 +299,7 @@ export class GameReadinessSystem {
      * Verify save system works
      */
     async verifySaveSystem() {
-        console.log('[GameReadinessSystem] Verifying save system...');
+        logger.info('[GameReadinessSystem] Verifying save system...');
         
         // Check if game can save/load
         const passed = true; // Save system should work
@@ -315,7 +315,7 @@ export class GameReadinessSystem {
      * Verify input handling works
      */
     async verifyInputHandling() {
-        console.log('[GameReadinessSystem] Verifying input handling...');
+        logger.info('[GameReadinessSystem] Verifying input handling...');
         
         // Check if keyboard, mouse, gamepad work
         const passed = true; // Input systems should work
@@ -383,7 +383,7 @@ export class GameReadinessSystem {
             }
         };
 
-        console.log('[GameReadinessSystem] Readiness Report:', report);
+        logger.info('[GameReadinessSystem] Readiness Report:', report);
         
         return report;
     }

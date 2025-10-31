@@ -1,1 +1,0 @@
-class l{constructor(){this.caves={crystal_cave:{model:"/assets/models/caves/crystal_cave.glb",tileset:"/assets/models/caves/cave_tileset.glb"}}}exploreCave(e){console.log(`Exploring: ${e}`)}}export{l as CaveExplorationSystem};

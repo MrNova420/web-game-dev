@@ -1,0 +1,1 @@
+import{l as a}from"./index-CGDjDhhy.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class r{constructor(){this.location={model:"/assets/models/shops/black_market.glb"}}accessBlackMarket(s){a.info(`${s} accesses black market`)}}export{r as BlackMarketSystem};

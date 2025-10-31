@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CardGameSystem - Collectible Card Game Mini-Game
  * 
@@ -188,7 +189,7 @@ export class CardGameSystem {
      */
     createDeck(name, cardIds) {
         if (cardIds.length !== this.settings.deckSize) {
-            console.warn(`Deck must contain exactly ${this.settings.deckSize} cards`);
+            logger.warn(`Deck must contain exactly ${this.settings.deckSize} cards`);
             return null;
         }
         

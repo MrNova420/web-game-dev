@@ -5,5 +5,5 @@
 
 export class NetworkOptimizationSystem {
   constructor() { this.latency = 50; this.bandwidth = 1000; }
-  optimizePackets(data) { console.log(`Optimized packet size: ${data.length} bytes`); }
+  optimizePackets(data) { logger.info(`Optimized packet size: ${data.length} bytes`); }
 }

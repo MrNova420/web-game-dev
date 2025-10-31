@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Advanced3DModelSystem - Professional 3D human and monster models
  * Uses ONLY external assets - no procedural geometry creation
  * 
@@ -188,7 +189,7 @@ export class Advanced3DModelSystem {
     async loadCharacterModel(className) {
         const characterData = this.characterModels[className];
         if (!characterData) {
-            console.warn(`Character class ${className} not found`);
+            logger.warn(`Character class ${className} not found`);
             return null;
         }
         
@@ -198,7 +199,7 @@ export class Advanced3DModelSystem {
         }
         
         try {
-            console.log(`Loading ${className} from ${characterData.source}: ${characterData.model}`);
+            logger.info(`Loading ${className} from ${characterData.source}: ${characterData.model}`);
             const gltf = await this.loadGLTF(characterData.model);
             
             if (gltf) {
@@ -206,7 +207,7 @@ export class Advanced3DModelSystem {
                 return gltf.scene.clone();
             }
         } catch (error) {
-            console.warn(`Failed to load character model: ${characterData.model}`, error);
+            logger.warn(`Failed to load character model: ${characterData.model}`, error);
             return this.createPlaceholderCharacter(className);
         }
     }
@@ -217,7 +218,7 @@ export class Advanced3DModelSystem {
     async loadMonsterModel(monsterType) {
         const monsterData = this.monsterModels[monsterType];
         if (!monsterData) {
-            console.warn(`Monster type ${monsterType} not found`);
+            logger.warn(`Monster type ${monsterType} not found`);
             return null;
         }
         
@@ -227,7 +228,7 @@ export class Advanced3DModelSystem {
         }
         
         try {
-            console.log(`Loading ${monsterType} from ${monsterData.source}: ${monsterData.model}`);
+            logger.info(`Loading ${monsterType} from ${monsterData.source}: ${monsterData.model}`);
             const gltf = await this.loadGLTF(monsterData.model);
             
             if (gltf) {
@@ -235,7 +236,7 @@ export class Advanced3DModelSystem {
                 return gltf.scene.clone();
             }
         } catch (error) {
-            console.warn(`Failed to load monster model: ${monsterData.model}`, error);
+            logger.warn(`Failed to load monster model: ${monsterData.model}`, error);
             return this.createPlaceholderMonster(monsterType);
         }
     }
@@ -249,7 +250,7 @@ export class Advanced3DModelSystem {
                 path,
                 (gltf) => resolve(gltf),
                 (progress) => {
-                    console.log(`Loading: ${(progress.loaded / progress.total * 100).toFixed(2)}%`);
+                    logger.info(`Loading: ${(progress.loaded / progress.total * 100).toFixed(2)}%`);
                 },
                 (error) => reject(error)
             );
@@ -265,7 +266,7 @@ export class Advanced3DModelSystem {
                 path,
                 (fbx) => resolve(fbx),
                 (progress) => {
-                    console.log(`Loading animation: ${(progress.loaded / progress.total * 100).toFixed(2)}%`);
+                    logger.info(`Loading animation: ${(progress.loaded / progress.total * 100).toFixed(2)}%`);
                 },
                 (error) => reject(error)
             );
@@ -276,7 +277,7 @@ export class Advanced3DModelSystem {
      * Create placeholder (only if external asset fails to load)
      */
     createPlaceholderCharacter(className) {
-        console.warn(`Using placeholder for ${className} - external asset failed to load`);
+        logger.warn(`Using placeholder for ${className} - external asset failed to load`);
         const geometry = new THREE.CapsuleGeometry(0.5, 1.5, 4, 8);
         const material = new THREE.MeshStandardMaterial({ 
             color: 0x888888,
@@ -289,7 +290,7 @@ export class Advanced3DModelSystem {
      * Create placeholder monster (only if external asset fails to load)
      */
     createPlaceholderMonster(monsterType) {
-        console.warn(`Using placeholder for ${monsterType} - external asset failed to load`);
+        logger.warn(`Using placeholder for ${monsterType} - external asset failed to load`);
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ 
             color: 0xff0000,

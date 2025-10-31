@@ -30,7 +30,7 @@ export class EnhancedUISystem {
      * Initialize all UI systems
      */
     init() {
-        console.log('🎨 Initializing Enhanced UI System...');
+        logger.info('🎨 Initializing Enhanced UI System...');
         
         // Create all UI panels
         this.createMainMenu();
@@ -48,7 +48,7 @@ export class EnhancedUISystem {
         this.showPanel('mainMenu');
         this.hidePanel('hud');
         
-        console.log('✅ Enhanced UI System initialized');
+        logger.info('✅ Enhanced UI System initialized');
     }
     
     /**
@@ -722,7 +722,7 @@ export class EnhancedUISystem {
      */
     showDamageNumber(damage, position, isCrit = false) {
         // This would create floating damage numbers in 3D space
-        console.log(`Damage: ${damage} at position`, position);
+        logger.info(`Damage: ${damage} at position`, position);
     }
 }
 
