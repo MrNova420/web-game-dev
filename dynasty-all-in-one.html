@@ -1116,11 +1116,35 @@
 
         // Boss data from documentation
         const BOSSES = [
-            { name: 'Smoke Dragon', emoji: '🐉', biome: 0, hp: 500, attack: 40, gold: 100, exp: 200 },
-            { name: 'Fungal Empress', emoji: '🍄👑', biome: 1, hp: 800, attack: 50, gold: 200, exp: 350 },
-            { name: 'Corrupted Seraph', emoji: '😇💀', biome: 3, hp: 1200, attack: 65, gold: 300, exp: 500 },
-            { name: 'Void Navigator', emoji: '🌀👤', biome: 11, hp: 2000, attack: 85, gold: 500, exp: 800 },
-            { name: 'Last God-King', emoji: '👑💀', biome: 11, hp: 5000, attack: 120, gold: 1000, exp: 2000 }
+            // Early Game Bosses (Levels 1-20)
+            { name: 'Smoke Dragon', emoji: '🐉', biome: 0, hp: 500, attack: 40, defense: 10, gold: 100, exp: 200, level: 10 },
+            { name: 'Forest Guardian', emoji: '🌳👹', biome: 0, hp: 450, attack: 35, defense: 15, gold: 90, exp: 180, level: 8 },
+            { name: 'Fungal Empress', emoji: '🍄👑', biome: 1, hp: 800, attack: 50, defense: 12, gold: 200, exp: 350, level: 15 },
+            { name: 'Crystal Golem', emoji: '💎🗿', biome: 1, hp: 900, attack: 45, defense: 30, gold: 180, exp: 300, level: 18 },
+            
+            // Mid Game Bosses (Levels 21-40)
+            { name: 'Crimson Drake', emoji: '🐲🔴', biome: 2, hp: 1200, attack: 60, defense: 20, gold: 300, exp: 500, level: 25 },
+            { name: 'Ice Titan', emoji: '❄️🗿', biome: 6, hp: 1400, attack: 65, defense: 35, gold: 350, exp: 550, level: 28 },
+            { name: 'Corrupted Seraph', emoji: '😇💀', biome: 3, hp: 1500, attack: 70, defense: 18, gold: 400, exp: 600, level: 30 },
+            { name: 'Shadow Reaper', emoji: '💀🌑', biome: 3, hp: 1600, attack: 75, defense: 15, gold: 450, exp: 650, level: 33 },
+            { name: 'Thunder God', emoji: '⚡👿', biome: 9, hp: 1800, attack: 80, defense: 25, gold: 500, exp: 700, level: 35 },
+            { name: 'Lava Wyrm', emoji: '🌋🐉', biome: 10, hp: 2000, attack: 85, defense: 30, gold: 550, exp: 750, level: 38 },
+            
+            // Late Game Bosses (Levels 41-60)
+            { name: 'Ancient Lich', emoji: '💀👑', biome: 3, hp: 2500, attack: 95, defense: 20, gold: 700, exp: 900, level: 45 },
+            { name: 'Kraken', emoji: '🦑', biome: 2, hp: 3000, attack: 100, defense: 40, gold: 800, exp: 1000, level: 50 },
+            { name: 'Phoenix Lord', emoji: '🔥🦅', biome: 10, hp: 3500, attack: 110, defense: 25, gold: 900, exp: 1200, level: 55 },
+            { name: 'Void Navigator', emoji: '🌀👤', biome: 11, hp: 4000, attack: 120, defense: 30, gold: 1000, exp: 1400, level: 60 },
+            
+            // End Game Bosses (Levels 61-80)
+            { name: 'Dragon King', emoji: '🐉👑', biome: 10, hp: 5000, attack: 140, defense: 50, gold: 1500, exp: 2000, level: 65 },
+            { name: 'Celestial Warden', emoji: '🌟👼', biome: 9, hp: 6000, attack: 150, defense: 45, gold: 1800, exp: 2500, level: 70 },
+            { name: 'Void Tyrant', emoji: '🌀😈', biome: 11, hp: 7000, attack: 160, defense: 40, gold: 2000, exp: 3000, level: 75 },
+            { name: 'Last God-King', emoji: '👑💀', biome: 11, hp: 10000, attack: 200, defense: 60, gold: 3000, exp: 5000, level: 80 },
+            
+            // SECRET WORLD BOSSES (Very Rare)
+            { name: 'Omega Dragon', emoji: '🌈🐉', biome: 11, hp: 15000, attack: 250, defense: 80, gold: 5000, exp: 10000, level: 90, secret: true },
+            { name: 'Time Eater', emoji: '⏰💀', biome: 11, hp: 20000, attack: 300, defense: 100, gold: 10000, exp: 20000, level: 100, secret: true }
         ];
 
         // Loot items from documentation (400+ weapons, 7 rarity tiers)
@@ -3202,22 +3226,24 @@
             if (!gameState.comboCount) gameState.comboCount = 0;
             
             const now = Date.now();
-            if (now - gameState.lastAttackTime < 1000) {
+            if (now - gameState.lastAttackTime < 1500) { // Increased combo window
                 gameState.comboCount++;
             } else {
                 gameState.comboCount = 1;
             }
             gameState.lastAttackTime = now;
             
-            // Critical hit chance (10% + 2% per combo)
-            const critChance = 0.1 + (gameState.comboCount * 0.02);
+            // IMPROVED: Better crit chance scaling (15% base + 3% per combo, max 45%)
+            const critChance = Math.min(0.45, 0.15 + (gameState.comboCount * 0.03));
             const isCrit = Math.random() < critChance;
             
-            let damage = totalAttack + Math.floor(Math.random() * 10);
-            damage *= (1 + gameState.comboCount * 0.1); // 10% damage per combo
+            // IMPROVED: Better damage calculation with variance
+            let baseDamage = totalAttack * (0.9 + Math.random() * 0.2); // 90-110% of attack
+            let damage = baseDamage * (1 + gameState.comboCount * 0.15); // 15% per combo
             
+            // IMPROVED: Higher crit multiplier (2.5x instead of 2x)
             if (isCrit) {
-                damage *= 2;
+                damage *= 2.5;
                 createParticle(enemy.x, enemy.y, `💥 CRIT! -${Math.floor(damage)}`, '#ff00ff');
             } else {
                 createParticle(enemy.x, enemy.y, `-${Math.floor(damage)}`, '#ff0000');
@@ -3227,7 +3253,10 @@
                 createParticle(enemy.x, enemy.y - 30, `${gameState.comboCount}x COMBO!`, '#ffd700');
             }
             
-            enemy.hp -= damage;
+            // IMPROVED: Apply damage with enemy defense reduction
+            const enemyDefense = enemy.defense || 0;
+            const actualDamage = Math.max(1, damage - enemyDefense);
+            enemy.hp -= actualDamage;
             
             if (enemy.hp <= 0) {
                 const index = gameState.enemies.indexOf(enemy);
@@ -3380,26 +3409,42 @@
         function gainExp(amount) {
             gameState.player.exp += amount;
             
-            if (gameState.player.exp >= gameState.player.expToNext) {
+            // IMPROVED: Better exp curve (not too steep)
+            while (gameState.player.exp >= gameState.player.expToNext) {
                 gameState.player.level++;
-                gameState.player.exp = 0;
-                gameState.player.expToNext = Math.floor(gameState.player.expToNext * 1.5);
+                gameState.player.exp -= gameState.player.expToNext;
+                gameState.player.expToNext = Math.floor(100 * Math.pow(1.2, gameState.player.level - 1));
                 
-                // Level up bonuses
-                gameState.player.maxHp += 10;
-                gameState.player.maxMp += 5;
+                // IMPROVED: Better level up bonuses (scales with level)
+                const hpGain = 10 + Math.floor(gameState.player.level * 0.5);
+                const mpGain = 5 + Math.floor(gameState.player.level * 0.3);
+                const atkGain = 2 + Math.floor(gameState.player.level * 0.1);
+                const defGain = 1 + Math.floor(gameState.player.level * 0.1);
+                
+                gameState.player.maxHp += hpGain;
+                gameState.player.maxMp += mpGain;
                 gameState.player.hp = gameState.player.maxHp;
                 gameState.player.mp = gameState.player.maxMp;
-                gameState.player.attack += 2;
-                gameState.player.defense += 1;
+                gameState.player.attack += atkGain;
+                gameState.player.defense += defGain;
+                gameState.player.speed = Math.min(8, 5 + gameState.player.level * 0.1); // Cap speed
                 
                 createParticle(gameState.player.x, gameState.player.y, '✨ LEVEL UP! ✨', '#ffd700');
+                createParticle(gameState.player.x, gameState.player.y - 40, `Level ${gameState.player.level}!`, '#00ff00');
                 
                 document.getElementById('player-class').textContent = 
                     `Level ${gameState.player.level} ${gameState.player.class.name}`;
                 
                 // Unlock skills on level up
                 unlockSkills();
+                
+                // Every 10 levels, give bonus reward
+                if (gameState.player.level % 10 === 0) {
+                    const bonusGold = gameState.player.level * 50;
+                    gameState.player.gold += bonusGold;
+                    createParticle(gameState.player.x, gameState.player.y - 60, 
+                        `🎁 +${bonusGold} Gold Bonus!`, '#ffd700');
+                }
                 
                 // Check level achievements
                 checkAchievements();
@@ -3528,22 +3573,35 @@
             return suitableWeapons[Math.floor(Math.random() * suitableWeapons.length)];
         }
 
-        // Enhanced loot drop that uses weapon database
+        // IMPROVED: Enhanced loot drop with better rates and scaling
         function dropLootFromEnemy(enemy) {
-            const dropChance = 0.2 + (gameState.comboCount * 0.05);
+            // IMPROVED: Better drop chance based on enemy level/type
+            const baseDropChance = 0.25; // 25% base
+            const levelBonus = Math.min(0.30, gameState.player.level * 0.01); // +1% per level, max 30%
+            const comboBonus = gameState.comboCount * 0.05; // +5% per combo
+            const bossBonus = enemy.isBoss ? 0.50 : 0; // +50% for bosses
+            
+            const dropChance = Math.min(0.95, baseDropChance + levelBonus + comboBonus + bossBonus);
+            
             if (Math.random() > dropChance) return;
             
-            // 60% chance for weapon, 40% for other loot
-            if (Math.random() < 0.6) {
+            // IMPROVED: 70% weapon, 30% other loot (better weapon drops)
+            if (Math.random() < 0.7) {
                 const weapon = getWeaponForLevel(gameState.player.level);
                 if (weapon) {
                     giveWeapon(weapon.name);
                 }
             } else {
-                // Drop original loot items (potions, etc.)
+                // Drop consumables, materials, etc.
                 const lootItem = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
                 gameState.player.inventory.push({...lootItem});
                 createParticle(enemy.x, enemy.y, `+${lootItem.icon} ${lootItem.name}!`, RARITY_COLORS[lootItem.rarity] || '#ffffff');
+            }
+            
+            // IMPROVED: Bonus loot for high combos (3+)
+            if (gameState.comboCount >= 3) {
+                gameState.player.gold += 10 * gameState.comboCount;
+                createParticle(enemy.x, enemy.y - 30, `+${10 * gameState.comboCount} Combo Gold!`, '#ffd700');
             }
         }
 
@@ -7199,6 +7257,92 @@
                         {name: "Queen Aquaria", role: "ruler", x: 16666, y: 18750, dialogue: "Welcome to our underwater realm."},
                         {name: "Captain Tidehunter", role: "quest_giver", x: 16700, y: 18800, dialogue: "Need a ship?"}
                     ]
+                },
+                // ADD REMAINING 5 CITIES
+                {
+                    id: "shadowmoon",
+                    name: "Shadowmoon Citadel",
+                    biome: "shadowmoon_vale",
+                    x: 41666, y: 18750,
+                    size: {width: 800, height: 700},
+                    population: 80,
+                    buildings: [
+                        {type: "castle", name: "Dark Castle", x: 41666, y: 18750, size: 150},
+                        {type: "tower", name: "Shadow Tower", x: 41600, y: 18700, size: 100},
+                        {type: "market", name: "Night Market", x: 41700, y: 18800, size: 90}
+                    ],
+                    npcs: [
+                        {name: "Lord Umbra", role: "ruler", x: 41666, y: 18750, dialogue: "Welcome to the shadows."},
+                        {name: "Shadow Merchant", role: "vendor_general", x: 41700, y: 18800, dialogue: "Dark wares for sale!"}
+                    ]
+                },
+                {
+                    id: "frostheim",
+                    name: "Frostheim",
+                    biome: "frozen_wastes",
+                    x: 8333, y: 31250,
+                    size: {width: 750, height: 650},
+                    population: 70,
+                    buildings: [
+                        {type: "hall", name: "Ice Hall", x: 8333, y: 31250, size: 130},
+                        {type: "forge", name: "Frost Forge", x: 8280, y: 31200, size: 90},
+                        {type: "inn", name: "Warm Hearth Inn", x: 8380, y: 31300, size: 70}
+                    ],
+                    npcs: [
+                        {name: "Jarl Frostbeard", role: "ruler", x: 8333, y: 31250, dialogue: "Stay warm, traveler."},
+                        {name: "Ice Smith", role: "vendor_weapon", x: 8280, y: 31200, dialogue: "Forged in ice!"}
+                    ]
+                },
+                {
+                    id: "skyreach",
+                    name: "Skyreach Spire",
+                    biome: "celestial_highlands",
+                    x: 25000, y: 31250,
+                    size: {width: 700, height: 600},
+                    population: 65,
+                    buildings: [
+                        {type: "spire", name: "Sky Spire", x: 25000, y: 31250, size: 180},
+                        {type: "temple", name: "Cloud Temple", x: 24950, y: 31200, size: 100},
+                        {type: "market", name: "Sky Bazaar", x: 25050, y: 31300, size: 80}
+                    ],
+                    npcs: [
+                        {name: "Archon Skywind", role: "ruler", x: 25000, y: 31250, dialogue: "Rise to the heavens!"},
+                        {name: "Cloud Sage", role: "mage_trainer", x: 24950, y: 31200, dialogue: "Master the sky!"}
+                    ]
+                },
+                {
+                    id: "emberforge",
+                    name: "Emberforge City",
+                    biome: "volcanic_badlands",
+                    x: 33333, y: 43750,
+                    size: {width: 800, height: 700},
+                    population: 85,
+                    buildings: [
+                        {type: "forge", name: "Great Forge", x: 33333, y: 43750, size: 160},
+                        {type: "mine", name: "Lava Mines", x: 33280, y: 43700, size: 120},
+                        {type: "barracks", name: "Fire Barracks", x: 33380, y: 43800, size: 100}
+                    ],
+                    npcs: [
+                        {name: "Forge Lord Magmus", role: "ruler", x: 33333, y: 43750, dialogue: "Feel the heat!"},
+                        {name: "Master Smith Pyro", role: "vendor_weapon", x: 33280, y: 43700, dialogue: "Legendary weapons!"}
+                    ]
+                },
+                {
+                    id: "voidgate",
+                    name: "Void Gate Outpost",
+                    biome: "void_rift",
+                    x: 41666, y: 43750,
+                    size: {width: 650, height: 550},
+                    population: 50,
+                    buildings: [
+                        {type: "portal", name: "Void Portal", x: 41666, y: 43750, size: 150},
+                        {type: "tower", name: "Reality Tower", x: 41616, y: 43700, size: 100},
+                        {type: "shrine", name: "Chaos Shrine", x: 41716, y: 43800, size: 80}
+                    ],
+                    npcs: [
+                        {name: "Void Keeper Null", role: "ruler", x: 41666, y: 43750, dialogue: "Beyond reality..."},
+                        {name: "Chaos Merchant", role: "vendor_general", x: 41716, y: 43800, dialogue: "Trade in chaos!"}
+                    ]
                 }
             ],
             villages: [
@@ -7207,6 +7351,25 @@
                 {name: "Ironpeak", biome: "crimson_peaks", x: 40000, y: 7000, buildings: 18, npcs: 14},
                 {name: "Ashfen", biome: "twilight_marshlands", x: 24000, y: 20000, buildings: 10, npcs: 8},
                 {name: "Frostpine", biome: "frozen_wastes", x: 8000, y: 32000, buildings: 14, npcs: 11}
+            ],
+            // ADD DUNGEONS, LANDMARKS, WORLD BOSSES
+            dungeons: [
+                {name: "Crypt of Shadows", biome: "mystic_forest", x: 6000, y: 8000, difficulty: 3, floors: 10, boss: "Shadow King"},
+                {name: "Frozen Depths", biome: "frozen_wastes", x: 10000, y: 35000, difficulty: 6, floors: 15, boss: "Ice Drake"},
+                {name: "Magma Core", biome: "volcanic_badlands", x: 35000, y: 45000, difficulty: 9, floors: 20, boss: "Lava Titan"},
+                {name: "Void Citadel", biome: "void_rift", x: 43000, y: 45000, difficulty: 11, floors: 25, boss: "Void Lord"}
+            ],
+            worldBosses: [
+                {name: "Ancient Dragon", x: 25000, y: 12500, level: 50, respawn: 3600},
+                {name: "Kraken", x: 16666, y: 20000, level: 60, respawn: 3600},
+                {name: "Phoenix", x: 35000, y: 43750, level: 70, respawn: 3600},
+                {name: "Void Titan", x: 41666, y: 45000, level: 80, respawn: 3600}
+            ],
+            resources: [
+                {type: "Gold Mine", x: 40000, y: 8000, yields: "gold_ore"},
+                {type: "Mithril Vein", x: 25000, y: 32000, yields: "mithril_ore"},
+                {type: "Ancient Tree", x: 8333, y: 7000, yields: "ancient_wood"},
+                {type: "Crystal Cave", x: 25000, y: 30000, yields: "magic_crystal"}
             ]
         };
 
