@@ -1411,15 +1411,16 @@ export class GameEngine {
                     enemy.takeDamage(damage);
                     
                     // Create hit effect
-                if (this.particleSystem) {
-                    this.particleSystem.createHitEffect(enemy.mesh.position);
+                    if (this.particleSystem) {
+                        this.particleSystem.createHitEffect(enemy.mesh.position);
+                    }
+                    
+                    if (!enemy.isAlive) {
+                        this.onEnemyKilled(enemy);
+                    }
                 }
-                
-                if (!enemy.isAlive) {
-                    this.onEnemyKilled(enemy);
-                }
-            }
-        });
+            });
+        }
     }
     
     castShadowStep() {
