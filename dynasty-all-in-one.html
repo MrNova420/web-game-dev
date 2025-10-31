@@ -6339,8 +6339,612 @@
         }
 
         // ========================================
+        // PHASE 21: PVP & ARENA SYSTEM
+        // ========================================
+
+        const arenaSystem = {
+            active: false,
+            mode: null, // '1v1', '3v3', '5v5', '10v10'
+            players: [],
+            score: { team1: 0, team2: 0 },
+            timer: 0,
+            matchHistory: []
+        };
+
+        const pvpStats = {
+            wins: 0,
+            losses: 0,
+            kills: 0,
+            deaths: 0,
+            rating: 1500,
+            honorPoints: 0,
+            rank: 'Bronze',
+            season: 1
+        };
+
+        const PVP_RANKS = [
+            { name: 'Bronze', minRating: 0, icon: '🥉', rewards: { gold: 100, items: 1 } },
+            { name: 'Silver', minRating: 1200, icon: '🥈', rewards: { gold: 250, items: 2 } },
+            { name: 'Gold', minRating: 1500, icon: '🥇', rewards: { gold: 500, items: 3 } },
+            { name: 'Platinum', minRating: 1800, icon: '💎', rewards: { gold: 1000, items: 5 } },
+            { name: 'Diamond', minRating: 2100, icon: '💠', rewards: { gold: 2000, items: 8 } },
+            { name: 'Master', minRating: 2400, icon: '👑', rewards: { gold: 5000, items: 10 } },
+            { name: 'Grandmaster', minRating: 2700, icon: '⭐', rewards: { gold: 10000, items: 15 } }
+        ];
+
+        class ArenaMatch {
+            constructor(mode) {
+                this.id = Date.now() + Math.random();
+                this.mode = mode;
+                this.team1 = [];
+                this.team2 = [];
+                this.startTime = Date.now();
+                this.endTime = null;
+                this.winner = null;
+                this.rewards = { gold: 0, honor: 0, rating: 0 };
+            }
+
+            addPlayer(player, team) {
+                if (team === 1) this.team1.push(player);
+                else this.team2.push(player);
+            }
+
+            start() {
+                arenaSystem.active = true;
+                arenaSystem.mode = this.mode;
+                arenaSystem.timer = 900000; // 15 minutes
+            }
+
+            end(winningTeam) {
+                this.endTime = Date.now();
+                this.winner = winningTeam;
+                
+                // Calculate rewards
+                const matchDuration = this.endTime - this.startTime;
+                const baseGold = 500;
+                const baseHonor = 100;
+                const baseRating = 25;
+                
+                if (winningTeam === 1 && this.team1.includes('Player')) {
+                    this.rewards = {
+                        gold: baseGold,
+                        honor: baseHonor,
+                        rating: baseRating
+                    };
+                    pvpStats.wins++;
+                    pvpStats.rating += baseRating;
+                } else if (winningTeam === 2 && this.team2.includes('Player')) {
+                    this.rewards = {
+                        gold: baseGold,
+                        honor: baseHonor,
+                        rating: baseRating
+                    };
+                    pvpStats.wins++;
+                    pvpStats.rating += baseRating;
+                } else {
+                    this.rewards = {
+                        gold: baseGold / 2,
+                        honor: baseHonor / 2,
+                        rating: -Math.floor(baseRating / 2)
+                    };
+                    pvpStats.losses++;
+                    pvpStats.rating += this.rewards.rating;
+                }
+                
+                player.gold += this.rewards.gold;
+                pvpStats.honorPoints += this.rewards.honor;
+                
+                updatePvPRank();
+                arenaSystem.matchHistory.push(this);
+                arenaSystem.active = false;
+            }
+        }
+
+        function queueForArena(mode) {
+            if (arenaSystem.active) return { success: false, message: 'Already in match' };
+            
+            const match = new ArenaMatch(mode);
+            match.addPlayer('Player', 1);
+            
+            // Add AI opponents
+            const playersNeeded = mode === '1v1' ? 1 : mode === '3v3' ? 5 : mode === '5v5' ? 9 : 19;
+            for (let i = 0; i < playersNeeded; i++) {
+                const team = i < playersNeeded / 2 ? 1 : 2;
+                match.addPlayer(`AI_${i}`, team);
+            }
+            
+            match.start();
+            createParticle(player.x, player.y - 50, `${mode} Arena Match Started!`, "#FF4444", 2000);
+            
+            return { success: true, match };
+        }
+
+        function updatePvPRank() {
+            for (let i = PVP_RANKS.length - 1; i >= 0; i--) {
+                if (pvpStats.rating >= PVP_RANKS[i].minRating) {
+                    const oldRank = pvpStats.rank;
+                    pvpStats.rank = PVP_RANKS[i].name;
+                    
+                    if (oldRank !== pvpStats.rank) {
+                        createParticle(player.x, player.y - 60, 
+                            `Rank Up: ${pvpStats.rank} ${PVP_RANKS[i].icon}!`, 
+                            "#FFD700", 3000);
+                        
+                        // Rank up rewards
+                        player.gold += PVP_RANKS[i].rewards.gold;
+                        for (let j = 0; j < PVP_RANKS[i].rewards.items; j++) {
+                            const weapon = getWeaponForLevel(player.level + 10, Math.floor(Math.random() * 10));
+                            giveWeapon(weapon);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Battleground System
+        const battlegrounds = [
+            {
+                name: 'Warsong Gulch',
+                mode: 'capture_flag',
+                teams: 10,
+                objectives: ['Capture enemy flag 3 times'],
+                map: { width: 2000, height: 1500 },
+                bases: [
+                    { team: 1, x: 200, y: 750 },
+                    { team: 2, x: 1800, y: 750 }
+                ]
+            },
+            {
+                name: 'Arathi Basin',
+                mode: 'control_points',
+                teams: 15,
+                objectives: ['Control 3 of 5 resource points'],
+                map: { width: 2500, height: 2000 },
+                controlPoints: [
+                    { name: 'Lumber Mill', x: 500, y: 400 },
+                    { name: 'Blacksmith', x: 1250, y: 1000 },
+                    { name: 'Gold Mine', x: 2000, y: 600 },
+                    { name: 'Farm', x: 750, y: 1600 },
+                    { name: 'Stables', x: 1750, y: 1400 }
+                ]
+            },
+            {
+                name: 'Alterac Valley',
+                mode: 'siege',
+                teams: 40,
+                objectives: ['Destroy enemy base', 'Kill enemy general'],
+                map: { width: 4000, height: 3000 },
+                bases: [
+                    { team: 1, x: 500, y: 1500, npcs: ['General Drek\'thar'] },
+                    { team: 2, x: 3500, y: 1500, npcs: ['General Vanndar'] }
+                ]
+            }
+        ];
+
+        function joinBattleground(battlegroundName) {
+            const bg = battlegrounds.find(b => b.name === battlegroundName);
+            if (!bg) return { success: false, message: 'Battleground not found' };
+            
+            const match = {
+                battleground: bg,
+                startTime: Date.now(),
+                score: { team1: 0, team2: 0 },
+                objectives: {}
+            };
+            
+            createParticle(player.x, player.y - 50, `Joined ${bg.name}!`, "#FF4444", 2000);
+            return { success: true, match };
+        }
+
+        // Honor Point Shop
+        const honorShop = [
+            { id: 1, name: 'PvP Sword', cost: 5000, type: 'weapon', stats: { attack: 100 } },
+            { id: 2, name: 'PvP Armor', cost: 3000, type: 'armor', stats: { defense: 80 } },
+            { id: 3, name: 'PvP Mount', cost: 10000, type: 'mount', speed: 200 },
+            { id: 4, name: 'Arena Master Title', cost: 15000, type: 'title', effect: 'arena_master' },
+            { id: 5, name: 'Gladiator Helm', cost: 2000, type: 'helm', stats: { defense: 40, hp: 200 } }
+        ];
+
+        function purchaseFromHonorShop(itemId) {
+            const item = honorShop.find(i => i.id === itemId);
+            if (!item) return { success: false, message: 'Item not found' };
+            if (pvpStats.honorPoints < item.cost) return { success: false, message: 'Not enough honor points' };
+            
+            pvpStats.honorPoints -= item.cost;
+            
+            if (item.type === 'weapon') {
+                const weapon = { ...WEAPONS.swords[0], name: item.name, attack: item.stats.attack, rarity: 'epic' };
+                giveWeapon(weapon);
+            } else if (item.type === 'title') {
+                player.titles.push(item.name);
+            }
+            
+            createParticle(player.x, player.y - 50, `Purchased ${item.name}!`, "#FFD700", 2000);
+            return { success: true, item };
+        }
+
+        // ========================================
+        // PHASE 22: ADVANCED WORLD GENERATION
+        // ========================================
+
+        // Detailed World Building - Not just data, actual generation
+        const worldFeatures = {
+            roads: [],
+            bridges: [],
+            rivers: [],
+            mountains: [],
+            forests: [],
+            deserts: [],
+            towns: [],
+            ruins: []
+        };
+
+        function generateDetailedWorld() {
+            // Generate roads connecting cities
+            for (let i = 0; i < cities.length - 1; i++) {
+                const start = cities[i];
+                const end = cities[i + 1];
+                const road = generateRoad(start.x, start.y, end.x, end.y);
+                worldFeatures.roads.push(road);
+            }
+            
+            // Generate rivers
+            for (let i = 0; i < 8; i++) {
+                const startX = Math.random() * WORLD_SIZE;
+                const startY = 0;
+                const river = generateRiver(startX, startY, WORLD_SIZE);
+                worldFeatures.rivers.push(river);
+            }
+            
+            // Generate mountain ranges
+            for (const biome of biomeRegions) {
+                if (biome.name === 'Crimson Peaks' || biome.name === 'Crystal Peaks') {
+                    const mountains = generateMountainRange(biome.x, biome.y, biome.width, biome.height);
+                    worldFeatures.mountains.push(...mountains);
+                }
+            }
+            
+            // Generate forests
+            for (const biome of biomeRegions) {
+                if (biome.name === 'Mystic Forest' || biome.name === 'Verdant Plains') {
+                    const forest = generateForest(biome.x, biome.y, biome.width / 2, biome.height / 2);
+                    worldFeatures.forests.push(forest);
+                }
+            }
+            
+            // Generate ancient ruins
+            for (let i = 0; i < 20; i++) {
+                const x = Math.random() * WORLD_SIZE;
+                const y = Math.random() * WORLD_SIZE;
+                const ruins = generateRuins(x, y);
+                worldFeatures.ruins.push(ruins);
+            }
+        }
+
+        function generateRoad(x1, y1, x2, y2) {
+            const road = {
+                start: { x: x1, y: y1 },
+                end: { x: x2, y: y2 },
+                points: [],
+                width: 20
+            };
+            
+            // Simple straight line for now, could add curves
+            const distance = Math.sqrt((x2-x1)**2 + (y2-y1)**2);
+            const steps = Math.floor(distance / 50);
+            
+            for (let i = 0; i <= steps; i++) {
+                const t = i / steps;
+                road.points.push({
+                    x: x1 + (x2 - x1) * t,
+                    y: y1 + (y2 - y1) * t
+                });
+            }
+            
+            return road;
+        }
+
+        function generateRiver(startX, startY, length) {
+            const river = {
+                points: [],
+                width: 30,
+                flow: 'south'
+            };
+            
+            let x = startX;
+            let y = startY;
+            
+            for (let i = 0; i < length / 100; i++) {
+                river.points.push({ x, y });
+                y += 100;
+                x += (Math.random() - 0.5) * 50; // Meander
+            }
+            
+            return river;
+        }
+
+        function generateMountainRange(baseX, baseY, width, height) {
+            const mountains = [];
+            const peaks = 10;
+            
+            for (let i = 0; i < peaks; i++) {
+                const x = baseX + Math.random() * width;
+                const y = baseY + Math.random() * height;
+                const size = 100 + Math.random() * 200;
+                const elevation = 500 + Math.random() * 1000;
+                
+                mountains.push({
+                    x, y, size, elevation,
+                    type: 'peak',
+                    climbable: elevation < 1000,
+                    hasSnow: elevation > 700
+                });
+            }
+            
+            return mountains;
+        }
+
+        function generateForest(baseX, baseY, width, height) {
+            return {
+                x: baseX,
+                y: baseY,
+                width,
+                height,
+                trees: [],
+                density: 0.7,
+                types: ['oak', 'pine', 'willow', 'ancient']
+            };
+        }
+
+        function generateRuins(x, y) {
+            return {
+                x, y,
+                size: 200 + Math.random() * 300,
+                type: ['temple', 'castle', 'monument', 'tomb'][Math.floor(Math.random() * 4)],
+                explored: false,
+                hasLoot: true,
+                hasDungeon: Math.random() > 0.5,
+                lootQuality: ['rare', 'epic', 'legendary'][Math.floor(Math.random() * 3)]
+            };
+        }
+
+        // World Events System
+        const worldEvents = [];
+
+        const EVENT_TYPES = [
+            {
+                name: 'Meteor Shower',
+                duration: 300000, // 5 minutes
+                frequency: 7200000, // 2 hours
+                effect: () => {
+                    // Spawn meteors with collectible ore
+                    for (let i = 0; i < 20; i++) {
+                        const x = player.x + (Math.random() - 0.5) * 1000;
+                        const y = player.y + (Math.random() - 0.5) * 1000;
+                        gameState.resources.push({
+                            type: 'meteorite',
+                            x, y,
+                            resource: 'meteor_ore',
+                            amount: 10,
+                            rarity: 'legendary'
+                        });
+                    }
+                    createParticle(player.x, player.y - 60, "⭐ Meteor Shower! Collect Ore!", "#FFD700", 3000);
+                }
+            },
+            {
+                name: 'Dragon Attack',
+                duration: 600000, // 10 minutes
+                frequency: 10800000, // 3 hours
+                effect: () => {
+                    // Spawn powerful dragon world boss
+                    const dragon = {
+                        name: 'World Dragon',
+                        x: player.x + 500,
+                        y: player.y,
+                        hp: 50000,
+                        maxHp: 50000,
+                        attack: 100,
+                        level: 80,
+                        isBoss: true,
+                        isWorldBoss: true,
+                        rewards: ['legendary', 'legendary', 'mythic']
+                    };
+                    gameState.enemies.push(dragon);
+                    createParticle(player.x, player.y - 60, "🐉 WORLD BOSS: Dragon Has Appeared!", "#FF0000", 5000);
+                }
+            },
+            {
+                name: 'Void Invasion',
+                duration: 900000, // 15 minutes
+                frequency: 14400000, // 4 hours
+                effect: () => {
+                    // Spawn void enemies across the world
+                    for (let i = 0; i < 50; i++) {
+                        const x = Math.random() * WORLD_SIZE;
+                        const y = Math.random() * WORLD_SIZE;
+                        gameState.enemies.push({
+                            name: 'Void Invader',
+                            x, y,
+                            hp: 500,
+                            maxHp: 500,
+                            attack: 50,
+                            level: 60,
+                            type: 'void'
+                        });
+                    }
+                    createParticle(player.x, player.y - 60, "⚫ Void Invasion! Defend the Realm!", "#9C27B0", 4000);
+                }
+            },
+            {
+                name: 'Goblin Merchant',
+                duration: 180000, // 3 minutes
+                frequency: 3600000, // 1 hour
+                effect: () => {
+                    // Spawn special merchant with rare goods
+                    gameState.npcs.push({
+                        name: 'Goblin Merchant',
+                        x: player.x + 200,
+                        y: player.y,
+                        type: 'special_merchant',
+                        items: [
+                            { name: 'Rare Mount', cost: 50000 },
+                            { name: 'Legendary Pet', cost: 100000 },
+                            { name: 'Ancient Recipe', cost: 25000 }
+                        ],
+                        despawnTime: Date.now() + 180000
+                    });
+                    createParticle(player.x, player.y - 60, "💰 Goblin Merchant Appeared!", "#4CAF50", 3000);
+                }
+            }
+        ];
+
+        function checkWorldEvents() {
+            const now = Date.now();
+            
+            for (const eventType of EVENT_TYPES) {
+                const lastEvent = worldEvents.find(e => e.type === eventType.name);
+                
+                if (!lastEvent || (now - lastEvent.startTime) > eventType.frequency) {
+                    // Trigger event
+                    const event = {
+                        type: eventType.name,
+                        startTime: now,
+                        endTime: now + eventType.duration,
+                        active: true
+                    };
+                    
+                    worldEvents.push(event);
+                    eventType.effect();
+                }
+            }
+            
+            // Clean up ended events
+            for (let i = worldEvents.length - 1; i >= 0; i--) {
+                if (worldEvents[i].active && now > worldEvents[i].endTime) {
+                    worldEvents[i].active = false;
+                }
+            }
+        }
+
+        // ========================================
+        // PHASE 23: ACHIEVEMENT & TITLE SYSTEM EXPANSION
+        // ========================================
+
+        const achievementCategories = {
+            combat: [],
+            exploration: [],
+            social: [],
+            profession: [],
+            collection: [],
+            pvp: [],
+            dungeon: [],
+            special: []
+        };
+
+        const advancedAchievements = [
+            // Combat Achievements
+            { id: 101, name: 'Warrior of Light', category: 'combat', desc: 'Defeat 10,000 enemies', requirement: 10000, reward: { title: 'Warrior of Light', gold: 10000 } },
+            { id: 102, name: 'Godslayer', category: 'combat', desc: 'Defeat 100 bosses', requirement: 100, reward: { title: 'Godslayer', mount: 'legendary_dragon' } },
+            { id: 103, name: 'Master of Arms', category: 'combat', desc: 'Reach level 100', requirement: 100, reward: { title: 'Master of Arms', gold: 50000 } },
+            
+            // Exploration Achievements
+            { id: 201, name: 'World Explorer', category: 'exploration', desc: 'Discover all 80 landmarks', requirement: 80, reward: { title: 'World Explorer', mount: 'explorer_mount' } },
+            { id: 202, name: 'Pathfinder', category: 'exploration', desc: 'Travel 1,000,000 units', requirement: 1000000, reward: { title: 'Pathfinder', gold: 25000 } },
+            { id: 203, name: 'Ruin Raider', category: 'exploration', desc: 'Explore all 20 ancient ruins', requirement: 20, reward: { title: 'Ruin Raider', item: 'ancient_artifact' } },
+            
+            // Social Achievements
+            { id: 301, name: 'Guild Master', category: 'social', desc: 'Reach guild level 10', requirement: 10, reward: { title: 'Guild Master', perk: 'guild_teleport' } },
+            { id: 302, name: 'Best Friends Forever', category: 'social', desc: 'Have 50 friends', requirement: 50, reward: { title: 'Social Butterfly', gold: 5000 } },
+            { id: 303, name: 'Party Leader', category: 'social', desc: 'Complete 100 dungeons with parties', requirement: 100, reward: { title: 'Party Leader', xp_boost: 0.1 } },
+            
+            // Profession Achievements
+            { id: 401, name: 'Master Craftsman', category: 'profession', desc: 'Reach 300 in all professions', requirement: 10, reward: { title: 'Master Craftsman', gold: 100000 } },
+            { id: 402, name: 'Legendary Smith', category: 'profession', desc: 'Craft 100 legendary items', requirement: 100, reward: { title: 'Legendary Smith', recipe: 'ultimate_weapon' } },
+            { id: 403, name: 'Green Thumb', category: 'profession', desc: 'Harvest 10,000 crops', requirement: 10000, reward: { title: 'Green Thumb', farm_boost: 0.2 } },
+            
+            // Collection Achievements
+            { id: 501, name: 'Gotta Catch Em All', category: 'collection', desc: 'Collect all 50 pets', requirement: 50, reward: { title: 'Pet Master', pet: 'ultimate_companion' } },
+            { id: 502, name: 'Mount Collector', category: 'collection', desc: 'Collect 30 mounts', requirement: 30, reward: { title: 'Mount Collector', mount_speed: 0.5 } },
+            { id: 503, name: 'Weaponsmith', category: 'collection', desc: 'Collect all legendary weapons', requirement: 11, reward: { title: 'Legendary Collector', display_case: true } },
+            
+            // PvP Achievements
+            { id: 601, name: 'Gladiator', category: 'pvp', desc: 'Win 1000 arena matches', requirement: 1000, reward: { title: 'Gladiator', mount: 'gladiator_mount' } },
+            { id: 602, name: 'Battlemaster', category: 'pvp', desc: 'Win 500 battlegrounds', requirement: 500, reward: { title: 'Battlemaster', honor_boost: 0.25 } },
+            { id: 603, name: 'Rank 1', category: 'pvp', desc: 'Reach Grandmaster rank', requirement: 1, reward: { title: 'Rank 1 Gladiator', gold: 100000 } },
+            
+            // Dungeon Achievements
+            { id: 701, name: 'Dungeon Master', category: 'dungeon', desc: 'Complete all 24 dungeons', requirement: 24, reward: { title: 'Dungeon Master', key: 'master_key' } },
+            { id: 702, name: 'Mythic Hero', category: 'dungeon', desc: 'Complete 100 Mythic+ dungeons', requirement: 100, reward: { title: 'Mythic Hero', gear: 'mythic_set' } },
+            { id: 703, name: 'Speed Runner', category: 'dungeon', desc: 'Complete dungeon under 5 minutes', requirement: 1, reward: { title: 'Speed Runner', mount: 'speed_demon' } },
+            
+            // Special Achievements
+            { id: 801, name: 'The Chosen One', category: 'special', desc: 'Complete main storyline', requirement: 1, reward: { title: 'The Chosen One', ultimate_ability: true } },
+            { id: 802, name: 'Master of All', category: 'special', desc: 'Complete all achievements', requirement: 1, reward: { title: 'Master of All', everything: true } },
+            { id: 803, name: 'Immortal', category: 'special', desc: 'Reach level 100 without dying', requirement: 1, reward: { title: 'Immortal', stat_boost: 0.5 } }
+        ];
+
+        function checkAdvancedAchievements() {
+            for (const achievement of advancedAchievements) {
+                if (achievement.unlocked) continue;
+                
+                let progress = 0;
+                
+                switch(achievement.category) {
+                    case 'combat':
+                        if (achievement.id === 101) progress = gameState.enemiesDefeated;
+                        else if (achievement.id === 102) progress = gameState.bossesDefeated;
+                        else if (achievement.id === 103) progress = player.level;
+                        break;
+                    case 'exploration':
+                        if (achievement.id === 201) progress = gameState.landmarksDiscovered.size;
+                        else if (achievement.id === 202) progress = playerProfile.statistics.totalPlayTime;
+                        else if (achievement.id === 203) progress = worldFeatures.ruins.filter(r => r.explored).length;
+                        break;
+                    case 'social':
+                        if (achievement.id === 301) progress = playerGuild ? playerGuild.level : 0;
+                        else if (achievement.id === 302) progress = friendsList.length;
+                        else if (achievement.id === 303) progress = playerProfile.statistics.dungeonsCleared;
+                        break;
+                    case 'profession':
+                        if (achievement.id === 401) {
+                            progress = Object.values(craftingSkills).filter(skill => skill >= 300).length;
+                        }
+                        else if (achievement.id === 402) progress = playerProfile.statistics.crafted;
+                        else if (achievement.id === 403) progress = playerProfile.statistics.gathered;
+                        break;
+                }
+                
+                if (progress >= achievement.requirement) {
+                    achievement.unlocked = true;
+                    createParticle(player.x, player.y - 70, 
+                        `🏆 Achievement: ${achievement.name}!`, 
+                        "#FFD700", 4000);
+                    
+                    // Grant rewards
+                    if (achievement.reward.title) {
+                        player.titles.push(achievement.reward.title);
+                    }
+                    if (achievement.reward.gold) {
+                        player.gold += achievement.reward.gold;
+                    }
+                    if (achievement.reward.mount) {
+                        // Add mount to collection
+                    }
+                }
+            }
+        }
+
+        // ========================================
         // INITIALIZE
         // ========================================
+
+        // Call world generation on game start
+        generateDetailedWorld();
+        
+        // Start world event checker
+        setInterval(checkWorldEvents, 60000); // Check every minute
 
         updateBiomeDisplay();
     </script>
