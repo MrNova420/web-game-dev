@@ -2678,12 +2678,12 @@
         // Building the full massive anime fantasy world
         // ========================================
         
-        // NEW: Fast world loading using pre-built data
+        // NEW: Fast world loading with VIEW CULLING - only load what player can see
         function loadPrebuiltWorld() {
-            console.log('🚀 Loading pre-built world (FAST)...');
+            console.log('🚀 Loading pre-built world with view culling...');
             
-            // Use smaller, playable world size
-            gameState.worldSize = 10000;
+            // Use FULL large world size (50,000 x 50,000)
+            gameState.worldSize = 50000;
             
             // Clear existing
             gameState.landmarks = [];
@@ -2695,7 +2695,7 @@
             gameState.dungeonPortals = [];
             gameState.biomeRegions = [];
             
-            // Create simplified biome grid (3x4 = 12 biomes) with smaller size
+            // Create biome grid (3x4 = 12 biomes)
             const biomeLayout = [
                 [0, 5, 1],   // Mystic Forest, Verdant Plains, Crimson Peaks
                 [2, 8, 3],   // Azure Depths, Twilight Marshlands, Shadowmoon
@@ -2706,7 +2706,7 @@
             const biomeWidth = gameState.worldSize / 3;
             const biomeHeight = gameState.worldSize / 4;
             
-            // Create biome regions (just the boundaries, no heavy generation)
+            // Create biome regions (boundaries only)
             for (let row = 0; row < 4; row++) {
                 for (let col = 0; col < 3; col++) {
                     const biomeId = biomeLayout[row][col];
@@ -2724,64 +2724,149 @@
                 }
             }
             
-            // Spawn ONLY a few enemies near player (NOT hundreds!)
-            const startRegion = gameState.biomeRegions[0]; // Start in Mystic Forest
-            const biome = startRegion.biome;
-            
-            // Spawn just 20 enemies total (NOT 200+!)
-            for (let i = 0; i < 20; i++) {
-                const creatureData = biome.creatures[Math.floor(Math.random() * biome.creatures.length)];
-                const angle = (i / 20) * Math.PI * 2;
-                const dist = 200 + Math.random() * 400;
-                const ex = startRegion.centerX + Math.cos(angle) * dist;
-                const ey = startRegion.centerY + Math.sin(angle) * dist;
+            // Load pre-built cities and villages from COMPLETE_WORLD_DATA
+            if (COMPLETE_WORLD_DATA) {
+                // Load ALL cities (they're just markers, not heavy)
+                if (COMPLETE_WORLD_DATA.cities) {
+                    for (const city of COMPLETE_WORLD_DATA.cities) {
+                        gameState.landmarks.push({
+                            x: city.x,
+                            y: city.y,
+                            name: city.name,
+                            emoji: '🏰',
+                            radius: 100,
+                            discovered: false,
+                            type: 'city',
+                            cityData: city // Store full city data for later
+                        });
+                    }
+                }
                 
-                gameState.enemies.push({
-                    x: ex,
-                    y: ey,
-                    name: creatureData.name,
-                    emoji: creatureData.emoji,
-                    hp: creatureData.hp,
-                    maxHp: creatureData.hp,
-                    attack: creatureData.attack,
-                    exp: creatureData.exp,
-                    gold: creatureData.gold,
-                    radius: 25,
-                    speed: 1 + Math.random(),
-                    wanderAngle: Math.random() * Math.PI * 2,
-                    aggroRange: 300
-                });
-            }
-            
-            // Add a few landmarks from pre-built data
-            if (COMPLETE_WORLD_DATA && COMPLETE_WORLD_DATA.cities) {
-                for (const city of COMPLETE_WORLD_DATA.cities.slice(0, 3)) {
-                    gameState.landmarks.push({
-                        x: city.x,
-                        y: city.y,
-                        name: city.name,
-                        emoji: '🏰',
-                        radius: 80,
-                        discovered: false
-                    });
-                    
-                    // Add some NPCs
-                    if (city.npcs) {
-                        for (const npc of city.npcs.slice(0, 2)) {
-                            gameState.npcs.push({
-                                x: npc.x,
-                                y: npc.y,
-                                name: npc.name,
-                                emoji: '🧙',
-                                dialogue: npc.dialogue,
-                                radius: 35
-                            });
-                        }
+                // Load ALL villages (just markers)
+                if (COMPLETE_WORLD_DATA.villages) {
+                    for (const village of COMPLETE_WORLD_DATA.villages) {
+                        gameState.landmarks.push({
+                            x: village.x,
+                            y: village.y,
+                            name: village.name,
+                            emoji: '🏘️',
+                            radius: 80,
+                            discovered: false,
+                            type: 'village'
+                        });
                     }
                 }
             }
             
-            console.log(`✅ Fast load complete! ${gameState.enemies.length} enemies, ${gameState.landmarks.length} landmarks`);
+            // IMPORTANT: Only spawn enemies/NPCs near player's starting position
+            // More will spawn dynamically as player moves
+            spawnNearbyContent(gameState.player.x, gameState.player.y);
+            
+            console.log(`✅ Pre-built world loaded with view culling!`);
+            console.log(`   World size: ${gameState.worldSize}x${gameState.worldSize}`);
+            console.log(`   Total landmarks: ${gameState.landmarks.length}`);
+            console.log(`   Loaded enemies (nearby): ${gameState.enemies.length}`);
+            console.log(`   Loaded NPCs (nearby): ${gameState.npcs.length}`);
+        }
+        
+        // Spawn enemies and NPCs only near a position (VIEW CULLING)
+        function spawnNearbyContent(x, y, radius = 1500) {
+            const currentBiome = getCurrentBiome();
+            if (!currentBiome) return;
+            
+            // Count existing enemies in range to avoid spawning too many
+            const existingNearby = gameState.enemies.filter(e => {
+                const dist = Math.sqrt((e.x - x) ** 2 + (e.y - y) ** 2);
+                return dist < radius;
+            });
+            
+            // Only spawn if we don't have enough nearby
+            const targetCount = 25;
+            const toSpawn = Math.max(0, targetCount - existingNearby.length);
+            
+            if (toSpawn > 0) {
+                for (let i = 0; i < toSpawn; i++) {
+                    const creatureData = currentBiome.creatures[Math.floor(Math.random() * currentBiome.creatures.length)];
+                    const angle = Math.random() * Math.PI * 2;
+                    const dist = 400 + Math.random() * 800;
+                    const ex = x + Math.cos(angle) * dist;
+                    const ey = y + Math.sin(angle) * dist;
+                    
+                    gameState.enemies.push({
+                        x: ex,
+                        y: ey,
+                        name: creatureData.name,
+                        emoji: creatureData.emoji,
+                        hp: creatureData.hp,
+                        maxHp: creatureData.hp,
+                        attack: creatureData.attack,
+                        exp: creatureData.exp,
+                        gold: creatureData.gold,
+                        radius: 25,
+                        speed: 1 + Math.random(),
+                        wanderAngle: Math.random() * Math.PI * 2,
+                        aggroRange: 400,
+                        biomeId: currentBiome.id
+                    });
+                }
+                console.log(`Spawned ${toSpawn} enemies near player`);
+            }
+            
+            // Spawn NPCs from nearby cities
+            if (COMPLETE_WORLD_DATA && COMPLETE_WORLD_DATA.cities) {
+                for (const city of COMPLETE_WORLD_DATA.cities) {
+                    const cityDist = Math.sqrt((city.x - x) ** 2 + (city.y - y) ** 2);
+                    
+                    // Only load NPCs from cities within view range
+                    if (cityDist < radius) {
+                        // Check if we already loaded this city's NPCs
+                        const existingCityNpcs = gameState.npcs.filter(npc => 
+                            Math.abs(npc.x - city.x) < 500 && Math.abs(npc.y - city.y) < 500
+                        );
+                        
+                        if (existingCityNpcs.length === 0 && city.npcs) {
+                            // Load this city's NPCs
+                            for (const npc of city.npcs) {
+                                gameState.npcs.push({
+                                    x: npc.x,
+                                    y: npc.y,
+                                    name: npc.name,
+                                    emoji: npc.role === 'ruler' ? '👑' : 
+                                           npc.role === 'quest_giver' ? '❗' : 
+                                           npc.role === 'vendor_weapon' ? '⚔️' : '🧙',
+                                    dialogue: npc.dialogue,
+                                    role: npc.role,
+                                    radius: 35,
+                                    cityName: city.name
+                                });
+                            }
+                            console.log(`Loaded ${city.npcs.length} NPCs from ${city.name}`);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Clean up far away enemies/NPCs to save memory (VIEW CULLING)
+        function cleanupFarContent() {
+            const cullDistance = 2500; // Keep things within 2500 units of player
+            
+            // Remove enemies that are too far
+            gameState.enemies = gameState.enemies.filter(e => {
+                const dist = Math.sqrt((e.x - gameState.player.x) ** 2 + (e.y - gameState.player.y) ** 2);
+                return dist < cullDistance;
+            });
+            
+            // Keep at least some NPCs loaded (don't remove all)
+            const farNpcs = gameState.npcs.filter(npc => {
+                const dist = Math.sqrt((npc.x - gameState.player.x) ** 2 + (npc.y - gameState.player.y) ** 2);
+                return dist >= cullDistance;
+            });
+            
+            // Only remove far NPCs if we have too many loaded
+            if (gameState.npcs.length > 50 && farNpcs.length > 20) {
+                gameState.npcs = gameState.npcs.filter(npc => !farNpcs.includes(npc));
+            }
         }
             
             // Clear existing world
@@ -3731,6 +3816,17 @@
             updateQuests();
             updateDayNightCycle(dt);
             updateWeather(dt);
+            
+            // DYNAMIC CONTENT LOADING - Spawn/cleanup based on player position
+            if (!gameState.lastSpawnCheck) gameState.lastSpawnCheck = 0;
+            gameState.lastSpawnCheck += dt;
+            
+            // Check every 3 seconds if we need to spawn content
+            if (gameState.lastSpawnCheck > 3) {
+                gameState.lastSpawnCheck = 0;
+                spawnNearbyContent(gameState.player.x, gameState.player.y);
+                cleanupFarContent();
+            }
             
             updateStats();
         }
@@ -7114,15 +7210,15 @@
             ]
         };
 
-        // INITIALIZE
+        // INITIALIZE - DON'T generate world on startup!
         // ========================================
 
-        // Call world generation on game start
-        generateDetailedWorld();
+        // DON'T call world generation - world is pre-built!
+        // generateDetailedWorld(); // DISABLED - causes freeze
         
-        // Load permanent world data
+        // Pre-built world data is already loaded
         if (COMPLETE_WORLD_DATA) {
-            console.log(`✅ Loaded ${COMPLETE_WORLD_DATA.cities.length} cities and ${COMPLETE_WORLD_DATA.villages.length} villages`);
+            console.log(`✅ Pre-built world ready: ${COMPLETE_WORLD_DATA.cities.length} cities, ${COMPLETE_WORLD_DATA.villages.length} villages`);
         }
         
         // Start world event checker
