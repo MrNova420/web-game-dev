@@ -16,7 +16,7 @@ export class QuestSystemAdvanced {
   }
 
   acceptQuest(playerId, questId) {
-    console.log(`${playerId} accepted quest: ${questId}`);
+    logger.info(`${playerId} accepted quest: ${questId}`);
     this.activeQuests.set(questId, { progress: 0, objectives: [] });
   }
 }

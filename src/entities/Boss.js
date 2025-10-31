@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Boss - Boss enemy class for Dynasty of Emberveil
  * Powerful unique enemies that appear on boss floors
  */
@@ -33,7 +34,7 @@ export class Boss extends Enemy {
         // Add boss indicator
         this.addBossIndicator();
         
-        console.log(`👑 Boss spawned: ${this.stats.name}`);
+        logger.info(`👑 Boss spawned: ${this.stats.name}`);
     }
     
     getSpecialAbilities() {
@@ -122,7 +123,7 @@ export class Boss extends Enemy {
     
     enterPhase(phase) {
         this.phase = phase;
-        console.log(`👑 ${this.stats.name} enters Phase ${phase}!`);
+        logger.info(`👑 ${this.stats.name} enters Phase ${phase}!`);
         
         // Increase stats each phase
         this.stats.attack *= 1.3;
@@ -141,7 +142,7 @@ export class Boss extends Enemy {
         
         const ability = this.specialAbilities[Math.floor(Math.random() * this.specialAbilities.length)];
         
-        console.log(`👑 ${this.stats.name} uses ${ability.name}!`);
+        logger.info(`👑 ${this.stats.name} uses ${ability.name}!`);
         
         // Apply ability effect based on type
         switch (ability.effect) {

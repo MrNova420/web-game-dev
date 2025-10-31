@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * TextureManagementSystem - PBR Texture Loading & Management
  * 
  * Loads professional PBR textures from FREE external sources:
@@ -92,7 +93,7 @@ export class TextureManagementSystem {
         
         const basePath = this.manifest[category]?.[name];
         if (!basePath) {
-            console.warn(`Texture ${category}/${name} not found in manifest`);
+            logger.warn(`Texture ${category}/${name} not found in manifest`);
             return this.createFallbackMaterial();
         }
         
@@ -136,7 +137,7 @@ export class TextureManagementSystem {
             
             return material;
         } catch (error) {
-            console.warn(`Failed to load PBR material ${category}/${name}:`, error);
+            logger.warn(`Failed to load PBR material ${category}/${name}:`, error);
             return this.createFallbackMaterial();
         }
     }
@@ -167,7 +168,7 @@ export class TextureManagementSystem {
             
             return texture;
         } catch (error) {
-            console.warn(`Failed to load texture ${path}:`, error);
+            logger.warn(`Failed to load texture ${path}:`, error);
             return null;
         }
     }
@@ -237,7 +238,7 @@ export class TextureManagementSystem {
             
             return envMap;
         } catch (error) {
-            console.warn(`Failed to load environment map ${name}:`, error);
+            logger.warn(`Failed to load environment map ${name}:`, error);
             return null;
         }
     }

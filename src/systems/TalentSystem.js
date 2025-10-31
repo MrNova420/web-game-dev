@@ -15,8 +15,8 @@ export class TalentSystem {
   }
 
   allocateTalent(playerId, talentId) {
-    console.log(`${playerId} allocated talent: ${talentId}`);
-    console.log(`  Icon: ${this.icons.talent_point}`);
+    logger.info(`${playerId} allocated talent: ${talentId}`);
+    logger.info(`  Icon: ${this.icons.talent_point}`);
   }
 
   update(delta) {

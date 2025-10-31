@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * PostProcessingSystem - Advanced post-processing effects
  * Includes bloom, depth of field, motion blur, color grading, and more
  */
@@ -44,7 +45,7 @@ export class PostProcessingSystem {
         this.setupRenderTarget();
         this.createShaderPasses();
         
-        console.log('🎨 Post-Processing System initialized');
+        logger.info('🎨 Post-Processing System initialized');
     }
     
     setupRenderTarget() {
@@ -313,7 +314,7 @@ export class PostProcessingSystem {
     toggleEffect(effectName) {
         if (this.effects.hasOwnProperty(effectName)) {
             this.effects[effectName] = !this.effects[effectName];
-            console.log(`🎨 ${effectName}: ${this.effects[effectName] ? 'ON' : 'OFF'}`);
+            logger.info(`🎨 ${effectName}: ${this.effects[effectName] ? 'ON' : 'OFF'}`);
         }
     }
     
@@ -347,7 +348,7 @@ export class PostProcessingSystem {
                 break;
         }
         
-        console.log(`🎨 Graphics quality set to: ${preset}`);
+        logger.info(`🎨 Graphics quality set to: ${preset}`);
     }
     
     handleResize(width, height) {
@@ -366,6 +367,6 @@ export class PostProcessingSystem {
         if (this.screenQuad.geometry) this.screenQuad.geometry.dispose();
         if (this.screenQuad.material) this.screenQuad.material.dispose();
         
-        console.log('🎨 Post-Processing System disposed');
+        logger.info('🎨 Post-Processing System disposed');
     }
 }

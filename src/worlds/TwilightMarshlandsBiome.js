@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Twilight Marshlands Biome - Swamp Zone (Level 25-40)
  * Per README: Murky swamps with poisonous plants
  * 
@@ -29,7 +30,7 @@ export class TwilightMarshlandsBiome {
     }
     
     async build() {
-        console.log('🐸 Building Twilight Marshlands Biome...');
+        logger.info('🐸 Building Twilight Marshlands Biome...');
         
         try {
             await this.setupEnvironment();
@@ -39,12 +40,12 @@ export class TwilightMarshlandsBiome {
             await this.buildWitchsHut();
             await this.buildLizardfolkVillage();
             
-            console.log('✅ Twilight Marshlands complete!');
-            console.log(`   - Swamp trees: ${this.swampTrees.length}`);
-            console.log(`   - Mushrooms: ${this.mushrooms.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Twilight Marshlands complete!');
+            logger.info(`   - Swamp trees: ${this.swampTrees.length}`);
+            logger.info(`   - Mushrooms: ${this.mushrooms.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Twilight Marshlands:', error);
+            logger.error('Error building Twilight Marshlands:', error);
         }
     }
     
@@ -91,7 +92,7 @@ export class TwilightMarshlandsBiome {
     }
     
     async createSwampTerrain() {
-        console.log('🗺️ Creating swamp terrain...');
+        logger.info('🗺️ Creating swamp terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_UnevenBrick.gltf',
@@ -135,11 +136,11 @@ export class TwilightMarshlandsBiome {
             }
         }
         
-        console.log('   ✅ Swamp terrain created');
+        logger.info('   ✅ Swamp terrain created');
     }
     
     async addSwampTrees() {
-        console.log('🌳 Adding swamp trees...');
+        logger.info('🌳 Adding swamp trees...');
         
         const treeCount = 80;
         const deadTreePath = '/assets/models/nature/DeadTree_1.gltf';
@@ -173,11 +174,11 @@ export class TwilightMarshlandsBiome {
             this.swampTrees.push(tree);
         }
         
-        console.log(`   ✅ Added ${this.swampTrees.length} swamp trees`);
+        logger.info(`   ✅ Added ${this.swampTrees.length} swamp trees`);
     }
     
     async addMushrooms() {
-        console.log('🍄 Adding poisonous mushrooms...');
+        logger.info('🍄 Adding poisonous mushrooms...');
         
         const mushroomCount = 60;
         const plantPath = this.assetRegistry.getRandomPlant();
@@ -219,11 +220,11 @@ export class TwilightMarshlandsBiome {
             this.mushrooms.push(mushroom);
         }
         
-        console.log(`   ✅ Added ${this.mushrooms.length} mushrooms`);
+        logger.info(`   ✅ Added ${this.mushrooms.length} mushrooms`);
     }
     
     async buildWitchsHut() {
-        console.log('🧙 Building Witch\'s Hut (potions shop)...');
+        logger.info('🧙 Building Witch\'s Hut (potions shop)...');
         
         const buildingPath = '/assets/models/buildings/Wall_Wood.gltf';
         const hut = await this.modelLoader.load(buildingPath);
@@ -241,12 +242,12 @@ export class TwilightMarshlandsBiome {
             
             this.scene.add(hut);
             this.structures.push({ name: 'Witch\'s Hut', type: 'shop' });
-            console.log('   ✅ Witch\'s Hut created');
+            logger.info('   ✅ Witch\'s Hut created');
         }
     }
     
     async buildLizardfolkVillage() {
-        console.log('🦎 Building Lizardfolk Village...');
+        logger.info('🦎 Building Lizardfolk Village...');
         
         const buildingPaths = [
             '/assets/models/props/Barrel.gltf',
@@ -270,6 +271,6 @@ export class TwilightMarshlandsBiome {
         }
         
         this.structures.push({ name: 'Lizardfolk Village', type: 'settlement', buildings: buildingCount });
-        console.log(`   ✅ Lizardfolk Village built with ${buildingCount} structures`);
+        logger.info(`   ✅ Lizardfolk Village built with ${buildingCount} structures`);
     }
 }

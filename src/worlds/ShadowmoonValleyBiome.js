@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Shadowmoon Valley Biome - Dark Zone (Level 30-45)
  * Per README: Perpetual twilight with corrupted landscape
  * 
@@ -30,7 +31,7 @@ export class ShadowmoonValleyBiome {
     }
     
     async build() {
-        console.log('🌑 Building Shadowmoon Valley Biome...');
+        logger.info('🌑 Building Shadowmoon Valley Biome...');
         
         try {
             await this.setupEnvironment();
@@ -41,12 +42,12 @@ export class ShadowmoonValleyBiome {
             await this.buildEclipseCitadel();
             await this.buildGraveyardOfHeroes();
             
-            console.log('✅ Shadowmoon Valley complete!');
-            console.log(`   - Dead Trees: ${this.deadTrees.length}`);
-            console.log(`   - Dark Crystals: ${this.darkCrystals.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Shadowmoon Valley complete!');
+            logger.info(`   - Dead Trees: ${this.deadTrees.length}`);
+            logger.info(`   - Dark Crystals: ${this.darkCrystals.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Shadowmoon Valley:', error);
+            logger.error('Error building Shadowmoon Valley:', error);
         }
     }
     
@@ -94,7 +95,7 @@ export class ShadowmoonValleyBiome {
     }
     
     async createCorruptedTerrain() {
-        console.log('🗺️ Creating corrupted terrain...');
+        logger.info('🗺️ Creating corrupted terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_UnevenBrick.gltf',
@@ -139,11 +140,11 @@ export class ShadowmoonValleyBiome {
             }
         }
         
-        console.log('   ✅ Corrupted terrain created');
+        logger.info('   ✅ Corrupted terrain created');
     }
     
     async addDeadTrees() {
-        console.log('🌲 Adding dead trees...');
+        logger.info('🌲 Adding dead trees...');
         
         const treeCount = 120;
         
@@ -176,11 +177,11 @@ export class ShadowmoonValleyBiome {
             this.deadTrees.push(tree);
         }
         
-        console.log(`   ✅ Added ${this.deadTrees.length} dead trees`);
+        logger.info(`   ✅ Added ${this.deadTrees.length} dead trees`);
     }
     
     async addDarkCrystals() {
-        console.log('💎 Adding dark crystals...');
+        logger.info('💎 Adding dark crystals...');
         
         const crystalCount = 50;
         
@@ -227,11 +228,11 @@ export class ShadowmoonValleyBiome {
             this.darkCrystals.push(crystal);
         }
         
-        console.log(`   ✅ Added ${this.darkCrystals.length} dark crystals`);
+        logger.info(`   ✅ Added ${this.darkCrystals.length} dark crystals`);
     }
     
     async addCorruptedRocks() {
-        console.log('🪨 Adding corrupted rocks...');
+        logger.info('🪨 Adding corrupted rocks...');
         
         const rockCount = 70;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -268,11 +269,11 @@ export class ShadowmoonValleyBiome {
             this.rocks.push(rock);
         }
         
-        console.log(`   ✅ Added ${this.rocks.length} corrupted rocks`);
+        logger.info(`   ✅ Added ${this.rocks.length} corrupted rocks`);
     }
     
     async buildEclipseCitadel() {
-        console.log('🏰 Building Eclipse Citadel (demon fortress)...');
+        logger.info('🏰 Building Eclipse Citadel (demon fortress)...');
         
         // Load building models for fortress
         const buildingPaths = [
@@ -298,11 +299,11 @@ export class ShadowmoonValleyBiome {
         }
         
         this.structures.push({ name: 'Eclipse Citadel', type: 'fortress', buildings: buildingCount });
-        console.log(`   ✅ Eclipse Citadel built with ${buildingCount} structures`);
+        logger.info(`   ✅ Eclipse Citadel built with ${buildingCount} structures`);
     }
     
     async buildGraveyardOfHeroes() {
-        console.log('⚰️ Building Graveyard of Heroes...');
+        logger.info('⚰️ Building Graveyard of Heroes...');
         
         // Create graveyard with props
         const propPaths = [
@@ -338,6 +339,6 @@ export class ShadowmoonValleyBiome {
         }
         
         this.structures.push({ name: 'Graveyard of Heroes', type: 'cemetery', graves: graveCount });
-        console.log(`   ✅ Graveyard built with ${graveCount} graves`);
+        logger.info(`   ✅ Graveyard built with ${graveCount} graves`);
     }
 }

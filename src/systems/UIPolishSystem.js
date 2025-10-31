@@ -62,10 +62,10 @@ export class UIPolishSystem {
     }
     
     init() {
-        console.log('UIPolishSystem initialized with external assets');
-        console.log('- UI elements: Kenney UI Pack');
-        console.log('- Icons: game-icons.net (4000+ icons)');
-        console.log('- Fonts: Kenney');
+        logger.info('UIPolishSystem initialized with external assets');
+        logger.info('- UI elements: Kenney UI Pack');
+        logger.info('- Icons: game-icons.net (4000+ icons)');
+        logger.info('- Fonts: Kenney');
     }
     
     /**
@@ -94,7 +94,7 @@ export class UIPolishSystem {
         };
         
         this.floatingNumbers.push(floatingNumber);
-        console.log(`Floating damage: ${damage} (${type}, color: ${color})`);
+        logger.info(`Floating damage: ${damage} (${type}, color: ${color})`);
     }
     
     /**
@@ -113,7 +113,7 @@ export class UIPolishSystem {
             pulsePhase: 0
         });
         
-        console.log(`Status effect added: ${effectType} (pulse rate: ${pulseRate}/s)`);
+        logger.info(`Status effect added: ${effectType} (pulse rate: ${pulseRate}/s)`);
     }
     
     /**
@@ -141,7 +141,7 @@ export class UIPolishSystem {
         bar.elapsed = 0;
         bar.startValue = bar.current;
         
-        console.log(`Bar transition: ${barId} -> ${targetValue} (${duration}s)`);
+        logger.info(`Bar transition: ${barId} -> ${targetValue} (${duration}s)`);
     }
     
     /**
@@ -151,12 +151,12 @@ export class UIPolishSystem {
      * @param {number} targetXP - Target XP value (0-1)
      */
     triggerXPBarFill(xpGained, currentXP, targetXP) {
-        console.log(`XP gained: +${xpGained} (${currentXP} -> ${targetXP})`);
+        logger.info(`XP gained: +${xpGained} (${currentXP} -> ${targetXP})`);
         this.transitionBar('xp', targetXP, 1.0);
         
         // Add glow effect during fill
         if (targetXP >= 1.0) {
-            console.log('Level-up! XP bar glows gold');
+            logger.info('Level-up! XP bar glows gold');
         }
     }
     
@@ -166,7 +166,7 @@ export class UIPolishSystem {
      * @param {object} position - Screen position {x, y}
      */
     showTooltip(text, position) {
-        console.log(`Tooltip shown: "${text}" at (${position.x}, ${position.y})`);
+        logger.info(`Tooltip shown: "${text}" at (${position.x}, ${position.y})`);
         // Bounce-in animation using easing function
     }
     
@@ -188,7 +188,7 @@ export class UIPolishSystem {
         // Radial wipe animation shows cooldown progress
         // Icon glows when cooldownPercent === 0 (ready to use)
         if (cooldownPercent === 0) {
-            console.log(`Ability ready: ${abilityId} (icon glows)`);
+            logger.info(`Ability ready: ${abilityId} (icon glows)`);
         }
     }
     

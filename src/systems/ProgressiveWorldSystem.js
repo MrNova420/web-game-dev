@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Progressive World System
  * Phase 8.3 - World tiers, region evolution, random events, and world bosses
  */
@@ -66,7 +67,7 @@ export class ProgressiveWorldSystem {
     }
     
     initialize() {
-        console.log('🌍 Progressive World System initialized');
+        logger.info('🌍 Progressive World System initialized');
         
         // Create world tiers
         this.createWorldTiers();
@@ -332,7 +333,7 @@ export class ProgressiveWorldSystem {
         const tierData = this.worldTiers[tier - 1];
         tierData.unlocked = true;
         
-        console.log(`🎊 World Tier ${tier} Unlocked: ${tierData.name}`);
+        logger.info(`🎊 World Tier ${tier} Unlocked: ${tierData.name}`);
         
         // Trigger tier unlock event
         this.triggerEvent({
@@ -374,7 +375,7 @@ export class ProgressiveWorldSystem {
         
         const newState = region.evolution[nextEvolution];
         
-        console.log(`✨ ${region.name} evolved to: ${newState}`);
+        logger.info(`✨ ${region.name} evolved to: ${newState}`);
         
         // Apply evolution changes
         this.applyRegionEvolution(region, newState);
@@ -442,7 +443,7 @@ export class ProgressiveWorldSystem {
         
         this.activeEvents.push(event);
         
-        console.log(`🌟 World Event Started: ${eventType} at ${location.x}, ${location.z}`);
+        logger.info(`🌟 World Event Started: ${eventType} at ${location.x}, ${location.z}`);
         
         this.applyEventEffects(event);
     }
@@ -503,7 +504,7 @@ export class ProgressiveWorldSystem {
      * End event and distribute rewards
      */
     endEvent(event) {
-        console.log(`Event ended: ${event.type}`);
+        logger.info(`Event ended: ${event.type}`);
         
         // Distribute rewards to participants
         if (event.participants && event.participants.length > 0) {
@@ -569,7 +570,7 @@ export class ProgressiveWorldSystem {
         
         this.activeWorldBosses.push(boss);
         
-        console.log(`🐉 World Boss Spawned: ${boss.name} at level ${boss.level}`);
+        logger.info(`🐉 World Boss Spawned: ${boss.name} at level ${boss.level}`);
         
         // Announce to all players
         this.announceWorldBoss(boss);
@@ -619,7 +620,7 @@ export class ProgressiveWorldSystem {
     transitionBossPhase(boss, newPhase) {
         boss.currentPhase = newPhase;
         
-        console.log(`${boss.name} entered Phase ${newPhase}!`);
+        logger.info(`${boss.name} entered Phase ${newPhase}!`);
         
         // Add new abilities
         boss.currentAbilities = boss.phaseAbilities?.[newPhase] || [];
@@ -639,7 +640,7 @@ export class ProgressiveWorldSystem {
         boss.damage *= 2;
         boss.attackSpeed *= 1.5;
         
-        console.log(`💢 ${boss.name} is ENRAGED!`);
+        logger.info(`💢 ${boss.name} is ENRAGED!`);
     }
     
     /**
@@ -649,7 +650,7 @@ export class ProgressiveWorldSystem {
         boss.active = false;
         boss.lastDeath = Date.now();
         
-        console.log(`🏆 World Boss Defeated: ${boss.name}`);
+        logger.info(`🏆 World Boss Defeated: ${boss.name}`);
         
         // Distribute rewards
         boss.participants.forEach(participant => {
@@ -796,55 +797,55 @@ export class ProgressiveWorldSystem {
     
     updateRegionVisuals(region) {
         // Visual updates would be applied here
-        console.log(`Updated visuals for ${region.name}`);
+        logger.info(`Updated visuals for ${region.name}`);
     }
     
     announceWorldBoss(boss) {
-        console.log(`📢 WORLD ANNOUNCEMENT: ${boss.name} has appeared!`);
+        logger.info(`📢 WORLD ANNOUNCEMENT: ${boss.name} has appeared!`);
     }
     
     spawnMeteors(position, count) {
-        console.log(`☄️ Spawning ${count} meteors at`, position);
+        logger.info(`☄️ Spawning ${count} meteors at`, position);
     }
     
     spawnInvasion(position, count) {
-        console.log(`👹 Spawning invasion of ${count} monsters at`, position);
+        logger.info(`👹 Spawning invasion of ${count} monsters at`, position);
     }
     
     spawnTreasureChests(position, count) {
-        console.log(`💰 Spawning ${count} treasure chests at`, position);
+        logger.info(`💰 Spawning ${count} treasure chests at`, position);
     }
     
     spawnEventBoss(position) {
-        console.log(`👑 Spawning event boss at`, position);
+        logger.info(`👑 Spawning event boss at`, position);
     }
     
     triggerWeatherDisaster(position) {
-        console.log(`🌪️ Triggering weather disaster at`, position);
+        logger.info(`🌪️ Triggering weather disaster at`, position);
     }
     
     spawnAbundantResources(position) {
-        console.log(`🌾 Spawning abundant resources at`, position);
+        logger.info(`🌾 Spawning abundant resources at`, position);
     }
     
     openPortal(position) {
-        console.log(`🌀 Opening portal at`, position);
+        logger.info(`🌀 Opening portal at`, position);
     }
     
     applyCelestialBlessing(position) {
-        console.log(`✨ Applying celestial blessing at`, position);
+        logger.info(`✨ Applying celestial blessing at`, position);
     }
     
     giveEventRewards(participant, rewards) {
-        console.log(`Giving event rewards to participant:`, rewards);
+        logger.info(`Giving event rewards to participant:`, rewards);
     }
     
     giveBossRewards(participant, rewards) {
-        console.log(`Giving boss rewards to participant:`, rewards);
+        logger.info(`Giving boss rewards to participant:`, rewards);
     }
     
     triggerPhaseTransition(boss) {
-        console.log(`Phase transition for ${boss.name}`);
+        logger.info(`Phase transition for ${boss.name}`);
     }
     
     applyTerritoryBenefits(territory) {

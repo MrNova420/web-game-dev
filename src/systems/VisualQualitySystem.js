@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * VisualQualitySystem - Ensures highest visual quality
  * Uses only external professional assets for AAA quality
  */
@@ -19,7 +20,7 @@ export class VisualQualitySystem {
     this.particleSystems = [];
     this.lightSources = [];
     
-    console.log('VisualQualitySystem initialized - AAA quality settings');
+    logger.info('VisualQualitySystem initialized - AAA quality settings');
   }
 
   /**
@@ -115,13 +116,13 @@ export class VisualQualitySystem {
 
     // Particle settings
     const particleSettings = this.setParticleQuality(this.qualitySettings.particles);
-    console.log(`✅ Particle quality: ${this.qualitySettings.particles}`, particleSettings);
+    logger.info(`✅ Particle quality: ${this.qualitySettings.particles}`, particleSettings);
 
     // Post-processing
     const ppSettings = this.setPostProcessingQuality(this.qualitySettings.postProcessing);
-    console.log(`✅ Post-processing: ${this.qualitySettings.postProcessing}`, ppSettings);
+    logger.info(`✅ Post-processing: ${this.qualitySettings.postProcessing}`, ppSettings);
 
-    console.log('✅ Visual quality settings applied - AAA standard');
+    logger.info('✅ Visual quality settings applied - AAA standard');
   }
 
   /**
@@ -138,7 +139,7 @@ export class VisualQualitySystem {
         modelCount++;
         // Ensure all models use external assets
         if (!obj.userData.externalAsset) {
-          console.warn('⚠️ Model without external asset flag:', obj.name);
+          logger.warn('⚠️ Model without external asset flag:', obj.name);
         }
       }
 
@@ -153,7 +154,7 @@ export class VisualQualitySystem {
       }
     });
 
-    console.log(`📊 Scene optimization:
+    logger.info(`📊 Scene optimization:
       - Models: ${modelCount} (all external)
       - Lights: ${lightCount}
       - Particle systems: ${particleCount} (Kenney Pack)`);

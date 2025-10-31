@@ -56,7 +56,7 @@ export class QualityOfLifeSystem {
         this.targetFPS = 60;
         this.fpsHistory = [];
         
-        console.log('✨ Quality of Life System initialized');
+        logger.info('✨ Quality of Life System initialized');
     }
     
     /**
@@ -73,7 +73,7 @@ export class QualityOfLifeSystem {
             this.autoSave();
         });
         
-        console.log('💾 Auto-save enabled (every 60 seconds)');
+        logger.info('💾 Auto-save enabled (every 60 seconds)');
     }
     
     autoSave() {
@@ -91,7 +91,7 @@ export class QualityOfLifeSystem {
         };
         
         localStorage.setItem('emberveil_autosave', JSON.stringify(saveData));
-        console.log('💾 Auto-saved game state');
+        logger.info('💾 Auto-saved game state');
         
         // Show subtle notification
         this.showToast('Game saved', 'success', 2000);
@@ -102,10 +102,10 @@ export class QualityOfLifeSystem {
         if (saved) {
             try {
                 const data = JSON.parse(saved);
-                console.log('💾 Loading auto-save from', new Date(data.timestamp));
+                logger.info('💾 Loading auto-save from', new Date(data.timestamp));
                 return data;
             } catch (e) {
-                console.error('Failed to load save:', e);
+                logger.error('Failed to load save:', e);
             }
         }
         return null;
@@ -133,7 +133,7 @@ export class QualityOfLifeSystem {
         // Screenshot (press F12)
         this.registerShortcut('F12', () => this.takeScreenshot());
         
-        console.log('⌨️ Quick actions configured');
+        logger.info('⌨️ Quick actions configured');
     }
     
     registerShortcut(key, action) {
@@ -276,7 +276,7 @@ export class QualityOfLifeSystem {
             }
         }, 1000);
         
-        console.log('💰 Auto-loot enabled');
+        logger.info('💰 Auto-loot enabled');
     }
     
     checkForLoot() {
@@ -419,7 +419,7 @@ export class QualityOfLifeSystem {
             this.monitorPerformance();
         }, 1000);
         
-        console.log('📊 Performance monitoring active');
+        logger.info('📊 Performance monitoring active');
     }
     
     monitorPerformance() {
@@ -458,7 +458,7 @@ export class QualityOfLifeSystem {
     
     setGraphicsQuality(quality) {
         // Adjust renderer settings
-        console.log(`📊 Graphics quality: ${quality}`);
+        logger.info(`📊 Graphics quality: ${quality}`);
         
         if (quality === 'low') {
             this.gameEngine.renderer.shadowMap.enabled = false;
@@ -499,7 +499,7 @@ export class QualityOfLifeSystem {
     
     useItem(item) {
         // Would use the item
-        console.log('Using item:', item.name);
+        logger.info('Using item:', item.name);
     }
     
     showToast(message, type = 'info', duration = 3000) {
@@ -507,7 +507,7 @@ export class QualityOfLifeSystem {
         if (window.enhancedUI) {
             window.enhancedUI.showNotification(message, type);
         } else {
-            console.log(`[${type.toUpperCase()}] ${message}`);
+            logger.info(`[${type.toUpperCase()}] ${message}`);
         }
     }
     
@@ -539,7 +539,7 @@ export class QualityOfLifeSystem {
      * Initialize all QoL features
      */
     initialize() {
-        console.log('✨ Initializing Quality of Life features...');
+        logger.info('✨ Initializing Quality of Life features...');
         
         this.setupAutoSave();
         this.setupQuickActions();
@@ -553,15 +553,15 @@ export class QualityOfLifeSystem {
             this.loadSettings(JSON.parse(savedSettings));
         }
         
-        console.log('✅ Quality of Life system ready!');
-        console.log('   💾 Auto-save: Every 60 seconds');
-        console.log('   ⌨️ Quick actions: H (heal), P (potion), X (mount), R (auto-run)');
-        console.log('   🎯 Smart targeting: Tab to cycle targets');
-        console.log('   💰 Auto-loot: Picks up uncommon+ items');
-        console.log('   📍 Waypoints: Add custom markers');
-        console.log('   💡 Hints: Tutorial system active');
-        console.log('   ♿ Accessibility: Color blind mode, text size, high contrast');
-        console.log('   📊 Performance: Auto-adjust quality');
+        logger.info('✅ Quality of Life system ready!');
+        logger.info('   💾 Auto-save: Every 60 seconds');
+        logger.info('   ⌨️ Quick actions: H (heal), P (potion), X (mount), R (auto-run)');
+        logger.info('   🎯 Smart targeting: Tab to cycle targets');
+        logger.info('   💰 Auto-loot: Picks up uncommon+ items');
+        logger.info('   📍 Waypoints: Add custom markers');
+        logger.info('   💡 Hints: Tutorial system active');
+        logger.info('   ♿ Accessibility: Color blind mode, text size, high contrast');
+        logger.info('   📊 Performance: Auto-adjust quality');
     }
     
     /**

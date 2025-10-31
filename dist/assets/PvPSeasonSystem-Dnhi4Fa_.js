@@ -1,1 +1,0 @@
-class a{constructor(){this.seasons=new Map,this.rewardModels={gladiator_mount:"/assets/models/mounts/gladiator_mount.glb",seasonal_armor:"/assets/models/armor/season_1_pvp.glb"}}startSeason(s){console.log(`PvP Season ${s} started`)}}export{a as PvPSeasonSystem};

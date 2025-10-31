@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Void Rift Biome - Endgame Zone (Level 65-80)
  * Per README: Chaotic dimension with shifting reality
  * 
@@ -29,7 +30,7 @@ export class VoidRiftBiome {
     }
     
     async build() {
-        console.log('🌀 Building Void Rift Biome...');
+        logger.info('🌀 Building Void Rift Biome...');
         
         try {
             await this.setupEnvironment();
@@ -39,12 +40,12 @@ export class VoidRiftBiome {
             await this.buildPortalOfInfinity();
             await this.buildChaosThrone();
             
-            console.log('✅ Void Rift complete!');
-            console.log(`   - Void crystals: ${this.voidCrystals.length}`);
-            console.log(`   - Chaos formations: ${this.chaosFormations.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Void Rift complete!');
+            logger.info(`   - Void crystals: ${this.voidCrystals.length}`);
+            logger.info(`   - Chaos formations: ${this.chaosFormations.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Void Rift:', error);
+            logger.error('Error building Void Rift:', error);
         }
     }
     
@@ -96,7 +97,7 @@ export class VoidRiftBiome {
     }
     
     async createVoidTerrain() {
-        console.log('🗺️ Creating void terrain...');
+        logger.info('🗺️ Creating void terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_UnevenBrick.gltf',
@@ -155,11 +156,11 @@ export class VoidRiftBiome {
             }
         }
         
-        console.log('   ✅ Void terrain created');
+        logger.info('   ✅ Void terrain created');
     }
     
     async addVoidCrystals() {
-        console.log('💠 Adding void crystals...');
+        logger.info('💠 Adding void crystals...');
         
         const crystalCount = 100;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -210,11 +211,11 @@ export class VoidRiftBiome {
             this.voidCrystals.push(crystal);
         }
         
-        console.log(`   ✅ Added ${this.voidCrystals.length} void crystals`);
+        logger.info(`   ✅ Added ${this.voidCrystals.length} void crystals`);
     }
     
     async addChaosFormations() {
-        console.log('⚡ Adding chaos formations...');
+        logger.info('⚡ Adding chaos formations...');
         
         const formationCount = 80;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -257,11 +258,11 @@ export class VoidRiftBiome {
             this.chaosFormations.push(formation);
         }
         
-        console.log(`   ✅ Added ${this.chaosFormations.length} chaos formations`);
+        logger.info(`   ✅ Added ${this.chaosFormations.length} chaos formations`);
     }
     
     async buildPortalOfInfinity() {
-        console.log('🌀 Building Portal of Infinity (main entrance)...');
+        logger.info('🌀 Building Portal of Infinity (main entrance)...');
         
         // Create giant portal using rocks
         const rockPath = this.assetRegistry.getRandomRock();
@@ -287,12 +288,12 @@ export class VoidRiftBiome {
             
             this.scene.add(portal);
             this.structures.push({ name: 'Portal of Infinity', type: 'portal' });
-            console.log('   ✅ Portal of Infinity created');
+            logger.info('   ✅ Portal of Infinity created');
         }
     }
     
     async buildChaosThrone() {
-        console.log('👑 Building Chaos Throne (void king seat)...');
+        logger.info('👑 Building Chaos Throne (void king seat)...');
         
         const buildingPath = '/assets/models/buildings/Wall_Plaster.gltf';
         const throne = await this.modelLoader.load(buildingPath);
@@ -315,7 +316,7 @@ export class VoidRiftBiome {
             
             this.scene.add(throne);
             this.structures.push({ name: 'Chaos Throne', type: 'boss_area' });
-            console.log('   ✅ Chaos Throne created');
+            logger.info('   ✅ Chaos Throne created');
         }
     }
 }

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * World Population System - Fill world with NPCs, enemies, quests, activities
  * Makes the game world feel alive and immersive
  */
@@ -16,7 +17,7 @@ export class WorldPopulationSystem {
     }
     
     async populate() {
-        console.log('🌍 POPULATING WORLD WITH LIFE...');
+        logger.info('🌍 POPULATING WORLD WITH LIFE...');
         
         // Spawn NPCs in villages and towns
         await this.spawnVillageNPCs();
@@ -33,11 +34,11 @@ export class WorldPopulationSystem {
         // Create activities and points of interest
         await this.createActivities();
         
-        console.log(`✅ World populated with ${this.npcs.length} NPCs, ${this.enemies.length} enemies`);
+        logger.info(`✅ World populated with ${this.npcs.length} NPCs, ${this.enemies.length} enemies`);
     }
     
     async spawnVillageNPCs() {
-        console.log('👥 Spawning village NPCs...');
+        logger.info('👥 Spawning village NPCs...');
         
         const villagePositions = [
             { x: 0, z: 50, name: 'Starting Village' },
@@ -66,7 +67,7 @@ export class WorldPopulationSystem {
             }
         }
         
-        console.log(`   ✅ Spawned ${this.npcs.length} NPCs in 3 villages`);
+        logger.info(`   ✅ Spawned ${this.npcs.length} NPCs in 3 villages`);
     }
     
     async createNPC(type, position, village) {
@@ -199,7 +200,7 @@ export class WorldPopulationSystem {
     }
     
     async spawnWorldEnemies() {
-        console.log('👹 Spawning world enemies...');
+        logger.info('👹 Spawning world enemies...');
         
         const biomeEnemies = [
             // Mystic Forest
@@ -238,7 +239,7 @@ export class WorldPopulationSystem {
             }
         }
         
-        console.log(`   ✅ Spawned ${this.enemies.length} enemies across the world`);
+        logger.info(`   ✅ Spawned ${this.enemies.length} enemies across the world`);
     }
     
     async createEnemy(type, position) {
@@ -365,7 +366,7 @@ export class WorldPopulationSystem {
     }
     
     async spawnQuestGivers() {
-        console.log('📜 Spawning quest givers...');
+        logger.info('📜 Spawning quest givers...');
         
         const questGiverData = [
             { x: 0, z: 55, name: 'Village Elder', quest: 'main_story_1' },
@@ -381,7 +382,7 @@ export class WorldPopulationSystem {
             this.questGivers.push(questGiver);
         }
         
-        console.log(`   ✅ Spawned ${this.questGivers.length} quest givers`);
+        logger.info(`   ✅ Spawned ${this.questGivers.length} quest givers`);
     }
     
     async createQuestGiver(data, position) {
@@ -452,7 +453,7 @@ export class WorldPopulationSystem {
     }
     
     async spawnMerchants() {
-        console.log('💰 Spawning merchants...');
+        logger.info('💰 Spawning merchants...');
         
         const merchantData = [
             { x: 5, z: 52, type: 'general', name: 'General Store' },
@@ -467,7 +468,7 @@ export class WorldPopulationSystem {
             this.merchants.push(merchant);
         }
         
-        console.log(`   ✅ Spawned ${this.merchants.length} merchants`);
+        logger.info(`   ✅ Spawned ${this.merchants.length} merchants`);
     }
     
     async createMerchant(data, position) {
@@ -519,7 +520,7 @@ export class WorldPopulationSystem {
     }
     
     async createActivities() {
-        console.log('🎯 Creating world activities...');
+        logger.info('🎯 Creating world activities...');
         
         // Fishing spots
         this.createFishingSpots();
@@ -533,7 +534,7 @@ export class WorldPopulationSystem {
         // Rare spawns
         this.createRareSpawns();
         
-        console.log(`   ✅ Created ${this.activities.length} activities`);
+        logger.info(`   ✅ Created ${this.activities.length} activities`);
     }
     
     createFishingSpots() {

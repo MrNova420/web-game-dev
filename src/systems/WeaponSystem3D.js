@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * WeaponSystem3D - Advanced 3D Weapon Management System
  * 
  * Phase 2, System 17 of AUTONOMOUS_EXECUTION_PLAN
@@ -355,7 +356,7 @@ export class WeaponSystem3D {
     createWeapon(weaponId, level = 1) {
         const weaponData = this.weaponDatabase.get(weaponId);
         if (!weaponData) {
-            console.warn(`Weapon ${weaponId} not found in database`);
+            logger.warn(`Weapon ${weaponId} not found in database`);
             return null;
         }
         
@@ -415,7 +416,7 @@ export class WeaponSystem3D {
                 this.applyRarityEffect(model, weapon.rarity);
             }
         } catch (error) {
-            console.warn(`Failed to load weapon model: ${weapon.model}`, error);
+            logger.warn(`Failed to load weapon model: ${weapon.model}`, error);
             // Create fallback placeholder
             weapon.model = this.createPlaceholderWeapon(weapon);
         }

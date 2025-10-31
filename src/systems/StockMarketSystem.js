@@ -3,5 +3,5 @@
  */
 export class StockMarketSystem {
   constructor() { this.stocks = new Map(); this.ui = { ticker: '/assets/ui/economy/stock_ticker.png' }; }  // Kenney
-  tradeStock(playerId, stock, amount) { console.log(`${playerId} trades ${stock}: ${amount}`); }
+  tradeStock(playerId, stock, amount) { logger.info(`${playerId} trades ${stock}: ${amount}`); }
 }

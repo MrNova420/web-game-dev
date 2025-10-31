@@ -8,5 +8,5 @@ export class SeasonalEventsSystem {
       halloween: { decorations: '/assets/models/seasonal/halloween/*.glb' }  // Quaternius
     };
   }
-  activateEvent(eventName) { console.log(`Seasonal event: ${eventName}`); }
+  activateEvent(eventName) { logger.info(`Seasonal event: ${eventName}`); }
 }

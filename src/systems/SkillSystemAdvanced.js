@@ -351,11 +351,11 @@ export class SkillSystemAdvanced {
    * Initialize the skill system
    */
   init() {
-    console.log('SkillSystemAdvanced: Initializing with external assets');
-    console.log(`  - Animations: Mixamo (1000+ skill animations)`);
-    console.log(`  - VFX: Kenney Particle Pack + OpenGameArt`);
-    console.log(`  - Icons: game-icons.net (4000+ icons)`);
-    console.log(`  - Skill trees: 8 trees, 100+ total skills`);
+    logger.info('SkillSystemAdvanced: Initializing with external assets');
+    logger.info(`  - Animations: Mixamo (1000+ skill animations)`);
+    logger.info(`  - VFX: Kenney Particle Pack + OpenGameArt`);
+    logger.info(`  - Icons: game-icons.net (4000+ icons)`);
+    logger.info(`  - Skill trees: 8 trees, 100+ total skills`);
     
     // Register all skills
     for (const [treeName, tree] of Object.entries(this.skillTrees)) {
@@ -373,7 +373,7 @@ export class SkillSystemAdvanced {
   useSkill(skillId, caster, target = null) {
     const skill = this.skills.get(skillId);
     if (!skill || skill.level === 0) {
-      console.log(`SkillSystemAdvanced: Skill ${skillId} not available`);
+      logger.info(`SkillSystemAdvanced: Skill ${skillId} not available`);
       return false;
     }
     
@@ -381,21 +381,21 @@ export class SkillSystemAdvanced {
     if (this.cooldowns.has(skillId)) {
       const remaining = this.cooldowns.get(skillId) - Date.now();
       if (remaining > 0) {
-        console.log(`SkillSystemAdvanced: Skill ${skillId} on cooldown (${(remaining/1000).toFixed(1)}s)`);
+        logger.info(`SkillSystemAdvanced: Skill ${skillId} on cooldown (${(remaining/1000).toFixed(1)}s)`);
         return false;
       }
     }
     
     // Check mana
     if (caster.mana < skill.manaCost) {
-      console.log(`SkillSystemAdvanced: Insufficient mana for ${skill.name}`);
+      logger.info(`SkillSystemAdvanced: Insufficient mana for ${skill.name}`);
       return false;
     }
     
     // Execute skill
-    console.log(`SkillSystemAdvanced: ${caster.name} uses ${skill.name}`);
-    console.log(`  - Animation: ${skill.animation} (Mixamo)`);
-    console.log(`  - VFX: ${skill.vfx} (Kenney/OpenGameArt)`);
+    logger.info(`SkillSystemAdvanced: ${caster.name} uses ${skill.name}`);
+    logger.info(`  - Animation: ${skill.animation} (Mixamo)`);
+    logger.info(`  - VFX: ${skill.vfx} (Kenney/OpenGameArt)`);
     
     caster.mana -= skill.manaCost;
     
@@ -404,7 +404,7 @@ export class SkillSystemAdvanced {
     
     if (target && scaledDamage > 0) {
       target.health -= scaledDamage;
-      console.log(`  - Dealt ${scaledDamage.toFixed(0)} damage to ${target.name}`);
+      logger.info(`  - Dealt ${scaledDamage.toFixed(0)} damage to ${target.name}`);
     }
     
     // Set cooldown
@@ -424,7 +424,7 @@ export class SkillSystemAdvanced {
     
     if (now - this.lastSkillTime < this.comboWindow) {
       this.combos.push({ skill: skillId, time: now });
-      console.log(`SkillSystemAdvanced: Combo chain: ${this.combos.length} skills`);
+      logger.info(`SkillSystemAdvanced: Combo chain: ${this.combos.length} skills`);
     } else {
       this.combos = [{ skill: skillId, time: now }];
     }
@@ -440,18 +440,18 @@ export class SkillSystemAdvanced {
     if (!skill) return false;
     
     if (skill.level >= skill.maxLevel) {
-      console.log(`SkillSystemAdvanced: ${skill.name} is already max level`);
+      logger.info(`SkillSystemAdvanced: ${skill.name} is already max level`);
       return false;
     }
     
     if (this.progression.spentSkillPoints >= this.progression.totalSkillPoints) {
-      console.log(`SkillSystemAdvanced: No skill points available`);
+      logger.info(`SkillSystemAdvanced: No skill points available`);
       return false;
     }
     
     skill.level++;
     this.progression.spentSkillPoints++;
-    console.log(`SkillSystemAdvanced: ${skill.name} leveled up to ${skill.level}`);
+    logger.info(`SkillSystemAdvanced: ${skill.name} leveled up to ${skill.level}`);
     return true;
   }
   

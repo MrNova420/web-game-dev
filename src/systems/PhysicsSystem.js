@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * PhysicsSystem - Physics-based interactions for realistic gameplay
  * Provides collision detection, rigid body dynamics, and physical interactions
  */
@@ -48,7 +49,7 @@ export class PhysicsSystem {
         // Add ground plane
         this.createGroundPlane();
         
-        console.log('⚛️ Physics System initialized');
+        logger.info('⚛️ Physics System initialized');
     }
     
     setupMaterialInteractions() {
@@ -427,6 +428,6 @@ export class PhysicsSystem {
             });
         }
         
-        console.log('⚛️ Physics System disposed');
+        logger.info('⚛️ Physics System disposed');
     }
 }

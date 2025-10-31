@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Azure Depths Biome - Underwater Zone (Level 20-35)
  * Per README: Vast underwater realm with coral cities
  * 
@@ -30,7 +31,7 @@ export class AzureDepthsBiome {
     }
     
     async build() {
-        console.log('🌊 Building Azure Depths Biome...');
+        logger.info('🌊 Building Azure Depths Biome...');
         
         try {
             await this.setupEnvironment();
@@ -41,12 +42,12 @@ export class AzureDepthsBiome {
             await this.buildAtlanteanRuins();
             await this.buildCoralPalace();
             
-            console.log('✅ Azure Depths complete!');
-            console.log(`   - Coral: ${this.coral.length}`);
-            console.log(`   - Plants: ${this.plants.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Azure Depths complete!');
+            logger.info(`   - Coral: ${this.coral.length}`);
+            logger.info(`   - Plants: ${this.plants.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Azure Depths:', error);
+            logger.error('Error building Azure Depths:', error);
         }
     }
     
@@ -80,7 +81,7 @@ export class AzureDepthsBiome {
     }
     
     async createUnderwaterTerrain() {
-        console.log('🗺️ Creating underwater terrain...');
+        logger.info('🗺️ Creating underwater terrain...');
         
         const groundTiles = [
             '/assets/models/nature/RockPath_Round_Wide.gltf',
@@ -124,11 +125,11 @@ export class AzureDepthsBiome {
             }
         }
         
-        console.log('   ✅ Underwater terrain created');
+        logger.info('   ✅ Underwater terrain created');
     }
     
     async addCoralReefs() {
-        console.log('🪸 Adding coral reefs...');
+        logger.info('🪸 Adding coral reefs...');
         
         // Use colorful rocks as coral
         const coralCount = 100;
@@ -164,11 +165,11 @@ export class AzureDepthsBiome {
             this.coral.push(coral);
         }
         
-        console.log(`   ✅ Added ${this.coral.length} coral pieces`);
+        logger.info(`   ✅ Added ${this.coral.length} coral pieces`);
     }
     
     async addSeaPlants() {
-        console.log('🌿 Adding sea plants...');
+        logger.info('🌿 Adding sea plants...');
         
         const plantCount = 80;
         const plantPath = this.assetRegistry.getRandomPlant();
@@ -193,11 +194,11 @@ export class AzureDepthsBiome {
             this.plants.push(plant);
         }
         
-        console.log(`   ✅ Added ${this.plants.length} sea plants`);
+        logger.info(`   ✅ Added ${this.plants.length} sea plants`);
     }
     
     async addRocks() {
-        console.log('🪨 Adding underwater rocks...');
+        logger.info('🪨 Adding underwater rocks...');
         
         const rockCount = 60;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -221,17 +222,17 @@ export class AzureDepthsBiome {
             this.rocks.push(rock);
         }
         
-        console.log(`   ✅ Added ${this.rocks.length} rocks`);
+        logger.info(`   ✅ Added ${this.rocks.length} rocks`);
     }
     
     async buildAtlanteanRuins() {
-        console.log('🏛️ Building Atlantean Ruins...');
+        logger.info('🏛️ Building Atlantean Ruins...');
         // Placeholder for ancient underwater ruins
         this.structures.push({ name: 'Atlantean Ruins', type: 'ruins' });
     }
     
     async buildCoralPalace() {
-        console.log('🏰 Building Coral Palace...');
+        logger.info('🏰 Building Coral Palace...');
         // Placeholder for merfolk kingdom
         this.structures.push({ name: 'Coral Palace', type: 'palace' });
     }

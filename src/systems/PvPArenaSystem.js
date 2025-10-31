@@ -104,7 +104,7 @@ export class PvPArenaSystem {
         // Spectator system
         this.spectators = new Map(); // matchId -> [spectatorIds]
         
-        console.log('⚔️ PvPArenaSystem initialized');
+        logger.info('⚔️ PvPArenaSystem initialized');
     }
     
     /**
@@ -130,7 +130,7 @@ export class PvPArenaSystem {
             queueTime: Date.now()
         });
         
-        console.log(`🎮 Player ${playerId} queued for ${mode} (Rating: ${rating})`);
+        logger.info(`🎮 Player ${playerId} queued for ${mode} (Rating: ${rating})`);
         
         // Try to find match
         this.tryMatchmaking(mode);
@@ -195,7 +195,7 @@ export class PvPArenaSystem {
         
         this.activeMatches.push(match);
         
-        console.log(`🏟️ Match created: ${modeConfig.name} (${players.length} players)`);
+        logger.info(`🏟️ Match created: ${modeConfig.name} (${players.length} players)`);
         
         return match;
     }
@@ -221,7 +221,7 @@ export class PvPArenaSystem {
         
         this.pendingDuels.push(duel);
         
-        console.log(`⚔️ Duel challenge sent from ${challengerId} to ${targetId} (Wager: ${wager})`);
+        logger.info(`⚔️ Duel challenge sent from ${challengerId} to ${targetId} (Wager: ${wager})`);
         
         return { success: true, duelId: duel.id };
     }
@@ -254,7 +254,7 @@ export class PvPArenaSystem {
         
         this.activeDuels.push(match);
         
-        console.log(`⚔️ Duel accepted! ${duel.challenger} vs ${duel.target}`);
+        logger.info(`⚔️ Duel accepted! ${duel.challenger} vs ${duel.target}`);
         
         return { success: true, matchId: match.id };
     }
@@ -286,13 +286,13 @@ export class PvPArenaSystem {
         // Handle wager for duels
         if (match.isDuel && match.wager > 0) {
             const loserId = match.players.find(p => p.id !== winnerId)?.id;
-            console.log(`💰 ${winnerId} wins ${match.wager} gold from ${loserId}`);
+            logger.info(`💰 ${winnerId} wins ${match.wager} gold from ${loserId}`);
         }
         
         // Check for title unlocks
         this.checkTitleUnlocks(winnerId);
         
-        console.log(`🏆 Match ended! Winner: ${winnerId}`);
+        logger.info(`🏆 Match ended! Winner: ${winnerId}`);
         
         return {
             winner: winnerId,
@@ -317,7 +317,7 @@ export class PvPArenaSystem {
         
         this.playerRatings.set(playerId, newRating);
         
-        console.log(`📊 ${playerId} rating: ${currentRating} → ${newRating} (${ratingChange > 0 ? '+' : ''}${ratingChange})`);
+        logger.info(`📊 ${playerId} rating: ${currentRating} → ${newRating} (${ratingChange > 0 ? '+' : ''}${ratingChange})`);
     }
     
     /**
@@ -354,7 +354,7 @@ export class PvPArenaSystem {
         const current = this.honorPoints.get(playerId) || 0;
         this.honorPoints.set(playerId, current + amount);
         
-        console.log(`🏅 ${playerId} earned ${amount} honor points (Total: ${current + amount})`);
+        logger.info(`🏅 ${playerId} earned ${amount} honor points (Total: ${current + amount})`);
     }
     
     /**
@@ -392,7 +392,7 @@ export class PvPArenaSystem {
         this.playerTitles.get(playerId).push(titleId);
         
         const title = this.titles[titleId];
-        console.log(`🏆 ${playerId} unlocked title: ${title.name}!`);
+        logger.info(`🏆 ${playerId} unlocked title: ${title.name}!`);
     }
     
     /**
@@ -417,7 +417,7 @@ export class PvPArenaSystem {
         
         this.spectators.get(matchId).push(spectatorId);
         
-        console.log(`👁️ ${spectatorId} is now spectating match ${matchId}`);
+        logger.info(`👁️ ${spectatorId} is now spectating match ${matchId}`);
         
         return { success: true, match };
     }
@@ -490,7 +490,7 @@ export class PvPArenaSystem {
      * End season and distribute rewards
      */
     endSeason() {
-        console.log(`🏆 Season ${this.currentSeason.number} ended!`);
+        logger.info(`🏆 Season ${this.currentSeason.number} ended!`);
         
         // Distribute rewards based on final rankings
         this.playerRatings.forEach((rating, playerId) => {
@@ -498,7 +498,7 @@ export class PvPArenaSystem {
             const rewards = this.currentSeason.rewards[rank.name.toLowerCase()];
             
             if (rewards) {
-                console.log(`🎁 ${playerId} received season rewards: ${rewards.join(', ')}`);
+                logger.info(`🎁 ${playerId} received season rewards: ${rewards.join(', ')}`);
             }
         });
         

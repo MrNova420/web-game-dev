@@ -3,5 +3,5 @@
  */
 export class StreamIntegrationSystem {
   constructor() { this.streams = new Map(); }
-  startStream(playerId, platform) { console.log(`${playerId} streaming on ${platform}`); }
+  startStream(playerId, platform) { logger.info(`${playerId} streaming on ${platform}`); }
 }

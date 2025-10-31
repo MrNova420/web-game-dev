@@ -529,7 +529,7 @@ export class PetBattleSystem {
             if (tournament) {
                 const prizes = this.tournamentConfig.prizePools[tournament.rank];
                 // Award prizes to winner
-                console.log(`Tournament winner ${winnerId} receives:`, prizes);
+                logger.info(`Tournament winner ${winnerId} receives:`, prizes);
             }
         }
         
@@ -537,7 +537,7 @@ export class PetBattleSystem {
         for (const player of [battle.player1, battle.player2]) {
             for (const pet of player.pets) {
                 const exp = Math.floor(50 * battle.round);
-                console.log(`${pet.name} gained ${exp} experience!`);
+                logger.info(`${pet.name} gained ${exp} experience!`);
             }
         }
     }
@@ -605,7 +605,7 @@ export class PetBattleSystem {
             message: message,
             timestamp: Date.now()
         });
-        console.log(`[Battle ${battle.id}] ${message}`);
+        logger.info(`[Battle ${battle.id}] ${message}`);
     }
     
     /**

@@ -69,7 +69,7 @@ export class ProceduralGenerationSystem {
             dungeonThemes: ['Ruins', 'Catacombs', 'Tower', 'Fortress', 'Temple', 'Abyss', 'Nexus', 'Sanctum', 'Citadel', 'Labyrinth']
         };
         
-        console.log('🎲 ProceduralGenerationSystem initialized');
+        logger.info('🎲 ProceduralGenerationSystem initialized');
     }
     
     /**
@@ -94,7 +94,7 @@ export class ProceduralGenerationSystem {
             this.generateItems(5, i);
         }
         
-        console.log('✨ Initial content pool generated');
+        logger.info('✨ Initial content pool generated');
     }
     
     /**
@@ -304,7 +304,7 @@ export class ProceduralGenerationSystem {
         };
         
         this.generatedContent.worlds.set(biome.id, biome);
-        console.log(`🌍 Generated new biome: ${biome.name} (Level ${unlockLevel})`);
+        logger.info(`🌍 Generated new biome: ${biome.name} (Level ${unlockLevel})`);
         return biome;
     }
     
@@ -365,7 +365,7 @@ export class ProceduralGenerationSystem {
         };
         
         this.generatedContent.dungeons.set(dungeon.id, dungeon);
-        console.log(`🏰 Generated new dungeon: ${dungeon.name}`);
+        logger.info(`🏰 Generated new dungeon: ${dungeon.name}`);
         return dungeon;
     }
     
@@ -410,7 +410,7 @@ export class ProceduralGenerationSystem {
         };
         
         this.generatedContent.quests.set(questline.id, questline);
-        console.log(`📜 Generated new questline: ${questline.name}`);
+        logger.info(`📜 Generated new questline: ${questline.name}`);
         return questline;
     }
     
@@ -457,7 +457,7 @@ export class ProceduralGenerationSystem {
             generatedAt: Date.now()
         };
         
-        console.log(`🎮 Generated new game mode: ${gameMode.name}`);
+        logger.info(`🎮 Generated new game mode: ${gameMode.name}`);
         return gameMode;
     }
     

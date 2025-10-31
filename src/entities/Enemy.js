@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Enemy - Enemy entity class
  * Different enemy types based on Dynasty of Emberveil lore
  */
@@ -224,7 +225,7 @@ export class Enemy {
             if (gameEngine.craftingSystem) {
                 const drops = gameEngine.craftingSystem.dropMaterialsFromEnemy(this);
                 if (drops && drops.length > 0) {
-                    console.log(`💎 Materials dropped: ${drops.map(d => `${d.material.name} x${d.amount}`).join(', ')}`);
+                    logger.info(`💎 Materials dropped: ${drops.map(d => `${d.material.name} x${d.amount}`).join(', ')}`);
                 }
             }
         }
@@ -244,7 +245,7 @@ export class Enemy {
         if (distance < 2.5) { // Slightly larger attack range
             player.takeDamage(this.stats.attack);
             this.lastAttackTime = currentTime;
-            console.log(`👾 ${this.stats.name} attacks player for ${this.stats.attack} damage!`);
+            logger.info(`👾 ${this.stats.name} attacks player for ${this.stats.attack} damage!`);
         }
     }
 }

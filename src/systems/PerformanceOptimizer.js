@@ -194,19 +194,19 @@ export class PerformanceOptimizer {
 
         // Detect performance issues
         if (avgFPS < this.thresholds.fpsLow) {
-            console.warn('⚠️ Low FPS detected:', avgFPS.toFixed(1));
+            logger.warn('⚠️ Low FPS detected:', avgFPS.toFixed(1));
             this.onLowPerformance();
         }
 
         if (avgFrameTime > this.thresholds.frameTimeCritical) {
-            console.warn('⚠️ Frame time too high:', avgFrameTime.toFixed(1), 'ms');
+            logger.warn('⚠️ Frame time too high:', avgFrameTime.toFixed(1), 'ms');
         }
 
         if (avgMemory > this.thresholds.memoryWarning) {
-            console.warn('⚠️ High memory usage:', (avgMemory / 1024 / 1024).toFixed(1), 'MB');
+            logger.warn('⚠️ High memory usage:', (avgMemory / 1024 / 1024).toFixed(1), 'MB');
             
             if (avgMemory > this.thresholds.memoryCritical) {
-                console.error('❌ Critical memory usage!');
+                logger.error('❌ Critical memory usage!');
                 this.onCriticalMemory();
             }
         }
@@ -234,7 +234,7 @@ export class PerformanceOptimizer {
     }
 
     onCriticalMemory() {
-        console.log('🧹 Performing emergency cleanup...');
+        logger.info('🧹 Performing emergency cleanup...');
         
         // Release all pools
         for (const [name, pool] of this.objectPools) {
@@ -289,7 +289,7 @@ export class PerformanceOptimizer {
 
     setOptimizationLevel(level) {
         this.optimizationLevel = level;
-        console.log(`🎮 Quality set to: ${level}`);
+        logger.info(`🎮 Quality set to: ${level}`);
 
         // Apply optimization settings
         const settings = this.getOptimizationSettings(level);
@@ -409,7 +409,7 @@ export class PerformanceOptimizer {
     // Performance mode methods
     setPerformanceMode(mode) {
         this.performanceMode = mode;
-        console.log(`⚡ Performance mode: ${mode}`);
+        logger.info(`⚡ Performance mode: ${mode}`);
 
         switch (mode) {
             case 'battery':
@@ -485,31 +485,31 @@ export class PerformanceOptimizer {
     // Enable/disable features
     enableAdaptiveQuality() {
         this.adaptiveQuality = true;
-        console.log('✅ Adaptive quality enabled');
+        logger.info('✅ Adaptive quality enabled');
     }
 
     disableAdaptiveQuality() {
         this.adaptiveQuality = false;
-        console.log('Adaptive quality disabled');
+        logger.info('Adaptive quality disabled');
     }
 
     enableCulling() {
         this.cullingEnabled = true;
-        console.log('✅ Culling enabled');
+        logger.info('✅ Culling enabled');
     }
 
     disableCulling() {
         this.cullingEnabled = false;
-        console.log('Culling disabled');
+        logger.info('Culling disabled');
     }
 
     enableLOD() {
         this.lodEnabled = true;
-        console.log('✅ LOD enabled');
+        logger.info('✅ LOD enabled');
     }
 
     disableLOD() {
         this.lodEnabled = false;
-        console.log('LOD disabled');
+        logger.info('LOD disabled');
     }
 }

@@ -55,7 +55,7 @@ export class WeaponMasterySystem {
     if (current.xp >= xpNeeded) {
       current.level++;
       current.xp -= xpNeeded;
-      console.log(`${entityId} reached ${weaponType} mastery level ${current.level}!`);
+      logger.info(`${entityId} reached ${weaponType} mastery level ${current.level}!`);
       this.checkUnlocks(entityId, weaponType, current.level);
     }
     
@@ -65,13 +65,13 @@ export class WeaponMasterySystem {
   checkUnlocks(entityId, weaponType, level) {
     const unlocks = this.unlockableMoves[weaponType];
     if (unlocks && unlocks[level]) {
-      console.log(`${entityId} unlocked: ${unlocks[level]}`);
+      logger.info(`${entityId} unlocked: ${unlocks[level]}`);
     }
     
     const tier = this.getCurrentTier(level);
-    console.log(`${entityId} ${weaponType} mastery: ${tier}`);
-    console.log(`  Icon: ${this.masteryTiers[tier].icon}`);
-    console.log(`  Bonus: ${this.masteryTiers[tier].bonus}x`);
+    logger.info(`${entityId} ${weaponType} mastery: ${tier}`);
+    logger.info(`  Icon: ${this.masteryTiers[tier].icon}`);
+    logger.info(`  Bonus: ${this.masteryTiers[tier].bonus}x`);
   }
 
   getCurrentTier(level) {

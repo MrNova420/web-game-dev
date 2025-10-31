@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Moonlit Glade Village - Complete Starting Village
  * Built using Medieval Village MegaKit (176 building models)
  * 
@@ -44,7 +45,7 @@ export class MoonlitGladeVillage {
      * Build the complete village
      */
     async build() {
-        console.log('🏘️ Building Moonlit Glade Village...');
+        logger.info('🏘️ Building Moonlit Glade Village...');
         
         try {
             // Create village layout
@@ -71,14 +72,14 @@ export class MoonlitGladeVillage {
             // Spawn NPCs
             await this.spawnVillageNPCs();
             
-            console.log('✅ Moonlit Glade Village complete!');
-            console.log(`   - Buildings: ${this.buildings.length}`);
-            console.log(`   - Props: ${this.props.length}`);
-            console.log(`   - NPCs: ${this.npcs.length}`);
-            console.log(`   - Lights: ${this.lights.length}`);
+            logger.info('✅ Moonlit Glade Village complete!');
+            logger.info(`   - Buildings: ${this.buildings.length}`);
+            logger.info(`   - Props: ${this.props.length}`);
+            logger.info(`   - NPCs: ${this.npcs.length}`);
+            logger.info(`   - Lights: ${this.lights.length}`);
             
         } catch (error) {
-            console.error('Error building village:', error);
+            logger.error('Error building village:', error);
         }
     }
     
@@ -120,14 +121,14 @@ export class MoonlitGladeVillage {
             this.scene.add(stone);
         }
         
-        console.log('   ✅ Village ground created');
+        logger.info('   ✅ Village ground created');
     }
     
     /**
      * Build The Mystical Tankard Tavern
      */
     async buildTavern() {
-        console.log('   🍺 Building tavern...');
+        logger.info('   🍺 Building tavern...');
         
         const tavernPos = {
             x: this.center.x - 15,
@@ -186,7 +187,7 @@ export class MoonlitGladeVillage {
      * Build Everforge Smithy
      */
     async buildBlacksmith() {
-        console.log('   ⚒️ Building blacksmith...');
+        logger.info('   ⚒️ Building blacksmith...');
         
         const smithyPos = {
             x: this.center.x + 15,
@@ -243,7 +244,7 @@ export class MoonlitGladeVillage {
      * Build Glade Goods General Store
      */
     async buildGeneralStore() {
-        console.log('   🏪 Building general store...');
+        logger.info('   🏪 Building general store...');
         
         const storePos = {
             x: this.center.x - 15,
@@ -294,7 +295,7 @@ export class MoonlitGladeVillage {
      * Build Moonwater Potions Alchemy Shop
      */
     async buildAlchemyShop() {
-        console.log('   ⚗️ Building alchemy shop...');
+        logger.info('   ⚗️ Building alchemy shop...');
         
         const shopPos = {
             x: this.center.x + 15,
@@ -351,7 +352,7 @@ export class MoonlitGladeVillage {
      * Build residential houses around village
      */
     async buildHouses() {
-        console.log('   🏠 Building houses...');
+        logger.info('   🏠 Building houses...');
         
         const houseCount = 10;
         const houseRadius = 25;
@@ -387,14 +388,14 @@ export class MoonlitGladeVillage {
             this.buildings.push(house);
         }
         
-        console.log(`   ✅ Built ${this.buildingTypes.houses.length} houses`);
+        logger.info(`   ✅ Built ${this.buildingTypes.houses.length} houses`);
     }
     
     /**
      * Build central marketplace with stalls
      */
     async buildMarketplace() {
-        console.log('   🏛️ Building marketplace...');
+        logger.info('   🏛️ Building marketplace...');
         
         const stallCount = 6;
         const stallRadius = 8;
@@ -426,14 +427,14 @@ export class MoonlitGladeVillage {
             }
         }
         
-        console.log(`   ✅ Built ${stallCount} market stalls`);
+        logger.info(`   ✅ Built ${stallCount} market stalls`);
     }
     
     /**
      * Add decorative props throughout village
      */
     async addVillageProps() {
-        console.log('   🎨 Adding decorative props...');
+        logger.info('   🎨 Adding decorative props...');
         
         const propLocations = [
             // Barrels and crates scattered around
@@ -471,14 +472,14 @@ export class MoonlitGladeVillage {
             }
         }
         
-        console.log(`   ✅ Added ${this.props.length} decorative props`);
+        logger.info(`   ✅ Added ${this.props.length} decorative props`);
     }
     
     /**
      * Add village lighting - lanterns, torches, ambient lights
      */
     addVillageLighting() {
-        console.log('   💡 Adding village lighting...');
+        logger.info('   💡 Adding village lighting...');
         
         // Central fountain/well light
         const centralLight = new THREE.PointLight(0xffffcc, 2, 25);
@@ -509,14 +510,14 @@ export class MoonlitGladeVillage {
             this.scene.add(post);
         }
         
-        console.log(`   ✅ Added ${this.lights.length} lights`);
+        logger.info(`   ✅ Added ${this.lights.length} lights`);
     }
     
     /**
      * Spawn village NPCs
      */
     async spawnVillageNPCs() {
-        console.log('   👥 Spawning NPCs...');
+        logger.info('   👥 Spawning NPCs...');
         
         const npcDefinitions = [
             { name: 'Innkeeper Elara', location: this.buildingTypes.tavern, role: 'quest_giver' },
@@ -534,7 +535,7 @@ export class MoonlitGladeVillage {
             }
         }
         
-        console.log(`   ✅ Spawned ${this.npcs.length} NPCs`);
+        logger.info(`   ✅ Spawned ${this.npcs.length} NPCs`);
     }
     
     /**

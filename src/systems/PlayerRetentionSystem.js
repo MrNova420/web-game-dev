@@ -227,22 +227,22 @@ export class PlayerRetentionSystem {
 
   showRewardNotification(reward) {
     // UI notification using Kenney UI Pack
-    console.log('Daily Reward:', reward);
+    logger.info('Daily Reward:', reward);
   }
 
   showComebackNotification(reward, daysAway) {
-    console.log(`Welcome back! You were away for ${daysAway} days. Here's your reward:`, reward);
+    logger.info(`Welcome back! You were away for ${daysAway} days. Here's your reward:`, reward);
   }
 
   showMilestoneNotification(reward, streak) {
-    console.log(`${streak}-Day Login Streak!`, reward);
+    logger.info(`${streak}-Day Login Streak!`, reward);
   }
 
   showQuestCompleteNotification(quest) {
-    console.log('Weekly Quest Complete:', quest.name);
+    logger.info('Weekly Quest Complete:', quest.name);
   }
 
   showEventNotification(event) {
-    console.log('Monthly Event:', event.name);
+    logger.info('Monthly Event:', event.name);
   }
 }

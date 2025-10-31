@@ -153,7 +153,7 @@ export class PlayerHousingSystem {
         }
         
         this.house.tier = tier;
-        console.log(`🏠 Upgraded to ${tierData.name}!`);
+        logger.info(`🏠 Upgraded to ${tierData.name}!`);
         
         return { success: true, tier: tierData };
     }
@@ -367,7 +367,7 @@ export class PlayerHousingSystem {
      */
     useTrainingDummy() {
         // Grant XP or skill points
-        console.log('💪 Training complete!');
+        logger.info('💪 Training complete!');
         return { success: true, reward: 'xp' };
     }
     
@@ -380,7 +380,7 @@ export class PlayerHousingSystem {
             this.gameEngine.player.hp = this.gameEngine.player.maxHP;
             this.gameEngine.player.mana = this.gameEngine.player.maxMana;
         }
-        console.log('🧘 Meditation complete - fully restored!');
+        logger.info('🧘 Meditation complete - fully restored!');
         return { success: true, reward: 'restore' };
     }
     
@@ -389,7 +389,7 @@ export class PlayerHousingSystem {
      */
     useGarden() {
         // Harvest plants
-        console.log('🌱 Garden tended!');
+        logger.info('🌱 Garden tended!');
         return { success: true, reward: 'herbs' };
     }
     
@@ -398,7 +398,7 @@ export class PlayerHousingSystem {
      */
     useBookshelf() {
         // Learn recipes or lore
-        console.log('📚 Knowledge gained!');
+        logger.info('📚 Knowledge gained!');
         return { success: true, reward: 'knowledge' };
     }
     
@@ -480,7 +480,7 @@ export class PlayerHousingSystem {
             this.house.upgrades = new Set(data.upgrades || []);
             this.house.theme = data.theme || 'default';
         } catch (error) {
-            console.error('Failed to load house data:', error);
+            logger.error('Failed to load house data:', error);
         }
     }
 }

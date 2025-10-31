@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * PlatformerGameSystem - 2.5D Platformer Mini-Game with EXTERNAL ASSETS
  * Phase 8 - Mini-Games System #126
  * 
@@ -131,8 +132,8 @@ export class PlatformerGameSystem {
     }
     
     initialize() {
-        console.log('🎮 Platformer Game System initialized');
-        console.log('   Using Kenney Platform Pack + Mixamo + OpenGameArt');
+        logger.info('🎮 Platformer Game System initialized');
+        logger.info('   Using Kenney Platform Pack + Mixamo + OpenGameArt');
     }
     
     createLevels() {
@@ -332,17 +333,17 @@ export class PlatformerGameSystem {
     }
     
     startGame() {
-        console.log('🎮 Starting Platformer Mini-Game');
-        console.log(`   Level: ${this.levels[this.currentLevel].name}`);
+        logger.info('🎮 Starting Platformer Mini-Game');
+        logger.info(`   Level: ${this.levels[this.currentLevel].name}`);
         this.active = true;
         this.loadLevel(this.currentLevel);
     }
     
     loadLevel(levelIndex) {
         const level = this.levels[levelIndex];
-        console.log(`📦 Loading Level ${levelIndex + 1}: ${level.name}`);
-        console.log(`   Theme: ${level.theme}, Difficulty: ${level.difficulty}`);
-        console.log(`   Using external assets from Kenney + Quaternius + OpenGameArt`);
+        logger.info(`📦 Loading Level ${levelIndex + 1}: ${level.name}`);
+        logger.info(`   Theme: ${level.theme}, Difficulty: ${level.difficulty}`);
+        logger.info(`   Using external assets from Kenney + Quaternius + OpenGameArt`);
         
         // Reset player
         this.player.position.set(0, 2, 0);
@@ -372,33 +373,33 @@ export class PlatformerGameSystem {
     }
     
     generatePlatforms(level) {
-        console.log(`🏗️  Generating ${level.platformCount} platforms (Kenney Platform Pack)`);
+        logger.info(`🏗️  Generating ${level.platformCount} platforms (Kenney Platform Pack)`);
         // Platforms would be loaded from external Kenney assets
         // Implementation would use GLTFLoader to load platform models
     }
     
     spawnCollectibles(level) {
-        console.log(`💎 Spawning ${level.collectibleCount} collectibles (Kenney Game Icons)`);
+        logger.info(`💎 Spawning ${level.collectibleCount} collectibles (Kenney Game Icons)`);
         // Collectibles loaded from external Kenney assets
     }
     
     spawnHazards(level) {
-        console.log(`⚠️  Spawning ${level.hazardCount} hazards (Kenney Obstacle Pack)`);
+        logger.info(`⚠️  Spawning ${level.hazardCount} hazards (Kenney Obstacle Pack)`);
         // Hazards loaded from external Kenney assets
     }
     
     spawnEnemies(level) {
-        console.log(`👾 Spawning ${level.enemyCount} enemies (Quaternius)`);
+        logger.info(`👾 Spawning ${level.enemyCount} enemies (Quaternius)`);
         // Enemies loaded from external Quaternius assets
     }
     
     spawnBoss(bossData) {
-        console.log(`👹 Spawning boss: ${bossData.type} (Sketchfab Free)`);
+        logger.info(`👹 Spawning boss: ${bossData.type} (Sketchfab Free)`);
         // Boss loaded from external Sketchfab asset
     }
     
     loadParallaxBackground(theme) {
-        console.log(`🖼️  Loading parallax background: ${theme} (OpenGameArt)`);
+        logger.info(`🖼️  Loading parallax background: ${theme} (OpenGameArt)`);
         // Background layers loaded from external OpenGameArt assets
     }
     
@@ -553,13 +554,13 @@ export class PlatformerGameSystem {
     }
     
     gameOver() {
-        console.log('💀 Game Over!');
+        logger.info('💀 Game Over!');
         this.active = false;
     }
     
     levelComplete() {
-        console.log(`✅ Level ${this.currentLevel + 1} Complete!`);
-        console.log(`   Score: ${this.score}, Max Combo: ${this.maxCombo}`);
+        logger.info(`✅ Level ${this.currentLevel + 1} Complete!`);
+        logger.info(`   Score: ${this.score}, Max Combo: ${this.maxCombo}`);
         
         this.currentLevel++;
         if (this.currentLevel < this.levels.length) {
@@ -570,7 +571,7 @@ export class PlatformerGameSystem {
     }
     
     gameComplete() {
-        console.log('🎉 All levels complete! Platformer Master!');
+        logger.info('🎉 All levels complete! Platformer Master!');
         this.active = false;
     }
     

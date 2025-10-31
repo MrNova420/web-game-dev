@@ -1,1 +1,0 @@
-import{l as t}from"./index-CGDjDhhy.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class l{constructor(){this.artifacts={ancient_relic:{model:"/assets/models/artifacts/relic.glb"},fossil:{model:"/assets/models/artifacts/fossil.glb"}}}excavate(s){t.info(`Excavating site: ${s}`)}}export{l as ArchaeologySystem};

@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Massive Open World System - Dynasty of Emberveil
  * 
  * HAND-CRAFTED, NON-PROCEDURAL MASSIVE MULTIPLAYER WORLD
@@ -139,56 +140,56 @@ export class MassiveOpenWorld {
      * Initialize the MASSIVE ALMOST ENDLESS open world
      */
     async initialize() {
-        console.log('🌍 ============================================');
-        console.log('   INITIALIZING MASSIVE OPEN WORLD');
-        console.log('   Dynasty of Emberveil - Complete MMORPG World');
-        console.log('============================================');
-        console.log(`📏 World Dimensions: ${this.worldSize}m x ${this.worldSize}m (10km²)`);
-        console.log(`🗺️  Total Biomes: ${this.biomeGrid.length}`);
-        console.log(`🏘️  Total Villages: ${this.totalContent.villages}`);
-        console.log(`🏛️  Total Dungeons: ${this.totalContent.dungeons}`);
-        console.log(`❓ Secret Areas: ${this.totalContent.secretAreas}`);
-        console.log(`📜 Quest Hubs: ${this.totalContent.questHubs}`);
-        console.log(`👥 Total NPCs: ${this.totalContent.npcs}`);
-        console.log(`💀 World Bosses: ${this.totalContent.worldBosses}`);
-        console.log(`💎 Treasure Locations: ${this.totalContent.treasures}`);
-        console.log(`⚔️  Enemy Spawns: ${this.totalContent.enemies}+`);
-        console.log('============================================\n');
+        logger.info('🌍 ============================================');
+        logger.info('   INITIALIZING MASSIVE OPEN WORLD');
+        logger.info('   Dynasty of Emberveil - Complete MMORPG World');
+        logger.info('============================================');
+        logger.info(`📏 World Dimensions: ${this.worldSize}m x ${this.worldSize}m (10km²)`);
+        logger.info(`🗺️  Total Biomes: ${this.biomeGrid.length}`);
+        logger.info(`🏘️  Total Villages: ${this.totalContent.villages}`);
+        logger.info(`🏛️  Total Dungeons: ${this.totalContent.dungeons}`);
+        logger.info(`❓ Secret Areas: ${this.totalContent.secretAreas}`);
+        logger.info(`📜 Quest Hubs: ${this.totalContent.questHubs}`);
+        logger.info(`👥 Total NPCs: ${this.totalContent.npcs}`);
+        logger.info(`💀 World Bosses: ${this.totalContent.worldBosses}`);
+        logger.info(`💎 Treasure Locations: ${this.totalContent.treasures}`);
+        logger.info(`⚔️  Enemy Spawns: ${this.totalContent.enemies}+`);
+        logger.info('============================================\n');
         
         // Create world boundary markers
         this.createWorldBoundaries();
         
         // Build Everlight City (massive central hub)
-        console.log('🏰 Building Everlight City - The Floating Capital...');
+        logger.info('🏰 Building Everlight City - The Floating Capital...');
         await this.buildEverlightCity();
-        console.log('   ✅ Everlight City complete!\n');
+        logger.info('   ✅ Everlight City complete!\n');
         
         // Build starting zone (Mystic Forest) - Fully detailed
-        console.log('🌲 Building Starting Zone: Mystic Forest...');
+        logger.info('🌲 Building Starting Zone: Mystic Forest...');
         await this.buildStartingZone();
-        console.log('   ✅ Mystic Forest complete!\n');
+        logger.info('   ✅ Mystic Forest complete!\n');
         
         // Generate content maps for all biomes (markers for future loading)
-        console.log('📍 Generating world content markers...');
+        logger.info('📍 Generating world content markers...');
         this.generateWorldContent();
-        console.log('   ✅ Content markers generated!\n');
+        logger.info('   ✅ Content markers generated!\n');
         
         // Create portal network
-        console.log('🌀 Creating portal network...');
+        logger.info('🌀 Creating portal network...');
         this.createZonePortals();
-        console.log('   ✅ Portal network active!\n');
+        logger.info('   ✅ Portal network active!\n');
         
         // Create fast travel network
-        console.log('✈️  Setting up fast travel points...');
+        logger.info('✈️  Setting up fast travel points...');
         this.setupFastTravel();
-        console.log('   ✅ Fast travel ready!\n');
+        logger.info('   ✅ Fast travel ready!\n');
         
-        console.log('🎉 ============================================');
-        console.log('   MASSIVE OPEN WORLD READY!');
-        console.log('   Type: Hand-Crafted, Non-Procedural');
-        console.log('   Status: Immersive, Exploration-Ready');
-        console.log('   Content: Endless Adventures Await!');
-        console.log('============================================\n');
+        logger.info('🎉 ============================================');
+        logger.info('   MASSIVE OPEN WORLD READY!');
+        logger.info('   Type: Hand-Crafted, Non-Procedural');
+        logger.info('   Status: Immersive, Exploration-Ready');
+        logger.info('   Content: Endless Adventures Await!');
+        logger.info('============================================\n');
         
         this.printWorldStats();
     }
@@ -278,7 +279,7 @@ export class MassiveOpenWorld {
                             this.contentPerBiome.treasures;
         });
         
-        console.log(`      Generated ${totalGenerated} points of interest!`);
+        logger.info(`      Generated ${totalGenerated} points of interest!`);
     }
     
     /**
@@ -321,21 +322,21 @@ export class MassiveOpenWorld {
      * Print detailed world statistics
      */
     printWorldStats() {
-        console.log('📊 WORLD STATISTICS:');
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log(`Biomes:           ${this.biomeGrid.length}`);
-        console.log(`Villages:         ${this.villages.length}`);
-        console.log(`Dungeons:         ${this.dungeons.length}`);
-        console.log(`Secret Areas:     ${this.secretAreas.length}`);
-        console.log(`Quest Hubs:       ${this.questHubs.length}`);
-        console.log(`World Bosses:     ${this.worldBosses.length}`);
-        console.log(`Treasures:        ${this.treasureLocations.length}`);
-        console.log(`Fast Travel:      ${this.fastTravelPoints.length}`);
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.log(`Total POIs:       ${this.villages.length + this.dungeons.length + this.secretAreas.length}`);
-        console.log(`Exploration Time: ~500+ hours`);
-        console.log(`World Status:     MASSIVE & IMMERSIVE`);
-        console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+        logger.info('📊 WORLD STATISTICS:');
+        logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        logger.info(`Biomes:           ${this.biomeGrid.length}`);
+        logger.info(`Villages:         ${this.villages.length}`);
+        logger.info(`Dungeons:         ${this.dungeons.length}`);
+        logger.info(`Secret Areas:     ${this.secretAreas.length}`);
+        logger.info(`Quest Hubs:       ${this.questHubs.length}`);
+        logger.info(`World Bosses:     ${this.worldBosses.length}`);
+        logger.info(`Treasures:        ${this.treasureLocations.length}`);
+        logger.info(`Fast Travel:      ${this.fastTravelPoints.length}`);
+        logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        logger.info(`Total POIs:       ${this.villages.length + this.dungeons.length + this.secretAreas.length}`);
+        logger.info(`Exploration Time: ~500+ hours`);
+        logger.info(`World Status:     MASSIVE & IMMERSIVE`);
+        logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     }
     
     /**
@@ -369,7 +370,7 @@ export class MassiveOpenWorld {
             // Don't add to scene - invisible boundaries
         });
         
-        console.log('   🔲 World boundaries created');
+        logger.info('   🔲 World boundaries created');
     }
     
     /**
@@ -377,7 +378,7 @@ export class MassiveOpenWorld {
      * Massive floating city accessible from all biomes
      */
     async buildEverlightCity() {
-        console.log('🏰 Building Everlight City (Central Hub)...');
+        logger.info('🏰 Building Everlight City (Central Hub)...');
         
         const cityCenter = this.everlightCity.pos;
         
@@ -494,9 +495,9 @@ export class MassiveOpenWorld {
         // Add radiant lighting to city
         this.addCityLighting(cityCenter);
         
-        console.log(`   ✅ Everlight City complete!`);
-        console.log(`      Buildings: ${this.everlightCity.buildings.length}`);
-        console.log(`      Size: ${this.everlightCity.size}x${this.everlightCity.size}`);
+        logger.info(`   ✅ Everlight City complete!`);
+        logger.info(`      Buildings: ${this.everlightCity.buildings.length}`);
+        logger.info(`      Size: ${this.everlightCity.size}x${this.everlightCity.size}`);
     }
     
     /**
@@ -520,7 +521,7 @@ export class MassiveOpenWorld {
             this.everlightCity.buildings.push(stall);
         }
         
-        console.log(`      ✅ Marketplace: ${stallCount} vendor stalls`);
+        logger.info(`      ✅ Marketplace: ${stallCount} vendor stalls`);
     }
     
     /**
@@ -541,7 +542,7 @@ export class MassiveOpenWorld {
             this.everlightCity.buildings.push(guildHall);
         }
         
-        console.log(`      ✅ Guild District: 4 guild halls`);
+        logger.info(`      ✅ Guild District: 4 guild halls`);
     }
     
     /**
@@ -571,7 +572,7 @@ export class MassiveOpenWorld {
             });
         }
         
-        console.log(`      ✅ Portal Plaza: ${this.questHubs.length} portals`);
+        logger.info(`      ✅ Portal Plaza: ${this.questHubs.length} portals`);
     }
     
     /**
@@ -602,14 +603,14 @@ export class MassiveOpenWorld {
         const ambientGlow = new THREE.AmbientLight(0xccddff, 0.4);
         this.scene.add(ambientGlow);
         
-        console.log(`      ✅ City lighting: Spectacular illumination added`);
+        logger.info(`      ✅ City lighting: Spectacular illumination added`);
     }
     
     /**
      * Build starting zone (Mystic Forest) with village
      */
     async buildStartingZone() {
-        console.log('🌲 Building Starting Zone: Mystic Forest...');
+        logger.info('🌲 Building Starting Zone: Mystic Forest...');
         
         const biomeData = this.biomeGrid.find(b => b.isStart);
         const biomeCenter = biomeData.pos;
@@ -627,10 +628,10 @@ export class MassiveOpenWorld {
         
         this.loadedBiomes.set('mystic_forest', mysticForest);
         
-        console.log(`   ✅ Mystic Forest loaded at (${biomeCenter[0]}, ${biomeCenter[1]})`);
+        logger.info(`   ✅ Mystic Forest loaded at (${biomeCenter[0]}, ${biomeCenter[1]})`);
         
         // Also build Crimson Peaks for Phase 6
-        console.log('\n🔥 Building Crimson Peaks Biome...');
+        logger.info('\n🔥 Building Crimson Peaks Biome...');
         const crimsonData = this.biomeGrid.find(b => b.id === 'crimson_peaks');
         
         const crimsonPeaks = new CrimsonPeaksBiome(this.scene, this.modelLoader);
@@ -643,20 +644,20 @@ export class MassiveOpenWorld {
         
         this.loadedBiomes.set('crimson_peaks', crimsonPeaks);
         
-        console.log(`   ✅ Crimson Peaks loaded at (${crimsonData.pos[0]}, ${crimsonData.pos[1]})\n`);
+        logger.info(`   ✅ Crimson Peaks loaded at (${crimsonData.pos[0]}, ${crimsonData.pos[1]})\n`);
         
         // Build Azure Depths (Underwater Zone)
-        console.log('\n🌊 Building Azure Depths Biome...');
+        logger.info('\n🌊 Building Azure Depths Biome...');
         const azureData = this.biomeGrid.find(b => b.id === 'azure_depths' || b.name.includes('Azure'));
         if (azureData || true) { // Build even if not in grid yet
             const azureDepths = new AzureDepthsBiome(this.scene, this.modelLoader);
             await azureDepths.build();
             this.loadedBiomes.set('azure_depths', azureDepths);
-            console.log(`   ✅ Azure Depths loaded\n`);
+            logger.info(`   ✅ Azure Depths loaded\n`);
         }
         
         // Build Shadowmoon Valley (Dark Zone)
-        console.log('\n🌑 Building Shadowmoon Valley Biome...');
+        logger.info('\n🌑 Building Shadowmoon Valley Biome...');
         const shadowData = this.biomeGrid.find(b => b.id === 'shadowmoon_valley');
         if (shadowData) {
             const shadowValley = new ShadowmoonValleyBiome(this.scene, this.modelLoader);
@@ -666,11 +667,11 @@ export class MassiveOpenWorld {
             };
             await shadowValley.build();
             this.loadedBiomes.set('shadowmoon_valley', shadowValley);
-            console.log(`   ✅ Shadowmoon Valley loaded at (${shadowData.pos[0]}, ${shadowData.pos[1]})\n`);
+            logger.info(`   ✅ Shadowmoon Valley loaded at (${shadowData.pos[0]}, ${shadowData.pos[1]})\n`);
         }
         
         // Build Crystal Peaks (Magical Zone)
-        console.log('\n💎 Building Crystal Peaks Biome...');
+        logger.info('\n💎 Building Crystal Peaks Biome...');
         const crystalData = this.biomeGrid.find(b => b.id === 'crystal_peaks');
         if (crystalData) {
             const crystalPeaks = new CrystalPeaksBiome(this.scene, this.modelLoader);
@@ -680,11 +681,11 @@ export class MassiveOpenWorld {
             };
             await crystalPeaks.build();
             this.loadedBiomes.set('crystal_peaks', crystalPeaks);
-            console.log(`   ✅ Crystal Peaks loaded at (${crystalData.pos[0]}, ${crystalData.pos[1]})\n`);
+            logger.info(`   ✅ Crystal Peaks loaded at (${crystalData.pos[0]}, ${crystalData.pos[1]})\n`);
         }
         
         // Build Verdant Plains (Grassland Zone)
-        console.log('\n🌾 Building Verdant Plains Biome...');
+        logger.info('\n🌾 Building Verdant Plains Biome...');
         const verdantData = this.biomeGrid.find(b => b.id === 'verdant_plains');
         if (verdantData) {
             const verdantPlains = new VerdantPlainsBiome(this.scene, this.modelLoader);
@@ -694,11 +695,11 @@ export class MassiveOpenWorld {
             };
             await verdantPlains.build();
             this.loadedBiomes.set('verdant_plains', verdantPlains);
-            console.log(`   ✅ Verdant Plains loaded at (${verdantData.pos[0]}, ${verdantData.pos[1]})\n`);
+            logger.info(`   ✅ Verdant Plains loaded at (${verdantData.pos[0]}, ${verdantData.pos[1]})\n`);
         }
         
         // Build Frozen Wastes (Ice Zone)
-        console.log('\n❄️ Building Frozen Wastes Biome...');
+        logger.info('\n❄️ Building Frozen Wastes Biome...');
         const frozenData = this.biomeGrid.find(b => b.id === 'frozen_wastes');
         if (frozenData) {
             const frozenWastes = new FrozenWastesBiome(this.scene, this.modelLoader);
@@ -708,65 +709,65 @@ export class MassiveOpenWorld {
             };
             await frozenWastes.build();
             this.loadedBiomes.set('frozen_wastes', frozenWastes);
-            console.log(`   ✅ Frozen Wastes loaded at (${frozenData.pos[0]}, ${frozenData.pos[1]})\n`);
+            logger.info(`   ✅ Frozen Wastes loaded at (${frozenData.pos[0]}, ${frozenData.pos[1]})\n`);
         }
         
         // Build Scorched Desert (Desert Zone)
-        console.log('\n🏜️ Building Scorched Desert Biome...');
+        logger.info('\n🏜️ Building Scorched Desert Biome...');
         const desertData = this.biomeGrid.find(b => b.id === 'scorched_desert');
         if (desertData) {
             const scorchedDesert = new ScorchedDesertBiome(this.scene, this.modelLoader);
             scorchedDesert.center = { x: desertData.pos[0], z: desertData.pos[1] };
             await scorchedDesert.build();
             this.loadedBiomes.set('scorched_desert', scorchedDesert);
-            console.log(`   ✅ Scorched Desert loaded at (${desertData.pos[0]}, ${desertData.pos[1]})\n`);
+            logger.info(`   ✅ Scorched Desert loaded at (${desertData.pos[0]}, ${desertData.pos[1]})\n`);
         }
         
         // Build Twilight Marshlands (Swamp Zone)
-        console.log('\n🐸 Building Twilight Marshlands Biome...');
+        logger.info('\n🐸 Building Twilight Marshlands Biome...');
         const marshData = this.biomeGrid.find(b => b.id === 'twilight_marshlands');
         if (marshData) {
             const twilightMarsh = new TwilightMarshlandsBiome(this.scene, this.modelLoader);
             twilightMarsh.center = { x: marshData.pos[0], z: marshData.pos[1] };
             await twilightMarsh.build();
             this.loadedBiomes.set('twilight_marshlands', twilightMarsh);
-            console.log(`   ✅ Twilight Marshlands loaded at (${marshData.pos[0]}, ${marshData.pos[1]})\n`);
+            logger.info(`   ✅ Twilight Marshlands loaded at (${marshData.pos[0]}, ${marshData.pos[1]})\n`);
         }
         
         // Build Celestial Highlands (Sky Zone)
-        console.log('\n☁️ Building Celestial Highlands Biome...');
+        logger.info('\n☁️ Building Celestial Highlands Biome...');
         const celestialData = this.biomeGrid.find(b => b.id === 'celestial_highlands');
         if (celestialData) {
             const celestialHighlands = new CelestialHighlandsBiome(this.scene, this.modelLoader);
             celestialHighlands.center = { x: celestialData.pos[0], z: celestialData.pos[1] };
             await celestialHighlands.build();
             this.loadedBiomes.set('celestial_highlands', celestialHighlands);
-            console.log(`   ✅ Celestial Highlands loaded at (${celestialData.pos[0]}, ${celestialData.pos[1]})\n`);
+            logger.info(`   ✅ Celestial Highlands loaded at (${celestialData.pos[0]}, ${celestialData.pos[1]})\n`);
         }
         
         // Build Volcanic Badlands (Fire Zone)
-        console.log('\n🌋 Building Volcanic Badlands Biome...');
+        logger.info('\n🌋 Building Volcanic Badlands Biome...');
         const volcanicData = this.biomeGrid.find(b => b.id === 'volcanic_badlands');
         if (volcanicData) {
             const volcanicBadlands = new VolcanicBadlandsBiome(this.scene, this.modelLoader);
             volcanicBadlands.center = { x: volcanicData.pos[0], z: volcanicData.pos[1] };
             await volcanicBadlands.build();
             this.loadedBiomes.set('volcanic_badlands', volcanicBadlands);
-            console.log(`   ✅ Volcanic Badlands loaded at (${volcanicData.pos[0]}, ${volcanicData.pos[1]})\n`);
+            logger.info(`   ✅ Volcanic Badlands loaded at (${volcanicData.pos[0]}, ${volcanicData.pos[1]})\n`);
         }
         
         // Build Void Rift (Endgame Zone)
-        console.log('\n🌀 Building Void Rift Biome (ENDGAME)...');
+        logger.info('\n🌀 Building Void Rift Biome (ENDGAME)...');
         const voidData = this.biomeGrid.find(b => b.id === 'void_rift');
         if (voidData) {
             const voidRift = new VoidRiftBiome(this.scene, this.modelLoader);
             voidRift.center = { x: voidData.pos[0], z: voidData.pos[1] };
             await voidRift.build();
             this.loadedBiomes.set('void_rift', voidRift);
-            console.log(`   ✅ Void Rift loaded at (${voidData.pos[0]}, ${voidData.pos[1]})\n`);
+            logger.info(`   ✅ Void Rift loaded at (${voidData.pos[0]}, ${voidData.pos[1]})\n`);
         }
         
-        console.log('\n🎉 ALL 12 BIOMES COMPLETE! World fully built!');
+        logger.info('\n🎉 ALL 12 BIOMES COMPLETE! World fully built!');
     }
     
     /**
@@ -781,7 +782,7 @@ export class MassiveOpenWorld {
             this.scene.add(marker);
         });
         
-        console.log('   🌀 Zone portals created');
+        logger.info('   🌀 Zone portals created');
     }
     
     /**
@@ -792,17 +793,17 @@ export class MassiveOpenWorld {
             return this.loadedBiomes.get(biomeId);
         }
         
-        console.log(`📦 Loading biome: ${biomeId}...`);
+        logger.info(`📦 Loading biome: ${biomeId}...`);
         
         const biomeData = this.biomeGrid.find(b => b.id === biomeId);
         if (!biomeData) {
-            console.warn(`Biome not found: ${biomeId}`);
+            logger.warn(`Biome not found: ${biomeId}`);
             return null;
         }
         
         // TODO: Create other biome classes (CrimsonPeaksBiome, etc.)
         // For now, return placeholder
-        console.log(`   ⏳ ${biomeData.name} - Coming soon!`);
+        logger.info(`   ⏳ ${biomeData.name} - Coming soon!`);
         
         return null;
     }

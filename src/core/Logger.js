@@ -25,13 +25,13 @@ export class Logger {
     
     log(...args) {
         if (this.enabled && this._shouldLog('info')) {
-            console.log(...args);
+            logger.info(...args);
         }
     }
     
     debug(...args) {
         if (this.enabled && this._shouldLog('debug')) {
-            console.debug(...args);
+            logger.debug(...args);
         }
     }
     
@@ -43,13 +43,13 @@ export class Logger {
     
     warn(...args) {
         if (this.enabled && this._shouldLog('warn')) {
-            console.warn(...args);
+            logger.warn(...args);
         }
     }
     
     error(...args) {
         if (this.enabled && this._shouldLog('error')) {
-            console.error(...args);
+            logger.error(...args);
         }
     }
     

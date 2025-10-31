@@ -84,7 +84,7 @@ export class TutorialSystem {
         this.tutorialPanel = null;
         this.highlightOverlay = null;
         
-        console.log('📚 Tutorial System initialized');
+        logger.info('📚 Tutorial System initialized');
     }
     
     start() {
@@ -95,7 +95,7 @@ export class TutorialSystem {
         this.createTutorialUI();
         this.showStep(0);
         
-        console.log('📚 Tutorial started');
+        logger.info('📚 Tutorial started');
     }
     
     createTutorialUI() {
@@ -353,7 +353,7 @@ export class TutorialSystem {
             this.engine.saveSystem.saveGame('Tutorial completed');
         }
         
-        console.log('📚 Tutorial completed');
+        logger.info('📚 Tutorial completed');
     }
     
     showCompletionMessage() {

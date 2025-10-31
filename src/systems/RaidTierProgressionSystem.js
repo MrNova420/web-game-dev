@@ -63,15 +63,15 @@ export class RaidTierProgressionSystem {
 
   startRaid(raidId, difficulty, raidGroup) {
     const raid = this.raidTiers[raidId];
-    console.log(`=== RAID STARTED: ${raidId} ===`);
-    console.log(`Difficulty: ${difficulty}`);
-    console.log(`Players: ${raidGroup.length}/${raid.playerCount}`);
-    console.log(`Environment: ${raid.environment}`);
-    console.log(`Bosses: ${raid.bosses.length}`);
+    logger.info(`=== RAID STARTED: ${raidId} ===`);
+    logger.info(`Difficulty: ${difficulty}`);
+    logger.info(`Players: ${raidGroup.length}/${raid.playerCount}`);
+    logger.info(`Environment: ${raid.environment}`);
+    logger.info(`Bosses: ${raid.bosses.length}`);
     raid.bosses.forEach((boss, i) => {
-      console.log(`  Boss ${i+1}: ${boss.name}`);
-      console.log(`    Model: ${boss.model}`);
-      console.log(`    Animations: ${boss.animations}`);
+      logger.info(`  Boss ${i+1}: ${boss.name}`);
+      logger.info(`    Model: ${boss.model}`);
+      logger.info(`    Animations: ${boss.animations}`);
     });
   }
 }

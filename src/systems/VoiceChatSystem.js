@@ -3,5 +3,5 @@
  */
 export class VoiceChatSystem {
   constructor() { this.channels = new Map(); }
-  enableVoice(channelId) { console.log(`Voice enabled: ${channelId}`); }
+  enableVoice(channelId) { logger.info(`Voice enabled: ${channelId}`); }
 }

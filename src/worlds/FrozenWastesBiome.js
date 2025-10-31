@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Frozen Wastes Biome - Ice Zone (Level 40-55)
  * Per README: Endless snow and ice with ancient ruins
  * 
@@ -29,7 +30,7 @@ export class FrozenWastesBiome {
     }
     
     async build() {
-        console.log('❄️ Building Frozen Wastes Biome...');
+        logger.info('❄️ Building Frozen Wastes Biome...');
         
         try {
             await this.setupEnvironment();
@@ -39,12 +40,12 @@ export class FrozenWastesBiome {
             await this.buildFrostheimStronghold();
             await this.buildEternalGlacier();
             
-            console.log('✅ Frozen Wastes complete!');
-            console.log(`   - Ice formations: ${this.iceFormations.length}`);
-            console.log(`   - Frozen trees: ${this.frozenTrees.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Frozen Wastes complete!');
+            logger.info(`   - Ice formations: ${this.iceFormations.length}`);
+            logger.info(`   - Frozen trees: ${this.frozenTrees.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Frozen Wastes:', error);
+            logger.error('Error building Frozen Wastes:', error);
         }
     }
     
@@ -91,7 +92,7 @@ export class FrozenWastesBiome {
     }
     
     async createIcyTerrain() {
-        console.log('🗺️ Creating icy terrain...');
+        logger.info('🗺️ Creating icy terrain...');
         
         const groundTiles = [
             '/assets/models/buildings/Floor_Brick.gltf',
@@ -136,11 +137,11 @@ export class FrozenWastesBiome {
             }
         }
         
-        console.log('   ✅ Icy terrain created');
+        logger.info('   ✅ Icy terrain created');
     }
     
     async addIceCrystals() {
-        console.log('💎 Adding ice crystals...');
+        logger.info('💎 Adding ice crystals...');
         
         const crystalCount = 80;
         const rockPath = this.assetRegistry.getRandomRock();
@@ -190,11 +191,11 @@ export class FrozenWastesBiome {
             this.iceFormations.push(crystal);
         }
         
-        console.log(`   ✅ Added ${this.iceFormations.length} ice crystals`);
+        logger.info(`   ✅ Added ${this.iceFormations.length} ice crystals`);
     }
     
     async addFrozenTrees() {
-        console.log('🌲 Adding frozen trees...');
+        logger.info('🌲 Adding frozen trees...');
         
         const treeCount = 60;
         const deadTreePath = '/assets/models/nature/DeadTree_1.gltf';
@@ -228,11 +229,11 @@ export class FrozenWastesBiome {
             this.frozenTrees.push(tree);
         }
         
-        console.log(`   ✅ Added ${this.frozenTrees.length} frozen trees`);
+        logger.info(`   ✅ Added ${this.frozenTrees.length} frozen trees`);
     }
     
     async buildFrostheimStronghold() {
-        console.log('🏰 Building Frostheim Stronghold (ice fortress)...');
+        logger.info('🏰 Building Frostheim Stronghold (ice fortress)...');
         
         const buildingPaths = [
             '/assets/models/buildings/Wall_Brick.gltf',
@@ -259,11 +260,11 @@ export class FrozenWastesBiome {
         }
         
         this.structures.push({ name: 'Frostheim Stronghold', type: 'fortress', buildings: buildingCount });
-        console.log(`   ✅ Frostheim Stronghold built with ${buildingCount} structures`);
+        logger.info(`   ✅ Frostheim Stronghold built with ${buildingCount} structures`);
     }
     
     async buildEternalGlacier() {
-        console.log('🧊 Building Eternal Glacier (massive ice wall)...');
+        logger.info('🧊 Building Eternal Glacier (massive ice wall)...');
         
         // Create massive ice wall using scaled rocks
         const rockPath = this.assetRegistry.getRandomRock();
@@ -287,7 +288,7 @@ export class FrozenWastesBiome {
             
             this.scene.add(glacier);
             this.structures.push({ name: 'Eternal Glacier', type: 'landmark' });
-            console.log('   ✅ Eternal Glacier created');
+            logger.info('   ✅ Eternal Glacier created');
         }
     }
 }

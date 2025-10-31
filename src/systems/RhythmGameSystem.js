@@ -203,12 +203,12 @@ export class RhythmGameSystem {
     startSong(songId) {
         const song = this.songs[songId];
         if (!song) {
-            console.warn(`Song ${songId} not found`);
+            logger.warn(`Song ${songId} not found`);
             return false;
         }
         
         if (!song.unlocked) {
-            console.warn(`Song ${songId} is locked`);
+            logger.warn(`Song ${songId} is locked`);
             return false;
         }
         

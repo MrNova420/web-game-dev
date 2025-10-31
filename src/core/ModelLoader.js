@@ -1,4 +1,5 @@
 /**
+import { logger } from './core/Logger.js';
  * ModelLoader - Load 3D models from PROFESSIONAL asset packs
  * All models hosted in /public/assets/models/ directory
  * 
@@ -23,7 +24,7 @@ export class ModelLoader {
         
         // Configure loader manager to handle missing resources gracefully
         this.loader.manager.onError = (url) => {
-            console.warn(`⚠️ Failed to load resource: ${url} - Using fallback`);
+            logger.warn(`⚠️ Failed to load resource: ${url} - Using fallback`);
         };
         
         this.loadedModels = new Map();
@@ -180,8 +181,8 @@ export class ModelLoader {
         this.useFallback = false;
         this.useAnimeShader = true;
         
-        console.log('✅ ModelLoader initialized with PROFESSIONAL ASSETS!');
-        console.log(`📦 200+ models from KayKit, Universal Base Characters, Fantasy Props, Nature MegaKits`);
+        logger.info('✅ ModelLoader initialized with PROFESSIONAL ASSETS!');
+        logger.info(`📦 200+ models from KayKit, Universal Base Characters, Fantasy Props, Nature MegaKits`);
     }
     
     /**
@@ -204,7 +205,7 @@ export class ModelLoader {
                 this.modelCache.set(modelPath, gltf.scene);
                 return gltf.scene.clone();
             } else {
-                console.error(`❌ Model loaded but no scene: ${modelPath}`);
+                logger.error(`❌ Model loaded but no scene: ${modelPath}`);
                 return null;
             }
             
@@ -219,7 +220,7 @@ export class ModelLoader {
      * This loads and caches frequently used models before they're needed
      */
     async preloadCommonModels() {
-        console.log('📦 Preloading common models...');
+        logger.info('📦 Preloading common models...');
         
         const commonModels = [
             '/assets/models/nature/CommonTree_1.gltf',
@@ -240,7 +241,7 @@ export class ModelLoader {
             }
         }
         
-        console.log(`✅ Preloaded ${loaded.length}/${commonModels.length} common models`);
+        logger.info(`✅ Preloaded ${loaded.length}/${commonModels.length} common models`);
         return loaded.length;
     }
     
@@ -261,8 +262,8 @@ export class ModelLoader {
             const modelUrl = this.modelLibrary[category]?.[modelName];
             
             if (!modelUrl) {
-                console.error(`❌ Model URL not found: ${category}/${modelName}`);
-                console.error('⚠️ NO FALLBACK - Returning empty group');
+                logger.error(`❌ Model URL not found: ${category}/${modelName}`);
+                logger.error('⚠️ NO FALLBACK - Returning empty group');
                 // Return empty group instead of fallback - user explicitly requests NO FALLBACK
                 return new THREE.Group();
             }
@@ -270,7 +271,7 @@ export class ModelLoader {
             const gltf = await this.loadGLTF(modelUrl);
             
             if (gltf && gltf.scene) {
-                console.log(`✅ Successfully loaded REAL model: ${category}/${modelName}`);
+                logger.info(`✅ Successfully loaded REAL model: ${category}/${modelName}`);
                 // Apply anime toon shader for that cel-shaded anime look
                 if (useAnimeShader) {
                     this.applyAnimeShader(gltf.scene);
@@ -280,14 +281,14 @@ export class ModelLoader {
                 this.modelCache.set(cacheKey, gltf.scene);
                 return gltf.scene.clone();
             } else {
-                console.error(`❌ Model loaded but no scene: ${category}/${modelName}`);
+                logger.error(`❌ Model loaded but no scene: ${category}/${modelName}`);
                 // Return empty group - NO FALLBACK
                 return new THREE.Group();
             }
             
         } catch (error) {
-            console.error(`❌ FAILED to load REAL model ${category}/${modelName}:`, error.message);
-            console.error('⚠️ NO FALLBACK - Model will not be visible until external source is accessible');
+            logger.error(`❌ FAILED to load REAL model ${category}/${modelName}:`, error.message);
+            logger.error('⚠️ NO FALLBACK - Model will not be visible until external source is accessible');
             // Return empty group instead of fallback geometry - user explicitly requests NO FALLBACK
             return new THREE.Group();
         }
@@ -363,7 +364,7 @@ export class ModelLoader {
                     // Suppress progress logs to reduce console spam
                     // if (progress.total > 0) {
                     //     const percent = (progress.loaded / progress.total) * 100;
-                    //     console.log(`Loading model: ${percent.toFixed(0)}%`);
+                    //     logger.info(`Loading model: ${percent.toFixed(0)}%`);
                     // }
                 },
                 (error) => {
@@ -792,7 +793,7 @@ export class ModelLoader {
      * Preload commonly used models
      */
     async preloadCommonModels() {
-        console.log('📦 Preloading production-grade anime/fantasy models...');
+        logger.info('📦 Preloading production-grade anime/fantasy models...');
         
         const modelsToPreload = [
             ['characters', 'anime_girl'],
@@ -815,13 +816,13 @@ export class ModelLoader {
             try {
                 await this.loadModel(category, modelName);
                 successCount++;
-                console.log(`✅ Preloaded: ${category}/${modelName}`);
+                logger.info(`✅ Preloaded: ${category}/${modelName}`);
             } catch (error) {
-                console.warn(`⚠️ Using fallback for: ${category}/${modelName}`);
+                logger.warn(`⚠️ Using fallback for: ${category}/${modelName}`);
             }
         }
         
-        console.log(`📦 Model preloading complete: ${successCount}/${modelsToPreload.length} loaded`);
+        logger.info(`📦 Model preloading complete: ${successCount}/${modelsToPreload.length} loaded`);
         return successCount;
     }
 }

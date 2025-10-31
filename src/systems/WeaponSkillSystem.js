@@ -117,7 +117,7 @@ export class WeaponSkillSystem {
             }
         };
         
-        console.log('⚔️ WeaponSkillSystem initialized');
+        logger.info('⚔️ WeaponSkillSystem initialized');
     }
     
     /**
@@ -125,7 +125,7 @@ export class WeaponSkillSystem {
      */
     equipWeapon(weaponType, tier = 'common') {
         if (!this.weaponTypes[weaponType]) {
-            console.warn('Unknown weapon type:', weaponType);
+            logger.warn('Unknown weapon type:', weaponType);
             return;
         }
         
@@ -136,7 +136,7 @@ export class WeaponSkillSystem {
             proficiency: this.proficiency[weaponType]
         };
         
-        console.log(`⚔️ Equipped ${tier} ${weaponType}`);
+        logger.info(`⚔️ Equipped ${tier} ${weaponType}`);
     }
     
     /**
@@ -171,7 +171,7 @@ export class WeaponSkillSystem {
         // Grant experience
         this.gainExperience(this.equippedWeapon.type, 10);
         
-        console.log(`💥 Used ${skillName}: ${finalDamage.toFixed(0)} damage`);
+        logger.info(`💥 Used ${skillName}: ${finalDamage.toFixed(0)} damage`);
         
         return {
             success: true,
@@ -230,7 +230,7 @@ export class WeaponSkillSystem {
      * Handle proficiency level up
      */
     onProficiencyLevelUp(weaponType, prof) {
-        console.log(`📈 ${weaponType} proficiency reached level ${prof.level}!`);
+        logger.info(`📈 ${weaponType} proficiency reached level ${prof.level}!`);
         
         // Unlock new skills every 5 levels
         if (prof.level % 5 === 0) {
@@ -240,7 +240,7 @@ export class WeaponSkillSystem {
             if (skillIndex < weaponData.skills.length) {
                 const newSkill = weaponData.skills[skillIndex];
                 prof.unlockedSkills.push(newSkill);
-                console.log(`✨ Unlocked skill: ${newSkill}`);
+                logger.info(`✨ Unlocked skill: ${newSkill}`);
             }
         }
         
@@ -264,7 +264,7 @@ export class WeaponSkillSystem {
         else prof.masteryTier = 'novice';
         
         if (oldTier !== prof.masteryTier) {
-            console.log(`🏆 ${weaponType} mastery: ${prof.masteryTier.toUpperCase()}!`);
+            logger.info(`🏆 ${weaponType} mastery: ${prof.masteryTier.toUpperCase()}!`);
         }
     }
     
@@ -331,7 +331,7 @@ export class WeaponSkillSystem {
         // Evolve weapon
         this.equippedWeapon.tier = nextTier;
         
-        console.log(`✨ Weapon evolved to ${nextTier}!`);
+        logger.info(`✨ Weapon evolved to ${nextTier}!`);
         
         return {
             success: true,

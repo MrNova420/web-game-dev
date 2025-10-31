@@ -24,7 +24,7 @@ export class ProgressTrackingSystem {
         this.planFutureEnhancements();
         this.setupProgressMonitoring();
         
-        console.log('📊 Progress Tracking System initialized');
+        logger.info('📊 Progress Tracking System initialized');
         this.printProgressReport();
     }
     
@@ -172,7 +172,7 @@ export class ProgressTrackingSystem {
             try {
                 this.metrics = { ...this.metrics, ...JSON.parse(saved) };
             } catch (e) {
-                console.warn('Failed to load metrics:', e);
+                logger.warn('Failed to load metrics:', e);
             }
         }
         
@@ -195,15 +195,15 @@ export class ProgressTrackingSystem {
         try {
             localStorage.setItem('dynasty_metrics', JSON.stringify(this.metrics));
         } catch (e) {
-            console.warn('Failed to save metrics:', e);
+            logger.warn('Failed to save metrics:', e);
         }
     }
     
     printProgressReport() {
-        console.log('\n=== 📊 Dynasty of Emberveil - Development Progress ===\n');
+        logger.info('\n=== 📊 Dynasty of Emberveil - Development Progress ===\n');
         
         // System Health
-        console.log('🔧 System Status:');
+        logger.info('🔧 System Status:');
         const categories = {};
         Object.entries(this.developmentProgress.systemHealth).forEach(([name, info]) => {
             if (!categories[info.category]) {
@@ -217,25 +217,25 @@ export class ProgressTrackingSystem {
         
         Object.entries(categories).forEach(([category, stats]) => {
             const percentage = Math.round((stats.implemented / stats.total) * 100);
-            console.log(`  ${category}: ${stats.implemented}/${stats.total} (${percentage}%)`);
+            logger.info(`  ${category}: ${stats.implemented}/${stats.total} (${percentage}%)`);
         });
         
         // Player Metrics
-        console.log('\n📈 Player Metrics:');
-        console.log(`  Sessions Played: ${this.metrics.sessionsPlayed}`);
-        console.log(`  Total Play Time: ${Math.round(this.metrics.totalPlayTime / 60)} minutes`);
-        console.log(`  Highest Floor Reached: ${this.metrics.highestFloor}`);
-        console.log(`  Enemies Defeated: ${this.metrics.enemiesDefeated}`);
-        console.log(`  Achievements Unlocked: ${this.metrics.achievementsUnlocked}`);
+        logger.info('\n📈 Player Metrics:');
+        logger.info(`  Sessions Played: ${this.metrics.sessionsPlayed}`);
+        logger.info(`  Total Play Time: ${Math.round(this.metrics.totalPlayTime / 60)} minutes`);
+        logger.info(`  Highest Floor Reached: ${this.metrics.highestFloor}`);
+        logger.info(`  Enemies Defeated: ${this.metrics.enemiesDefeated}`);
+        logger.info(`  Achievements Unlocked: ${this.metrics.achievementsUnlocked}`);
         
         // Future Enhancements
-        console.log('\n🚀 Planned Enhancements (Top 5):');
+        logger.info('\n🚀 Planned Enhancements (Top 5):');
         this.futureEnhancements.slice(0, 5).forEach((enhancement, i) => {
-            console.log(`  ${i + 1}. [${enhancement.priority.toUpperCase()}] ${enhancement.title}`);
-            console.log(`     ${enhancement.description}`);
+            logger.info(`  ${i + 1}. [${enhancement.priority.toUpperCase()}] ${enhancement.title}`);
+            logger.info(`     ${enhancement.description}`);
         });
         
-        console.log('\n===================================================\n');
+        logger.info('\n===================================================\n');
     }
     
     getProgressSummary() {

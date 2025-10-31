@@ -34,7 +34,7 @@ class PlayerOnboardingSystem {
     }
     
     initialize() {
-        console.log('[PlayerOnboarding] Initializing onboarding system...');
+        logger.info('[PlayerOnboarding] Initializing onboarding system...');
         
         // Detect player type
         this.detectPlayerType();
@@ -45,7 +45,7 @@ class PlayerOnboardingSystem {
         // Load player progress
         this.loadProgress();
         
-        console.log('[PlayerOnboarding] System initialized for', this.playerType, 'player');
+        logger.info('[PlayerOnboarding] System initialized for', this.playerType, 'player');
     }
     
     detectPlayerType() {
@@ -226,7 +226,7 @@ class PlayerOnboardingSystem {
     }
     
     showStep(step) {
-        console.log('[PlayerOnboarding] Showing step:', step.title);
+        logger.info('[PlayerOnboarding] Showing step:', step.title);
         
         // Create tutorial UI
         const tutorialUI = this.createTutorialUI(step);
@@ -360,7 +360,7 @@ class PlayerOnboardingSystem {
     }
     
     finishOnboarding() {
-        console.log('[PlayerOnboarding] Onboarding complete!');
+        logger.info('[PlayerOnboarding] Onboarding complete!');
         this.saveProgress();
         
         // Show completion message
@@ -406,7 +406,7 @@ class PlayerOnboardingSystem {
     }
     
     giveRewards(reward) {
-        console.log('[PlayerOnboarding] Giving rewards:', reward);
+        logger.info('[PlayerOnboarding] Giving rewards:', reward);
         // Implement reward distribution
     }
     
@@ -438,7 +438,7 @@ class PlayerOnboardingSystem {
             const data = localStorage.getItem('dynasty_save');
             return data ? JSON.parse(data) : null;
         } catch (error) {
-            console.error('[PlayerOnboarding] Failed to load save data:', error);
+            logger.error('[PlayerOnboarding] Failed to load save data:', error);
             return null;
         }
     }
@@ -452,7 +452,7 @@ class PlayerOnboardingSystem {
             };
             localStorage.setItem('dynasty_onboarding', JSON.stringify(progress));
         } catch (error) {
-            console.error('[PlayerOnboarding] Failed to save progress:', error);
+            logger.error('[PlayerOnboarding] Failed to save progress:', error);
         }
     }
     
@@ -464,7 +464,7 @@ class PlayerOnboardingSystem {
                 this.completedSteps = new Set(progress.completedSteps || []);
             }
         } catch (error) {
-            console.error('[PlayerOnboarding] Failed to load progress:', error);
+            logger.error('[PlayerOnboarding] Failed to load progress:', error);
         }
     }
 }

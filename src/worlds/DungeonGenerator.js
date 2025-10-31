@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * DungeonGenerator - Procedural dungeon generation system
  * Generates dungeons based on different biomes from Dynasty of Emberveil lore
  */
@@ -89,7 +90,7 @@ export class DungeonGenerator {
         // Generate spawn points for enemies
         dungeon.spawnPoints = this.createSpawnPoints(size, 5 + level);
         
-        console.log(`🏰 Generated dungeon: ${dungeon.name} (Level ${level})`);
+        logger.info(`🏰 Generated dungeon: ${dungeon.name} (Level ${level})`);
         
         return dungeon;
     }

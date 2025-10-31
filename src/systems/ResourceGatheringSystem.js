@@ -18,7 +18,7 @@ export class ResourceGatheringSystem {
   }
 
   gatherResource(playerId, resourceType) {
-    console.log(`${playerId} gathering ${resourceType}`);
-    console.log(`  Animation: ${this.animations.mining}`);
+    logger.info(`${playerId} gathering ${resourceType}`);
+    logger.info(`  Animation: ${this.animations.mining}`);
   }
 }

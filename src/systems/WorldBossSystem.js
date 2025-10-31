@@ -8,5 +8,5 @@ export class WorldBossSystem {
       titan_golem: { model: '/assets/models/bosses/titan.glb', animations: '/assets/animations/golem_*.fbx' }  // Sketchfab + Mixamo
     };
   }
-  spawnWorldBoss(bossId) { console.log(`World boss spawned: ${bossId}`); }
+  spawnWorldBoss(bossId) { logger.info(`World boss spawned: ${bossId}`); }
 }

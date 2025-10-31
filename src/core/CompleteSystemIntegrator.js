@@ -1,4 +1,5 @@
 /**
+import { logger } from './core/Logger.js';
  * Complete System Integrator
  * 
  * Activates ALL 263 game systems and integrates them properly
@@ -47,9 +48,9 @@ export class CompleteSystemIntegrator {
      * Initialize ALL systems and load pre-built world
      */
     async initialize() {
-        console.log('🚀 Complete System Integrator - Activating ALL Systems...');
-        console.log('   Loading pre-built world data...');
-        console.log(`   Total systems to initialize: 263`);
+        logger.info('🚀 Complete System Integrator - Activating ALL Systems...');
+        logger.info('   Loading pre-built world data...');
+        logger.info(`   Total systems to initialize: 263`);
         
         try {
             // Step 1: Load animation library first
@@ -71,11 +72,11 @@ export class CompleteSystemIntegrator {
             await this.initializeAdvancedSystems();
             
             this.initialized = true;
-            console.log('✅ Complete System Integration finished!');
-            console.log(`   Total active systems: ${Object.keys(this.systems).length}`);
+            logger.info('✅ Complete System Integration finished!');
+            logger.info(`   Total active systems: ${Object.keys(this.systems).length}`);
             
         } catch (error) {
-            console.error('Error in system integration:', error);
+            logger.error('Error in system integration:', error);
         }
     }
     
@@ -83,16 +84,16 @@ export class CompleteSystemIntegrator {
      * Initialize animation system
      */
     async initializeAnimations() {
-        console.log('🎭 Initializing Animation System...');
+        logger.info('🎭 Initializing Animation System...');
         await this.animationController.loadAnimationLibrary();
-        console.log('   ✅ Animation system ready');
+        logger.info('   ✅ Animation system ready');
     }
     
     /**
      * Initialize core systems
      */
     async initializeCoreSystems() {
-        console.log('⚙️ Initializing Core Systems (50+ systems)...');
+        logger.info('⚙️ Initializing Core Systems (50+ systems)...');
         
         // Terrain and world
         this.systems.terrain = new TerrainSystem(this.scene);
@@ -105,21 +106,21 @@ export class CompleteSystemIntegrator {
         this.systems.magicEffects = new MagicalEffectsSystem(this.scene);
         this.systems.fantasyMagic = new FantasyMagicSystem(this.scene);
         
-        console.log('   ✅ Core systems initialized');
+        logger.info('   ✅ Core systems initialized');
     }
     
     /**
      * Load pre-built world with all assets positioned
      */
     async loadPreBuiltWorld() {
-        console.log('🌍 Loading Pre-Built World Data...');
-        console.log(`   World size: ${this.prebuiltWorld.world.size.x}x${this.prebuiltWorld.world.size.z}`);
-        console.log(`   Total biomes: ${this.prebuiltWorld.world.totalBiomes}`);
+        logger.info('🌍 Loading Pre-Built World Data...');
+        logger.info(`   World size: ${this.prebuiltWorld.world.size.x}x${this.prebuiltWorld.world.size.z}`);
+        logger.info(`   Total biomes: ${this.prebuiltWorld.world.totalBiomes}`);
         
         // Load Mystic Forest biome with pre-positioned assets
         await this.loadMysticForestPrebuilt();
         
-        console.log('   ✅ Pre-built world loaded');
+        logger.info('   ✅ Pre-built world loaded');
     }
     
     /**
@@ -127,11 +128,11 @@ export class CompleteSystemIntegrator {
      */
     async loadMysticForestPrebuilt() {
         const biomeData = this.prebuiltWorld.biomes.mysticForest;
-        console.log(`   Loading ${biomeData.name}...`);
+        logger.info(`   Loading ${biomeData.name}...`);
         
         // Load trees at pre-defined positions
         if (biomeData.trees && biomeData.trees.length > 0) {
-            console.log(`     - Loading ${biomeData.trees.length} pre-positioned trees...`);
+            logger.info(`     - Loading ${biomeData.trees.length} pre-positioned trees...`);
             for (const treeData of biomeData.trees) {
                 await this.loadPrePositionedAsset(treeData, 'nature');
             }
@@ -139,7 +140,7 @@ export class CompleteSystemIntegrator {
         
         // Load rocks at pre-defined positions
         if (biomeData.rocks && biomeData.rocks.length > 0) {
-            console.log(`     - Loading ${biomeData.rocks.length} pre-positioned rocks...`);
+            logger.info(`     - Loading ${biomeData.rocks.length} pre-positioned rocks...`);
             for (const rockData of biomeData.rocks) {
                 await this.loadPrePositionedAsset(rockData, 'nature');
             }
@@ -147,7 +148,7 @@ export class CompleteSystemIntegrator {
         
         // Load plants at pre-defined positions
         if (biomeData.plants && biomeData.plants.length > 0) {
-            console.log(`     - Loading ${biomeData.plants.length} pre-positioned plants...`);
+            logger.info(`     - Loading ${biomeData.plants.length} pre-positioned plants...`);
             for (const plantData of biomeData.plants) {
                 await this.loadPrePositionedAsset(plantData, 'nature');
             }
@@ -155,7 +156,7 @@ export class CompleteSystemIntegrator {
         
         // Load landmarks
         if (biomeData.landmarks && biomeData.landmarks.length > 0) {
-            console.log(`     - Loading ${biomeData.landmarks.length} landmarks...`);
+            logger.info(`     - Loading ${biomeData.landmarks.length} landmarks...`);
             for (const landmark of biomeData.landmarks) {
                 await this.loadLandmark(landmark);
             }
@@ -163,11 +164,11 @@ export class CompleteSystemIntegrator {
         
         // Spawn enemies at pre-defined locations
         if (biomeData.enemySpawns && biomeData.enemySpawns.length > 0) {
-            console.log(`     - Spawning ${biomeData.enemySpawns.length} enemies...`);
+            logger.info(`     - Spawning ${biomeData.enemySpawns.length} enemies...`);
             await this.spawnEnemiesPrebuilt(biomeData.enemySpawns);
         }
         
-        console.log(`     ✅ ${biomeData.name} loaded with all pre-built content`);
+        logger.info(`     ✅ ${biomeData.name} loaded with all pre-built content`);
     }
     
     /**
@@ -251,7 +252,7 @@ export class CompleteSystemIntegrator {
      * Initialize gameplay systems
      */
     async initializeGameplaySystems() {
-        console.log('🎮 Initializing Gameplay Systems (100+ systems)...');
+        logger.info('🎮 Initializing Gameplay Systems (100+ systems)...');
         
         this.systems.crafting = new CraftingSystem();
         this.systems.tutorial = new TutorialSystem();
@@ -261,32 +262,32 @@ export class CompleteSystemIntegrator {
         this.systems.achievements = new AchievementSystemComplex();
         this.systems.biomes = new BiomeDungeonsSystem(this.scene, this.modelLoader);
         
-        console.log('   ✅ Gameplay systems initialized');
+        logger.info('   ✅ Gameplay systems initialized');
     }
     
     /**
      * Initialize social/multiplayer systems
      */
     async initializeSocialSystems() {
-        console.log('👥 Initializing Social Systems (50+ systems)...');
+        logger.info('👥 Initializing Social Systems (50+ systems)...');
         
         this.systems.guilds = new GuildAndHousingSystem();
         this.systems.trading = new PropertyTradingSystem();
         this.systems.market = new StockMarketSystem();
         
-        console.log('   ✅ Social systems initialized');
+        logger.info('   ✅ Social systems initialized');
     }
     
     /**
      * Initialize advanced features
      */
     async initializeAdvancedSystems() {
-        console.log('✨ Initializing Advanced Systems (63+ systems)...');
+        logger.info('✨ Initializing Advanced Systems (63+ systems)...');
         
         // In production, initialize remaining 63 systems here
         // Examples: Weather, Day/Night, Seasons, Raids, Arena, etc.
         
-        console.log('   ✅ Advanced systems initialized');
+        logger.info('   ✅ Advanced systems initialized');
     }
     
     /**

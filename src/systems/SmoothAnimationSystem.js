@@ -64,12 +64,12 @@ export class SmoothAnimationSystem {
     }
     
     init() {
-        console.log('SmoothAnimationSystem initialized');
-        console.log('- All animations: Mixamo (1000+ animations)');
-        console.log('- Camera smoothing: Enabled (lerp factor: 0.1)');
-        console.log('- Movement interpolation: Enabled (lerp factor: 0.15)');
-        console.log('- Weapon sway: Enabled');
-        console.log('- Landing impacts: Enabled');
+        logger.info('SmoothAnimationSystem initialized');
+        logger.info('- All animations: Mixamo (1000+ animations)');
+        logger.info('- Camera smoothing: Enabled (lerp factor: 0.1)');
+        logger.info('- Movement interpolation: Enabled (lerp factor: 0.15)');
+        logger.info('- Weapon sway: Enabled');
+        logger.info('- Landing impacts: Enabled');
     }
     
     /**
@@ -132,7 +132,7 @@ export class SmoothAnimationSystem {
      */
     handleLandingImpact(impactVelocity) {
         if (impactVelocity > this.landingImpactThreshold) {
-            console.log(`Landing impact! (velocity: ${impactVelocity.toFixed(2)})`);
+            logger.info(`Landing impact! (velocity: ${impactVelocity.toFixed(2)})`);
             
             // Play landing animation (Mixamo)
             this.setAnimationState('land');
@@ -150,7 +150,7 @@ export class SmoothAnimationSystem {
      * Trigger jump with wind-up animation
      */
     triggerJump() {
-        console.log('Jump triggered (Mixamo wind-up animation)');
+        logger.info('Jump triggered (Mixamo wind-up animation)');
         this.setAnimationState('jump');
         this.isGrounded = false;
     }
@@ -160,7 +160,7 @@ export class SmoothAnimationSystem {
      * @param {THREE.Vector3} direction - Dodge direction
      */
     triggerDodgeRoll(direction) {
-        console.log('Dodge roll triggered (Mixamo animation + camera rotation)');
+        logger.info('Dodge roll triggered (Mixamo animation + camera rotation)');
         this.setAnimationState('dodge');
         
         // Camera rotates with dodge roll
@@ -173,13 +173,13 @@ export class SmoothAnimationSystem {
      */
     setAnimationState(state) {
         if (this.currentAnimationState !== state) {
-            console.log(`Animation transition: ${this.currentAnimationState} -> ${state} (blend: ${this.animationBlendTime}s)`);
+            logger.info(`Animation transition: ${this.currentAnimationState} -> ${state} (blend: ${this.animationBlendTime}s)`);
             this.currentAnimationState = state;
             
             // Load and blend to new animation (Mixamo)
             const animationPath = this.animationStates[state];
             if (animationPath) {
-                console.log(`Loading animation: ${animationPath} (Mixamo)`);
+                logger.info(`Loading animation: ${animationPath} (Mixamo)`);
             }
         }
     }
@@ -191,7 +191,7 @@ export class SmoothAnimationSystem {
      */
     updateMountAnimation(mount, blendProgress) {
         // Blend between standing and mounted pose (Mixamo)
-        console.log(`Mount blend progress: ${(blendProgress * 100).toFixed(1)}%`);
+        logger.info(`Mount blend progress: ${(blendProgress * 100).toFixed(1)}%`);
     }
     
     /**

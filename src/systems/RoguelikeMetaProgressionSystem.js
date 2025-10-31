@@ -656,7 +656,7 @@ export class RoguelikeMetaProgressionSystem {
             this.unlockedFeatures = new Set(data.unlockedFeatures || []);
             this.metaAchievements = new Set(data.metaAchievements || []);
         } catch (error) {
-            console.error('Failed to load meta-progression:', error);
+            logger.error('Failed to load meta-progression:', error);
         }
     }
     

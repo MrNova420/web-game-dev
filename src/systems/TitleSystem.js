@@ -13,11 +13,11 @@ export class TitleSystem {
   }
 
   unlockTitle(playerId, titleId) {
-    console.log(`${playerId} unlocked title: ${titleId}`);
-    console.log(`  Icon: ${this.icons.title_badge}`);
+    logger.info(`${playerId} unlocked title: ${titleId}`);
+    logger.info(`  Icon: ${this.icons.title_badge}`);
   }
 
   equipTitle(playerId, titleId) {
-    console.log(`${playerId} equipped title: ${titleId}`);
+    logger.info(`${playerId} equipped title: ${titleId}`);
   }
 }

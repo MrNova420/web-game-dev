@@ -1,4 +1,5 @@
 /**
+import { logger } from '../core/Logger.js';
  * Celestial Highlands Biome - Sky Zone (Level 50-65)
  * Per README: Floating islands among clouds
  * 
@@ -27,7 +28,7 @@ export class CelestialHighlandsBiome {
     }
     
     async build() {
-        console.log('☁️ Building Celestial Highlands Biome...');
+        logger.info('☁️ Building Celestial Highlands Biome...');
         
         try {
             await this.setupEnvironment();
@@ -36,11 +37,11 @@ export class CelestialHighlandsBiome {
             await this.buildSkyCastle();
             await this.buildRainbowBridge();
             
-            console.log('✅ Celestial Highlands complete!');
-            console.log(`   - Floating islands: ${this.floatingIslands.length}`);
-            console.log(`   - Structures: ${this.structures.length}`);
+            logger.info('✅ Celestial Highlands complete!');
+            logger.info(`   - Floating islands: ${this.floatingIslands.length}`);
+            logger.info(`   - Structures: ${this.structures.length}`);
         } catch (error) {
-            console.error('Error building Celestial Highlands:', error);
+            logger.error('Error building Celestial Highlands:', error);
         }
     }
     
@@ -88,7 +89,7 @@ export class CelestialHighlandsBiome {
     }
     
     async createFloatingSkyIslands() {
-        console.log('🏝️ Creating floating sky islands...');
+        logger.info('🏝️ Creating floating sky islands...');
         
         const islandCount = 15;
         const groundTile = '/assets/models/nature/RockPath_Round_Wide.gltf';
@@ -122,11 +123,11 @@ export class CelestialHighlandsBiome {
             }
         }
         
-        console.log(`   ✅ Created ${this.floatingIslands.length} floating islands`);
+        logger.info(`   ✅ Created ${this.floatingIslands.length} floating islands`);
     }
     
     async addCloudEffects() {
-        console.log('☁️ Adding cloud effects...');
+        logger.info('☁️ Adding cloud effects...');
         
         // Add fluffy cloud particles
         const cloudCount = 300;
@@ -152,11 +153,11 @@ export class CelestialHighlandsBiome {
         const clouds = new THREE.Points(cloudGeometry, cloudMaterial);
         this.scene.add(clouds);
         
-        console.log('   ✅ Cloud effects added');
+        logger.info('   ✅ Cloud effects added');
     }
     
     async buildSkyCastle() {
-        console.log('🏰 Building Sky Castle (ancient fortress)...');
+        logger.info('🏰 Building Sky Castle (ancient fortress)...');
         
         const buildingPaths = [
             '/assets/models/buildings/Wall_Plaster.gltf',
@@ -185,11 +186,11 @@ export class CelestialHighlandsBiome {
         }
         
         this.structures.push({ name: 'Sky Castle', type: 'fortress', buildings: buildingCount });
-        console.log(`   ✅ Sky Castle built with ${buildingCount} structures`);
+        logger.info(`   ✅ Sky Castle built with ${buildingCount} structures`);
     }
     
     async buildRainbowBridge() {
-        console.log('🌈 Building Rainbow Bridge...');
+        logger.info('🌈 Building Rainbow Bridge...');
         
         // Create rainbow bridge using colored floor tiles
         const bridgePath = '/assets/models/buildings/Floor_WoodLight.gltf';
@@ -216,6 +217,6 @@ export class CelestialHighlandsBiome {
         }
         
         this.structures.push({ name: 'Rainbow Bridge', type: 'landmark' });
-        console.log('   ✅ Rainbow Bridge created');
+        logger.info('   ✅ Rainbow Bridge created');
     }
 }
