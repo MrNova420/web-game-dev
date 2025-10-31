@@ -1140,6 +1140,14 @@
         document.getElementById('icon-character').addEventListener('click', () => togglePanel('player-stats'));
         document.getElementById('icon-inventory').addEventListener('click', () => togglePanel('inventory-panel'));
         document.getElementById('icon-quests').addEventListener('click', () => togglePanel('quest-panel'));
+        document.getElementById('icon-skills').addEventListener('click', () => {
+            console.log('🌟 Skills panel clicked - Feature coming soon!');
+            // TODO: Add skills panel
+        });
+        document.getElementById('icon-map').addEventListener('click', () => {
+            console.log('🗺️ Map panel clicked - Feature coming soon!');
+            // TODO: Add map panel
+        });
         
         // NEW: Major feature icon handlers
         document.getElementById('icon-guild').addEventListener('click', () => togglePanel('guild-panel'));
@@ -1151,6 +1159,10 @@
         document.getElementById('icon-minigames').addEventListener('click', () => togglePanel('minigames-panel'));
         document.getElementById('icon-marketplace').addEventListener('click', () => togglePanel('marketplace-panel'));
         document.getElementById('icon-raids').addEventListener('click', () => togglePanel('raids-panel'));
+        document.getElementById('icon-settings').addEventListener('click', () => {
+            console.log('⚙️ Settings panel clicked - Feature coming soon!');
+            // TODO: Add settings panel
+        });
         
         // Load saved panel states
         window.addEventListener('load', loadPanelStates);
