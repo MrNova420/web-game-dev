@@ -1,0 +1,1 @@
+class t{constructor(){this.gearSets={MYTHIC_RAIDER:{model:"/assets/models/gear/mythic_raider_set.glb",particles:"/assets/particles/mythic_aura.png"},GLADIATOR:{model:"/assets/models/gear/gladiator_set.glb",particles:"/assets/particles/pvp_aura.png"}}}equipGear(e,s){console.log(`${e} equipped ${s} set`)}}export{t as EndgameGearSystem};

@@ -1,0 +1,1 @@
+class e{constructor(){this.artifacts={ancient_relic:{model:"/assets/models/artifacts/relic.glb"},fossil:{model:"/assets/models/artifacts/fossil.glb"}}}excavate(s){console.log(`Excavating site: ${s}`)}}export{e as ArchaeologySystem};

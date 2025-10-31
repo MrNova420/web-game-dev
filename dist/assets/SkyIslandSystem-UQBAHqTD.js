@@ -1,0 +1,1 @@
+class o{constructor(){this.islands={floating_island:{model:"/assets/models/islands/floating_island.glb"},cloud_palace:{model:"/assets/models/islands/cloud_palace.glb"}}}teleportToIsland(l){console.log(`Teleporting to: ${l}`)}}export{o as SkyIslandSystem};

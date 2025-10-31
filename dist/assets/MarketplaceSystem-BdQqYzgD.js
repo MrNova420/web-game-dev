@@ -1,0 +1,1 @@
+class t{constructor(){this.shops={vendor:{model:"/assets/models/shops/marketplace.glb"}},this.ui={shop:"/assets/ui/shop/shop_window.png"}}buyItem(s,o){console.log(`${s} bought ${o}`)}}export{t as MarketplaceSystem};

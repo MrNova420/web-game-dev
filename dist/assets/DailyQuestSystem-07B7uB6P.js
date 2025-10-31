@@ -1,0 +1,1 @@
+class a{constructor(){this.dailyQuests=new Map,this.weeklyQuests=new Map,this.ui={daily_panel:"/assets/ui/daily/daily_quests.png",calendar:"/assets/ui/daily/calendar_icon.png"}}refreshDailies(s){console.log(`${s} daily quests refreshed`),console.log(`  UI: ${this.ui.daily_panel}`)}}export{a as DailyQuestSystem};

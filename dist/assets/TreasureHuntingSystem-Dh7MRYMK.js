@@ -1,0 +1,1 @@
+class r{constructor(){this.treasures={chest:{model:"/assets/models/treasures/chest.glb",icon:"/assets/icons/treasure.png"},buried:{model:"/assets/models/treasures/buried.glb",vfx:"/assets/particles/dig.png"}}}findTreasure(s){console.log(`${s} found treasure!`)}}export{r as TreasureHuntingSystem};

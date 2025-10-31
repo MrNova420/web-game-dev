@@ -1,0 +1,1 @@
+class o{constructor(){this.tiers={BRONZE:1,SILVER:2,GOLD:3,PLATINUM:4,DIAMOND:5},this.icons={tier_badge:"/assets/icons/challenges/tier_badge.png"}}completeTier(e,s){console.log(`${e} completed ${s} tier`)}}export{o as ChallengeModeTiers};

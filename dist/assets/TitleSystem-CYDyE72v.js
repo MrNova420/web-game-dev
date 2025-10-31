@@ -1,0 +1,1 @@
+class i{constructor(){this.titles=new Map,this.icons={title_badge:"/assets/icons/titles/title_badge.png"}}unlockTitle(t,e){console.log(`${t} unlocked title: ${e}`),console.log(`  Icon: ${this.icons.title_badge}`)}equipTitle(t,e){console.log(`${t} equipped title: ${e}`)}}export{i as TitleSystem};
