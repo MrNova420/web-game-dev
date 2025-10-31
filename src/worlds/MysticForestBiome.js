@@ -58,11 +58,11 @@ export class MysticForestBiome {
         console.log('🌲 Building Mystic Forest Biome...');
         
         try {
-            // Setup environment
-            this.setupEnvironment();
+            // Setup environment with REAL skybox
+            await this.setupEnvironment();
             
-            // Create terrain
-            this.createTerrain();
+            // Create terrain with REAL ground tiles
+            await this.createTerrain();
             
             // OPTIMIZED: Preload common models first (loads once, reuses many times)
             await this.preloadCommonModels();
@@ -96,10 +96,39 @@ export class MysticForestBiome {
     
     /**
      * Setup environmental lighting and atmosphere
+     * USING YOUR REAL SKYBOX ASSETS!
      */
-    setupEnvironment() {
-        // Mystical forest colors
-        this.scene.background = new THREE.Color(0x1a2f3a);
+    async setupEnvironment() {
+        // Load REAL skybox texture from your assets
+        const textureLoader = new THREE.TextureLoader();
+        
+        try {
+            // Use your actual GreenSky skybox for forest biome
+            const skyboxTexture = await new Promise((resolve, reject) => {
+                textureLoader.load(
+                    '/assets/skyboxes/GreenSky.png',
+                    resolve,
+                    undefined,
+                    reject
+                );
+            });
+            
+            // Create skybox sphere using YOUR actual asset
+            const skyGeo = new THREE.SphereGeometry(500, 32, 32);
+            const skyMat = new THREE.MeshBasicMaterial({
+                map: skyboxTexture,
+                side: THREE.BackSide
+            });
+            const sky = new THREE.Mesh(skyGeo, skyMat);
+            this.scene.add(sky);
+            
+            console.log('   ✅ Loaded GreenSky.png skybox from your assets');
+        } catch (error) {
+            console.error('   ⚠️ Failed to load skybox, using fallback color');
+            this.scene.background = new THREE.Color(0x1a2f3a);
+        }
+        
+        // Fog for mystical atmosphere
         this.scene.fog = new THREE.FogExp2(0x1a3f5a, 0.008);
         
         // Ambient light - mystical blue-green tint
@@ -138,46 +167,74 @@ export class MysticForestBiome {
     }
     
     /**
-     * Create the forest terrain
+     * Create the forest terrain using REAL ground models from mega packs
+     * NO MORE CODED GEOMETRY - USING YOUR ACTUAL ASSETS!
      */
-    createTerrain() {
-        const geometry = new THREE.PlaneGeometry(
-            this.worldSize, 
-            this.worldSize, 
-            100, 
-            100
-        );
+    async createTerrain() {
+        console.log('🗺️ Creating terrain from ground tile models...');
         
-        // Add elevation variation
-        const vertices = geometry.attributes.position.array;
-        for (let i = 0; i < vertices.length; i += 3) {
-            const x = vertices[i];
-            const z = vertices[i + 1];
-            
-            // Gentle hills using multiple noise octaves
-            const height = 
-                Math.sin(x * 0.02) * 2 +
-                Math.cos(z * 0.03) * 1.5 +
-                Math.sin(x * 0.1) * Math.cos(z * 0.1) * 0.5;
-            
-            vertices[i + 2] = height;
+        // Use actual ground path models from Nature MegaKit
+        const groundTiles = [
+            '/assets/models/nature/RockPath_Round_Wide.gltf',
+            '/assets/models/nature/RockPath_Square_Wide.gltf',
+            '/assets/models/buildings/Floor_UnevenBrick.gltf'
+        ];
+        
+        // Load ground tile models
+        const tileVariants = [];
+        for (const tilePath of groundTiles) {
+            const tile = await this.modelLoader.load(tilePath);
+            if (tile) tileVariants.push(tile);
         }
         
-        geometry.computeVertexNormals();
+        if (tileVariants.length === 0) {
+            console.error('❌ No ground tiles loaded! Cannot create terrain.');
+            return;
+        }
         
-        // Forest floor material - mossy green
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x2d5016,
-            roughness: 0.9,
-            metalness: 0.1
-        });
+        console.log(`   Using ${tileVariants.length} ground tile variants`);
         
-        this.terrain = new THREE.Mesh(geometry, material);
-        this.terrain.rotation.x = -Math.PI / 2;
-        this.terrain.receiveShadow = true;
-        this.scene.add(this.terrain);
+        // Create terrain grid using actual tile models
+        const tileSize = 10; // Size of each tile
+        const tilesX = Math.floor(this.worldSize / tileSize);
+        const tilesZ = Math.floor(this.worldSize / tileSize);
         
-        console.log('🗺️ Terrain created');
+        let tileCount = 0;
+        
+        for (let x = 0; x < tilesX; x++) {
+            for (let z = 0; z < tilesZ; z++) {
+                // Pick a random tile variant and clone it
+                const variant = tileVariants[Math.floor(Math.random() * tileVariants.length)];
+                const tile = variant.clone();
+                
+                // Position tile
+                const posX = (x - tilesX / 2) * tileSize;
+                const posZ = (z - tilesZ / 2) * tileSize;
+                tile.position.set(posX, 0, posZ);
+                
+                // Random rotation for variety
+                tile.rotation.y = Math.floor(Math.random() * 4) * (Math.PI / 2);
+                
+                // Scale to fit tileSize
+                tile.scale.setScalar(tileSize / 2);
+                
+                tile.receiveShadow = true;
+                
+                this.scene.add(tile);
+                this.terrain = tile; // Keep reference to first tile
+                tileCount++;
+            }
+        }
+        
+        console.log(`   ✅ Created terrain with ${tileCount} ground tile models`);
+    }
+    
+    /**
+     * Get terrain height at position (for object placement)
+     */
+    getTerrainHeight(x, z) {
+        // Simple flat terrain since we're using tile models
+        return 0;
     }
     
     /**
