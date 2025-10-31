@@ -419,4 +419,16 @@ export class CannabisMagicSystem {
                 Math.min((Date.now() - plot.plantTime) / this.herbTypes[plot.herb].growTime, 1) : 0
         }));
     }
+    
+    getHerbTypes() {
+        return Object.entries(this.herbTypes).map(([key, herb]) => ({
+            key,
+            name: herb.name,
+            color: herb.color,
+            magicPower: herb.power,
+            effect: herb.effect,
+            growTime: herb.growTime,
+            rarity: herb.rarity
+        }));
+    }
 }
