@@ -775,6 +775,210 @@
         ];
 
         // ========================================
+        // COMPLETE SKILL SYSTEM (120 SKILLS)
+        // 15 Skills per Class x 8 Classes
+        // ========================================
+
+        const ALL_SKILLS = {
+            warrior: [
+                { id: 'power_slash', name: 'Power Slash', level: 1, damage: 150, manaCost: 10, cooldown: 3, type: 'physical', desc: 'Heavy damage single target' },
+                { id: 'whirlwind', name: 'Whirlwind', level: 5, damage: 120, manaCost: 15, cooldown: 5, type: 'physical', aoe: true, desc: 'Spin attack hitting nearby enemies' },
+                { id: 'heroic_charge', name: 'Heroic Charge', level: 10, damage: 100, manaCost: 20, cooldown: 8, type: 'physical', stun: true, desc: 'Rush forward, stunning enemies' },
+                { id: 'battle_cry', name: 'Battle Cry', level: 15, manaCost: 25, cooldown: 15, type: 'buff', desc: 'Buff party members +20% attack' },
+                { id: 'execute', name: 'Execute', level: 20, damage: 300, manaCost: 30, cooldown: 10, type: 'physical', desc: 'Finisher for low-HP enemies (2x on <25% HP)' },
+                { id: 'shield_bash', name: 'Shield Bash', level: 25, damage: 80, manaCost: 15, cooldown: 6, type: 'physical', interrupt: true, desc: 'Interrupt and stun' },
+                { id: 'berserker_rage', name: 'Berserker Rage', level: 30, manaCost: 40, cooldown: 30, type: 'buff', desc: 'Temporary +50% damage for 10 seconds' },
+                { id: 'cleave', name: 'Cleave', level: 35, damage: 140, manaCost: 20, cooldown: 4, type: 'physical', aoe: true, desc: 'Hit multiple targets in arc' },
+                { id: 'intimidating_shout', name: 'Intimidating Shout', level: 40, manaCost: 25, cooldown: 20, type: 'debuff', fear: true, desc: 'Fear nearby enemies' },
+                { id: 'blade_storm', name: 'Blade Storm', level: 45, damage: 200, manaCost: 50, cooldown: 25, type: 'physical', aoe: true, desc: 'Ultimate AoE ability' },
+                { id: 'last_stand', name: 'Last Stand', level: 50, manaCost: 60, cooldown: 120, type: 'buff', desc: 'Survive lethal damage once (immunity for 5s)' },
+                { id: 'war_god_fury', name: "War God's Fury", level: 55, manaCost: 70, cooldown: 60, type: 'transform', desc: 'Transform into berserker (stats +100%)' },
+                { id: 'earthquake', name: 'Earthquake', level: 60, damage: 250, manaCost: 80, cooldown: 30, type: 'physical', aoe: true, stun: true, desc: 'Ground slam AoE with stun' },
+                { id: 'titans_grip', name: "Titan's Grip", level: 65, manaCost: 100, cooldown: 180, type: 'buff', desc: 'Dual wield two-handed weapons (+75% dmg)' },
+                { id: 'avatar_of_war', name: 'Avatar of War', level: 70, manaCost: 150, cooldown: 300, type: 'ultimate', desc: 'Ultimate transformation (all stats +200%, heal to full)' }
+            ],
+            mage: [
+                { id: 'fireball', name: 'Fireball', level: 1, damage: 180, manaCost: 15, cooldown: 2, type: 'fire', desc: 'Fire damage projectile' },
+                { id: 'ice_storm', name: 'Ice Storm', level: 5, damage: 150, manaCost: 25, cooldown: 6, type: 'ice', aoe: true, slow: true, desc: 'Ice AoE with slow' },
+                { id: 'lightning_bolt', name: 'Lightning Bolt', level: 10, damage: 200, manaCost: 20, cooldown: 3, type: 'lightning', desc: 'Instant lightning strike' },
+                { id: 'meteor', name: 'Meteor', level: 15, damage: 300, manaCost: 50, cooldown: 15, type: 'fire', aoe: true, desc: 'Massive fire AoE from sky' },
+                { id: 'blink', name: 'Blink', level: 20, manaCost: 20, cooldown: 8, type: 'utility', desc: 'Teleport short distance' },
+                { id: 'arcane_missiles', name: 'Arcane Missiles', level: 25, damage: 120, manaCost: 30, cooldown: 5, type: 'arcane', desc: 'Multiple magic missiles' },
+                { id: 'frostbolt', name: 'Frostbolt', level: 30, damage: 160, manaCost: 18, cooldown: 2.5, type: 'ice', slow: true, desc: 'Ice bolt that slows' },
+                { id: 'polymorph', name: 'Polymorph', level: 35, manaCost: 25, cooldown: 20, type: 'debuff', desc: 'Turn enemy into sheep (10s)' },
+                { id: 'flame_strike', name: 'Flame Strike', level: 40, damage: 220, manaCost: 35, cooldown: 8, type: 'fire', aoe: true, desc: 'Column of fire AoE' },
+                { id: 'time_warp', name: 'Time Warp', level: 45, manaCost: 80, cooldown: 60, type: 'buff', desc: 'Party haste +50% for 15s' },
+                { id: 'blizzard', name: 'Blizzard', level: 50, damage: 280, manaCost: 60, cooldown: 20, type: 'ice', aoe: true, desc: 'Massive ice storm' },
+                { id: 'arcane_explosion', name: 'Arcane Explosion', level: 55, damage: 240, manaCost: 40, cooldown: 10, type: 'arcane', aoe: true, desc: 'Point-blank AoE' },
+                { id: 'pyroblast', name: 'Pyroblast', level: 60, damage: 500, manaCost: 70, cooldown: 25, type: 'fire', desc: 'Massive fire nuke (3s cast)' },
+                { id: 'mana_shield', name: 'Mana Shield', level: 65, manaCost: 50, cooldown: 45, type: 'buff', desc: 'Absorb damage with mana (lasts 20s)' },
+                { id: 'arcane_surge', name: 'Arcane Surge', level: 70, manaCost: 200, cooldown: 180, type: 'ultimate', desc: 'All spells instant cast for 10s, mana cost -50%' }
+            ],
+            rogue: [
+                { id: 'backstab', name: 'Backstab', level: 1, damage: 200, manaCost: 15, cooldown: 3, type: 'physical', desc: 'High damage from behind (3x from behind)' },
+                { id: 'vanish', name: 'Vanish', level: 5, manaCost: 20, cooldown: 30, type: 'utility', desc: 'Enter stealth instantly' },
+                { id: 'poison_blade', name: 'Poison Blade', level: 10, damage: 120, manaCost: 15, cooldown: 5, type: 'poison', dot: true, desc: 'Apply poison DoT' },
+                { id: 'shadow_step', name: 'Shadow Step', level: 15, damage: 150, manaCost: 25, cooldown: 10, type: 'physical', desc: 'Teleport behind enemy and strike' },
+                { id: 'eviscerate', name: 'Eviscerate', level: 20, damage: 250, manaCost: 30, cooldown: 8, type: 'physical', desc: 'Finisher (damage scales with combo)' },
+                { id: 'smoke_bomb', name: 'Smoke Bomb', level: 25, manaCost: 30, cooldown: 40, type: 'utility', desc: 'Create smoke cloud (stealth area)' },
+                { id: 'kidney_shot', name: 'Kidney Shot', level: 30, damage: 100, manaCost: 25, cooldown: 15, type: 'physical', stun: true, desc: 'Stun enemy (4s)' },
+                { id: 'blade_flurry', name: 'Blade Flurry', level: 35, damage: 160, manaCost: 35, cooldown: 12, type: 'physical', aoe: true, desc: 'Hit all nearby enemies' },
+                { id: 'fan_of_knives', name: 'Fan of Knives', level: 40, damage: 140, manaCost: 30, cooldown: 10, type: 'physical', aoe: true, desc: 'Throw knives in all directions' },
+                { id: 'assassination', name: 'Assassination', level: 45, damage: 400, manaCost: 50, cooldown: 30, type: 'physical', desc: 'Massive damage to low HP target' },
+                { id: 'cloak_of_shadows', name: 'Cloak of Shadows', level: 50, manaCost: 40, cooldown: 60, type: 'buff', desc: 'Immune to magic for 5s' },
+                { id: 'deadly_poison', name: 'Deadly Poison', level: 55, damage: 80, manaCost: 35, cooldown: 6, type: 'poison', dot: true, desc: 'Deadly poison stack (max 5)' },
+                { id: 'shadow_dance', name: 'Shadow Dance', level: 60, manaCost: 60, cooldown: 45, type: 'buff', desc: 'All abilities from stealth for 15s' },
+                { id: 'adrenaline_rush', name: 'Adrenaline Rush', level: 65, manaCost: 70, cooldown: 90, type: 'buff', desc: 'Attack speed +100%, energy regen +200%' },
+                { id: 'vendetta', name: 'Vendetta', level: 70, manaCost: 100, cooldown: 120, type: 'ultimate', desc: 'Mark target for death (+200% dmg to target)' }
+            ],
+            ranger: [
+                { id: 'multi_shot', name: 'Multi-Shot', level: 1, damage: 130, manaCost: 15, cooldown: 4, type: 'physical', aoe: true, desc: 'Hit 3 targets' },
+                { id: 'aimed_shot', name: 'Aimed Shot', level: 5, damage: 250, manaCost: 20, cooldown: 8, type: 'physical', desc: 'High damage precise shot (2s cast)' },
+                { id: 'trap', name: 'Trap', level: 10, damage: 100, manaCost: 15, cooldown: 15, type: 'physical', stun: true, desc: 'Place trap that roots enemy' },
+                { id: 'pet_command', name: 'Pet Command', level: 15, damage: 180, manaCost: 20, cooldown: 10, type: 'physical', desc: 'Pet attacks with bonus damage' },
+                { id: 'camouflage', name: 'Camouflage', level: 20, manaCost: 25, cooldown: 30, type: 'utility', desc: 'Enter stealth while moving' },
+                { id: 'explosive_shot', name: 'Explosive Shot', level: 25, damage: 200, manaCost: 30, cooldown: 6, type: 'fire', aoe: true, desc: 'Explosive arrow AoE' },
+                { id: 'disengage', name: 'Disengage', level: 30, manaCost: 15, cooldown: 12, type: 'utility', desc: 'Backflip away from target' },
+                { id: 'rapid_fire', name: 'Rapid Fire', level: 35, damage: 300, manaCost: 40, cooldown: 20, type: 'physical', desc: 'Channel rapid arrows (5 per sec)' },
+                { id: 'flare', name: 'Flare', level: 40, manaCost: 20, cooldown: 15, type: 'utility', desc: 'Reveal stealth in area' },
+                { id: 'serpent_sting', name: 'Serpent Sting', level: 45, damage: 150, manaCost: 25, cooldown: 8, type: 'nature', dot: true, desc: 'Nature DoT' },
+                { id: 'barrage', name: 'Barrage', level: 50, damage: 350, manaCost: 50, cooldown: 25, type: 'physical', aoe: true, desc: 'Massive arrow barrage' },
+                { id: 'kill_command', name: 'Kill Command', level: 55, damage: 220, manaCost: 30, cooldown: 10, type: 'physical', desc: 'Pet execute command' },
+                { id: 'aspect_of_cheetah', name: 'Aspect of Cheetah', level: 60, manaCost: 30, cooldown: 60, type: 'buff', desc: 'Movement speed +200% for 10s' },
+                { id: 'beast_mastery', name: 'Beast Mastery', level: 65, manaCost: 80, cooldown: 90, type: 'buff', desc: 'Pet becomes elite (+300% stats, 30s)' },
+                { id: 'wild_spirits', name: 'Wild Spirits', level: 70, manaCost: 120, cooldown: 120, type: 'ultimate', desc: 'Summon spirit pack (5 wolves, permanent)' }
+            ],
+            cleric: [
+                { id: 'heal', name: 'Heal', level: 1, healing: 200, manaCost: 20, cooldown: 2, type: 'holy', desc: 'Heal single target' },
+                { id: 'holy_light', name: 'Holy Light', level: 5, damage: 150, manaCost: 15, cooldown: 4, type: 'holy', desc: 'Holy damage to undead/demons' },
+                { id: 'divine_shield', name: 'Divine Shield', level: 10, manaCost: 30, cooldown: 60, type: 'buff', desc: 'Immune to all damage (5s)' },
+                { id: 'blessing', name: 'Blessing', level: 15, manaCost: 25, cooldown: 20, type: 'buff', desc: 'Buff target (+30% stats, 60s)' },
+                { id: 'smite', name: 'Smite', level: 20, damage: 180, manaCost: 18, cooldown: 3, type: 'holy', desc: 'Holy damage bolt' },
+                { id: 'resurrect', name: 'Resurrect', level: 25, manaCost: 100, cooldown: 600, type: 'utility', desc: 'Bring dead ally back to life' },
+                { id: 'prayer_of_healing', name: 'Prayer of Healing', level: 30, healing: 150, manaCost: 40, cooldown: 10, type: 'holy', aoe: true, desc: 'Heal all allies' },
+                { id: 'holy_nova', name: 'Holy Nova', level: 35, damage: 120, healing: 80, manaCost: 35, cooldown: 8, type: 'holy', aoe: true, desc: 'Damage enemies, heal allies' },
+                { id: 'guardian_spirit', name: 'Guardian Spirit', level: 40, manaCost: 50, cooldown: 90, type: 'buff', desc: 'Prevent death once (lasts 10s)' },
+                { id: 'holy_word', name: 'Holy Word: Sanctify', level: 45, healing: 250, manaCost: 60, cooldown: 20, type: 'holy', aoe: true, desc: 'Massive AoE heal' },
+                { id: 'mass_dispel', name: 'Mass Dispel', level: 50, manaCost: 40, cooldown: 30, type: 'utility', desc: 'Remove all debuffs from party' },
+                { id: 'divine_hymn', name: 'Divine Hymn', level: 55, healing: 500, manaCost: 80, cooldown: 60, type: 'holy', desc: 'Channel massive healing (3s)' },
+                { id: 'holy_fire', name: 'Holy Fire', level: 60, damage: 280, manaCost: 40, cooldown: 12, type: 'holy', dot: true, desc: 'Holy fire DoT' },
+                { id: 'apotheosis', name: 'Apotheosis', level: 65, manaCost: 100, cooldown: 120, type: 'buff', desc: 'All heals instant cast, mana free (15s)' },
+                { id: 'divine_ascension', name: 'Divine Ascension', level: 70, manaCost: 150, cooldown: 180, type: 'ultimate', desc: 'Become angel (fly, all abilities empowered, 30s)' }
+            ],
+            paladin: [
+                { id: 'holy_strike', name: 'Holy Strike', level: 1, damage: 140, manaCost: 15, cooldown: 3, type: 'holy', desc: 'Holy melee damage' },
+                { id: 'lay_on_hands', name: 'Lay on Hands', level: 5, healing: 500, manaCost: 80, cooldown: 120, type: 'holy', desc: 'Full heal instant' },
+                { id: 'consecration', name: 'Consecration', level: 10, damage: 100, manaCost: 20, cooldown: 8, type: 'holy', aoe: true, desc: 'Holy ground AoE' },
+                { id: 'divine_protection', name: 'Divine Protection', level: 15, manaCost: 25, cooldown: 30, type: 'buff', desc: 'Reduce damage taken 50% (10s)' },
+                { id: 'hammer_of_justice', name: 'Hammer of Justice', level: 20, damage: 120, manaCost: 20, cooldown: 15, type: 'holy', stun: true, desc: 'Stun with hammer' },
+                { id: 'flash_of_light', name: 'Flash of Light', level: 25, healing: 150, manaCost: 25, cooldown: 5, type: 'holy', desc: 'Quick heal' },
+                { id: 'judgement', name: 'Judgement', level: 30, damage: 200, manaCost: 30, cooldown: 10, type: 'holy', desc: 'Holy judgement strike' },
+                { id: 'divine_steed', name: 'Divine Steed', level: 35, manaCost: 20, cooldown: 30, type: 'utility', desc: 'Mount instantly, speed boost' },
+                { id: 'blessing_of_sacrifice', name: 'Blessing of Sacrifice', level: 40, manaCost: 35, cooldown: 45, type: 'buff', desc: 'Transfer damage from ally to self' },
+                { id: 'avenging_wrath', name: 'Avenging Wrath', level: 45, manaCost: 60, cooldown: 90, type: 'buff', desc: 'Wings appear, damage +30%, healing +30%' },
+                { id: 'shield_of_righteous', name: 'Shield of Righteous', level: 50, damage: 180, manaCost: 30, cooldown: 8, type: 'holy', desc: 'Shield bash with holy power' },
+                { id: 'word_of_glory', name: 'Word of Glory', level: 55, healing: 300, manaCost: 40, cooldown: 12, type: 'holy', desc: 'Powerful single heal' },
+                { id: 'divine_storm', name: 'Divine Storm', level: 60, damage: 240, manaCost: 50, cooldown: 15, type: 'holy', aoe: true, desc: 'Holy whirlwind' },
+                { id: 'crusader_strike', name: 'Crusader Strike', level: 65, damage: 220, manaCost: 35, cooldown: 6, type: 'holy', desc: 'Empowered crusader hit' },
+                { id: 'final_reckoning', name: 'Final Reckoning', level: 70, manaCost: 120, cooldown: 180, type: 'ultimate', desc: 'Judge all enemies, massive AoE holy damage' }
+            ],
+            necromancer: [
+                { id: 'summon_undead', name: 'Summon Undead', level: 1, manaCost: 30, cooldown: 20, type: 'summon', desc: 'Summon skeleton warrior' },
+                { id: 'death_coil', name: 'Death Coil', level: 5, damage: 170, manaCost: 20, cooldown: 4, type: 'dark', desc: 'Dark magic bolt' },
+                { id: 'plague', name: 'Plague', level: 10, damage: 120, manaCost: 25, cooldown: 8, type: 'dark', dot: true, aoe: true, desc: 'Spreading plague DoT' },
+                { id: 'soul_drain', name: 'Soul Drain', level: 15, damage: 150, healing: 75, manaCost: 20, cooldown: 6, type: 'dark', desc: 'Drain life from enemy' },
+                { id: 'bone_armor', name: 'Bone Armor', level: 20, manaCost: 30, cooldown: 30, type: 'buff', desc: 'Shield of bones (+200 armor, 20s)' },
+                { id: 'corpse_explosion', name: 'Corpse Explosion', level: 25, damage: 300, manaCost: 40, cooldown: 15, type: 'dark', aoe: true, desc: 'Explode corpse' },
+                { id: 'raise_dead', name: 'Raise Dead', level: 30, manaCost: 50, cooldown: 60, type: 'summon', desc: 'Raise powerful ghoul' },
+                { id: 'death_and_decay', name: 'Death and Decay', level: 35, damage: 160, manaCost: 35, cooldown: 10, type: 'dark', aoe: true, dot: true, desc: 'Ground AoE DoT' },
+                { id: 'lichborne', name: 'Lichborne', level: 40, manaCost: 40, cooldown: 45, type: 'buff', desc: 'Become undead (immune to fear/charm, 10s)' },
+                { id: 'army_of_dead', name: 'Army of the Dead', level: 45, manaCost: 80, cooldown: 120, type: 'summon', desc: 'Summon 10 ghouls' },
+                { id: 'dark_transformation', name: 'Dark Transformation', level: 50, manaCost: 50, cooldown: 40, type: 'buff', desc: 'Transform minion into abomination' },
+                { id: 'soul_reaper', name: 'Soul Reaper', level: 55, damage: 350, manaCost: 45, cooldown: 20, type: 'dark', desc: 'Execute (bonus dmg on low HP)' },
+                { id: 'unholy_frenzy', name: 'Unholy Frenzy', level: 60, manaCost: 60, cooldown: 60, type: 'buff', desc: 'Attack speed +100%, lifesteal +50%' },
+                { id: 'apocalypse', name: 'Apocalypse', level: 65, damage: 400, manaCost: 90, cooldown: 90, type: 'dark', desc: 'Massive dark explosion, summon 4 ghouls' },
+                { id: 'lich_king_form', name: 'Lich King Form', level: 70, manaCost: 150, cooldown: 180, type: 'ultimate', desc: 'Transform into Lich King (all abilities empowered, 40s)' }
+            ],
+            monk: [
+                { id: 'flying_kick', name: 'Flying Kick', level: 1, damage: 140, manaCost: 15, cooldown: 4, type: 'physical', desc: 'Flying kick attack' },
+                { id: 'chi_burst', name: 'Chi Burst', level: 5, damage: 160, healing: 80, manaCost: 20, cooldown: 8, type: 'nature', desc: 'Chi wave damages/heals' },
+                { id: 'meditation', name: 'Meditation', level: 10, healing: 100, manaCost: 0, cooldown: 12, type: 'nature', desc: 'Channel healing + mana regen' },
+                { id: 'touch_of_death', name: 'Touch of Death', level: 15, damage: 500, manaCost: 50, cooldown: 60, type: 'physical', desc: 'Instant kill <10% HP enemies' },
+                { id: 'spinning_crane_kick', name: 'Spinning Crane Kick', level: 20, damage: 130, manaCost: 25, cooldown: 6, type: 'physical', aoe: true, desc: 'Spinning kick AoE' },
+                { id: 'tiger_palm', name: 'Tiger Palm', level: 25, damage: 120, manaCost: 15, cooldown: 3, type: 'physical', desc: 'Fast palm strike' },
+                { id: 'fortifying_brew', name: 'Fortifying Brew', level: 30, manaCost: 30, cooldown: 40, type: 'buff', desc: 'HP +20%, damage reduction 20%' },
+                { id: 'fists_of_fury', name: 'Fists of Fury', level: 35, damage: 280, manaCost: 40, cooldown: 18, type: 'physical', aoe: true, desc: 'Rapid punches in cone' },
+                { id: 'transcendence', name: 'Transcendence', level: 40, manaCost: 25, cooldown: 30, type: 'utility', desc: 'Place spirit, teleport back anytime' },
+                { id: 'rising_sun_kick', name: 'Rising Sun Kick', level: 45, damage: 250, manaCost: 35, cooldown: 10, type: 'physical', desc: 'Powerful rising kick' },
+                { id: 'zen_meditation', name: 'Zen Meditation', level: 50, manaCost: 40, cooldown: 60, type: 'buff', desc: 'Redirect all party damage to self (10s)' },
+                { id: 'storm_earth_fire', name: 'Storm, Earth, and Fire', level: 55, manaCost: 60, cooldown: 90, type: 'summon', desc: 'Split into 3 elemental spirits' },
+                { id: 'touch_of_karma', name: 'Touch of Karma', level: 60, manaCost: 50, cooldown: 45, type: 'buff', desc: 'Reflect all damage back to attacker' },
+                { id: 'invoke_xuen', name: 'Invoke Xuen', level: 65, manaCost: 80, cooldown: 120, type: 'summon', desc: 'Summon White Tiger Celestial' },
+                { id: 'serenity', name: 'Serenity', level: 70, manaCost: 100, cooldown: 180, type: 'ultimate', desc: 'Enter ultimate state (all cooldowns reset, abilities free, 15s)' }
+            ]
+        };
+
+        // ========================================
+        // STATUS EFFECTS SYSTEM (30+ Effects)
+        // ========================================
+
+        const STATUS_EFFECTS = {
+            // Damage Over Time
+            burning: { name: 'Burning', icon: '🔥', damage: 10, duration: 10, type: 'dot', color: '#ff4500' },
+            bleeding: { name: 'Bleeding', icon: '🩸', damage: 8, duration: 12, type: 'dot', color: '#dc143c' },
+            poisoned: { name: 'Poisoned', icon: '☠️', damage: 6, duration: 15, type: 'dot', color: '#00ff00' },
+            corroded: { name: 'Corroded', icon: '🧪', damage: 12, duration: 8, type: 'dot', color: '#9900cc' },
+            frostbite: { name: 'Frostbite', icon: '❄️', damage: 5, duration: 10, type: 'dot', slow: 0.3, color: '#00ffff' },
+            plague: { name: 'Plague', icon: '🦠', damage: 15, duration: 20, type: 'dot', spread: true, color: '#006600' },
+            
+            // Debuffs
+            stunned: { name: 'Stunned', icon: '💫', duration: 3, type: 'cc', immobile: true, color: '#ffaa00' },
+            frozen: { name: 'Frozen', icon: '🧊', duration: 4, type: 'cc', immobile: true, color: '#00ccff' },
+            slowed: { name: 'Slowed', icon: '🐌', duration: 6, type: 'debuff', slow: 0.5, color: '#6666ff' },
+            weakened: { name: 'Weakened', icon: '📉', duration: 10, type: 'debuff', attackReduction: 0.3, color: '#999999' },
+            silenced: { name: 'Silenced', icon: '🔇', duration: 5, type: 'cc', noAbilities: true, color: '#663399' },
+            blinded: { name: 'Blinded', icon: '🙈', duration: 4, type: 'debuff', missChance: 0.5, color: '#333333' },
+            feared: { name: 'Feared', icon: '😱', duration: 5, type: 'cc', flee: true, color: '#9900ff' },
+            charmed: { name: 'Charmed', icon: '💖', duration: 8, type: 'cc', friendly: true, color: '#ff69b4' },
+            confused: { name: 'Confused', icon: '😵', duration: 6, type: 'cc', random: true, color: '#cc00cc' },
+            rooted: { name: 'Rooted', icon: '🌱', duration: 5, type: 'cc', immobile: true, canCast: true, color: '#228b22' },
+            disarmed: { name: 'Disarmed', icon: '🚫', duration: 4, type: 'cc', noAttack: true, color: '#ff0000' },
+            
+            // Buffs
+            hasted: { name: 'Hasted', icon: '⚡', duration: 15, type: 'buff', speed: 1.5, color: '#ffff00' },
+            strengthened: { name: 'Strengthened', icon: '💪', duration: 20, type: 'buff', attackBonus: 0.3, color: '#ff8c00' },
+            shielded: { name: 'Shielded', icon: '🛡️', duration: 10, type: 'buff', shield: 200, color: '#4169e1' },
+            regenerating: { name: 'Regenerating', icon: '💚', heal: 10, duration: 15, type: 'hot', color: '#00ff00' },
+            blessed: { name: 'Blessed', icon: '✨', duration: 30, type: 'buff', allStats: 0.2, color: '#ffd700' },
+            invisible: { name: 'Invisible', icon: '👻', duration: 10, type: 'buff', stealth: true, color: 'rgba(255,255,255,0.3)' },
+            enraged: { name: 'Enraged', icon: '😡', duration: 12, type: 'buff', damage: 0.5, defenseReduction: 0.3, color: '#ff0000' },
+            focused: { name: 'Focused', icon: '🎯', duration: 15, type: 'buff', critChance: 0.2, color: '#ffa500' },
+            
+            // Special
+            invulnerable: { name: 'Invulnerable', icon: '🌟', duration: 5, type: 'buff', immune: true, color: '#ffffff' },
+            flying: { name: 'Flying', icon: '🕊️', duration: 20, type: 'buff', canFly: true, color: '#87ceeb' },
+            transformed: { name: 'Transformed', icon: '🐉', duration: 30, type: 'buff', transform: true, allStats: 1.0, color: '#ff00ff' },
+            marked: { name: 'Marked for Death', icon: '💀', duration: 20, type: 'debuff', damageTaken: 1.0, color: '#000000' },
+            cursed: { name: 'Cursed', icon: '👿', duration: 25, type: 'debuff', allStats: -0.3, color: '#660066' }
+        };
+
+        // ========================================
+        // DAMAGE TYPES & RESISTANCES
+        // ========================================
+
+        const DAMAGE_TYPES = {
+            physical: { name: 'Physical', icon: '⚔️', color: '#cccccc' },
+            fire: { name: 'Fire', icon: '🔥', color: '#ff4500' },
+            ice: { name: 'Ice', icon: '❄️', color: '#00ffff' },
+            lightning: { name: 'Lightning', icon: '⚡', color: '#ffff00' },
+            holy: { name: 'Holy', icon: '✨', color: '#ffd700' },
+            dark: { name: 'Dark', icon: '🌑', color: '#000000' },
+            nature: { name: 'Nature', icon: '🌿', color: '#00ff00' },
+            arcane: { name: 'Arcane', icon: '🔮', color: '#9900ff' },
+            poison: { name: 'Poison', icon: '☠️', color: '#00cc00' }
+        };
+
+        // ========================================
         // PHASE 1: ENHANCED 3D GRAPHICS SYSTEM
         // ========================================
 
