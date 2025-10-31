@@ -20,8 +20,19 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export class ModelLoader {
     constructor() {
         this.loader = new GLTFLoader();
+        
+        // Configure loader manager to handle missing resources gracefully
+        this.loader.manager.onError = (url) => {
+            console.warn(`⚠️ Failed to load resource: ${url} - Using fallback`);
+        };
+        
         this.loadedModels = new Map();
         this.modelCache = new Map();
+        this.fallbackMaterial = new THREE.MeshStandardMaterial({
+            color: 0x88cc88,
+            roughness: 0.7,
+            metalness: 0.2
+        });
         
         // PROFESSIONAL ASSET LIBRARY - Real game-ready models
         this.modelLibrary = {
