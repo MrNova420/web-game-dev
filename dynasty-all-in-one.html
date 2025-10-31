@@ -2447,10 +2447,10 @@
             gameState.abilityIcons = abilityIcons[selectedClass] || ['🔥', '⚔️', '🛡️', '⚡'];
             updateAbilityIcons();
             
-            // Generate complete open world with all 12 biomes
-            console.log('🌍 Starting Complete World Generation...');
-            generateCompleteWorld();
-            console.log('✅ World Built! Starting game...');
+            // Use pre-built world data instead of generating (MUCH FASTER!)
+            console.log('🌍 Loading Pre-built World Data...');
+            loadPrebuiltWorld();
+            console.log('✅ World Loaded! Starting game...');
 
             // Give player starting weapon based on class
             giveStartingWeapon();
@@ -2678,11 +2678,111 @@
         // Building the full massive anime fantasy world
         // ========================================
         
-        function generateCompleteWorld() {
-            console.log('🌍 Building Complete Fantasy World...');
+        // NEW: Fast world loading using pre-built data
+        function loadPrebuiltWorld() {
+            console.log('🚀 Loading pre-built world (FAST)...');
             
-            // Expand world size to 50000x50000 for full 12-biome coverage
-            gameState.worldSize = 50000;
+            // Use smaller, playable world size
+            gameState.worldSize = 10000;
+            
+            // Clear existing
+            gameState.landmarks = [];
+            gameState.buildings = [];
+            gameState.villages = [];
+            gameState.resources = [];
+            gameState.npcs = [];
+            gameState.enemies = [];
+            gameState.dungeonPortals = [];
+            gameState.biomeRegions = [];
+            
+            // Create simplified biome grid (3x4 = 12 biomes) with smaller size
+            const biomeLayout = [
+                [0, 5, 1],   // Mystic Forest, Verdant Plains, Crimson Peaks
+                [2, 8, 3],   // Azure Depths, Twilight Marshlands, Shadowmoon
+                [6, 4, 9],   // Frozen Wastes, Crystal Peaks, Celestial Highlands
+                [7, 10, 11]  // Scorched Desert, Volcanic Badlands, Void Rift
+            ];
+            
+            const biomeWidth = gameState.worldSize / 3;
+            const biomeHeight = gameState.worldSize / 4;
+            
+            // Create biome regions (just the boundaries, no heavy generation)
+            for (let row = 0; row < 4; row++) {
+                for (let col = 0; col < 3; col++) {
+                    const biomeId = biomeLayout[row][col];
+                    const biome = BIOMES[biomeId];
+                    
+                    gameState.biomeRegions.push({
+                        biome: biome,
+                        x: col * biomeWidth,
+                        y: row * biomeHeight,
+                        width: biomeWidth,
+                        height: biomeHeight,
+                        centerX: col * biomeWidth + biomeWidth / 2,
+                        centerY: row * biomeHeight + biomeHeight / 2
+                    });
+                }
+            }
+            
+            // Spawn ONLY a few enemies near player (NOT hundreds!)
+            const startRegion = gameState.biomeRegions[0]; // Start in Mystic Forest
+            const biome = startRegion.biome;
+            
+            // Spawn just 20 enemies total (NOT 200+!)
+            for (let i = 0; i < 20; i++) {
+                const creatureData = biome.creatures[Math.floor(Math.random() * biome.creatures.length)];
+                const angle = (i / 20) * Math.PI * 2;
+                const dist = 200 + Math.random() * 400;
+                const ex = startRegion.centerX + Math.cos(angle) * dist;
+                const ey = startRegion.centerY + Math.sin(angle) * dist;
+                
+                gameState.enemies.push({
+                    x: ex,
+                    y: ey,
+                    name: creatureData.name,
+                    emoji: creatureData.emoji,
+                    hp: creatureData.hp,
+                    maxHp: creatureData.hp,
+                    attack: creatureData.attack,
+                    exp: creatureData.exp,
+                    gold: creatureData.gold,
+                    radius: 25,
+                    speed: 1 + Math.random(),
+                    wanderAngle: Math.random() * Math.PI * 2,
+                    aggroRange: 300
+                });
+            }
+            
+            // Add a few landmarks from pre-built data
+            if (COMPLETE_WORLD_DATA && COMPLETE_WORLD_DATA.cities) {
+                for (const city of COMPLETE_WORLD_DATA.cities.slice(0, 3)) {
+                    gameState.landmarks.push({
+                        x: city.x,
+                        y: city.y,
+                        name: city.name,
+                        emoji: '🏰',
+                        radius: 80,
+                        discovered: false
+                    });
+                    
+                    // Add some NPCs
+                    if (city.npcs) {
+                        for (const npc of city.npcs.slice(0, 2)) {
+                            gameState.npcs.push({
+                                x: npc.x,
+                                y: npc.y,
+                                name: npc.name,
+                                emoji: '🧙',
+                                dialogue: npc.dialogue,
+                                radius: 35
+                            });
+                        }
+                    }
+                }
+            }
+            
+            console.log(`✅ Fast load complete! ${gameState.enemies.length} enemies, ${gameState.landmarks.length} landmarks`);
+        }
             
             // Clear existing world
             gameState.landmarks = [];
