@@ -804,7 +804,43 @@ Thank you to the amazing creators who provide free assets!
                 50% { background-position: 100% 50%; }
                 100% { background-position: 0% 50%; }
             }
-        `,document.head.appendChild(r),e.appendChild(t),e.appendChild(s),e.appendChild(i),e.appendChild(n),e.appendChild(o),document.getElementById("game-container").appendChild(e),this.menuContainer=e}show(){this.menuContainer&&(this.menuContainer.style.display="flex",this.menuVisible=!0,this.autoHideTimeout=setTimeout(()=>{this.menuVisible&&(console.log("Auto-starting game after menu timeout..."),this.startNewGame())},5e3))}hide(){this.menuContainer&&(this.menuContainer.style.display="none",this.menuVisible=!1,this.autoHideTimeout&&(clearTimeout(this.autoHideTimeout),this.autoHideTimeout=null))}startNewGame(){console.log("🎮 Starting new game..."),this.hide(),this.gameEngine.saveSystem&&localStorage.removeItem("dynasty_save"),this.gameEngine.startFromSafeZone=!0}loadGame(){console.log("📂 Loading saved game..."),this.gameEngine.saveSystem&&this.gameEngine.saveSystem.hasSaveData()?(this.hide(),this.gameEngine.saveSystem.loadGame()):alert("No saved game found. Please start a new game.")}enterSafeZone(){console.log("🏰 Entering Safe Zone Hub..."),this.hide(),this.gameEngine.startFromSafeZone=!0}openSettings(){console.log("⚙️ Opening settings..."),alert("Settings panel coming soon!")}showCredits(){console.log("📜 Showing credits..."),alert(`
+        `,document.head.appendChild(r),e.appendChild(t),e.appendChild(s),e.appendChild(i),e.appendChild(n),e.appendChild(o),document.getElementById("game-container").appendChild(e),this.menuContainer=e}show(){this.menuContainer&&(this.menuContainer.style.display="flex",this.menuVisible=!0,this.autoHideTimeout=setTimeout(()=>{this.menuVisible&&(console.log("Auto-starting game after menu timeout..."),this.startNewGame())},5e3))}hide(){this.menuContainer&&(this.menuContainer.style.display="none",this.menuVisible=!1,this.autoHideTimeout&&(clearTimeout(this.autoHideTimeout),this.autoHideTimeout=null))}startNewGame(){console.log("🎮 Starting new game..."),this.hide(),this.gameEngine.saveSystem&&localStorage.removeItem("dynasty_save"),this.gameEngine.startFromSafeZone=!0}loadGame(){console.log("📂 Loading saved game..."),this.gameEngine.saveSystem&&this.gameEngine.saveSystem.hasSaveData()?(this.hide(),this.gameEngine.saveSystem.loadGame()):alert("No saved game found. Please start a new game.")}enterSafeZone(){console.log("🏰 Entering Safe Zone Hub..."),this.hide(),this.gameEngine.startFromSafeZone=!0}openSettings(){console.log("⚙️ Opening settings..."),this.createSettingsPanel()}createSettingsPanel(){const e=document.getElementById("settings-panel");e&&e.remove();const t=document.createElement("div");t.id="settings-panel",t.style.cssText=`
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, rgba(26, 40, 71, 0.98), rgba(45, 74, 124, 0.98));
+            border: 2px solid #9d4edd;
+            border-radius: 15px;
+            padding: 30px;
+            z-index: 3000;
+            min-width: 400px;
+            max-width: 600px;
+            box-shadow: 0 10px 40px rgba(157, 78, 221, 0.4);
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        `;const s=document.createElement("h2");s.textContent="⚙️ Settings",s.style.cssText=`
+            margin: 0 0 20px 0;
+            color: #c77dff;
+            text-align: center;
+            font-size: 2em;
+        `,t.appendChild(s);const i=this.createSettingSection("Audio",[{label:"Master Volume",type:"range",id:"master-volume",value:.7},{label:"Music Volume",type:"range",id:"music-volume",value:.6},{label:"SFX Volume",type:"range",id:"sfx-volume",value:.8}]);t.appendChild(i);const a=this.createSettingSection("Graphics",[{label:"Graphics Quality",type:"select",id:"graphics-quality",options:["Low","Medium","High","Ultra"],value:"High"},{label:"Shadows",type:"checkbox",id:"shadows",checked:!0},{label:"Particles",type:"checkbox",id:"particles",checked:!0},{label:"Anti-Aliasing",type:"checkbox",id:"anti-aliasing",checked:!0}]);t.appendChild(a);const n=this.createSettingSection("Controls",[{label:"Mouse Sensitivity",type:"range",id:"mouse-sensitivity",value:.5,min:.1,max:2},{label:"Invert Y-Axis",type:"checkbox",id:"invert-y",checked:!1}]);t.appendChild(n);const o=document.createElement("div");o.style.cssText=`
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            gap: 10px;
+        `;const r=document.createElement("button");r.textContent="Save Settings",r.style.cssText=this.getButtonStyle("#9d4edd"),r.onclick=()=>{this.saveSettings(),t.remove()};const l=document.createElement("button");l.textContent="Close",l.style.cssText=this.getButtonStyle("#dc143c"),l.onclick=()=>t.remove(),o.appendChild(r),o.appendChild(l),t.appendChild(o),document.body.appendChild(t)}createSettingSection(e,t){const s=document.createElement("div");s.style.cssText="margin-bottom: 25px;";const i=document.createElement("h3");return i.textContent=e,i.style.cssText="color: #e0aaff; margin-bottom: 15px; font-size: 1.3em;",s.appendChild(i),t.forEach(a=>{const n=document.createElement("div");n.style.cssText="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center;";const o=document.createElement("label");o.textContent=a.label,o.style.cssText="flex: 1; color: #ffffff;",n.appendChild(o);let r;if(a.type==="range"){r=document.createElement("input"),r.type="range",r.id=a.id,r.min=a.min||0,r.max=a.max||1,r.step=.1,r.value=localStorage.getItem(a.id)||a.value,r.style.cssText="flex: 1; max-width: 150px;";const l=document.createElement("span");l.textContent=Math.round(r.value*100)+"%",l.style.cssText="margin-left: 10px; min-width: 45px; color: #c77dff;",r.oninput=()=>l.textContent=Math.round(r.value*100)+"%",n.appendChild(r),n.appendChild(l)}else a.type==="select"?(r=document.createElement("select"),r.id=a.id,a.options.forEach(l=>{const c=document.createElement("option");c.value=l,c.textContent=l,r.appendChild(c)}),r.value=localStorage.getItem(a.id)||a.value,r.style.cssText="padding: 5px 10px; background: rgba(0,0,0,0.3); color: white; border: 1px solid #9d4edd; border-radius: 5px;",n.appendChild(r)):a.type==="checkbox"&&(r=document.createElement("input"),r.type="checkbox",r.id=a.id,r.checked=localStorage.getItem(a.id)!==null?localStorage.getItem(a.id)==="true":a.checked,r.style.cssText="width: 20px; height: 20px; cursor: pointer;",n.appendChild(r));s.appendChild(n)}),s}getButtonStyle(e){return`
+            padding: 12px 30px;
+            background: ${e};
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            flex: 1;
+            transition: all 0.3s;
+        `}saveSettings(){["master-volume","music-volume","sfx-volume","graphics-quality","shadows","particles","anti-aliasing","mouse-sensitivity","invert-y"].forEach(t=>{const s=document.getElementById(t);s&&(s.type==="checkbox"?localStorage.setItem(t,s.checked):localStorage.setItem(t,s.value))}),console.log("✅ Settings saved"),alert("Settings saved successfully!")}showCredits(){console.log("📜 Showing credits..."),alert(`
 Dynasty of Emberveil
 A Psychedelic Fantasy RPG
 
