@@ -1326,8 +1326,7 @@
                 { name: 'Gungnir', level: 60, rarity: 'Legendary', attack: 98, speed: 1.3, value: 16000, range: 2.5, icon: '⚡🔱', special: 'never_miss' },
                 { name: 'Longinus', level: 70, rarity: 'Mythic', attack: 135, speed: 1.2, value: 48000, range: 2, icon: '✝️🔱', special: 'divine_pierce' },
                 { name: 'Omega Spear', level: 80, rarity: 'Omega', attack: 190, speed: 1.4, value: 130000, range: 3, icon: '🌈🔱', special: 'reality_pierce' }
-            ]
-        };
+            ],
 
             // DAGGERS (50 weapons)
             daggers: [
@@ -2957,54 +2956,6 @@
             if (gameState.npcs.length > 50 && farNpcs.length > 20) {
                 gameState.npcs = gameState.npcs.filter(npc => !farNpcs.includes(npc));
             }
-        }
-            
-            // Clear existing world
-            gameState.landmarks = [];
-            gameState.buildings = [];
-            gameState.villages = [];
-            gameState.resources = [];
-            gameState.npcs = [];
-            gameState.enemies = [];
-            gameState.dungeonPortals = [];
-            gameState.biomeRegions = [];
-            
-            // PHASE 1: Create Biome Regions (12 biomes in a 3x4 grid)
-            const biomeLayout = [
-                [0, 5, 1],   // Row 1: Mystic Forest, Verdant Plains, Crimson Peaks
-                [2, 8, 3],   // Row 2: Azure Depths, Twilight Marshlands, Shadowmoon
-                [6, 4, 9],   // Row 3: Frozen Wastes, Crystal Peaks, Celestial Highlands
-                [7, 10, 11]  // Row 4: Scorched Desert, Volcanic Badlands, Void Rift
-            ];
-            
-            const biomeWidth = gameState.worldSize / 3;
-            const biomeHeight = gameState.worldSize / 4;
-            
-            // Place each biome in the world
-            for (let row = 0; row < 4; row++) {
-                for (let col = 0; col < 3; col++) {
-                    const biomeId = biomeLayout[row][col];
-                    const biome = BIOMES[biomeId];
-                    
-                    const region = {
-                        biome: biome,
-                        x: col * biomeWidth,
-                        y: row * biomeHeight,
-                        width: biomeWidth,
-                        height: biomeHeight,
-                        centerX: col * biomeWidth + biomeWidth / 2,
-                        centerY: row * biomeHeight + biomeHeight / 2
-                    };
-                    
-                    gameState.biomeRegions.push(region);
-                    
-                    // Generate content for this biome
-                    generateBiomeContent(region);
-                }
-            }
-            
-            console.log('✅ World Generation Complete!');
-            console.log(`📊 Generated: ${gameState.biomeRegions.length} biomes, ${gameState.landmarks.length} landmarks, ${gameState.enemies.length} creatures`);
         }
         
         function generateBiomeContent(region) {
@@ -4929,7 +4880,7 @@
                     {name: "Healing Potion", level: 10, materials: {herbs: 4, water: 2}, result: {type: "potion", effect: "heal", value: 150}},
                     {name: "Greater Healing", level: 30, materials: {rarehherbs: 6, crystalwater: 3}, result: {type: "potion", effect: "heal", value: 500}},
                     {name: "Mana Potion", level: 15, materials: {manaherbs: 5, water: 2}, result: {type: "potion", effect: "mana", value: 100}},
-                    {name: "Flask of Titans", level: 50, materials: {titanbloom: 10, purecr ystal: 5}, result: {type: "flask", effect: "strength", value: 50, duration: 3600}},
+                    {name: "Flask of Titans", level: 50, materials: {titanbloom: 10, purecrystal: 5}, result: {type: "flask", effect: "strength", value: 50, duration: 3600}},
                     {name: "Elixir of Immortality", level: 75, materials: {lifeessence: 15, dragonblood: 8, voidcrystal: 3}, result: {type: "elixir", effect: "regen", value: 100}}
                 ]
             },
@@ -5340,73 +5291,6 @@
                 whisper: []
             }
         };
-
-        // Guild System
-        class Guild {
-            constructor(name, leader) {
-                this.name = name;
-                this.leader = leader;
-                this.members = [leader];
-                this.level = 1;
-                this.exp = 0;
-                this.bank = {gold: 0, items: []};
-                this.perks = [];
-                this.ranks = {
-                    leader: {name: "Guild Master", permissions: ["all"]},
-                    officer: {name: "Officer", permissions: ["invite", "kick", "bank_withdraw"]},
-                    member: {name: "Member", permissions: ["chat", "bank_deposit"]},
-                    recruit: {name: "Recruit", permissions: ["chat"]}
-                };
-            }
-
-            addMember(player, rank = "recruit") {
-                if (this.members.length >= 100) return false; // Max 100 members
-                this.members.push({player: player, rank: rank, joinDate: Date.now()});
-                return true;
-            }
-
-            removeMember(player) {
-                this.members = this.members.filter(m => m.player !== player);
-            }
-
-            depositToBank(gold, items) {
-                this.bank.gold += gold || 0;
-                if (items) this.bank.items.push(...items);
-            }
-
-            withdrawFromBank(gold, itemIndex) {
-                if (gold && this.bank.gold >= gold) {
-                    this.bank.gold -= gold;
-                    return {type: "gold", amount: gold};
-                }
-                if (itemIndex !== undefined && this.bank.items[itemIndex]) {
-                    return {type: "item", item: this.bank.items.splice(itemIndex, 1)[0]};
-                }
-                return null;
-            }
-
-            gainExp(amount) {
-                this.exp += amount;
-                while (this.exp >= this.level * 1000) {
-                    this.exp -= this.level * 1000;
-                    this.level++;
-                    this.unlockPerk();
-                }
-            }
-
-            unlockPerk() {
-                const perks = [
-                    {level: 2, name: "Bank Expansion", effect: "bank_slots", value: 50},
-                    {level: 3, name: "Member Boost", effect: "max_members", value: 150},
-                    {level: 5, name: "EXP Bonus", effect: "exp_boost", value: 0.05},
-                    {level: 10, name: "Guild Hall", effect: "unlock_hall"},
-                    {level: 15, name: "Guild Mount", effect: "unlock_mount"},
-                    {level: 20, name: "Legendary Perk", effect: "all_boost", value: 0.1}
-                ];
-                const newPerk = perks.find(p => p.level === this.level);
-                if (newPerk) this.perks.push(newPerk);
-            }
-        }
 
         // Party System
         function createParty() {
