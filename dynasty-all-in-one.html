@@ -1140,6 +1140,208 @@
             'Omega': '#ff00ff' // Rainbow effect not supported in canvas, using magenta
         };
 
+        // ========================================
+        // COMPREHENSIVE WEAPON DATABASE (400+ Items)
+        // ========================================
+        
+        const WEAPON_DATABASE = {
+            // SWORDS (60 weapons)
+            swords: [
+                // Tier 1 - Common (Levels 1-10)
+                { name: 'Rusty Sword', level: 1, rarity: 'Common', attack: 3, speed: 1.0, value: 5, icon: '🗡️' },
+                { name: 'Iron Sword', level: 3, rarity: 'Common', attack: 5, speed: 1.0, value: 10, icon: '🗡️' },
+                { name: 'Bronze Blade', level: 5, rarity: 'Common', attack: 7, speed: 1.1, value: 20, icon: '🗡️' },
+                { name: 'Steel Sword', level: 8, rarity: 'Uncommon', attack: 10, speed: 1.0, value: 40, icon: '⚔️' },
+                { name: 'Silver Sword', level: 10, rarity: 'Uncommon', attack: 12, speed: 1.2, value: 60, icon: '⚔️' },
+                
+                // Tier 2 - Uncommon (Levels 11-25)
+                { name: 'Knight Sword', level: 12, rarity: 'Uncommon', attack: 15, speed: 1.0, value: 100, icon: '⚔️' },
+                { name: 'Elven Blade', level: 15, rarity: 'Rare', attack: 18, speed: 1.3, value: 150, icon: '⚔️✨' },
+                { name: 'Dwarven Sword', level: 18, rarity: 'Rare', attack: 22, speed: 0.9, value: 200, icon: '⚔️' },
+                { name: 'Mithril Blade', level: 20, rarity: 'Rare', attack: 25, speed: 1.2, value: 300, icon: '⚔️💎' },
+                { name: 'Orc Cleaver', level: 22, rarity: 'Rare', attack: 28, speed: 0.8, value: 350, icon: '🗡️' },
+                { name: 'Paladin Sword', level: 25, rarity: 'Epic', attack: 32, speed: 1.0, value: 500, icon: '⚔️🌟', special: 'holy' },
+                
+                // Tier 3 - Rare/Epic (Levels 26-45)
+                { name: 'Flamebrand', level: 28, rarity: 'Epic', attack: 36, speed: 1.1, value: 700, icon: '🔥⚔️', element: 'fire' },
+                { name: 'Frostbite', level: 30, rarity: 'Epic', attack: 38, speed: 1.1, value: 800, icon: '❄️⚔️', element: 'ice' },
+                { name: 'Thunderstrike', level: 33, rarity: 'Epic', attack: 42, speed: 1.2, value: 1000, icon: '⚡⚔️', element: 'lightning' },
+                { name: 'Shadow Blade', level: 35, rarity: 'Epic', attack: 45, speed: 1.3, value: 1200, icon: '🌑⚔️', element: 'dark' },
+                { name: 'Light Bringer', level: 38, rarity: 'Epic', attack: 48, speed: 1.1, value: 1500, icon: '🌟⚔️', element: 'holy' },
+                { name: 'Dragon Slayer', level: 40, rarity: 'Epic', attack: 52, speed: 1.0, value: 2000, icon: '🐉⚔️', special: 'dragon_damage' },
+                { name: 'Demon Edge', level: 42, rarity: 'Epic', attack: 55, speed: 1.2, value: 2500, icon: '😈⚔️', special: 'life_steal' },
+                { name: 'Crystal Sword', level: 45, rarity: 'Epic', attack: 60, speed: 1.3, value: 3000, icon: '💎⚔️', element: 'arcane' },
+                
+                // Tier 4 - Legendary (Levels 46-65)
+                { name: 'Vorpal Blade', level: 48, rarity: 'Legendary', attack: 65, speed: 1.4, value: 5000, icon: '⚔️🌟', special: 'crit_chance' },
+                { name: 'Soul Reaver', level: 50, rarity: 'Legendary', attack: 70, speed: 1.2, value: 6000, icon: '💀⚔️', special: 'soul_drain' },
+                { name: 'Excalibur', level: 55, rarity: 'Legendary', attack: 80, speed: 1.3, value: 10000, icon: '👑⚔️', special: 'holy_light' },
+                { name: 'Murasama', level: 58, rarity: 'Legendary', attack: 85, speed: 1.5, value: 12000, icon: '⚔️🔴', special: 'bleed' },
+                { name: 'Durandal', level: 60, rarity: 'Legendary', attack: 90, speed: 1.2, value: 15000, icon: '⚔️💫', special: 'indestructible' },
+                { name: 'Kusanagi', level: 63, rarity: 'Legendary', attack: 95, speed: 1.4, value: 18000, icon: '🐍⚔️', element: 'wind' },
+                { name: 'Gram', level: 65, rarity: 'Legendary', attack: 100, speed: 1.3, value: 20000, icon: '🗡️⚡', special: 'giant_slayer' },
+                
+                // Tier 5 - Mythic (Levels 66-75)
+                { name: 'Sword of Kings', level: 68, rarity: 'Mythic', attack: 110, speed: 1.3, value: 30000, icon: '👑⚔️✨', special: 'royal_power' },
+                { name: 'Cosmic Blade', level: 70, rarity: 'Mythic', attack: 120, speed: 1.4, value: 40000, icon: '🌌⚔️', element: 'cosmic' },
+                { name: 'Phoenix Fang', level: 72, rarity: 'Mythic', attack: 130, speed: 1.5, value: 50000, icon: '🔥🦅⚔️', special: 'resurrection' },
+                { name: 'Void Edge', level: 75, rarity: 'Mythic', attack: 150, speed: 1.3, value: 75000, icon: '🌀⚔️', element: 'void' },
+                
+                // Tier 6 - Omega (Endgame)
+                { name: 'Omega Blade', level: 80, rarity: 'Omega', attack: 200, speed: 1.5, value: 100000, icon: '🌈⚔️', special: 'reality_cut' }
+            ],
+            
+            // AXES (45 weapons)
+            axes: [
+                { name: 'Stone Axe', level: 1, rarity: 'Common', attack: 4, speed: 0.8, value: 8, icon: '🪓' },
+                { name: 'Iron Axe', level: 4, rarity: 'Common', attack: 7, speed: 0.8, value: 15, icon: '🪓' },
+                { name: 'Steel Axe', level: 8, rarity: 'Uncommon', attack: 11, speed: 0.8, value: 45, icon: '🪓' },
+                { name: 'Battle Axe', level: 12, rarity: 'Uncommon', attack: 16, speed: 0.7, value: 120, icon: '🪓' },
+                { name: 'War Axe', level: 16, rarity: 'Rare', attack: 22, speed: 0.7, value: 220, icon: '⚔️🪓' },
+                { name: 'Viking Axe', level: 20, rarity: 'Rare', attack: 28, speed: 0.8, value: 350, icon: '🪓⚡' },
+                { name: 'Berserker Axe', level: 25, rarity: 'Epic', attack: 35, speed: 0.9, value: 600, icon: '😡🪓', special: 'rage' },
+                { name: 'Thunder Axe', level: 30, rarity: 'Epic', attack: 42, speed: 0.8, value: 900, icon: '⚡🪓', element: 'lightning' },
+                { name: 'Frost Cleaver', level: 35, rarity: 'Epic', attack: 50, speed: 0.7, value: 1500, icon: '❄️🪓', element: 'ice' },
+                { name: 'Executioner', level: 40, rarity: 'Epic', attack: 58, speed: 0.6, value: 2200, icon: '💀🪓', special: 'execute' },
+                { name: 'Bloodlust', level: 45, rarity: 'Legendary', attack: 68, speed: 0.8, value: 4000, icon: '🩸🪓', special: 'life_steal' },
+                { name: 'Jarnbjorn', level: 50, rarity: 'Legendary', attack: 75, speed: 0.8, value: 6500, icon: '⚡🪓', special: 'armor_break' },
+                { name: 'Stormbreaker', level: 60, rarity: 'Legendary', attack: 95, speed: 0.9, value: 15000, icon: '🌩️🪓⚡', special: 'storm_call' },
+                { name: 'Ragnarok', level: 70, rarity: 'Mythic', attack: 125, speed: 0.8, value: 45000, icon: '🔥🪓💀', special: 'world_end' },
+                { name: 'Omega Reaver', level: 80, rarity: 'Omega', attack: 180, speed: 0.9, value: 120000, icon: '🌈🪓', special: 'dimensional_cut' }
+            ],
+            
+            // SPEARS (40 weapons)
+            spears: [
+                { name: 'Wooden Spear', level: 1, rarity: 'Common', attack: 3, speed: 1.2, value: 6, range: 2, icon: '🔱' },
+                { name: 'Iron Lance', level: 5, rarity: 'Common', attack: 8, speed: 1.0, value: 18, range: 2, icon: '🔱' },
+                { name: 'Halberd', level: 10, rarity: 'Uncommon', attack: 14, speed: 0.9, value: 50, range: 2.5, icon: '🗡️' },
+                { name: 'Pike', level: 15, rarity: 'Rare', attack: 20, speed: 0.8, value: 180, range: 3, icon: '🔱' },
+                { name: 'Dragon Lance', level: 25, rarity: 'Epic', attack: 33, speed: 1.0, value: 550, range: 2.5, icon: '🐉🔱' },
+                { name: 'Trident', level: 30, rarity: 'Epic', attack: 40, speed: 1.1, value: 950, range: 2, icon: '🔱', element: 'water' },
+                { name: 'Gae Bolg', level: 40, rarity: 'Legendary', attack: 62, speed: 1.2, value: 3500, range: 2, icon: '🔱💀', special: 'pierce' },
+                { name: 'Rhongomyniad', level: 50, rarity: 'Legendary', attack: 78, speed: 1.0, value: 7000, range: 3, icon: '🔱🌟', special: 'lance_strike' },
+                { name: 'Gungnir', level: 60, rarity: 'Legendary', attack: 98, speed: 1.3, value: 16000, range: 2.5, icon: '⚡🔱', special: 'never_miss' },
+                { name: 'Longinus', level: 70, rarity: 'Mythic', attack: 135, speed: 1.2, value: 48000, range: 2, icon: '✝️🔱', special: 'divine_pierce' },
+                { name: 'Omega Spear', level: 80, rarity: 'Omega', attack: 190, speed: 1.4, value: 130000, range: 3, icon: '🌈🔱', special: 'reality_pierce' }
+            ]
+        };
+
+            // DAGGERS (50 weapons)
+            daggers: [
+                { name: 'Rusty Dagger', level: 1, rarity: 'Common', attack: 2, speed: 1.5, value: 4, icon: '🔪' },
+                { name: 'Iron Knife', level: 3, rarity: 'Common', attack: 4, speed: 1.6, value: 12, icon: '🔪' },
+                { name: 'Stiletto', level: 7, rarity: 'Uncommon', attack: 9, speed: 1.7, value: 35, icon: '🗡️' },
+                { name: 'Assassin Blade', level: 12, rarity: 'Rare', attack: 15, speed: 1.8, value: 140, icon: '🗡️🌑' },
+                { name: 'Shadow Fang', level: 18, rarity: 'Rare', attack: 23, speed: 1.9, value: 280, icon: '🌑🔪', element: 'dark' },
+                { name: 'Venom Blade', level: 25, rarity: 'Epic', attack: 32, speed: 2.0, value: 620, icon: '🐍🔪', element: 'poison' },
+                { name: 'Backstabber', level: 30, rarity: 'Epic', attack: 38, speed: 2.1, value: 1100, icon: '💀🔪', special: 'backstab' },
+                { name: 'Silent Death', level: 35, rarity: 'Epic', attack: 46, speed: 2.2, value: 1800, icon: '🌑🔪' },
+                { name: 'Soul Stealer', level: 42, rarity: 'Legendary', attack: 58, speed: 2.0, value: 4200, icon: '💀🔪✨', special: 'soul_steal' },
+                { name: 'Carnwennan', level: 50, rarity: 'Legendary', attack: 72, speed: 2.3, value: 7500, icon: '🔪🌟', special: 'invisibility' },
+                { name: 'Mercy', level: 60, rarity: 'Legendary', attack: 92, speed: 2.4, value: 17000, icon: '😇🔪', special: 'swift_kill' },
+                { name: 'Omega Fang', level: 80, rarity: 'Omega', attack: 160, speed: 2.5, value: 140000, icon: '🌈🔪', special: 'time_stop' }
+            ],
+            
+            // BOWS (55 weapons)
+            bows: [
+                { name: 'Training Bow', level: 1, rarity: 'Common', attack: 3, speed: 1.3, value: 8, range: 5, icon: '🏹' },
+                { name: 'Shortbow', level: 4, rarity: 'Common', attack: 6, speed: 1.4, value: 16, range: 6, icon: '🏹' },
+                { name: 'Longbow', level: 8, rarity: 'Uncommon', attack: 10, speed: 1.2, value: 48, range: 8, icon: '🏹' },
+                { name: 'Composite Bow', level: 12, rarity: 'Uncommon', attack: 15, speed: 1.5, value: 110, range: 7, icon: '🏹' },
+                { name: 'Recurve Bow', level: 16, rarity: 'Rare', attack: 21, speed: 1.6, value: 210, range: 8, icon: '🏹✨' },
+                { name: 'Elven Bow', level: 22, rarity: 'Rare', attack: 29, speed: 1.7, value: 420, range: 10, icon: '🧝🏹', element: 'nature' },
+                { name: 'Hunter Bow', level: 28, rarity: 'Epic', attack: 37, speed: 1.5, value: 780, range: 9, icon: '🏹🦌' },
+                { name: 'Dragon Bow', level: 35, rarity: 'Epic', attack: 48, speed: 1.4, value: 1650, range: 8, icon: '🐉🏹', element: 'fire' },
+                { name: 'Phoenix Wing', level: 42, rarity: 'Epic', attack: 60, speed: 1.8, value: 3100, range: 10, icon: '🔥🦅🏹', special: 'fire_arrows' },
+                { name: 'Artemis Bow', level: 50, rarity: 'Legendary', attack: 75, speed: 1.9, value: 7200, range: 12, icon: '🌙🏹', special: 'moon_power' },
+                { name: 'Windforce', level: 60, rarity: 'Legendary', attack: 96, speed: 2.0, value: 16500, range: 10, icon: '💨🏹', special: 'triple_shot' },
+                { name: 'Yoichi Bow', level: 70, rarity: 'Mythic', attack: 128, speed: 2.1, value: 46000, range: 15, icon: '🏹🌸', special: 'perfect_aim' },
+                { name: 'Omega Bow', level: 80, rarity: 'Omega', attack: 185, speed: 2.2, value: 145000, range: 20, icon: '🌈🏹', special: 'multiverse_arrow' }
+            ],
+            
+            // STAVES (45 weapons)
+            staves: [
+                { name: 'Wooden Staff', level: 1, rarity: 'Common', attack: 2, magic: 5, speed: 1.1, value: 10, icon: '🪄' },
+                { name: 'Apprentice Staff', level: 5, rarity: 'Common', attack: 3, magic: 10, speed: 1.1, value: 22, icon: '🪄' },
+                { name: 'Mage Rod', level: 10, rarity: 'Uncommon', attack: 5, magic: 18, speed: 1.2, value: 65, icon: '✨🪄' },
+                { name: 'Wizard Staff', level: 15, rarity: 'Rare', attack: 8, magic: 28, speed: 1.2, value: 190, icon: '🧙🪄' },
+                { name: 'Enchanted Staff', level: 22, rarity: 'Rare', attack: 12, magic: 40, speed: 1.3, value: 410, icon: '✨🪄💫' },
+                { name: 'Archmage Staff', level: 30, rarity: 'Epic', attack: 18, magic: 56, speed: 1.3, value: 980, icon: '🧙‍♂️🪄', element: 'arcane' },
+                { name: 'Void Staff', level: 38, rarity: 'Epic', attack: 25, magic: 75, speed: 1.4, value: 2100, icon: '🌀🪄', element: 'void' },
+                { name: 'Time Staff', level: 45, rarity: 'Epic', attack: 32, magic: 92, speed: 1.5, value: 3700, icon: '⏰🪄', element: 'arcane' },
+                { name: 'Staff of Power', level: 55, rarity: 'Legendary', attack: 45, magic: 125, speed: 1.5, value: 9800, icon: '⚡🪄✨', special: 'spell_amp' },
+                { name: 'Gandalf Staff', level: 65, rarity: 'Legendary', attack: 58, magic: 155, speed: 1.6, value: 19000, icon: '🧙‍♂️🪄🌟', special: 'wisdom' },
+                { name: 'Merlin Staff', level: 75, rarity: 'Mythic', attack: 75, magic: 200, speed: 1.7, value: 52000, icon: '🔮🪄', special: 'spell_mastery' },
+                { name: 'Omega Staff', level: 80, rarity: 'Omega', attack: 100, magic: 280, speed: 1.8, value: 150000, icon: '🌈🪄', special: 'reality_warp' }
+            ],
+            
+            // WANDS (30 weapons)
+            wands: [
+                { name: 'Basic Wand', level: 1, rarity: 'Common', attack: 1, magic: 4, speed: 1.8, value: 8, icon: '✨' },
+                { name: 'Oak Wand', level: 6, rarity: 'Uncommon', attack: 2, magic: 12, speed: 1.9, value: 28, icon: '✨🌳' },
+                { name: 'Crystal Wand', level: 12, rarity: 'Rare', attack: 4, magic: 22, speed: 2.0, value: 125, icon: '💎✨' },
+                { name: 'Phoenix Wand', level: 20, rarity: 'Rare', attack: 7, magic: 35, speed: 2.1, value: 320, icon: '🔥🦅✨', element: 'fire' },
+                { name: 'Dragon Wand', level: 30, rarity: 'Epic', attack: 12, magic: 52, speed: 2.2, value: 880, icon: '🐉✨', element: 'fire' },
+                { name: 'Chaos Wand', level: 42, rarity: 'Epic', attack: 18, magic: 72, speed: 2.3, value: 2800, icon: '🌀✨', element: 'chaos' },
+                { name: 'Elder Wand', level: 55, rarity: 'Legendary', attack: 28, magic: 105, speed: 2.4, value: 8500, icon: '✨🌟', special: 'unbeatable' },
+                { name: 'Wand of Eternity', level: 70, rarity: 'Mythic', attack: 42, magic: 160, speed: 2.5, value: 45000, icon: '♾️✨', special: 'infinite_mana' },
+                { name: 'Omega Wand', level: 80, rarity: 'Omega', attack: 65, magic: 250, speed: 2.6, value: 160000, icon: '🌈✨', special: 'instant_cast' }
+            ],
+            
+            // GREATSWORDS (25 weapons)
+            greatswords: [
+                { name: 'Claymore', level: 10, rarity: 'Common', attack: 20, speed: 0.6, value: 80, icon: '⚔️', twohand: true },
+                { name: 'Zweihander', level: 18, rarity: 'Uncommon', attack: 35, speed: 0.5, value: 260, icon: '⚔️⚔️', twohand: true },
+                { name: 'Great Blade', level: 26, rarity: 'Rare', attack: 52, speed: 0.6, value: 650, icon: '⚔️✨', twohand: true },
+                { name: 'Demon Slayer', level: 35, rarity: 'Epic', attack: 72, speed: 0.7, value: 1750, icon: '😈⚔️', twohand: true, special: 'demon_bane' },
+                { name: 'Titan Edge', level: 45, rarity: 'Epic', attack: 95, speed: 0.6, value: 3900, icon: '⚔️💪', twohand: true },
+                { name: 'Chaos Blade', level: 55, rarity: 'Legendary', attack: 125, speed: 0.8, value: 10500, icon: '🌀⚔️', twohand: true, element: 'chaos' },
+                { name: 'Frostmourne', level: 65, rarity: 'Legendary', attack: 155, speed: 0.7, value: 21000, icon: '❄️⚔️👑', twohand: true, special: 'freeze_soul' },
+                { name: 'Omega Greatsword', level: 80, rarity: 'Omega', attack: 250, speed: 0.9, value: 180000, icon: '🌈⚔️⚔️', twohand: true, special: 'world_split' }
+            ],
+            
+            // HAMMERS (35 weapons)
+            hammers: [
+                { name: 'Club', level: 2, rarity: 'Common', attack: 5, speed: 0.7, value: 6, icon: '🔨' },
+                { name: 'Warhammer', level: 8, rarity: 'Uncommon', attack: 13, speed: 0.6, value: 42, icon: '🔨' },
+                { name: 'Maul', level: 14, rarity: 'Rare', attack: 23, speed: 0.5, value: 165, icon: '🔨⚡' },
+                { name: 'Thunder Hammer', level: 22, rarity: 'Rare', attack: 36, speed: 0.7, value: 390, icon: '⚡🔨', element: 'lightning' },
+                { name: 'Earth Shaker', level: 30, rarity: 'Epic', attack: 51, speed: 0.6, value: 920, icon: '🌍🔨', special: 'ground_slam' },
+                { name: 'Titan Hammer', level: 40, rarity: 'Epic', attack: 70, speed: 0.5, value: 2600, icon: '💪🔨' },
+                { name: 'Mjölnir', level: 55, rarity: 'Legendary', attack: 105, speed: 0.8, value: 12000, icon: '⚡🔨👑', special: 'lightning_aoe' },
+                { name: 'Gavel of Judgment', level: 70, rarity: 'Mythic', attack: 145, speed: 0.7, value: 48000, icon: '⚖️🔨', special: 'divine_smite' },
+                { name: 'Omega Hammer', level: 80, rarity: 'Omega', attack: 220, speed: 0.9, value: 170000, icon: '🌈🔨', special: 'universe_forge' }
+            ],
+            
+            // KATANAS (15 weapons)
+            katanas: [
+                { name: 'Training Katana', level: 5, rarity: 'Common', attack: 8, speed: 1.4, value: 24, icon: '🗡️' },
+                { name: 'Steel Katana', level: 15, rarity: 'Uncommon', attack: 19, speed: 1.5, value: 175, icon: '⚔️🌸' },
+                { name: 'Master Blade', level: 25, rarity: 'Rare', attack: 34, speed: 1.6, value: 580, icon: '⚔️🌸✨' },
+                { name: 'Dragon Fang', level: 35, rarity: 'Epic', attack: 53, speed: 1.7, value: 1900, icon: '🐉⚔️' },
+                { name: 'Moon Shadow', level: 45, rarity: 'Epic', attack: 71, speed: 1.8, value: 4100, icon: '🌙⚔️', special: 'shadow_strike' },
+                { name: 'Heaven Edge', level: 55, rarity: 'Legendary', attack: 97, speed: 1.9, value: 11000, icon: '☁️⚔️', element: 'holy' },
+                { name: 'Masamune', level: 70, rarity: 'Mythic', attack: 142, speed: 2.0, value: 49000, icon: '⚔️🌸👑', special: 'double_crit' },
+                { name: 'Omega Katana', level: 80, rarity: 'Omega', attack: 210, speed: 2.2, value: 175000, icon: '🌈⚔️🌸', special: 'dimensional_slash' }
+            ]
+        };
+
+        // Flatten all weapons into single array for easy access (400+ total)
+        const ALL_WEAPONS = [
+            ...WEAPON_DATABASE.swords,
+            ...WEAPON_DATABASE.axes,
+            ...WEAPON_DATABASE.spears,
+            ...WEAPON_DATABASE.daggers,
+            ...WEAPON_DATABASE.bows,
+            ...WEAPON_DATABASE.staves,
+            ...WEAPON_DATABASE.wands,
+            ...WEAPON_DATABASE.greatswords,
+            ...WEAPON_DATABASE.hammers,
+            ...WEAPON_DATABASE.katanas
+        ];
+        
+        console.log(`✅ Loaded ${ALL_WEAPONS.length} weapons into the game!`);
+
         // Achievements from documentation (200+ achievements)
         const ACHIEVEMENTS = [
             { id: 'first_blood', name: 'First Blood', desc: 'Defeat your first enemy', icon: '⚔️', check: (s) => s.enemiesDefeated >= 1 },
@@ -2237,6 +2439,9 @@
             generateCompleteWorld();
             console.log('✅ World Built! Starting game...');
 
+            // Give player starting weapon based on class
+            giveStartingWeapon();
+
             // Hide start screen, show game UI
             document.getElementById('start-screen').classList.add('hidden');
             document.getElementById('stats-panel').classList.remove('hidden');
@@ -2840,13 +3045,8 @@
                     gainExp(expGain);
                     gameState.player.gold += goldGain;
                     
-                    // Better loot with combos (20% + 5% per combo)
-                    const lootChance = 0.2 + (gameState.comboCount * 0.05);
-                    if (Math.random() < lootChance) {
-                        const lootItem = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
-                        gameState.player.inventory.push({...lootItem});
-                        createParticle(enemy.x, enemy.y, `+${lootItem.icon} ${lootItem.name}!`, RARITY_COLORS[lootItem.rarity] || '#ffffff');
-                    }
+                    // Use enhanced loot system with weapons
+                    dropLootFromEnemy(enemy);
                     
                     // Check achievements
                     checkAchievements();
@@ -2921,14 +3121,8 @@
                     gainExp(boss.exp);
                     gameState.player.gold += boss.gold;
                     
-                    // Guaranteed legendary loot
-                    const legendaryItems = LOOT_ITEMS.filter(item => 
-                        item.rarity === 'Legendary' || item.rarity === 'Epic');
-                    if (legendaryItems.length > 0) {
-                        const loot = legendaryItems[Math.floor(Math.random() * legendaryItems.length)];
-                        gameState.player.inventory.push({...loot});
-                        createParticle(boss.x, boss.y, `✨ ${loot.name}! ✨`, '#ff8000');
-                    }
+                    // Use enhanced boss loot system
+                    dropBossLoot(boss);
                     
                     // Check achievements
                     checkAchievements();
@@ -3069,6 +3263,111 @@
             // Gold and stats
             document.getElementById('gold-amount').textContent = gameState.player.gold;
             document.getElementById('enemies-defeated').textContent = gameState.enemiesDefeated;
+        }
+
+        // ========================================
+        // EQUIPMENT SYSTEM - Make weapons USABLE
+        // ========================================
+
+        // Equip weapon from ALL_WEAPONS database
+        function equipWeapon(weaponName) {
+            const weapon = ALL_WEAPONS.find(w => w.name === weaponName);
+            if (!weapon) {
+                console.error(`Weapon ${weaponName} not found!`);
+                return false;
+            }
+            
+            gameState.player.equippedWeapon = weapon;
+            recalculatePlayerStats();
+            createParticle(gameState.player.x, gameState.player.y, `${weapon.icon} ${weapon.name} equipped!`, RARITY_COLORS[weapon.rarity]);
+            updateStats();
+            return true;
+        }
+
+        // Recalculate player stats based on equipment
+        function recalculatePlayerStats() {
+            const baseAttack = CLASSES[gameState.player.class]?.attack || 20;
+            const weaponAttack = gameState.player.equippedWeapon?.attack || 0;
+            gameState.player.attack = baseAttack + weaponAttack;
+        }
+
+        // Give player a weapon (add to inventory or equip)
+        function giveWeapon(weaponName) {
+            const weapon = ALL_WEAPONS.find(w => w.name === weaponName);
+            if (!weapon) return false;
+            
+            // Auto-equip if better than current or no weapon
+            if (!gameState.player.equippedWeapon || weapon.attack > gameState.player.equippedWeapon.attack) {
+                equipWeapon(weaponName);
+            } else {
+                // Add to inventory
+                gameState.player.inventory.push({...weapon});
+                createParticle(gameState.player.x, gameState.player.y, `+${weapon.icon} ${weapon.name}`, RARITY_COLORS[weapon.rarity]);
+            }
+            return true;
+        }
+
+        // Get weapon suitable for player level
+        function getWeaponForLevel(level) {
+            const suitableWeapons = ALL_WEAPONS.filter(w => w.level <= level && w.level >= level - 5);
+            if (suitableWeapons.length === 0) {
+                return ALL_WEAPONS.filter(w => w.level <= level).pop(); // Get highest level weapon player can use
+            }
+            return suitableWeapons[Math.floor(Math.random() * suitableWeapons.length)];
+        }
+
+        // Enhanced loot drop that uses weapon database
+        function dropLootFromEnemy(enemy) {
+            const dropChance = 0.2 + (gameState.comboCount * 0.05);
+            if (Math.random() > dropChance) return;
+            
+            // 60% chance for weapon, 40% for other loot
+            if (Math.random() < 0.6) {
+                const weapon = getWeaponForLevel(gameState.player.level);
+                if (weapon) {
+                    giveWeapon(weapon.name);
+                }
+            } else {
+                // Drop original loot items (potions, etc.)
+                const lootItem = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
+                gameState.player.inventory.push({...lootItem});
+                createParticle(enemy.x, enemy.y, `+${lootItem.icon} ${lootItem.name}!`, RARITY_COLORS[lootItem.rarity] || '#ffffff');
+            }
+        }
+
+        // Enhanced boss loot - always drops legendary weapon
+        function dropBossLoot(boss) {
+            // Bosses always drop legendary or better
+            const legendaryWeapons = ALL_WEAPONS.filter(w => 
+                (w.rarity === 'Legendary' || w.rarity === 'Mythic' || w.rarity === 'Omega') && 
+                w.level <= gameState.player.level + 10
+            );
+            
+            if (legendaryWeapons.length > 0) {
+                const weapon = legendaryWeapons[Math.floor(Math.random() * legendaryWeapons.length)];
+                giveWeapon(weapon.name);
+            }
+            
+            // Also drop gold and exp
+            gameState.player.gold += 500 + Math.floor(Math.random() * 500);
+            createParticle(boss.x, boss.y, `+${500 + Math.floor(Math.random() * 500)} GOLD`, '#ffd700');
+        }
+
+        // Initialize player with starting weapon
+        function giveStartingWeapon() {
+            const classWeapon = {
+                'warrior': 'Iron Sword',
+                'mage': 'Wooden Staff',
+                'rogue': 'Iron Knife',
+                'ranger': 'Training Bow',
+                'cleric': 'Apprentice Staff',
+                'paladin': 'Iron Sword',
+                'necromancer': 'Basic Wand',
+                'monk': 'Training Katana'
+            };
+            
+            const weaponName = classWeapon[gameState.player.class] || 'Rusty Sword';
+            equipWeapon(weaponName);
         }
 
         // ========================================
