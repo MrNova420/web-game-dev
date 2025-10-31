@@ -10,15 +10,15 @@
 
 ## File Details
 
-- **Size**: 336 KB (343,701 bytes)
-- **Lines of Code**: 7,034
-- **Functions**: 123
+- **Size**: 365 KB
+- **Lines of Code**: 7,459
+- **Functions**: 130+
 - **Character Classes**: 8
 - **Biomes**: 12
 - **Cities**: 8
 - **Villages**: 5
-- **Enemy Types**: 60+
-- **Achievements**: 25+
+- **Enemy Types**: 120
+- **Achievements**: 30+
 
 ---
 
