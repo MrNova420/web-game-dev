@@ -296,7 +296,7 @@
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         /* Virtual Joystick for Mobile */
@@ -4581,7 +4581,7 @@
             ctx.fillStyle = '#FFD700';
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 4;
-            const biomeName = `${biome.emoji} ${biome.name}`;
+            const biomeName = `${currentBiome.emoji} ${currentBiome.name}`;
             const nameW = ctx.measureText(biomeName).width;
             ctx.strokeText(biomeName, canvas.width / 2 - nameW / 2, 40);
             ctx.fillText(biomeName, canvas.width / 2 - nameW / 2, 40);
@@ -4892,6 +4892,24 @@
             accessory1: null,
             accessory2: null
         };
+
+        // Inventory and materials that were missing
+        const inventory = [];
+        const materials = {
+            wood: 0,
+            stone: 0,
+            iron: 0,
+            herbs: 0,
+            leather: 0,
+            cloth: 0,
+            gems: 0
+        };
+
+        // Function to add item to inventory
+        function addItemToInventory(item) {
+            if (!item) return;
+            inventory.push(item);
+        }
 
         // Function to equip armor
         function equipArmor(armor, slot) {
@@ -5980,23 +5998,29 @@
         // ========================================
 
         function saveGameState() {
+            // Safety check - ensure player exists
+            if (!gameState.player) {
+                console.warn("Cannot save: player not initialized");
+                return false;
+            }
+            
             const saveData = {
                 version: "2.0",
                 timestamp: Date.now(),
                 player: {
                     class: selectedClass,
-                    level: player.level,
-                    exp: player.exp,
-                    gold: player.gold,
-                    hp: player.hp,
-                    mp: player.mp,
-                    maxHp: player.maxHp,
-                    maxMp: player.maxMp,
-                    attack: player.attack,
-                    defense: player.defense,
-                    x: player.x,
-                    y: player.y,
-                    titles: player.titles || []
+                    level: gameState.player.level,
+                    exp: gameState.player.exp,
+                    gold: gameState.player.gold,
+                    hp: gameState.player.hp,
+                    mp: gameState.player.mp,
+                    maxHp: gameState.player.maxHp,
+                    maxMp: gameState.player.maxMp,
+                    attack: gameState.player.attack,
+                    defense: gameState.player.defense,
+                    x: gameState.player.x,
+                    y: gameState.player.y,
+                    titles: gameState.player.titles || []
                 },
                 equipment: equipment,
                 inventory: inventory,
@@ -6029,7 +6053,7 @@
             try {
                 localStorage.setItem('dynasty_emberveil_save', JSON.stringify(saveData));
                 console.log("Game saved successfully!");
-                createParticle(player.x, player.y - 40, "💾 Game Saved!", "#00FF00", 2000);
+                createParticle(gameState.player.x, gameState.player.y - 40, "💾 Game Saved!", "#00FF00", 2000);
                 return true;
             } catch (e) {
                 console.error("Save failed:", e);
@@ -6047,18 +6071,18 @@
                 // Restore player data
                 if (saveData.player) {
                     selectedClass = saveData.player.class;
-                    player.level = saveData.player.level;
-                    player.exp = saveData.player.exp;
-                    player.gold = saveData.player.gold;
-                    player.hp = saveData.player.hp;
-                    player.mp = saveData.player.mp;
-                    player.maxHp = saveData.player.maxHp;
-                    player.maxMp = saveData.player.maxMp;
-                    player.attack = saveData.player.attack;
-                    player.defense = saveData.player.defense;
-                    player.x = saveData.player.x;
-                    player.y = saveData.player.y;
-                    player.titles = saveData.player.titles || [];
+                    gameState.player.level = saveData.player.level;
+                    gameState.player.exp = saveData.player.exp;
+                    gameState.player.gold = saveData.player.gold;
+                    gameState.player.hp = saveData.player.hp;
+                    gameState.player.mp = saveData.player.mp;
+                    gameState.player.maxHp = saveData.player.maxHp;
+                    gameState.player.maxMp = saveData.player.maxMp;
+                    gameState.player.attack = saveData.player.attack;
+                    gameState.player.defense = saveData.player.defense;
+                    gameState.player.x = saveData.player.x;
+                    gameState.player.y = saveData.player.y;
+                    gameState.player.titles = saveData.player.titles || [];
                 }
                 
                 // Restore equipment and inventory
@@ -7252,8 +7276,8 @@
                 effect: () => {
                     // Spawn meteors with collectible ore
                     for (let i = 0; i < 20; i++) {
-                        const x = player.x + (Math.random() - 0.5) * 1000;
-                        const y = player.y + (Math.random() - 0.5) * 1000;
+                        const x = gameState.player.x + (Math.random() - 0.5) * 1000;
+                        const y = gameState.player.y + (Math.random() - 0.5) * 1000;
                         gameState.resources.push({
                             type: 'meteorite',
                             x, y,
@@ -7262,7 +7286,7 @@
                             rarity: 'legendary'
                         });
                     }
-                    createParticle(player.x, player.y - 60, "⭐ Meteor Shower! Collect Ore!", "#FFD700", 3000);
+                    createParticle(gameState.player.x, gameState.player.y - 60, "⭐ Meteor Shower! Collect Ore!", "#FFD700", 3000);
                 }
             },
             {
@@ -7273,8 +7297,8 @@
                     // Spawn powerful dragon world boss
                     const dragon = {
                         name: 'World Dragon',
-                        x: player.x + 500,
-                        y: player.y,
+                        x: gameState.player.x + 500,
+                        y: gameState.player.y,
                         hp: 50000,
                         maxHp: 50000,
                         attack: 100,
@@ -7284,7 +7308,7 @@
                         rewards: ['legendary', 'legendary', 'mythic']
                     };
                     gameState.enemies.push(dragon);
-                    createParticle(player.x, player.y - 60, "🐉 WORLD BOSS: Dragon Has Appeared!", "#FF0000", 5000);
+                    createParticle(gameState.player.x, gameState.player.y - 60, "🐉 WORLD BOSS: Dragon Has Appeared!", "#FF0000", 5000);
                 }
             },
             {
@@ -7294,8 +7318,8 @@
                 effect: () => {
                     // Spawn void enemies across the world
                     for (let i = 0; i < 50; i++) {
-                        const x = Math.random() * WORLD_SIZE;
-                        const y = Math.random() * WORLD_SIZE;
+                        const x = Math.random() * gameState.worldSize;
+                        const y = Math.random() * gameState.worldSize;
                         gameState.enemies.push({
                             name: 'Void Invader',
                             x, y,
@@ -7306,7 +7330,7 @@
                             type: 'void'
                         });
                     }
-                    createParticle(player.x, player.y - 60, "⚫ Void Invasion! Defend the Realm!", "#9C27B0", 4000);
+                    createParticle(gameState.player.x, gameState.player.y - 60, "⚫ Void Invasion! Defend the Realm!", "#9C27B0", 4000);
                 }
             },
             {
@@ -7317,8 +7341,8 @@
                     // Spawn special merchant with rare goods
                     gameState.npcs.push({
                         name: 'Goblin Merchant',
-                        x: player.x + 200,
-                        y: player.y,
+                        x: gameState.player.x + 200,
+                        y: gameState.player.y,
                         type: 'special_merchant',
                         items: [
                             { name: 'Rare Mount', cost: 50000 },
@@ -7327,7 +7351,7 @@
                         ],
                         despawnTime: Date.now() + 180000
                     });
-                    createParticle(player.x, player.y - 60, "💰 Goblin Merchant Appeared!", "#4CAF50", 3000);
+                    createParticle(gameState.player.x, gameState.player.y - 60, "💰 Goblin Merchant Appeared!", "#4CAF50", 3000);
                 }
             }
         ];
