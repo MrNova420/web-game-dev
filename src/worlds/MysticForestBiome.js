@@ -72,7 +72,6 @@ export class MysticForestBiome {
             await this.plantForest();
             await this.addRocks();
             await this.addGroundCover();
-            ]);
             
             // Build special locations
             await this.buildAncientTree();

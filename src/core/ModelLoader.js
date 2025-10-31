@@ -243,15 +243,6 @@ export class ModelLoader {
         console.log(`✅ Preloaded ${loaded.length}/${commonModels.length} common models`);
         return loaded.length;
     }
-                return null;
-            }
-            
-        } catch (error) {
-            // Suppress error spam - models will use fallback
-            // console.error(`❌ Failed to load model ${modelPath}:`, error.message);
-            return null;
-        }
-    }
     
     /**
      * Load a model from the library with anime shader
