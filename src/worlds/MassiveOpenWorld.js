@@ -18,6 +18,7 @@
 
 import * as THREE from 'three';
 import { assetRegistry } from '../core/AssetRegistry.js';
+import { PreBuiltWorldData } from '../data/PreBuiltWorldData.js';
 import { MysticForestBiome } from './MysticForestBiome.js';
 import { CrimsonPeaksBiome } from './CrimsonPeaksBiome.js';
 import { AzureDepthsBiome } from './AzureDepthsBiome.js';
