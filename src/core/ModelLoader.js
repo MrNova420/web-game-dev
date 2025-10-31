@@ -196,11 +196,12 @@ export class ModelLoader {
         }
         
         try {
-            console.log(`📦 Loading model from path: ${modelPath}`);
+            // Suppress spam - only log first load
+            // console.log(`📦 Loading model from path: ${modelPath}`);
             const gltf = await this.loadGLTF(modelPath);
             
             if (gltf && gltf.scene) {
-                console.log(`✅ Successfully loaded: ${modelPath}`);
+                // console.log(`✅ Successfully loaded: ${modelPath}`);
                 
                 // Cache the model
                 this.modelCache.set(modelPath, gltf.scene);
@@ -211,7 +212,8 @@ export class ModelLoader {
             }
             
         } catch (error) {
-            console.error(`❌ Failed to load model ${modelPath}:`, error.message);
+            // Suppress error spam - models will use fallback
+            // console.error(`❌ Failed to load model ${modelPath}:`, error.message);
             return null;
         }
     }
@@ -320,10 +322,10 @@ export class ModelLoader {
      */
     loadGLTF(url) {
         return new Promise((resolve, reject) => {
-            // INCREASED timeout to 30 seconds - allow real models to load (NO FALLBACK!)
+            // Reduced timeout to 5 seconds - fail fast and use fallbacks
             const timeout = setTimeout(() => {
-                reject(new Error('Model loading timeout - external model failed to load'));
-            }, 30000);
+                reject(new Error('Model loading timeout - using fallback'));
+            }, 5000);
             
             this.loader.load(
                 url,
@@ -332,10 +334,11 @@ export class ModelLoader {
                     resolve(gltf);
                 },
                 (progress) => {
-                    if (progress.total > 0) {
-                        const percent = (progress.loaded / progress.total) * 100;
-                        console.log(`Loading model: ${percent.toFixed(0)}%`);
-                    }
+                    // Suppress progress logs to reduce console spam
+                    // if (progress.total > 0) {
+                    //     const percent = (progress.loaded / progress.total) * 100;
+                    //     console.log(`Loading model: ${percent.toFixed(0)}%`);
+                    // }
                 },
                 (error) => {
                     clearTimeout(timeout);

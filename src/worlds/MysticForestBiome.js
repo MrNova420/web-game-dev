@@ -166,17 +166,23 @@ export class MysticForestBiome {
         const treeCount = 150; // Dense forest
         const loadedTrees = [];
         
-        // Load tree models in batches
-        const batchSize = 10;
-        for (let i = 0; i < treeCount; i += batchSize) {
-            const batch = [];
-            
-            for (let j = 0; j < batchSize && i + j < treeCount; j++) {
-                batch.push(this.placeTree(i + j));
+        // Load tree models ONE AT A TIME for reliable loading
+        // This prevents overwhelming the browser with 150 simultaneous requests
+        for (let i = 0; i < treeCount; i++) {
+            try {
+                const tree = await this.placeTree(i);
+                if (tree) {
+                    loadedTrees.push(tree);
+                }
+                
+                // Progress feedback every 25 trees
+                if ((i + 1) % 25 === 0) {
+                    console.log(`   🌲 Planted ${i + 1}/${treeCount} trees...`);
+                }
+            } catch (error) {
+                // Continue even if one tree fails
+                this.createFallbackTree(i);
             }
-            
-            const results = await Promise.allSettled(batch);
-            loadedTrees.push(...results.filter(r => r.status === 'fulfilled'));
         }
         
         console.log(`   ✅ Planted ${this.trees.length} trees`);
