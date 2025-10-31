@@ -20,6 +20,9 @@ import * as THREE from 'three';
 import { assetRegistry } from '../core/AssetRegistry.js';
 import { MysticForestBiome } from './MysticForestBiome.js';
 import { CrimsonPeaksBiome } from './CrimsonPeaksBiome.js';
+import { AzureDepthsBiome } from './AzureDepthsBiome.js';
+import { ShadowmoonValleyBiome } from './ShadowmoonValleyBiome.js';
+import { CrystalPeaksBiome } from './CrystalPeaksBiome.js';
 
 export class MassiveOpenWorld {
     constructor(scene, modelLoader) {
@@ -633,6 +636,44 @@ export class MassiveOpenWorld {
         this.loadedBiomes.set('crimson_peaks', crimsonPeaks);
         
         console.log(`   ✅ Crimson Peaks loaded at (${crimsonData.pos[0]}, ${crimsonData.pos[1]})\n`);
+        
+        // Build Azure Depths (Underwater Zone)
+        console.log('\n🌊 Building Azure Depths Biome...');
+        const azureData = this.biomeGrid.find(b => b.id === 'azure_depths' || b.name.includes('Azure'));
+        if (azureData || true) { // Build even if not in grid yet
+            const azureDepths = new AzureDepthsBiome(this.scene, this.modelLoader);
+            await azureDepths.build();
+            this.loadedBiomes.set('azure_depths', azureDepths);
+            console.log(`   ✅ Azure Depths loaded\n`);
+        }
+        
+        // Build Shadowmoon Valley (Dark Zone)
+        console.log('\n🌑 Building Shadowmoon Valley Biome...');
+        const shadowData = this.biomeGrid.find(b => b.id === 'shadowmoon_valley');
+        if (shadowData) {
+            const shadowValley = new ShadowmoonValleyBiome(this.scene, this.modelLoader);
+            shadowValley.center = {
+                x: shadowData.pos[0],
+                z: shadowData.pos[1]
+            };
+            await shadowValley.build();
+            this.loadedBiomes.set('shadowmoon_valley', shadowValley);
+            console.log(`   ✅ Shadowmoon Valley loaded at (${shadowData.pos[0]}, ${shadowData.pos[1]})\n`);
+        }
+        
+        // Build Crystal Peaks (Magical Zone)
+        console.log('\n💎 Building Crystal Peaks Biome...');
+        const crystalData = this.biomeGrid.find(b => b.id === 'crystal_peaks');
+        if (crystalData) {
+            const crystalPeaks = new CrystalPeaksBiome(this.scene, this.modelLoader);
+            crystalPeaks.center = {
+                x: crystalData.pos[0],
+                z: crystalData.pos[1]
+            };
+            await crystalPeaks.build();
+            this.loadedBiomes.set('crystal_peaks', crystalPeaks);
+            console.log(`   ✅ Crystal Peaks loaded at (${crystalData.pos[0]}, ${crystalData.pos[1]})\n`);
+        }
     }
     
     /**
