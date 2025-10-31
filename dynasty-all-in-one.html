@@ -690,11 +690,17 @@
                 description: 'Towering mountains with volcanic activity',
                 weather: ['clear', 'storm'],
                 creatures: [
-                    { name: 'Mountain Troll', emoji: '👹', hp: 200, attack: 25, exp: 40, gold: 25 },
-                    { name: 'Fire Elemental', emoji: '🔥', hp: 150, attack: 30, exp: 50, gold: 30 },
-                    { name: 'Young Dragon', emoji: '🐉', hp: 300, attack: 40, exp: 100, gold: 80 },
-                    { name: 'Mountain Goat', emoji: '🐐', hp: 60, attack: 10, exp: 12, gold: 5 },
-                    { name: 'Eagle', emoji: '🦅', hp: 80, attack: 15, exp: 20, gold: 10 }
+                    { name: 'Mountain Troll', emoji: '👹', hp: 200, attack: 25, exp: 40, gold: 25, type: 'tank', speed: 0.9 },
+                    { name: 'Fire Elemental', emoji: '🔥', hp: 150, attack: 30, exp: 50, gold: 30, type: 'mage', speed: 1.2 },
+                    { name: 'Young Dragon', emoji: '🐉', hp: 300, attack: 40, exp: 100, gold: 80, type: 'elite', speed: 1.4 },
+                    { name: 'Mountain Goat', emoji: '🐐', hp: 60, attack: 10, exp: 12, gold: 5, type: 'peaceful', speed: 1.0 },
+                    { name: 'Eagle', emoji: '🦅', hp: 80, attack: 15, exp: 20, gold: 10, type: 'flying', speed: 1.8 },
+                    // NEW: Added 5 more enemy types
+                    { name: 'Frost Giant', emoji: '❄️👹', hp: 250, attack: 28, exp: 45, gold: 28, type: 'bruiser', speed: 0.8 },
+                    { name: 'Lava Lizard', emoji: '🦎🔥', hp: 180, attack: 26, exp: 38, gold: 22, type: 'fast', speed: 1.3 },
+                    { name: 'Stone Sentinel', emoji: '🗿', hp: 280, attack: 24, exp: 48, gold: 30, type: 'defender', speed: 0.7 },
+                    { name: 'Magma Elemental', emoji: '🌋', hp: 160, attack: 32, exp: 52, gold: 32, type: 'exploder', speed: 1.0 },
+                    { name: 'Wyvern', emoji: '🐲', hp: 220, attack: 35, exp: 70, gold: 50, type: 'flying_elite', speed: 1.6 }
                 ],
                 resources: [
                     { type: 'iron', emoji: '⛏️', amount: 3, rarity: 'uncommon' },
@@ -723,11 +729,17 @@
                 weather: ['clear'],
                 underwater: true,
                 creatures: [
-                    { name: 'Merfolk Warrior', emoji: '🧜', hp: 250, attack: 28, exp: 60, gold: 35 },
-                    { name: 'Sea Serpent', emoji: '🐍', hp: 400, attack: 35, exp: 80, gold: 50 },
-                    { name: 'Kraken Spawn', emoji: '🦑', hp: 500, attack: 45, exp: 120, gold: 80 },
-                    { name: 'Fish', emoji: '🐟', hp: 30, attack: 5, exp: 8, gold: 3 },
-                    { name: 'Crab', emoji: '🦀', hp: 100, attack: 15, exp: 25, gold: 12 }
+                    { name: 'Merfolk Warrior', emoji: '🧜', hp: 250, attack: 28, exp: 60, gold: 35, type: 'warrior', speed: 1.2 },
+                    { name: 'Sea Serpent', emoji: '🐍', hp: 400, attack: 35, exp: 80, gold: 50, type: 'serpent', speed: 1.4 },
+                    { name: 'Kraken Spawn', emoji: '🦑', hp: 500, attack: 45, exp: 120, gold: 80, type: 'elite', speed: 1.1 },
+                    { name: 'Fish', emoji: '🐟', hp: 30, attack: 5, exp: 8, gold: 3, type: 'critter', speed: 1.5 },
+                    { name: 'Crab', emoji: '🦀', hp: 100, attack: 15, exp: 25, gold: 12, type: 'armored', speed: 0.8 },
+                    // NEW: Added 5 more enemy types
+                    { name: 'Electric Eel', emoji: '⚡🐍', hp: 180, attack: 30, exp: 55, gold: 30, type: 'shocker', speed: 1.6 },
+                    { name: 'Shark', emoji: '🦈', hp: 320, attack: 38, exp: 75, gold: 45, type: 'predator', speed: 1.8 },
+                    { name: 'Jellyfish', emoji: '🪼', hp: 140, attack: 24, exp: 45, gold: 25, type: 'poisoner', speed: 0.9 },
+                    { name: 'Sea Witch', emoji: '🧙‍♀️🌊', hp: 220, attack: 42, exp: 90, gold: 60, type: 'caster', speed: 1.3 },
+                    { name: 'Leviathan Hatchling', emoji: '🐋', hp: 450, attack: 40, exp: 110, gold: 75, type: 'boss_spawn', speed: 1.0 }
                 ],
                 resources: [
                     { type: 'pearls', emoji: '🦪', amount: 1, rarity: 'rare' },
@@ -755,11 +767,17 @@
                 description: 'Perpetual twilight with corrupted landscape',
                 weather: ['fog', 'storm'],
                 creatures: [
-                    { name: 'Shadow Demon', emoji: '👿', hp: 350, attack: 40, exp: 90, gold: 60 },
-                    { name: 'Corrupted Beast', emoji: '🐺💀', hp: 300, attack: 35, exp: 75, gold: 45 },
-                    { name: 'Undead Knight', emoji: '☠️', hp: 400, attack: 45, exp: 110, gold: 70 },
-                    { name: 'Wraith', emoji: '👻', hp: 200, attack: 30, exp: 60, gold: 40 },
-                    { name: 'Bat Swarm', emoji: '🦇', hp: 150, attack: 25, exp: 50, gold: 30 }
+                    { name: 'Shadow Demon', emoji: '👿', hp: 350, attack: 40, exp: 90, gold: 60, type: 'demon', speed: 1.3 },
+                    { name: 'Corrupted Beast', emoji: '🐺💀', hp: 300, attack: 35, exp: 75, gold: 45, type: 'beast', speed: 1.4 },
+                    { name: 'Undead Knight', emoji: '☠️', hp: 400, attack: 45, exp: 110, gold: 70, type: 'undead', speed: 1.0 },
+                    { name: 'Wraith', emoji: '👻', hp: 200, attack: 30, exp: 60, gold: 40, type: 'spirit', speed: 1.5 },
+                    { name: 'Bat Swarm', emoji: '🦇', hp: 150, attack: 25, exp: 50, gold: 30, type: 'swarm', speed: 1.7 },
+                    // NEW: Added 5 more
+                    { name: 'Vampire Lord', emoji: '🧛', hp: 450, attack: 50, exp: 130, gold: 85, type: 'elite_vampire', speed: 1.4 },
+                    { name: 'Dark Cultist', emoji: '🧙‍♂️💀', hp: 280, attack: 42, exp: 95, gold: 65, type: 'caster', speed: 1.1 },
+                    { name: 'Ghoul', emoji: '🧟', hp: 320, attack: 38, exp: 85, gold: 55, type: 'undead_fast', speed: 1.3 },
+                    { name: 'Nightmare Horse', emoji: '🐴💀', hp: 380, attack: 44, exp: 100, gold: 70, type: 'mount', speed: 1.6 },
+                    { name: 'Banshee', emoji: '👻💀', hp: 250, attack: 48, exp: 120, gold: 80, type: 'screamer', speed: 1.5 }
                 ],
                 resources: [
                     { type: 'dark_crystal', emoji: '🔮', amount: 2, rarity: 'rare' },
@@ -788,11 +806,17 @@
                 weather: ['clear'],
                 floating: true,
                 creatures: [
-                    { name: 'Arcane Golem', emoji: '🗿', hp: 450, attack: 50, exp: 130, gold: 85 },
-                    { name: 'Spell Wraith', emoji: '👻', hp: 300, attack: 55, exp: 140, gold: 90 },
-                    { name: 'Crystal Dragon', emoji: '🐉💎', hp: 600, attack: 65, exp: 200, gold: 150 },
-                    { name: 'Mana Sprite', emoji: '✨', hp: 150, attack: 35, exp: 70, gold: 45 },
-                    { name: 'Arcane Elemental', emoji: '🔮', hp: 350, attack: 48, exp: 120, gold: 80 }
+                    { name: 'Arcane Golem', emoji: '🗿', hp: 450, attack: 50, exp: 130, gold: 85, type: 'golem', speed: 0.8 },
+                    { name: 'Spell Wraith', emoji: '👻', hp: 300, attack: 55, exp: 140, gold: 90, type: 'caster_spirit', speed: 1.4 },
+                    { name: 'Crystal Dragon', emoji: '🐉💎', hp: 600, attack: 65, exp: 200, gold: 150, type: 'dragon_elite', speed: 1.3 },
+                    { name: 'Mana Sprite', emoji: '✨', hp: 150, attack: 35, exp: 70, gold: 45, type: 'sprite', speed: 1.8 },
+                    { name: 'Arcane Elemental', emoji: '🔮', hp: 350, attack: 48, exp: 120, gold: 80, type: 'elemental', speed: 1.2 },
+                    // NEW: Added 5 more
+                    { name: 'Prism Guardian', emoji: '💎🗿', hp: 500, attack: 52, exp: 145, gold: 95, type: 'crystal_tank', speed: 0.7 },
+                    { name: 'Void Mage', emoji: '🌀🧙', hp: 320, attack: 60, exp: 155, gold: 100, type: 'void_caster', speed: 1.1 },
+                    { name: 'Lightning Wisp', emoji: '⚡✨', hp: 180, attack: 45, exp: 95, gold: 60, type: 'fast_shocker', speed: 2.0 },
+                    { name: 'Floating Eye', emoji: '👁️', hp: 250, attack: 58, exp: 150, gold: 95, type: 'observer', speed: 1.5 },
+                    { name: 'Arcane Construct', emoji: '🤖💎', hp: 480, attack: 54, exp: 160, gold: 110, type: 'construct', speed: 0.9 }
                 ],
                 resources: [
                     { type: 'mana_crystal', emoji: '💎', amount: 2, rarity: 'rare' },
@@ -820,11 +844,17 @@
                 description: 'Rolling hills with scattered villages',
                 weather: ['clear', 'rain'],
                 creatures: [
-                    { name: 'Centaur', emoji: '🏹', hp: 180, attack: 22, exp: 35, gold: 20 },
-                    { name: 'Griffin', emoji: '🦅', hp: 220, attack: 28, exp: 50, gold: 30 },
-                    { name: 'Wild Horse', emoji: '🐴', hp: 120, attack: 15, exp: 20, gold: 12 },
-                    { name: 'Cattle', emoji: '🐄', hp: 100, attack: 10, exp: 15, gold: 8 },
-                    { name: 'Bandit', emoji: '🗡️', hp: 150, attack: 20, exp: 30, gold: 25 }
+                    { name: 'Centaur', emoji: '🏹', hp: 180, attack: 22, exp: 35, gold: 20, type: 'archer', speed: 1.4 },
+                    { name: 'Griffin', emoji: '🦅', hp: 220, attack: 28, exp: 50, gold: 30, type: 'flying_elite', speed: 1.7 },
+                    { name: 'Wild Horse', emoji: '🐴', hp: 120, attack: 15, exp: 20, gold: 12, type: 'mount', speed: 1.8 },
+                    { name: 'Cattle', emoji: '🐄', hp: 100, attack: 10, exp: 15, gold: 8, type: 'peaceful', speed: 0.9 },
+                    { name: 'Bandit', emoji: '🗡️', hp: 150, attack: 20, exp: 30, gold: 25, type: 'human', speed: 1.2 },
+                    // NEW: Added 5 more
+                    { name: 'Plains Orc', emoji: '👹', hp: 200, attack: 26, exp: 45, gold: 28, type: 'warrior', speed: 1.1 },
+                    { name: 'Wind Rider', emoji: '💨🏇', hp: 180, attack: 24, exp: 40, gold: 24, type: 'mounted', speed: 1.9 },
+                    { name: 'Grass Elemental', emoji: '🌿', hp: 140, attack: 18, exp: 32, gold: 20, type: 'nature', speed: 1.3 },
+                    { name: 'Nomad Chief', emoji: '👑🏇', hp: 250, attack: 32, exp: 60, gold: 40, type: 'boss', speed: 1.6 },
+                    { name: 'Thunder Bird', emoji: '⚡🦅', hp: 280, attack: 35, exp: 70, gold: 50, type: 'legendary_bird', speed: 2.0 }
                 ],
                 resources: [
                     { type: 'wheat', emoji: '🌾', amount: 5, rarity: 'common' },
@@ -852,11 +882,17 @@
                 description: 'Endless snow and ice with ancient ruins',
                 weather: ['snow', 'storm'],
                 creatures: [
-                    { name: 'Frost Giant', emoji: '❄️👹', hp: 550, attack: 58, exp: 160, gold: 100 },
-                    { name: 'Ice Dragon', emoji: '🐉❄️', hp: 700, attack: 70, exp: 220, gold: 170 },
-                    { name: 'Yeti', emoji: '🦍', hp: 450, attack: 52, exp: 145, gold: 95 },
-                    { name: 'Polar Bear', emoji: '🐻‍❄️', hp: 350, attack: 45, exp: 110, gold: 70 },
-                    { name: 'Ice Elemental', emoji: '❄️', hp: 400, attack: 50, exp: 130, gold: 85 }
+                    { name: 'Frost Giant', emoji: '❄️👹', hp: 550, attack: 58, exp: 160, gold: 100, type: 'giant', speed: 0.9 },
+                    { name: 'Ice Dragon', emoji: '🐉❄️', hp: 700, attack: 70, exp: 220, gold: 170, type: 'dragon', speed: 1.3 },
+                    { name: 'Yeti', emoji: '🦍', hp: 450, attack: 52, exp: 145, gold: 95, type: 'beast', speed: 1.1 },
+                    { name: 'Polar Bear', emoji: '🐻‍❄️', hp: 350, attack: 45, exp: 110, gold: 70, type: 'predator', speed: 1.2 },
+                    { name: 'Ice Elemental', emoji: '❄️', hp: 400, attack: 50, exp: 130, gold: 85, type: 'elemental', speed: 1.0 },
+                    // NEW: Added 5 more
+                    { name: 'Frost Lich', emoji: '💀❄️', hp: 480, attack: 65, exp: 190, gold: 130, type: 'undead_caster', speed: 1.1 },
+                    { name: 'Snow Leopard', emoji: '🐆', hp: 380, attack: 55, exp: 155, gold: 100, type: 'fast_predator', speed: 1.7 },
+                    { name: 'Ice Golem', emoji: '🗿❄️', hp: 650, attack: 60, exp: 175, gold: 120, type: 'tank', speed: 0.7 },
+                    { name: 'Frost Wraith', emoji: '👻❄️', hp: 320, attack: 62, exp: 170, gold: 115, type: 'spirit', speed: 1.4 },
+                    { name: 'Blizzard Drake', emoji: '🐲❄️', hp: 580, attack: 68, exp: 200, gold: 150, type: 'drake', speed: 1.3 }
                 ],
                 resources: [
                     { type: 'ice_crystal', emoji: '❄️💎', amount: 2, rarity: 'rare' },
@@ -884,11 +920,17 @@
                 description: 'Vast desert with sandstorms and oases',
                 weather: ['clear', 'sandstorm'],
                 creatures: [
-                    { name: 'Sand Worm', emoji: '🪱', hp: 600, attack: 62, exp: 180, gold: 120 },
-                    { name: 'Scorpion', emoji: '🦂', hp: 400, attack: 55, exp: 150, gold: 95 },
-                    { name: 'Mummy', emoji: '🧟', hp: 500, attack: 58, exp: 165, gold: 110 },
-                    { name: 'Jackal', emoji: '🦊', hp: 300, attack: 45, exp: 120, gold: 75 },
-                    { name: 'Sand Elemental', emoji: '🌪️', hp: 450, attack: 52, exp: 140, gold: 90 }
+                    { name: 'Sand Worm', emoji: '🪱', hp: 600, attack: 62, exp: 180, gold: 120, type: 'worm', speed: 1.0 },
+                    { name: 'Scorpion', emoji: '🦂', hp: 400, attack: 55, exp: 150, gold: 95, type: 'poisoner', speed: 1.2 },
+                    { name: 'Mummy', emoji: '🧟', hp: 500, attack: 58, exp: 165, gold: 110, type: 'undead', speed: 0.9 },
+                    { name: 'Jackal', emoji: '🦊', hp: 300, attack: 45, exp: 120, gold: 75, type: 'scavenger', speed: 1.5 },
+                    { name: 'Sand Elemental', emoji: '🌪️', hp: 450, attack: 52, exp: 140, gold: 90, type: 'elemental', speed: 1.3 },
+                    // NEW: Added 5 more
+                    { name: 'Desert Sphinx', emoji: '🦁', hp: 650, attack: 70, exp: 210, gold: 150, type: 'guardian', speed: 1.1 },
+                    { name: 'Fire Snake', emoji: '🐍🔥', hp: 380, attack: 60, exp: 175, gold: 115, type: 'serpent', speed: 1.4 },
+                    { name: 'Anubis Warrior', emoji: '🐕', hp: 550, attack: 65, exp: 195, gold: 135, type: 'divine', speed: 1.2 },
+                    { name: 'Dust Devil', emoji: '🌪️💨', hp: 320, attack: 58, exp: 160, gold: 105, type: 'storm', speed: 1.8 },
+                    { name: 'Pharaoh Lich', emoji: '👑💀', hp: 700, attack: 75, exp: 230, gold: 170, type: 'boss_undead', speed: 1.0 }
                 ],
                 resources: [
                     { type: 'ancient_relic', emoji: '🏺', amount: 1, rarity: 'epic' },
@@ -916,11 +958,17 @@
                 description: 'Murky swamps with poisonous plants',
                 weather: ['fog', 'rain'],
                 creatures: [
-                    { name: 'Swamp Dragon', emoji: '🐉💧', hp: 480, attack: 48, exp: 135, gold: 88 },
-                    { name: 'Plague Rat', emoji: '🐀', hp: 200, attack: 32, exp: 65, gold: 42 },
-                    { name: 'Corrupt Ent', emoji: '🌳', hp: 400, attack: 42, exp: 105, gold: 68 },
-                    { name: 'Giant Frog', emoji: '🐸', hp: 250, attack: 35, exp: 75, gold: 48 },
-                    { name: 'Lizardfolk', emoji: '🦎', hp: 300, attack: 38, exp: 85, gold: 55 }
+                    { name: 'Swamp Dragon', emoji: '🐉💧', hp: 480, attack: 48, exp: 135, gold: 88, type: 'dragon', speed: 1.2 },
+                    { name: 'Plague Rat', emoji: '🐀', hp: 200, attack: 32, exp: 65, gold: 42, type: 'swarm', speed: 1.5 },
+                    { name: 'Corrupt Ent', emoji: '🌳', hp: 400, attack: 42, exp: 105, gold: 68, type: 'corrupted', speed: 0.8 },
+                    { name: 'Giant Frog', emoji: '🐸', hp: 250, attack: 35, exp: 75, gold: 48, type: 'amphibian', speed: 1.1 },
+                    { name: 'Lizardfolk', emoji: '🦎', hp: 300, attack: 38, exp: 85, gold: 55, type: 'tribal', speed: 1.2 },
+                    // NEW: Added 5 more
+                    { name: 'Bog Witch', emoji: '🧙‍♀️', hp: 350, attack: 52, exp: 145, gold: 95, type: 'caster', speed: 1.0 },
+                    { name: 'Swamp Hydra', emoji: '🐍🐍🐍', hp: 550, attack: 55, exp: 160, gold: 110, type: 'multi_head', speed: 0.9 },
+                    { name: 'Poison Sprite', emoji: '🧚‍♀️☠️', hp: 220, attack: 44, exp: 115, gold: 75, type: 'poisoner', speed: 1.7 },
+                    { name: 'Mud Golem', emoji: '💩🗿', hp: 450, attack: 40, exp: 120, gold: 80, type: 'tank', speed: 0.6 },
+                    { name: 'Crocodile King', emoji: '🐊👑', hp: 500, attack: 50, exp: 150, gold: 100, type: 'apex', speed: 1.3 }
                 ],
                 resources: [
                     { type: 'alchemical_ingredient', emoji: '🧪', amount: 3, rarity: 'rare' },
@@ -949,11 +997,17 @@
                 weather: ['clear'],
                 floating: true,
                 creatures: [
-                    { name: 'Griffin Guardian', emoji: '🦅', hp: 650, attack: 68, exp: 200, gold: 135 },
-                    { name: 'Phoenix', emoji: '🔥🦅', hp: 700, attack: 75, exp: 230, gold: 160 },
-                    { name: 'Cloud Giant', emoji: '☁️👹', hp: 800, attack: 72, exp: 215, gold: 145 },
-                    { name: 'Sky Serpent', emoji: '🐍', hp: 550, attack: 65, exp: 185, gold: 125 },
-                    { name: 'Storm Eagle', emoji: '⚡🦅', hp: 500, attack: 62, exp: 175, gold: 115 }
+                    { name: 'Griffin Guardian', emoji: '🦅', hp: 650, attack: 68, exp: 200, gold: 135, type: 'guardian', speed: 1.5 },
+                    { name: 'Phoenix', emoji: '🔥🦅', hp: 700, attack: 75, exp: 230, gold: 160, type: 'legendary', speed: 1.6 },
+                    { name: 'Cloud Giant', emoji: '☁️👹', hp: 800, attack: 72, exp: 215, gold: 145, type: 'giant', speed: 0.9 },
+                    { name: 'Sky Serpent', emoji: '🐍', hp: 550, attack: 65, exp: 185, gold: 125, type: 'serpent', speed: 1.4 },
+                    { name: 'Storm Eagle', emoji: '⚡🦅', hp: 500, attack: 62, exp: 175, gold: 115, type: 'flying', speed: 1.9 },
+                    // NEW: Added 5 more
+                    { name: 'Archangel', emoji: '👼⚔️', hp: 750, attack: 80, exp: 250, gold: 175, type: 'divine', speed: 1.5 },
+                    { name: 'Sky Whale', emoji: '🐋☁️', hp: 900, attack: 70, exp: 240, gold: 165, type: 'massive', speed: 0.8 },
+                    { name: 'Lightning Drake', emoji: '⚡🐉', hp: 680, attack: 78, exp: 235, gold: 155, type: 'dragon_elite', speed: 1.7 },
+                    { name: 'Celestial Knight', emoji: '⚔️✨', hp: 720, attack: 74, exp: 220, gold: 150, type: 'paladin', speed: 1.3 },
+                    { name: 'Wind Elemental Lord', emoji: '💨👑', hp: 600, attack: 76, exp: 225, gold: 145, type: 'elemental_boss', speed: 1.8 }
                 ],
                 resources: [
                     { type: 'star_metal', emoji: '⭐', amount: 1, rarity: 'legendary' },
@@ -982,11 +1036,17 @@
                 weather: ['clear'],
                 volcanic: true,
                 creatures: [
-                    { name: 'Lava Golem', emoji: '🌋🗿', hp: 850, attack: 78, exp: 245, gold: 175 },
-                    { name: 'Fire Demon', emoji: '😈🔥', hp: 750, attack: 82, exp: 260, gold: 185 },
-                    { name: 'Hell Hound', emoji: '🐺🔥', hp: 600, attack: 72, exp: 220, gold: 150 },
-                    { name: 'Salamander', emoji: '🦎🔥', hp: 550, attack: 68, exp: 200, gold: 135 },
-                    { name: 'Magma Elemental', emoji: '🌋', hp: 700, attack: 75, exp: 230, gold: 160 }
+                    { name: 'Lava Golem', emoji: '🌋🗿', hp: 850, attack: 78, exp: 245, gold: 175, type: 'golem', speed: 0.7 },
+                    { name: 'Fire Demon', emoji: '😈🔥', hp: 750, attack: 82, exp: 260, gold: 185, type: 'demon', speed: 1.2 },
+                    { name: 'Hell Hound', emoji: '🐺🔥', hp: 600, attack: 72, exp: 220, gold: 150, type: 'beast', speed: 1.6 },
+                    { name: 'Salamander', emoji: '🦎🔥', hp: 550, attack: 68, exp: 200, gold: 135, type: 'reptile', speed: 1.3 },
+                    { name: 'Magma Elemental', emoji: '🌋', hp: 700, attack: 75, exp: 230, gold: 160, type: 'elemental', speed: 1.1 },
+                    // NEW: Added 5 more
+                    { name: 'Inferno Dragon', emoji: '🐉🔥', hp: 950, attack: 92, exp: 290, gold: 210, type: 'dragon_elite', speed: 1.4 },
+                    { name: 'Ash Wraith', emoji: '👻🌋', hp: 680, attack: 80, exp: 250, gold: 180, type: 'spirit', speed: 1.5 },
+                    { name: 'Molten Giant', emoji: '🔥👹', hp: 1000, attack: 85, exp: 280, gold: 200, type: 'giant', speed: 0.8 },
+                    { name: 'Lava Serpent', emoji: '🐍🔥', hp: 720, attack: 88, exp: 270, gold: 190, type: 'serpent', speed: 1.4 },
+                    { name: 'Volcano Lord', emoji: '🌋👑', hp: 1100, attack: 95, exp: 320, gold: 240, type: 'boss', speed: 1.0 }
                 ],
                 resources: [
                     { type: 'magma_core', emoji: '🔥💎', amount: 1, rarity: 'legendary' },
@@ -1015,11 +1075,17 @@
                 weather: ['storm'],
                 voidRealm: true,
                 creatures: [
-                    { name: 'Void Lord', emoji: '👁️', hp: 1000, attack: 88, exp: 300, gold: 220 },
-                    { name: 'Chaos Beast', emoji: '🌀👾', hp: 900, attack: 85, exp: 280, gold: 200 },
-                    { name: 'Reality Warper', emoji: '🌀🔮', hp: 850, attack: 90, exp: 310, gold: 230 },
-                    { name: 'Void Dragon', emoji: '🐉🌀', hp: 1200, attack: 95, exp: 350, gold: 260 },
-                    { name: 'Chaos Elemental', emoji: '🌪️', hp: 800, attack: 82, exp: 270, gold: 190 }
+                    { name: 'Void Lord', emoji: '👁️', hp: 1000, attack: 88, exp: 300, gold: 220, type: 'void_elite', speed: 1.2 },
+                    { name: 'Chaos Beast', emoji: '🌀👾', hp: 900, attack: 85, exp: 280, gold: 200, type: 'chaos', speed: 1.3 },
+                    { name: 'Reality Warper', emoji: '🌀🔮', hp: 850, attack: 90, exp: 310, gold: 230, type: 'caster', speed: 1.1 },
+                    { name: 'Void Dragon', emoji: '🐉🌀', hp: 1200, attack: 95, exp: 350, gold: 260, type: 'dragon_void', speed: 1.4 },
+                    { name: 'Chaos Elemental', emoji: '🌪️', hp: 800, attack: 82, exp: 270, gold: 190, type: 'elemental', speed: 1.5 },
+                    // NEW: Added 5 more - ULTIMATE END GAME ENEMIES
+                    { name: 'Eldritch Horror', emoji: '🐙💀', hp: 1300, attack: 100, exp: 380, gold: 280, type: 'cosmic_horror', speed: 1.1 },
+                    { name: 'Dimensional Shredder', emoji: '🌀⚔️', hp: 1100, attack: 98, exp: 360, gold: 270, type: 'destroyer', speed: 1.6 },
+                    { name: 'Void Titan', emoji: '🗿🌀', hp: 1400, attack: 92, exp: 340, gold: 250, type: 'titan', speed: 0.9 },
+                    { name: 'Chaos Phoenix', emoji: '🔥🌀', hp: 1000, attack: 105, exp: 400, gold: 300, type: 'legendary', speed: 1.7 },
+                    { name: 'Reality Ender', emoji: '💀🌀', hp: 1500, attack: 110, exp: 450, gold: 350, type: 'apex_boss', speed: 1.3 }
                 ],
                 resources: [
                     { type: 'void_crystal', emoji: '🌀💎', amount: 1, rarity: 'mythic' },
@@ -1116,11 +1182,35 @@
 
         // Boss data from documentation
         const BOSSES = [
-            { name: 'Smoke Dragon', emoji: '🐉', biome: 0, hp: 500, attack: 40, gold: 100, exp: 200 },
-            { name: 'Fungal Empress', emoji: '🍄👑', biome: 1, hp: 800, attack: 50, gold: 200, exp: 350 },
-            { name: 'Corrupted Seraph', emoji: '😇💀', biome: 3, hp: 1200, attack: 65, gold: 300, exp: 500 },
-            { name: 'Void Navigator', emoji: '🌀👤', biome: 11, hp: 2000, attack: 85, gold: 500, exp: 800 },
-            { name: 'Last God-King', emoji: '👑💀', biome: 11, hp: 5000, attack: 120, gold: 1000, exp: 2000 }
+            // Early Game Bosses (Levels 1-20)
+            { name: 'Smoke Dragon', emoji: '🐉', biome: 0, hp: 500, attack: 40, defense: 10, gold: 100, exp: 200, level: 10 },
+            { name: 'Forest Guardian', emoji: '🌳👹', biome: 0, hp: 450, attack: 35, defense: 15, gold: 90, exp: 180, level: 8 },
+            { name: 'Fungal Empress', emoji: '🍄👑', biome: 1, hp: 800, attack: 50, defense: 12, gold: 200, exp: 350, level: 15 },
+            { name: 'Crystal Golem', emoji: '💎🗿', biome: 1, hp: 900, attack: 45, defense: 30, gold: 180, exp: 300, level: 18 },
+            
+            // Mid Game Bosses (Levels 21-40)
+            { name: 'Crimson Drake', emoji: '🐲🔴', biome: 2, hp: 1200, attack: 60, defense: 20, gold: 300, exp: 500, level: 25 },
+            { name: 'Ice Titan', emoji: '❄️🗿', biome: 6, hp: 1400, attack: 65, defense: 35, gold: 350, exp: 550, level: 28 },
+            { name: 'Corrupted Seraph', emoji: '😇💀', biome: 3, hp: 1500, attack: 70, defense: 18, gold: 400, exp: 600, level: 30 },
+            { name: 'Shadow Reaper', emoji: '💀🌑', biome: 3, hp: 1600, attack: 75, defense: 15, gold: 450, exp: 650, level: 33 },
+            { name: 'Thunder God', emoji: '⚡👿', biome: 9, hp: 1800, attack: 80, defense: 25, gold: 500, exp: 700, level: 35 },
+            { name: 'Lava Wyrm', emoji: '🌋🐉', biome: 10, hp: 2000, attack: 85, defense: 30, gold: 550, exp: 750, level: 38 },
+            
+            // Late Game Bosses (Levels 41-60)
+            { name: 'Ancient Lich', emoji: '💀👑', biome: 3, hp: 2500, attack: 95, defense: 20, gold: 700, exp: 900, level: 45 },
+            { name: 'Kraken', emoji: '🦑', biome: 2, hp: 3000, attack: 100, defense: 40, gold: 800, exp: 1000, level: 50 },
+            { name: 'Phoenix Lord', emoji: '🔥🦅', biome: 10, hp: 3500, attack: 110, defense: 25, gold: 900, exp: 1200, level: 55 },
+            { name: 'Void Navigator', emoji: '🌀👤', biome: 11, hp: 4000, attack: 120, defense: 30, gold: 1000, exp: 1400, level: 60 },
+            
+            // End Game Bosses (Levels 61-80)
+            { name: 'Dragon King', emoji: '🐉👑', biome: 10, hp: 5000, attack: 140, defense: 50, gold: 1500, exp: 2000, level: 65 },
+            { name: 'Celestial Warden', emoji: '🌟👼', biome: 9, hp: 6000, attack: 150, defense: 45, gold: 1800, exp: 2500, level: 70 },
+            { name: 'Void Tyrant', emoji: '🌀😈', biome: 11, hp: 7000, attack: 160, defense: 40, gold: 2000, exp: 3000, level: 75 },
+            { name: 'Last God-King', emoji: '👑💀', biome: 11, hp: 10000, attack: 200, defense: 60, gold: 3000, exp: 5000, level: 80 },
+            
+            // SECRET WORLD BOSSES (Very Rare)
+            { name: 'Omega Dragon', emoji: '🌈🐉', biome: 11, hp: 15000, attack: 250, defense: 80, gold: 5000, exp: 10000, level: 90, secret: true },
+            { name: 'Time Eater', emoji: '⏰💀', biome: 11, hp: 20000, attack: 300, defense: 100, gold: 10000, exp: 20000, level: 100, secret: true }
         ];
 
         // Loot items from documentation (400+ weapons, 7 rarity tiers)
@@ -1236,8 +1326,7 @@
                 { name: 'Gungnir', level: 60, rarity: 'Legendary', attack: 98, speed: 1.3, value: 16000, range: 2.5, icon: '⚡🔱', special: 'never_miss' },
                 { name: 'Longinus', level: 70, rarity: 'Mythic', attack: 135, speed: 1.2, value: 48000, range: 2, icon: '✝️🔱', special: 'divine_pierce' },
                 { name: 'Omega Spear', level: 80, rarity: 'Omega', attack: 190, speed: 1.4, value: 130000, range: 3, icon: '🌈🔱', special: 'reality_pierce' }
-            ]
-        };
+            ],
 
             // DAGGERS (50 weapons)
             daggers: [
@@ -2447,10 +2536,10 @@
             gameState.abilityIcons = abilityIcons[selectedClass] || ['🔥', '⚔️', '🛡️', '⚡'];
             updateAbilityIcons();
             
-            // Generate complete open world with all 12 biomes
-            console.log('🌍 Starting Complete World Generation...');
-            generateCompleteWorld();
-            console.log('✅ World Built! Starting game...');
+            // Use pre-built world data instead of generating (MUCH FASTER!)
+            console.log('🌍 Loading Pre-built World Data...');
+            loadPrebuiltWorld();
+            console.log('✅ World Loaded! Starting game...');
 
             // Give player starting weapon based on class
             giveStartingWeapon();
@@ -2678,13 +2767,14 @@
         // Building the full massive anime fantasy world
         // ========================================
         
-        function generateCompleteWorld() {
-            console.log('🌍 Building Complete Fantasy World...');
+        // NEW: Fast world loading with VIEW CULLING - only load what player can see
+        function loadPrebuiltWorld() {
+            console.log('🚀 Loading pre-built world with view culling...');
             
-            // Expand world size to 50000x50000 for full 12-biome coverage
+            // Use FULL large world size (50,000 x 50,000)
             gameState.worldSize = 50000;
             
-            // Clear existing world
+            // Clear existing
             gameState.landmarks = [];
             gameState.buildings = [];
             gameState.villages = [];
@@ -2693,25 +2783,26 @@
             gameState.enemies = [];
             gameState.dungeonPortals = [];
             gameState.biomeRegions = [];
+            gameState.enemyCamps = []; // NEW: Enemy camps for raiding!
             
-            // PHASE 1: Create Biome Regions (12 biomes in a 3x4 grid)
+            // Create biome grid (3x4 = 12 biomes)
             const biomeLayout = [
-                [0, 5, 1],   // Row 1: Mystic Forest, Verdant Plains, Crimson Peaks
-                [2, 8, 3],   // Row 2: Azure Depths, Twilight Marshlands, Shadowmoon
-                [6, 4, 9],   // Row 3: Frozen Wastes, Crystal Peaks, Celestial Highlands
-                [7, 10, 11]  // Row 4: Scorched Desert, Volcanic Badlands, Void Rift
+                [0, 5, 1],   // Mystic Forest, Verdant Plains, Crimson Peaks
+                [2, 8, 3],   // Azure Depths, Twilight Marshlands, Shadowmoon
+                [6, 4, 9],   // Frozen Wastes, Crystal Peaks, Celestial Highlands
+                [7, 10, 11]  // Scorched Desert, Volcanic Badlands, Void Rift
             ];
             
             const biomeWidth = gameState.worldSize / 3;
             const biomeHeight = gameState.worldSize / 4;
             
-            // Place each biome in the world
+            // Create biome regions (boundaries only)
             for (let row = 0; row < 4; row++) {
                 for (let col = 0; col < 3; col++) {
                     const biomeId = biomeLayout[row][col];
                     const biome = BIOMES[biomeId];
                     
-                    const region = {
+                    gameState.biomeRegions.push({
                         biome: biome,
                         x: col * biomeWidth,
                         y: row * biomeHeight,
@@ -2719,17 +2810,197 @@
                         height: biomeHeight,
                         centerX: col * biomeWidth + biomeWidth / 2,
                         centerY: row * biomeHeight + biomeHeight / 2
-                    };
-                    
-                    gameState.biomeRegions.push(region);
-                    
-                    // Generate content for this biome
-                    generateBiomeContent(region);
+                    });
                 }
             }
             
-            console.log('✅ World Generation Complete!');
-            console.log(`📊 Generated: ${gameState.biomeRegions.length} biomes, ${gameState.landmarks.length} landmarks, ${gameState.enemies.length} creatures`);
+            // Load pre-built cities and villages from COMPLETE_WORLD_DATA
+            if (COMPLETE_WORLD_DATA) {
+                // Load ALL cities (they're just markers, not heavy)
+                if (COMPLETE_WORLD_DATA.cities) {
+                    for (const city of COMPLETE_WORLD_DATA.cities) {
+                        gameState.landmarks.push({
+                            x: city.x,
+                            y: city.y,
+                            name: city.name,
+                            emoji: '🏰',
+                            radius: 100,
+                            discovered: false,
+                            type: 'city',
+                            cityData: city // Store full city data for later
+                        });
+                    }
+                }
+                
+                // Load ALL villages (just markers)
+                if (COMPLETE_WORLD_DATA.villages) {
+                    for (const village of COMPLETE_WORLD_DATA.villages) {
+                        gameState.landmarks.push({
+                            x: village.x,
+                            y: village.y,
+                            name: village.name,
+                            emoji: '🏘️',
+                            radius: 80,
+                            discovered: false,
+                            type: 'village'
+                        });
+                    }
+                }
+            }
+            
+            // Generate Enemy Camps across the world (20-30 camps)
+            const campCount = 20 + Math.floor(Math.random() * 11);
+            for (let i = 0; i < campCount; i++) {
+                // Pick random biome region
+                const region = gameState.biomeRegions[Math.floor(Math.random() * gameState.biomeRegions.length)];
+                const biome = region.biome;
+                
+                // Place camp randomly in biome (avoid edges)
+                const cx = region.x + 500 + Math.random() * (region.width - 1000);
+                const cy = region.y + 500 + Math.random() * (region.height - 1000);
+                
+                // Camp size and difficulty based on biome level
+                const level = Math.floor(Math.random() * 10) + parseInt(biome.level.split('-')[0]);
+                const enemyCount = 5 + Math.floor(Math.random() * 8); // 5-12 enemies
+                const lootQuality = level > 30 ? 'epic' : level > 15 ? 'rare' : 'common';
+                
+                gameState.enemyCamps.push({
+                    x: cx,
+                    y: cy,
+                    biome: biome.name,
+                    biomeId: biome.id,
+                    level: level,
+                    enemyCount: enemyCount,
+                    enemiesAlive: enemyCount,
+                    enemies: [], // Will be populated when player approaches
+                    loot: {
+                        gold: level * (50 + Math.random() * 100),
+                        items: Math.floor(Math.random() * 3) + 1,
+                        quality: lootQuality
+                    },
+                    radius: 200, // Camp size
+                    discovered: false,
+                    cleared: false,
+                    respawnTimer: 0,
+                    respawnTime: 600, // 10 minutes in game time
+                    emoji: level > 30 ? '🏴‍☠️' : level > 15 ? '⚔️' : '🏕️',
+                    type: level > 30 ? 'fortress' : level > 15 ? 'outpost' : 'camp'
+                });
+            }
+            
+            console.log(`✅ Generated ${campCount} enemy camps across the world!`);
+            
+            // IMPORTANT: Only spawn enemies/NPCs near player's starting position
+            // More will spawn dynamically as player moves
+            spawnNearbyContent(gameState.player.x, gameState.player.y);
+            
+            console.log(`✅ Pre-built world loaded with view culling!`);
+            console.log(`   World size: ${gameState.worldSize}x${gameState.worldSize}`);
+            console.log(`   Total landmarks: ${gameState.landmarks.length}`);
+            console.log(`   Loaded enemies (nearby): ${gameState.enemies.length}`);
+            console.log(`   Loaded NPCs (nearby): ${gameState.npcs.length}`);
+        }
+        
+        // Spawn enemies and NPCs only near a position (VIEW CULLING)
+        function spawnNearbyContent(x, y, radius = 1500) {
+            const currentBiome = getCurrentBiome();
+            if (!currentBiome) return;
+            
+            // Count existing enemies in range to avoid spawning too many
+            const existingNearby = gameState.enemies.filter(e => {
+                const dist = Math.sqrt((e.x - x) ** 2 + (e.y - y) ** 2);
+                return dist < radius;
+            });
+            
+            // Only spawn if we don't have enough nearby
+            const targetCount = 25;
+            const toSpawn = Math.max(0, targetCount - existingNearby.length);
+            
+            if (toSpawn > 0) {
+                for (let i = 0; i < toSpawn; i++) {
+                    const creatureData = currentBiome.creatures[Math.floor(Math.random() * currentBiome.creatures.length)];
+                    const angle = Math.random() * Math.PI * 2;
+                    // Spawn enemies OUTSIDE immediate view (800-1400 units away)
+                    // This makes it feel like discovered enemies, not spawned
+                    const dist = 800 + Math.random() * 600;
+                    const ex = x + Math.cos(angle) * dist;
+                    const ey = y + Math.sin(angle) * dist;
+                    
+                    gameState.enemies.push({
+                        x: ex,
+                        y: ey,
+                        name: creatureData.name,
+                        emoji: creatureData.emoji,
+                        hp: creatureData.hp,
+                        maxHp: creatureData.hp,
+                        attack: creatureData.attack,
+                        exp: creatureData.exp,
+                        gold: creatureData.gold,
+                        radius: 25,
+                        speed: 1 + Math.random(),
+                        wanderAngle: Math.random() * Math.PI * 2,
+                        aggroRange: 400,
+                        biomeId: currentBiome.id
+                    });
+                }
+                console.log(`Spawned ${toSpawn} enemies near player`);
+            }
+            
+            // Spawn NPCs from nearby cities
+            if (COMPLETE_WORLD_DATA && COMPLETE_WORLD_DATA.cities) {
+                for (const city of COMPLETE_WORLD_DATA.cities) {
+                    const cityDist = Math.sqrt((city.x - x) ** 2 + (city.y - y) ** 2);
+                    
+                    // Only load NPCs from cities within view range
+                    if (cityDist < radius) {
+                        // Check if we already loaded this city's NPCs
+                        const existingCityNpcs = gameState.npcs.filter(npc => 
+                            Math.abs(npc.x - city.x) < 500 && Math.abs(npc.y - city.y) < 500
+                        );
+                        
+                        if (existingCityNpcs.length === 0 && city.npcs) {
+                            // Load this city's NPCs
+                            for (const npc of city.npcs) {
+                                gameState.npcs.push({
+                                    x: npc.x,
+                                    y: npc.y,
+                                    name: npc.name,
+                                    emoji: npc.role === 'ruler' ? '👑' : 
+                                           npc.role === 'quest_giver' ? '❗' : 
+                                           npc.role === 'vendor_weapon' ? '⚔️' : '🧙',
+                                    dialogue: npc.dialogue,
+                                    role: npc.role,
+                                    radius: 35,
+                                    cityName: city.name
+                                });
+                            }
+                            console.log(`Loaded ${city.npcs.length} NPCs from ${city.name}`);
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Clean up far away enemies/NPCs to save memory (VIEW CULLING)
+        function cleanupFarContent() {
+            const cullDistance = 2500; // Keep things within 2500 units of player
+            
+            // Remove enemies that are too far
+            gameState.enemies = gameState.enemies.filter(e => {
+                const dist = Math.sqrt((e.x - gameState.player.x) ** 2 + (e.y - gameState.player.y) ** 2);
+                return dist < cullDistance;
+            });
+            
+            // Keep at least some NPCs loaded (don't remove all)
+            const farNpcs = gameState.npcs.filter(npc => {
+                const dist = Math.sqrt((npc.x - gameState.player.x) ** 2 + (npc.y - gameState.player.y) ** 2);
+                return dist >= cullDistance;
+            });
+            
+            // Only remove far NPCs if we have too many loaded
+            if (gameState.npcs.length > 50 && farNpcs.length > 20) {
+                gameState.npcs = gameState.npcs.filter(npc => !farNpcs.includes(npc));
+            }
         }
         
         function generateBiomeContent(region) {
@@ -3017,22 +3288,24 @@
             if (!gameState.comboCount) gameState.comboCount = 0;
             
             const now = Date.now();
-            if (now - gameState.lastAttackTime < 1000) {
+            if (now - gameState.lastAttackTime < 1500) { // Increased combo window
                 gameState.comboCount++;
             } else {
                 gameState.comboCount = 1;
             }
             gameState.lastAttackTime = now;
             
-            // Critical hit chance (10% + 2% per combo)
-            const critChance = 0.1 + (gameState.comboCount * 0.02);
+            // IMPROVED: Better crit chance scaling (15% base + 3% per combo, max 45%)
+            const critChance = Math.min(0.45, 0.15 + (gameState.comboCount * 0.03));
             const isCrit = Math.random() < critChance;
             
-            let damage = totalAttack + Math.floor(Math.random() * 10);
-            damage *= (1 + gameState.comboCount * 0.1); // 10% damage per combo
+            // IMPROVED: Better damage calculation with variance
+            let baseDamage = totalAttack * (0.9 + Math.random() * 0.2); // 90-110% of attack
+            let damage = baseDamage * (1 + gameState.comboCount * 0.15); // 15% per combo
             
+            // IMPROVED: Higher crit multiplier (2.5x instead of 2x)
             if (isCrit) {
-                damage *= 2;
+                damage *= 2.5;
                 createParticle(enemy.x, enemy.y, `💥 CRIT! -${Math.floor(damage)}`, '#ff00ff');
             } else {
                 createParticle(enemy.x, enemy.y, `-${Math.floor(damage)}`, '#ff0000');
@@ -3042,7 +3315,10 @@
                 createParticle(enemy.x, enemy.y - 30, `${gameState.comboCount}x COMBO!`, '#ffd700');
             }
             
-            enemy.hp -= damage;
+            // IMPROVED: Apply damage with enemy defense reduction
+            const enemyDefense = enemy.defense || 0;
+            const actualDamage = Math.max(1, damage - enemyDefense);
+            enemy.hp -= actualDamage;
             
             if (enemy.hp <= 0) {
                 const index = gameState.enemies.indexOf(enemy);
@@ -3195,26 +3471,42 @@
         function gainExp(amount) {
             gameState.player.exp += amount;
             
-            if (gameState.player.exp >= gameState.player.expToNext) {
+            // IMPROVED: Better exp curve (not too steep)
+            while (gameState.player.exp >= gameState.player.expToNext) {
                 gameState.player.level++;
-                gameState.player.exp = 0;
-                gameState.player.expToNext = Math.floor(gameState.player.expToNext * 1.5);
+                gameState.player.exp -= gameState.player.expToNext;
+                gameState.player.expToNext = Math.floor(100 * Math.pow(1.2, gameState.player.level - 1));
                 
-                // Level up bonuses
-                gameState.player.maxHp += 10;
-                gameState.player.maxMp += 5;
+                // IMPROVED: Better level up bonuses (scales with level)
+                const hpGain = 10 + Math.floor(gameState.player.level * 0.5);
+                const mpGain = 5 + Math.floor(gameState.player.level * 0.3);
+                const atkGain = 2 + Math.floor(gameState.player.level * 0.1);
+                const defGain = 1 + Math.floor(gameState.player.level * 0.1);
+                
+                gameState.player.maxHp += hpGain;
+                gameState.player.maxMp += mpGain;
                 gameState.player.hp = gameState.player.maxHp;
                 gameState.player.mp = gameState.player.maxMp;
-                gameState.player.attack += 2;
-                gameState.player.defense += 1;
+                gameState.player.attack += atkGain;
+                gameState.player.defense += defGain;
+                gameState.player.speed = Math.min(8, 5 + gameState.player.level * 0.1); // Cap speed
                 
                 createParticle(gameState.player.x, gameState.player.y, '✨ LEVEL UP! ✨', '#ffd700');
+                createParticle(gameState.player.x, gameState.player.y - 40, `Level ${gameState.player.level}!`, '#00ff00');
                 
                 document.getElementById('player-class').textContent = 
                     `Level ${gameState.player.level} ${gameState.player.class.name}`;
                 
                 // Unlock skills on level up
                 unlockSkills();
+                
+                // Every 10 levels, give bonus reward
+                if (gameState.player.level % 10 === 0) {
+                    const bonusGold = gameState.player.level * 50;
+                    gameState.player.gold += bonusGold;
+                    createParticle(gameState.player.x, gameState.player.y - 60, 
+                        `🎁 +${bonusGold} Gold Bonus!`, '#ffd700');
+                }
                 
                 // Check level achievements
                 checkAchievements();
@@ -3343,22 +3635,35 @@
             return suitableWeapons[Math.floor(Math.random() * suitableWeapons.length)];
         }
 
-        // Enhanced loot drop that uses weapon database
+        // IMPROVED: Enhanced loot drop with better rates and scaling
         function dropLootFromEnemy(enemy) {
-            const dropChance = 0.2 + (gameState.comboCount * 0.05);
+            // IMPROVED: Better drop chance based on enemy level/type
+            const baseDropChance = 0.25; // 25% base
+            const levelBonus = Math.min(0.30, gameState.player.level * 0.01); // +1% per level, max 30%
+            const comboBonus = gameState.comboCount * 0.05; // +5% per combo
+            const bossBonus = enemy.isBoss ? 0.50 : 0; // +50% for bosses
+            
+            const dropChance = Math.min(0.95, baseDropChance + levelBonus + comboBonus + bossBonus);
+            
             if (Math.random() > dropChance) return;
             
-            // 60% chance for weapon, 40% for other loot
-            if (Math.random() < 0.6) {
+            // IMPROVED: 70% weapon, 30% other loot (better weapon drops)
+            if (Math.random() < 0.7) {
                 const weapon = getWeaponForLevel(gameState.player.level);
                 if (weapon) {
                     giveWeapon(weapon.name);
                 }
             } else {
-                // Drop original loot items (potions, etc.)
+                // Drop consumables, materials, etc.
                 const lootItem = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
                 gameState.player.inventory.push({...lootItem});
                 createParticle(enemy.x, enemy.y, `+${lootItem.icon} ${lootItem.name}!`, RARITY_COLORS[lootItem.rarity] || '#ffffff');
+            }
+            
+            // IMPROVED: Bonus loot for high combos (3+)
+            if (gameState.comboCount >= 3) {
+                gameState.player.gold += 10 * gameState.comboCount;
+                createParticle(enemy.x, enemy.y - 30, `+${10 * gameState.comboCount} Combo Gold!`, '#ffd700');
             }
         }
 
@@ -3562,7 +3867,7 @@
                 gameState.keys['q'] = false;
             }
 
-            // Update enemies with better AI (only move if near camera for performance)
+            // ENHANCED ENEMY AI with type-based behaviors
             for (const enemy of gameState.enemies) {
                 const screenDist = distance(gameState.camera, enemy);
                 
@@ -3571,22 +3876,90 @@
                     const dx = gameState.player.x - enemy.x;
                     const dy = gameState.player.y - enemy.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Type-based AI behaviors
+                    const enemyType = enemy.type || 'normal';
+                    let aggroRange = 400;
+                    let attackRange = 35;
+                    
+                    // Adjust behavior by type
+                    if (enemyType === 'fast' || enemyType === 'flying') {
+                        aggroRange = 600;
+                        attackRange = 40;
+                    } else if (enemyType === 'tank' || enemyType === 'golem' || enemyType === 'defender') {
+                        aggroRange = 300;
+                        attackRange = 45;
+                    } else if (enemyType === 'ranged' || enemyType === 'caster' || enemyType === 'mage') {
+                        aggroRange = 500;
+                        attackRange = 150; // Stay at range
+                    } else if (enemyType === 'elite' || enemyType.includes('boss')) {
+                        aggroRange = 700;
+                        attackRange = 50;
+                    }
 
-                    // Better AI: Chase if close, wander if far
-                    if (dist < 400) {
-                        // Chase player
-                        enemy.x += (dx / dist) * enemy.speed;
-                        enemy.y += (dy / dist) * enemy.speed;
+                    // IMPROVED AI: Smarter behavior
+                    if (dist < aggroRange) {
+                        // Spotted player - engage
+                        enemy.isAggro = true;
+                        enemy.lastAggroTime = Date.now();
+                        
+                        // Chase player (or kite for ranged)
+                        if (enemyType === 'ranged' || enemyType === 'caster' || enemyType === 'mage') {
+                            // Ranged enemies maintain distance + circle strafe
+                            if (dist < attackRange - 50) {
+                                // Too close, back away
+                                enemy.x -= (dx / dist) * enemy.speed * 0.9;
+                                enemy.y -= (dy / dist) * enemy.speed * 0.9;
+                            } else if (dist > attackRange + 50) {
+                                // Too far, move closer
+                                enemy.x += (dx / dist) * enemy.speed * 0.5;
+                                enemy.y += (dy / dist) * enemy.speed * 0.5;
+                            } else {
+                                // Perfect range: strafe sideways
+                                const strafeAngle = Math.atan2(dy, dx) + Math.PI / 2;
+                                enemy.x += Math.cos(strafeAngle) * enemy.speed * 0.4;
+                                enemy.y += Math.sin(strafeAngle) * enemy.speed * 0.4;
+                            }
+                        } else {
+                            // Melee chase with zigzag (less predictable)
+                            const speedMod = enemyType === 'fast' ? 1.2 : enemyType === 'tank' ? 0.8 : enemyType === 'elite' ? 1.1 : 1.0;
+                            const zigzag = Math.sin(Date.now() / 500) * 0.08;
+                            const angle = Math.atan2(dy, dx) + zigzag;
+                            enemy.x += Math.cos(angle) * enemy.speed * speedMod;
+                            enemy.y += Math.sin(angle) * enemy.speed * speedMod;
+                        }
+                    } else if (enemy.isAggro && Date.now() - enemy.lastAggroTime < 5000) {
+                        // Lost sight - search nearby area
+                        if (!enemy.searchTimer) {
+                            enemy.searchTimer = 120;
+                            enemy.searchAngle = Math.atan2(dy, dx) + (Math.random() - 0.5);
+                        }
+                        enemy.searchTimer--;
+                        enemy.x += Math.cos(enemy.searchAngle) * enemy.speed * 0.6;
+                        enemy.y += Math.sin(enemy.searchAngle) * enemy.speed * 0.6;
+                        
+                        if (enemy.searchTimer <= 0) enemy.isAggro = false;
                     } else {
-                        // Wander around
+                        // Natural wandering with pauses
+                        enemy.isAggro = false;
+                        
                         if (!enemy.wanderTimer || enemy.wanderTimer <= 0) {
                             enemy.wanderAngle = Math.random() * Math.PI * 2;
                             enemy.wanderTimer = 60 + Math.random() * 120;
+                            // Sometimes pause (30% chance)
+                            enemy.isPaused = Math.random() < 0.3;
+                            enemy.pauseDuration = enemy.isPaused ? Math.floor(30 + Math.random() * 60) : 0;
                         }
                         enemy.wanderTimer--;
                         
-                        enemy.x += Math.cos(enemy.wanderAngle) * enemy.speed * 0.3;
-                        enemy.y += Math.sin(enemy.wanderAngle) * enemy.speed * 0.3;
+                        // Idle or wander
+                        if (enemy.isPaused && enemy.pauseDuration > 0) {
+                            enemy.pauseDuration--;
+                        } else {
+                            enemy.isPaused = false;
+                            enemy.x += Math.cos(enemy.wanderAngle) * enemy.speed * 0.3;
+                            enemy.y += Math.sin(enemy.wanderAngle) * enemy.speed * 0.3;
+                        }
                         
                         // Keep in world bounds
                         enemy.x = Math.max(50, Math.min(gameState.worldSize - 50, enemy.x));
@@ -3594,10 +3967,16 @@
                     }
 
                     // Enemy attacks player
-                    if (dist < 35) {
+                    if (dist < attackRange) {
                         const damage = 2 + Math.floor(Math.random() * 8);
                         const actualDamage = Math.max(1, damage - gameState.player.defense * 0.1);
                         gameState.player.hp -= actualDamage * 0.15;
+                        
+                        // Hit particle effect
+                        if (Math.random() < 0.1) {
+                            createParticle(gameState.player.x, gameState.player.y, 
+                                `💥 -${Math.floor(actualDamage)}`, '#ff4444');
+                        }
                         
                         if (gameState.player.hp <= 0) {
                             gameState.player.hp = 0;
@@ -3631,6 +4010,17 @@
             updateQuests();
             updateDayNightCycle(dt);
             updateWeather(dt);
+            
+            // DYNAMIC CONTENT LOADING - Spawn/cleanup based on player position
+            if (!gameState.lastSpawnCheck) gameState.lastSpawnCheck = 0;
+            gameState.lastSpawnCheck += dt;
+            
+            // Check every 3 seconds if we need to spawn content
+            if (gameState.lastSpawnCheck > 3) {
+                gameState.lastSpawnCheck = 0;
+                spawnNearbyContent(gameState.player.x, gameState.player.y);
+                cleanupFarContent();
+            }
             
             updateStats();
         }
@@ -3668,13 +4058,75 @@
             // Get current biome for background
             const currentBiome = getCurrentBiome() || BIOMES[0];
             
-            // BEAUTIFUL GRADIENT SKY based on current biome
+            // ENHANCED GRADIENT SKY with time-of-day and weather
+            const timeOfDay = TIME_SYSTEM ? TIME_SYSTEM.timeOfDay : 12;
+            let skyTop, skyMid, skyBottom;
+            
+            if (timeOfDay >= 6 && timeOfDay < 8) {
+                // Dawn
+                skyTop = '#FF6B6B';
+                skyMid = '#FFA07A';
+                skyBottom = '#FFD700';
+            } else if (timeOfDay >= 8 && timeOfDay < 18) {
+                // Day - use biome color
+                skyTop = currentBiome.color;
+                skyMid = currentBiome.color;
+                skyBottom = '#87CEEB';
+            } else if (timeOfDay >= 18 && timeOfDay < 20) {
+                // Dusk
+                skyTop = '#4B0082';
+                skyMid = '#FF4500';
+                skyBottom = '#FFD700';
+            } else {
+                // Night
+                skyTop = '#000428';
+                skyMid = '#001f3f';
+                skyBottom = '#003366';
+            }
+            
+            // Apply weather effects to sky
+            const weather = gameState.weather ? gameState.weather.current : 'clear';
+            if (weather === 'rain' || weather === 'storm') {
+                skyTop = '#1a1a2e';
+                skyMid = '#2f3640';
+                skyBottom = '#4a5568';
+            } else if (weather === 'fog') {
+                skyTop = '#95a5a6';
+                skyMid = '#bdc3c7';
+                skyBottom = '#ecf0f1';
+            }
+            
             const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-            gradient.addColorStop(0, currentBiome.color);
-            gradient.addColorStop(0.6, currentBiome.color);
-            gradient.addColorStop(1, '#1a1a2e'); // Dark horizon
+            gradient.addColorStop(0, skyTop);
+            gradient.addColorStop(0.5, skyMid);
+            gradient.addColorStop(1, skyBottom);
             ctx.fillStyle = gradient;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add stars at night
+            if (timeOfDay < 6 || timeOfDay >= 20) {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                for (let i = 0; i < 100; i++) {
+                    const starX = (i * 73) % canvas.width;
+                    const starY = (i * 59) % (canvas.height * 0.6);
+                    const twinkle = Math.sin(Date.now() * 0.001 + i) * 0.5 + 0.5;
+                    ctx.globalAlpha = twinkle;
+                    ctx.fillRect(starX, starY, 2, 2);
+                }
+                ctx.globalAlpha = 1;
+            }
+            
+            // Add clouds during day
+            if (timeOfDay >= 6 && timeOfDay < 20 && weather !== 'storm') {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+                ctx.font = '60px Arial';
+                const cloudTime = Date.now() * 0.00005;
+                for (let i = 0; i < 5; i++) {
+                    const cloudX = ((i * 300 + cloudTime * 1000) % (canvas.width + 200)) - 100;
+                    const cloudY = (i * 80) % (canvas.height * 0.4);
+                    ctx.fillText('☁️', cloudX, cloudY);
+                }
+            }
 
             // === WORLD SPACE RENDERING ===
             ctx.save();
@@ -3734,15 +4186,34 @@
                 }
             }
 
-            // GROUND VEGETATION with animation
+            // ENHANCED GROUND VEGETATION with biome-specific details
             ctx.font = '24px Arial';
             const vegTime = Date.now() * 0.001;
+            const currentBiomeVeg = {
+                0: ['🌱', '🌿', '☘️', '🍀', '🌸', '🦋'], // Mystic Forest
+                1: ['🪨', '⛰️', '🌲', '🔥'], // Crimson Peaks
+                2: ['🌊', '🐚', '🦀', '🐟'], // Azure Depths
+                3: ['💀', '🌑', '🦇', '🕷️'], // Shadowmoon
+                4: ['💎', '✨', '🔮', '⚡'], // Crystal Peaks
+                5: ['🌾', '🌻', '🦋', '🐝'], // Verdant Plains
+                6: ['❄️', '⛄', '🌨️', '❅'], // Frozen Wastes
+                7: ['🏜️', '🦂', '🌵', '☀️'], // Desert
+                8: ['🐸', '🍄', '🌿', '🦎'], // Marshlands
+                9: ['☁️', '⚡', '🦅', '✨'], // Celestial
+                10: ['🌋', '🔥', '💀', '🪨'], // Volcanic
+                11: ['🌀', '💫', '👁️', '🔮']  // Void Rift
+            };
+            
+            const biomeId = currentBiome.id || 0;
+            const vegetation = currentBiomeVeg[biomeId] || ['🌱', '🌿'];
+            
             for (let x = startX; x < endX; x += 150) {
                 for (let y = startY; y < endY; y += 150) {
-                    const vegetation = ['🌱', '🌿', '☘️', '🍀'][Math.floor((x + y) / 100) % 4];
+                    const vegIndex = Math.floor((x + y) / 100) % vegetation.length;
+                    const veg = vegetation[vegIndex];
                     const sway = Math.sin(vegTime + x * 0.01 + y * 0.01) * 2;
-                    ctx.globalAlpha = 0.4;
-                    ctx.fillText(vegetation, x + ((x + y) % 50) + sway, y + ((x * y) % 50));
+                    ctx.globalAlpha = 0.5;
+                    ctx.fillText(veg, x + ((x + y) % 50) + sway, y + ((x * y) % 50));
                 }
             }
             ctx.globalAlpha = 1;
@@ -3998,9 +4469,29 @@
                 }
             }
 
-            // PLAYER with glow and equipped weapon
-            ctx.shadowColor = '#FFD700';
-            ctx.shadowBlur = 20;
+            // PLAYER with enhanced combat feedback (NO SCALE - just glow)
+            const isAttacking = Date.now() - (gameState.lastAttackTime || 0) < 300;
+            
+            // Attack glow effect only
+            let attackGlow = 0;
+            if (isAttacking) {
+                const attackProgress = (Date.now() - gameState.lastAttackTime) / 300;
+                attackGlow = (1.0 - attackProgress) * 25;
+            }
+            
+            // Player glow based on combo or attack
+            if (gameState.comboCount > 0) {
+                const comboGlow = Math.min(gameState.comboCount * 3, 30);
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = comboGlow + attackGlow;
+            } else if (attackGlow > 0) {
+                ctx.shadowColor = '#FF4500';
+                ctx.shadowBlur = attackGlow;
+            } else {
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 20;
+            }
+            
             ctx.fillStyle = '#FFD700';
             ctx.strokeStyle = '#FFFFFF';
             ctx.lineWidth = 5;
@@ -4079,19 +4570,127 @@
             // Restore context
             ctx.restore();
 
-            // === SCREEN SPACE RENDERING ===
+            // === ENHANCED UI RENDERING ===
             
-            // Biome name at top
-            ctx.font = 'bold 40px Arial';
+            // TOP BAR - Biome & Stats
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+            ctx.fillRect(0, 0, canvas.width, 100);
+            
+            // Biome name with enhanced styling
+            ctx.font = 'bold 32px Arial';
             ctx.fillStyle = '#FFD700';
             ctx.strokeStyle = '#000000';
             ctx.lineWidth = 4;
             const biomeName = `${biome.emoji} ${biome.name}`;
             const nameW = ctx.measureText(biomeName).width;
-            ctx.strokeText(biomeName, canvas.width / 2 - nameW / 2, 60);
-            ctx.fillText(biomeName, canvas.width / 2 - nameW / 2, 60);
+            ctx.strokeText(biomeName, canvas.width / 2 - nameW / 2, 40);
+            ctx.fillText(biomeName, canvas.width / 2 - nameW / 2, 40);
+            
+            // Player stats in top bar
+            ctx.font = 'bold 18px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'left';
+            
+            // Level and Class
+            ctx.fillText(`Lv ${gameState.player.level} ${gameState.player.class?.name || 'Adventurer'}`, 20, 75);
+            
+            // Gold
+            ctx.fillStyle = '#FFD700';
+            ctx.fillText(`💰 ${gameState.player.gold}`, 20, 95);
+            
+            // Enemies defeated
+            ctx.fillStyle = '#FF6B6B';
+            ctx.fillText(`⚔️ ${gameState.enemiesDefeated}`, 200, 75);
+            
+            // Bosses defeated
+            ctx.fillStyle = '#FF4500';
+            ctx.fillText(`👑 ${gameState.bossesDefeated}`, 200, 95);
+            
+            // Current time
+            ctx.fillStyle = '#87CEEB';
+            const timeHour = TIME_SYSTEM ? TIME_SYSTEM.timeOfDay : 12;
+            const timeStr = `🕐 ${Math.floor(timeHour)}:${Math.floor((timeHour % 1) * 60).toString().padStart(2, '0')}`;
+            ctx.fillText(timeStr, 380, 75);
+            
+            // Current weather
+            ctx.fillStyle = '#FFFFFF';
+            const weatherEmoji = weather === 'rain' ? '🌧️' : weather === 'snow' ? '❄️' : 
+                                weather === 'fog' ? '🌫️' : weather === 'storm' ? '⛈️' : 
+                                weather === 'sandstorm' ? '🌪️' : '☀️';
+            ctx.fillText(`${weatherEmoji} ${weather || 'Clear'}`, 380, 95);
+            
+            // Combo counter in top right
+            if (gameState.comboCount > 1) {
+                ctx.font = 'bold 36px Arial';
+                ctx.fillStyle = '#FFD700';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 5;
+                ctx.textAlign = 'right';
+                ctx.strokeText(`${gameState.comboCount}x COMBO!`, canvas.width - 20, 50);
+                ctx.fillText(`${gameState.comboCount}x COMBO!`, canvas.width - 20, 50);
+            }
 
-            // Mini-map
+            // ENHANCED MINI-MAP with entities
+            const mapSize = 180;
+            const mapX = canvas.width - mapSize - 20;
+            const mapY = 120;
+            
+            // Map background
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(mapX, mapY, mapSize, mapSize);
+            
+            // Map border
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(mapX, mapY, mapSize, mapSize);
+            
+            // Draw biome regions on map
+            const mapScale = mapSize / gameState.worldSize;
+            for (const region of (gameState.biomeRegions || [])) {
+                ctx.fillStyle = region.biome.color + '40';
+                ctx.fillRect(
+                    mapX + region.x * mapScale,
+                    mapY + region.y * mapScale,
+                    region.width * mapScale,
+                    region.height * mapScale
+                );
+            }
+            
+            // Draw player position
+            const playerMapX = mapX + (gameState.player.x * mapScale);
+            const playerMapY = mapY + (gameState.player.y * mapScale);
+            ctx.fillStyle = '#00FF00';
+            ctx.beginPath();
+            ctx.arc(playerMapX, playerMapY, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw nearby enemies on map (within 2000 units)
+            ctx.fillStyle = '#FF0000';
+            for (const enemy of gameState.enemies) {
+                const dist = Math.sqrt(
+                    Math.pow(enemy.x - gameState.player.x, 2) +
+                    Math.pow(enemy.y - gameState.player.y, 2)
+                );
+                if (dist < 2000) {
+                    const enemyMapX = mapX + (enemy.x * mapScale);
+                    const enemyMapY = mapY + (enemy.y * mapScale);
+                    ctx.fillRect(enemyMapX - 1, enemyMapY - 1, 2, 2);
+                }
+            }
+            
+            // Draw cities on map
+            ctx.fillStyle = '#FFD700';
+            for (const city of (gameState.cities || [])) {
+                const cityMapX = mapX + (city.x * mapScale);
+                const cityMapY = mapY + (city.y * mapScale);
+                ctx.fillRect(cityMapX - 2, cityMapY - 2, 4, 4);
+            }
+            
+            // Map title
+            ctx.font = 'bold 14px Arial';
+            ctx.fillStyle = '#FFFFFF';
+            ctx.textAlign = 'center';
+            ctx.fillText('MAP', mapX + mapSize / 2, mapY - 5);
             drawMiniMap();
 
             // Weather effects
@@ -4358,7 +4957,7 @@
                     {name: "Healing Potion", level: 10, materials: {herbs: 4, water: 2}, result: {type: "potion", effect: "heal", value: 150}},
                     {name: "Greater Healing", level: 30, materials: {rarehherbs: 6, crystalwater: 3}, result: {type: "potion", effect: "heal", value: 500}},
                     {name: "Mana Potion", level: 15, materials: {manaherbs: 5, water: 2}, result: {type: "potion", effect: "mana", value: 100}},
-                    {name: "Flask of Titans", level: 50, materials: {titanbloom: 10, purecr ystal: 5}, result: {type: "flask", effect: "strength", value: 50, duration: 3600}},
+                    {name: "Flask of Titans", level: 50, materials: {titanbloom: 10, purecrystal: 5}, result: {type: "flask", effect: "strength", value: 50, duration: 3600}},
                     {name: "Elixir of Immortality", level: 75, materials: {lifeessence: 15, dragonblood: 8, voidcrystal: 3}, result: {type: "elixir", effect: "regen", value: 100}}
                 ]
             },
@@ -4427,14 +5026,14 @@
         });
 
         // Craft an item
-        function craftItem(profession, recipe Name) {
-            const profession = CRAFTING_PROFESSIONS[profession];
-            if (!profession) return false;
+        function craftItem(professionName, recipeName) {
+            const professionData = CRAFTING_PROFESSIONS[professionName];
+            if (!professionData) return false;
             
-            const recipe = profession.recipes.find(r => r.name === recipeName);
+            const recipe = professionData.recipes.find(r => r.name === recipeName);
             if (!recipe) return false;
             
-            const skill = craftingSkills[profession];
+            const skill = craftingSkills[professionName];
             if (skill.level < recipe.level) return false;
             
             // Check materials
@@ -4769,73 +5368,6 @@
                 whisper: []
             }
         };
-
-        // Guild System
-        class Guild {
-            constructor(name, leader) {
-                this.name = name;
-                this.leader = leader;
-                this.members = [leader];
-                this.level = 1;
-                this.exp = 0;
-                this.bank = {gold: 0, items: []};
-                this.perks = [];
-                this.ranks = {
-                    leader: {name: "Guild Master", permissions: ["all"]},
-                    officer: {name: "Officer", permissions: ["invite", "kick", "bank_withdraw"]},
-                    member: {name: "Member", permissions: ["chat", "bank_deposit"]},
-                    recruit: {name: "Recruit", permissions: ["chat"]}
-                };
-            }
-
-            addMember(player, rank = "recruit") {
-                if (this.members.length >= 100) return false; // Max 100 members
-                this.members.push({player: player, rank: rank, joinDate: Date.now()});
-                return true;
-            }
-
-            removeMember(player) {
-                this.members = this.members.filter(m => m.player !== player);
-            }
-
-            depositToBank(gold, items) {
-                this.bank.gold += gold || 0;
-                if (items) this.bank.items.push(...items);
-            }
-
-            withdrawFromBank(gold, itemIndex) {
-                if (gold && this.bank.gold >= gold) {
-                    this.bank.gold -= gold;
-                    return {type: "gold", amount: gold};
-                }
-                if (itemIndex !== undefined && this.bank.items[itemIndex]) {
-                    return {type: "item", item: this.bank.items.splice(itemIndex, 1)[0]};
-                }
-                return null;
-            }
-
-            gainExp(amount) {
-                this.exp += amount;
-                while (this.exp >= this.level * 1000) {
-                    this.exp -= this.level * 1000;
-                    this.level++;
-                    this.unlockPerk();
-                }
-            }
-
-            unlockPerk() {
-                const perks = [
-                    {level: 2, name: "Bank Expansion", effect: "bank_slots", value: 50},
-                    {level: 3, name: "Member Boost", effect: "max_members", value: 150},
-                    {level: 5, name: "EXP Bonus", effect: "exp_boost", value: 0.05},
-                    {level: 10, name: "Guild Hall", effect: "unlock_hall"},
-                    {level: 15, name: "Guild Mount", effect: "unlock_mount"},
-                    {level: 20, name: "Legendary Perk", effect: "all_boost", value: 0.1}
-                ];
-                const newPerk = perks.find(p => p.level === this.level);
-                if (newPerk) this.perks.push(newPerk);
-            }
-        }
 
         // Party System
         function createParty() {
@@ -5495,7 +6027,7 @@
             };
             
             try {
-                localStorage.setItem('dynasty_of_emberveil_save', JSON.stringify(saveData));
+                localStorage.setItem('dynasty_emberveil_save', JSON.stringify(saveData));
                 console.log("Game saved successfully!");
                 createParticle(player.x, player.y - 40, "💾 Game Saved!", "#00FF00", 2000);
                 return true;
@@ -5507,7 +6039,7 @@
 
         function loadGameState() {
             try {
-                const saveDataStr = localStorage.getItem('dynasty_of_emberveil_save');
+                const saveDataStr = localStorage.getItem('dynasty_emberveil_save');
                 if (!saveDataStr) return false;
                 
                 const saveData = JSON.parse(saveDataStr);
@@ -7003,6 +7535,92 @@
                         {name: "Queen Aquaria", role: "ruler", x: 16666, y: 18750, dialogue: "Welcome to our underwater realm."},
                         {name: "Captain Tidehunter", role: "quest_giver", x: 16700, y: 18800, dialogue: "Need a ship?"}
                     ]
+                },
+                // ADD REMAINING 5 CITIES
+                {
+                    id: "shadowmoon",
+                    name: "Shadowmoon Citadel",
+                    biome: "shadowmoon_vale",
+                    x: 41666, y: 18750,
+                    size: {width: 800, height: 700},
+                    population: 80,
+                    buildings: [
+                        {type: "castle", name: "Dark Castle", x: 41666, y: 18750, size: 150},
+                        {type: "tower", name: "Shadow Tower", x: 41600, y: 18700, size: 100},
+                        {type: "market", name: "Night Market", x: 41700, y: 18800, size: 90}
+                    ],
+                    npcs: [
+                        {name: "Lord Umbra", role: "ruler", x: 41666, y: 18750, dialogue: "Welcome to the shadows."},
+                        {name: "Shadow Merchant", role: "vendor_general", x: 41700, y: 18800, dialogue: "Dark wares for sale!"}
+                    ]
+                },
+                {
+                    id: "frostheim",
+                    name: "Frostheim",
+                    biome: "frozen_wastes",
+                    x: 8333, y: 31250,
+                    size: {width: 750, height: 650},
+                    population: 70,
+                    buildings: [
+                        {type: "hall", name: "Ice Hall", x: 8333, y: 31250, size: 130},
+                        {type: "forge", name: "Frost Forge", x: 8280, y: 31200, size: 90},
+                        {type: "inn", name: "Warm Hearth Inn", x: 8380, y: 31300, size: 70}
+                    ],
+                    npcs: [
+                        {name: "Jarl Frostbeard", role: "ruler", x: 8333, y: 31250, dialogue: "Stay warm, traveler."},
+                        {name: "Ice Smith", role: "vendor_weapon", x: 8280, y: 31200, dialogue: "Forged in ice!"}
+                    ]
+                },
+                {
+                    id: "skyreach",
+                    name: "Skyreach Spire",
+                    biome: "celestial_highlands",
+                    x: 25000, y: 31250,
+                    size: {width: 700, height: 600},
+                    population: 65,
+                    buildings: [
+                        {type: "spire", name: "Sky Spire", x: 25000, y: 31250, size: 180},
+                        {type: "temple", name: "Cloud Temple", x: 24950, y: 31200, size: 100},
+                        {type: "market", name: "Sky Bazaar", x: 25050, y: 31300, size: 80}
+                    ],
+                    npcs: [
+                        {name: "Archon Skywind", role: "ruler", x: 25000, y: 31250, dialogue: "Rise to the heavens!"},
+                        {name: "Cloud Sage", role: "mage_trainer", x: 24950, y: 31200, dialogue: "Master the sky!"}
+                    ]
+                },
+                {
+                    id: "emberforge",
+                    name: "Emberforge City",
+                    biome: "volcanic_badlands",
+                    x: 33333, y: 43750,
+                    size: {width: 800, height: 700},
+                    population: 85,
+                    buildings: [
+                        {type: "forge", name: "Great Forge", x: 33333, y: 43750, size: 160},
+                        {type: "mine", name: "Lava Mines", x: 33280, y: 43700, size: 120},
+                        {type: "barracks", name: "Fire Barracks", x: 33380, y: 43800, size: 100}
+                    ],
+                    npcs: [
+                        {name: "Forge Lord Magmus", role: "ruler", x: 33333, y: 43750, dialogue: "Feel the heat!"},
+                        {name: "Master Smith Pyro", role: "vendor_weapon", x: 33280, y: 43700, dialogue: "Legendary weapons!"}
+                    ]
+                },
+                {
+                    id: "voidgate",
+                    name: "Void Gate Outpost",
+                    biome: "void_rift",
+                    x: 41666, y: 43750,
+                    size: {width: 650, height: 550},
+                    population: 50,
+                    buildings: [
+                        {type: "portal", name: "Void Portal", x: 41666, y: 43750, size: 150},
+                        {type: "tower", name: "Reality Tower", x: 41616, y: 43700, size: 100},
+                        {type: "shrine", name: "Chaos Shrine", x: 41716, y: 43800, size: 80}
+                    ],
+                    npcs: [
+                        {name: "Void Keeper Null", role: "ruler", x: 41666, y: 43750, dialogue: "Beyond reality..."},
+                        {name: "Chaos Merchant", role: "vendor_general", x: 41716, y: 43800, dialogue: "Trade in chaos!"}
+                    ]
                 }
             ],
             villages: [
@@ -7011,18 +7629,37 @@
                 {name: "Ironpeak", biome: "crimson_peaks", x: 40000, y: 7000, buildings: 18, npcs: 14},
                 {name: "Ashfen", biome: "twilight_marshlands", x: 24000, y: 20000, buildings: 10, npcs: 8},
                 {name: "Frostpine", biome: "frozen_wastes", x: 8000, y: 32000, buildings: 14, npcs: 11}
+            ],
+            // ADD DUNGEONS, LANDMARKS, WORLD BOSSES
+            dungeons: [
+                {name: "Crypt of Shadows", biome: "mystic_forest", x: 6000, y: 8000, difficulty: 3, floors: 10, boss: "Shadow King"},
+                {name: "Frozen Depths", biome: "frozen_wastes", x: 10000, y: 35000, difficulty: 6, floors: 15, boss: "Ice Drake"},
+                {name: "Magma Core", biome: "volcanic_badlands", x: 35000, y: 45000, difficulty: 9, floors: 20, boss: "Lava Titan"},
+                {name: "Void Citadel", biome: "void_rift", x: 43000, y: 45000, difficulty: 11, floors: 25, boss: "Void Lord"}
+            ],
+            worldBosses: [
+                {name: "Ancient Dragon", x: 25000, y: 12500, level: 50, respawn: 3600},
+                {name: "Kraken", x: 16666, y: 20000, level: 60, respawn: 3600},
+                {name: "Phoenix", x: 35000, y: 43750, level: 70, respawn: 3600},
+                {name: "Void Titan", x: 41666, y: 45000, level: 80, respawn: 3600}
+            ],
+            resources: [
+                {type: "Gold Mine", x: 40000, y: 8000, yields: "gold_ore"},
+                {type: "Mithril Vein", x: 25000, y: 32000, yields: "mithril_ore"},
+                {type: "Ancient Tree", x: 8333, y: 7000, yields: "ancient_wood"},
+                {type: "Crystal Cave", x: 25000, y: 30000, yields: "magic_crystal"}
             ]
         };
 
-        // INITIALIZE
+        // INITIALIZE - DON'T generate world on startup!
         // ========================================
 
-        // Call world generation on game start
-        generateDetailedWorld();
+        // DON'T call world generation - world is pre-built!
+        // generateDetailedWorld(); // DISABLED - causes freeze
         
-        // Load permanent world data
+        // Pre-built world data is already loaded
         if (COMPLETE_WORLD_DATA) {
-            console.log(`✅ Loaded ${COMPLETE_WORLD_DATA.cities.length} cities and ${COMPLETE_WORLD_DATA.villages.length} villages`);
+            console.log(`✅ Pre-built world ready: ${COMPLETE_WORLD_DATA.cities.length} cities, ${COMPLETE_WORLD_DATA.villages.length} villages`);
         }
         
         // Start world event checker

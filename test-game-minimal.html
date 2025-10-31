@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Game Start</title>
+</head>
+<body>
+    <h1>Test</h1>
+    <div class="class-card" data-class="warrior" style="border:2px solid blue; padding:20px; cursor:pointer;">Click Me - Warrior</div>
+    <button id="start-game-btn" style="padding:10px; margin-top:20px;">Start Game</button>
+    <div id="output"></div>
+    
+    <script>
+        let selectedClass = null;
+        
+        document.querySelectorAll('.class-card').forEach(card => {
+            card.addEventListener('click', function() {
+                document.querySelectorAll('.class-card').forEach(c => c.style.border = '2px solid blue');
+                this.style.border = '4px solid gold';
+                selectedClass = this.dataset.class;
+                document.getElementById('output').textContent = 'Selected: ' + selectedClass;
+            });
+        });
+        
+        document.getElementById('start-game-btn').addEventListener('click', function() {
+            if (!selectedClass) {
+                alert('Please select a class first!');
+                return;
+            }
+            document.getElementById('output').textContent = 'Starting game with ' + selectedClass + '!';
+            alert('Game would start with: ' + selectedClass);
+        });
+    </script>
+</body>
+</html>

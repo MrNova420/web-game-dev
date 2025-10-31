@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Test Dynasty All-in-One</title>
+</head>
+<body>
+    <h1>Testing Dynasty All-in-One Game</h1>
+    <p>File exists: <span id="result"></span></p>
+    <p>File size: <span id="size"></span></p>
+    <p>Line count: <span id="lines"></span></p>
+    <br>
+    <a href="dynasty-all-in-one.html" target="_blank" style="font-size: 24px; padding: 15px 30px; background: #8b00ff; color: white; text-decoration: none; border-radius: 10px; display: inline-block;">🎮 PLAY DYNASTY ALL-IN-ONE GAME</a>
+    <script>
+        fetch('dynasty-all-in-one.html')
+            .then(r => r.text())
+            .then(content => {
+                document.getElementById('result').textContent = '✅ YES';
+                document.getElementById('result').style.color = 'green';
+                document.getElementById('size').textContent = (content.length / 1024).toFixed(2) + ' KB';
+                document.getElementById('lines').textContent = content.split('\n').length + ' lines';
+            })
+            .catch(e => {
+                document.getElementById('result').textContent = '❌ NO';
+                document.getElementById('result').style.color = 'red';
+            });
+    </script>
+</body>
+</html>
