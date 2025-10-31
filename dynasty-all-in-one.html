@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -755,7 +755,7 @@
             'Epic': '#a335ee',
             'Legendary': '#ff8000',
             'Mythic': '#e6cc80',
-            'Omega': 'linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #9400d3)'
+            'Omega': '#ff00ff' // Rainbow effect not supported in canvas, using magenta
         };
 
         // Achievements from documentation (200+ achievements)
@@ -1149,7 +1149,11 @@
             e.preventDefault();
             const nearestEnemy = findNearestEnemy(gameState.player.x, gameState.player.y);
             if (nearestEnemy && distance(gameState.player, nearestEnemy) < 200) {
-                attackEnemy(nearestEnemy);
+                if (nearestEnemy.isBoss) {
+                    attackBoss(nearestEnemy);
+                } else {
+                    attackEnemy(nearestEnemy);
+                }
             }
         }, { passive: false });
 
@@ -1553,7 +1557,11 @@
                     gameState.player.hp -= damage * 0.1;
                     if (gameState.player.hp <= 0) {
                         gameState.player.hp = 0;
-                        // Game over logic could go here
+                        // Respawn player
+                        gameState.player.hp = gameState.player.maxHp;
+                        gameState.player.x = canvas.width / 2;
+                        gameState.player.y = canvas.height / 2;
+                        createParticle(gameState.player.x, gameState.player.y, '💀 Respawned!', '#ff0000');
                     }
                 }
             }

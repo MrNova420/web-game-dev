@@ -482,4 +482,4 @@ Open `dynasty-all-in-one.html` and embark on your adventure in the Dynasty of Em
 *Version: 1.0*  
 *Lines of Code: 1731*  
 *File Size: ~85KB*  
-*Last Updated: 2025-10-31*
+*Last Updated: October 2025*
