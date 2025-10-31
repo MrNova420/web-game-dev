@@ -6937,11 +6937,93 @@
         }
 
         // ========================================
+        // ========================================
+        // COMPLETE WORLD DATABASE - PERMANENT
+        // ========================================
+        
+        const COMPLETE_WORLD_DATA = {
+            cities: [
+                {
+                    id: "everlight",
+                    name: "Everlight Capital",
+                    biome: "mystic_forest",
+                    x: 8333, y: 6250,
+                    size: {width: 1000, height: 800},
+                    population: 150,
+                    buildings: [
+                        {type: "palace", name: "Royal Palace", x: 8333, y: 6250, size: 150},
+                        {type: "guild", name: "Adventurer's Guild", x: 8200, y: 6200, size: 100},
+                        {type: "market", name: "Grand Market", x: 8400, y: 6300, size: 120},
+                        {type: "tower", name: "Mage Tower", x: 8250, y: 6350, size: 80},
+                        {type: "barracks", name: "Warrior Barracks", x: 8450, y: 6200, size: 90},
+                        {type: "temple", name: "Temple of Light", x: 8300, y: 6400, size: 100},
+                        {type: "bank", name: "City Bank", x: 8350, y: 6250, size: 70},
+                        {type: "auction", name: "Auction House", x: 8380, y: 6280, size: 80},
+                        {type: "inn", name: "The Golden Rest", x: 8280, y: 6220, size: 60}
+                    ],
+                    npcs: [
+                        {name: "King Alderan II", role: "ruler", x: 8333, y: 6250, dialogue: "Welcome to Everlight, hero."},
+                        {name: "Commander Helena", role: "quest_giver", x: 8200, y: 6200, dialogue: "Ready for adventure?"},
+                        {name: "Archmage Theron", role: "mage_trainer", x: 8250, y: 6350, dialogue: "Seeking magical knowledge?"},
+                        {name: "Blacksmith Garron", role: "vendor_weapon", x: 8220, y: 6180, dialogue: "Fine weapons for sale!"},
+                        {name: "Merchant Lyra", role: "vendor_general", x: 8400, y: 6300, dialogue: "Best prices in town!"}
+                    ]
+                },
+                {
+                    id: "dragonspire",
+                    name: "Dragonspire City",
+                    biome: "crimson_peaks",
+                    x: 41666, y: 6250,
+                    size: {width: 900, height: 700},
+                    population: 100,
+                    buildings: [
+                        {type: "arena", name: "Dragon Arena", x: 41666, y: 6250, size: 200},
+                        {type: "academy", name: "War Academy", x: 41600, y: 6200, size: 120},
+                        {type: "forge", name: "Titanforge", x: 41700, y: 6300, size: 100}
+                    ],
+                    npcs: [
+                        {name: "Warlord Drakon", role: "warrior_trainer", x: 41600, y: 6200, dialogue: "Strength through combat!"},
+                        {name: "Forge Master Brimstone", role: "vendor_weapon", x: 41700, y: 6300, dialogue: "Legendary weapons await!"}
+                    ]
+                },
+                {
+                    id: "atlantis",
+                    name: "Atlantis Port",
+                    biome: "azure_depths",
+                    x: 16666, y: 18750,
+                    size: {width: 850, height: 650},
+                    population: 90,
+                    underwater: true,
+                    buildings: [
+                        {type: "palace", name: "Pearl Palace", x: 16666, y: 18750, size: 140},
+                        {type: "market", name: "Coral Market", x: 16600, y: 18700, size: 100},
+                        {type: "docks", name: "Ship Docks", x: 16700, y: 18800, size: 150}
+                    ],
+                    npcs: [
+                        {name: "Queen Aquaria", role: "ruler", x: 16666, y: 18750, dialogue: "Welcome to our underwater realm."},
+                        {name: "Captain Tidehunter", role: "quest_giver", x: 16700, y: 18800, dialogue: "Need a ship?"}
+                    ]
+                }
+            ],
+            villages: [
+                {name: "Oakvale", biome: "mystic_forest", x: 7500, y: 5800, buildings: 15, npcs: 12},
+                {name: "Pinewood", biome: "mystic_forest", x: 9000, y: 6500, buildings: 12, npcs: 10},
+                {name: "Ironpeak", biome: "crimson_peaks", x: 40000, y: 7000, buildings: 18, npcs: 14},
+                {name: "Ashfen", biome: "twilight_marshlands", x: 24000, y: 20000, buildings: 10, npcs: 8},
+                {name: "Frostpine", biome: "frozen_wastes", x: 8000, y: 32000, buildings: 14, npcs: 11}
+            ]
+        };
+
         // INITIALIZE
         // ========================================
 
         // Call world generation on game start
         generateDetailedWorld();
+        
+        // Load permanent world data
+        if (COMPLETE_WORLD_DATA) {
+            console.log(`✅ Loaded ${COMPLETE_WORLD_DATA.cities.length} cities and ${COMPLETE_WORLD_DATA.villages.length} villages`);
+        }
         
         // Start world event checker
         setInterval(checkWorldEvents, 60000); // Check every minute
