@@ -497,9 +497,22 @@
                 </div>
             </div>
 
-            <div class="info-text">
+            <!-- EQUIPMENT DISPLAY -->
+            <div style="margin-top: 15px; padding: 10px; background: rgba(139, 0, 255, 0.2); border-radius: 5px;">
+                <div class="info-title" style="margin-bottom: 8px;">⚔️ Equipment</div>
+                <div id="equipped-weapon" style="font-size: 14px; color: #1eff00;">
+                    <span id="weapon-icon">🗡️</span>
+                    <span id="weapon-name">Iron Sword</span>
+                    <span style="color: #ffd700;">(+<span id="weapon-attack">5</span>⚔️)</span>
+                </div>
+                <div style="font-size: 11px; color: #888; margin-top: 3px;">
+                    ATK: <span id="total-attack" style="color: #ff6b6b;">25</span>
+                </div>
+            </div>
+
+            <div class="info-text" style="margin-top: 10px;">
                 <div class="info-title">💰 Gold: <span id="gold-amount">0</span></div>
-                <div class="info-title">👾 Enemies Defeated: <span id="enemies-defeated">0</span></div>
+                <div class="info-title">👾 Enemies: <span id="enemies-defeated">0</span></div>
             </div>
         </div>
 
@@ -3260,6 +3273,20 @@
             document.getElementById('exp-text').textContent = 
                 `${gameState.player.exp}/${gameState.player.expToNext}`;
 
+            // Update equipped weapon display
+            if (gameState.player.equippedWeapon) {
+                const weapon = gameState.player.equippedWeapon;
+                document.getElementById('weapon-icon').textContent = weapon.icon || '⚔️';
+                document.getElementById('weapon-name').textContent = weapon.name;
+                document.getElementById('weapon-name').style.color = RARITY_COLORS[weapon.rarity] || '#ffffff';
+                document.getElementById('weapon-attack').textContent = weapon.attack;
+                document.getElementById('total-attack').textContent = gameState.player.attack;
+            } else {
+                document.getElementById('weapon-name').textContent = 'No Weapon';
+                document.getElementById('weapon-attack').textContent = '0';
+                document.getElementById('total-attack').textContent = gameState.player.attack;
+            }
+
             // Gold and stats
             document.getElementById('gold-amount').textContent = gameState.player.gold;
             document.getElementById('enemies-defeated').textContent = gameState.enemiesDefeated;
@@ -3971,7 +3998,7 @@
                 }
             }
 
-            // PLAYER with glow
+            // PLAYER with glow and equipped weapon
             ctx.shadowColor = '#FFD700';
             ctx.shadowBlur = 20;
             ctx.fillStyle = '#FFD700';
@@ -3983,9 +4010,59 @@
             ctx.shadowBlur = 0;
             ctx.stroke();
             
+            // Player class icon
             ctx.font = '35px Arial';
             ctx.fillStyle = '#FFFFFF';
             ctx.fillText(gameState.player.class?.icon || '⚔️', gameState.player.x - 17, gameState.player.y + 12);
+
+            // EQUIPPED WEAPON VISUAL - Show weapon next to player
+            if (gameState.player.equippedWeapon) {
+                const weapon = gameState.player.equippedWeapon;
+                const weaponOffsetX = 30; // Position weapon to the right
+                const weaponOffsetY = -10;
+                
+                // Weapon glow based on rarity
+                ctx.shadowColor = RARITY_COLORS[weapon.rarity] || '#ffffff';
+                ctx.shadowBlur = 15;
+                
+                // Weapon icon
+                ctx.font = '40px Arial';
+                ctx.fillStyle = RARITY_COLORS[weapon.rarity] || '#ffffff';
+                
+                // Add subtle animation - weapon floats up/down
+                const weaponFloat = Math.sin(Date.now() * 0.003) * 3;
+                ctx.fillText(weapon.icon || '⚔️', 
+                    gameState.player.x + weaponOffsetX, 
+                    gameState.player.y + weaponOffsetY + weaponFloat);
+                
+                ctx.shadowBlur = 0;
+                
+                // Weapon attack stat below weapon
+                ctx.font = 'bold 14px Arial';
+                ctx.fillStyle = '#ffd700';
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 2;
+                const atkText = `+${weapon.attack}`;
+                ctx.strokeText(atkText, gameState.player.x + weaponOffsetX - 8, gameState.player.y + weaponOffsetY + 20 + weaponFloat);
+                ctx.fillText(atkText, gameState.player.x + weaponOffsetX - 8, gameState.player.y + weaponOffsetY + 20 + weaponFloat);
+            }
+
+            // MOVEMENT TRAIL EFFECT - Show direction of movement
+            if (gameState.player.velocityX !== 0 || gameState.player.velocityY !== 0) {
+                const trailLength = 3;
+                for (let i = 1; i <= trailLength; i++) {
+                    const alpha = (trailLength - i) / trailLength * 0.3;
+                    const trailX = gameState.player.x - gameState.player.velocityX * i * 3;
+                    const trailY = gameState.player.y - gameState.player.velocityY * i * 3;
+                    
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = '#FFD700';
+                    ctx.beginPath();
+                    ctx.arc(trailX, trailY, gameState.player.radius * 0.8, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
 
             // Particles
             ctx.font = '18px Arial';
