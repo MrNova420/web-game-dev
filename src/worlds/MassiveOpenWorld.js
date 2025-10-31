@@ -25,6 +25,11 @@ import { ShadowmoonValleyBiome } from './ShadowmoonValleyBiome.js';
 import { CrystalPeaksBiome } from './CrystalPeaksBiome.js';
 import { VerdantPlainsBiome } from './VerdantPlainsBiome.js';
 import { FrozenWastesBiome } from './FrozenWastesBiome.js';
+import { ScorchedDesertBiome } from './ScorchedDesertBiome.js';
+import { TwilightMarshlandsBiome } from './TwilightMarshlandsBiome.js';
+import { CelestialHighlandsBiome } from './CelestialHighlandsBiome.js';
+import { VolcanicBadlandsBiome } from './VolcanicBadlandsBiome.js';
+import { VoidRiftBiome } from './VoidRiftBiome.js';
 
 export class MassiveOpenWorld {
     constructor(scene, modelLoader) {
@@ -704,6 +709,63 @@ export class MassiveOpenWorld {
             this.loadedBiomes.set('frozen_wastes', frozenWastes);
             console.log(`   ✅ Frozen Wastes loaded at (${frozenData.pos[0]}, ${frozenData.pos[1]})\n`);
         }
+        
+        // Build Scorched Desert (Desert Zone)
+        console.log('\n🏜️ Building Scorched Desert Biome...');
+        const desertData = this.biomeGrid.find(b => b.id === 'scorched_desert');
+        if (desertData) {
+            const scorchedDesert = new ScorchedDesertBiome(this.scene, this.modelLoader);
+            scorchedDesert.center = { x: desertData.pos[0], z: desertData.pos[1] };
+            await scorchedDesert.build();
+            this.loadedBiomes.set('scorched_desert', scorchedDesert);
+            console.log(`   ✅ Scorched Desert loaded at (${desertData.pos[0]}, ${desertData.pos[1]})\n`);
+        }
+        
+        // Build Twilight Marshlands (Swamp Zone)
+        console.log('\n🐸 Building Twilight Marshlands Biome...');
+        const marshData = this.biomeGrid.find(b => b.id === 'twilight_marshlands');
+        if (marshData) {
+            const twilightMarsh = new TwilightMarshlandsBiome(this.scene, this.modelLoader);
+            twilightMarsh.center = { x: marshData.pos[0], z: marshData.pos[1] };
+            await twilightMarsh.build();
+            this.loadedBiomes.set('twilight_marshlands', twilightMarsh);
+            console.log(`   ✅ Twilight Marshlands loaded at (${marshData.pos[0]}, ${marshData.pos[1]})\n`);
+        }
+        
+        // Build Celestial Highlands (Sky Zone)
+        console.log('\n☁️ Building Celestial Highlands Biome...');
+        const celestialData = this.biomeGrid.find(b => b.id === 'celestial_highlands');
+        if (celestialData) {
+            const celestialHighlands = new CelestialHighlandsBiome(this.scene, this.modelLoader);
+            celestialHighlands.center = { x: celestialData.pos[0], z: celestialData.pos[1] };
+            await celestialHighlands.build();
+            this.loadedBiomes.set('celestial_highlands', celestialHighlands);
+            console.log(`   ✅ Celestial Highlands loaded at (${celestialData.pos[0]}, ${celestialData.pos[1]})\n`);
+        }
+        
+        // Build Volcanic Badlands (Fire Zone)
+        console.log('\n🌋 Building Volcanic Badlands Biome...');
+        const volcanicData = this.biomeGrid.find(b => b.id === 'volcanic_badlands');
+        if (volcanicData) {
+            const volcanicBadlands = new VolcanicBadlandsBiome(this.scene, this.modelLoader);
+            volcanicBadlands.center = { x: volcanicData.pos[0], z: volcanicData.pos[1] };
+            await volcanicBadlands.build();
+            this.loadedBiomes.set('volcanic_badlands', volcanicBadlands);
+            console.log(`   ✅ Volcanic Badlands loaded at (${volcanicData.pos[0]}, ${volcanicData.pos[1]})\n`);
+        }
+        
+        // Build Void Rift (Endgame Zone)
+        console.log('\n🌀 Building Void Rift Biome (ENDGAME)...');
+        const voidData = this.biomeGrid.find(b => b.id === 'void_rift');
+        if (voidData) {
+            const voidRift = new VoidRiftBiome(this.scene, this.modelLoader);
+            voidRift.center = { x: voidData.pos[0], z: voidData.pos[1] };
+            await voidRift.build();
+            this.loadedBiomes.set('void_rift', voidRift);
+            console.log(`   ✅ Void Rift loaded at (${voidData.pos[0]}, ${voidData.pos[1]})\n`);
+        }
+        
+        console.log('\n🎉 ALL 12 BIOMES COMPLETE! World fully built!');
     }
     
     /**
