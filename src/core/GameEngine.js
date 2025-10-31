@@ -124,6 +124,11 @@ import { SeductiveBossSystem } from '../systems/SeductiveBossSystem.js';
 import { SurvivalSystem } from '../systems/SurvivalSystem.js';
 import { BuildingSystem } from '../systems/BuildingSystem.js';
 import { FarmingSystem } from '../systems/FarmingSystem.js';
+// NEW UI SYSTEMS - Complete user interface for all features
+import { SurvivalUI } from '../ui/SurvivalUI.js';
+import { FarmingUI } from '../ui/FarmingUI.js';
+import { BuildingUI } from '../ui/BuildingUI.js';
+import { CannabisMagicUI } from '../ui/CannabisMagicUI.js';
 
 export class GameEngine {
     constructor(canvas) {
@@ -161,6 +166,12 @@ export class GameEngine {
         this.survivalSystem = null;
         this.buildingSystem = null;
         this.farmingSystem = null;
+        
+        // NEW UI SYSTEMS for player interaction
+        this.survivalUI = null;
+        this.farmingUI = null;
+        this.buildingUI = null;
+        this.cannabisMagicUI = null;
         this.achievementSystem = null;
         this.audioSystem = null;
         this.skillTreeSystem = null;
@@ -437,6 +448,34 @@ export class GameEngine {
             console.log('   - Romance 8 seductive anime bosses');
             console.log('   - Build 15+ structures (houses, farms, forges)');
             console.log('   - Farm 15+ crops with seasons');
+            
+            // ========================================
+            // INITIALIZE ALL UI SYSTEMS
+            // Create player-facing interfaces for all systems
+            // ========================================
+            console.log('🎨 Initializing UI Systems...');
+            
+            // Survival UI - hunger, thirst, temperature display with controls
+            this.survivalUI = new SurvivalUI(this.survivalSystem);
+            console.log('   ✅ Survival UI: Real-time stats & action buttons');
+            
+            // Farming UI - crop management, planting, harvesting
+            this.farmingUI = new FarmingUI(this.farmingSystem);
+            console.log('   ✅ Farming UI: Plant crops, manage 20 plots');
+            
+            // Building UI - construction menu, building list
+            this.buildingUI = new BuildingUI(this.buildingSystem);
+            console.log('   ✅ Building UI: 15+ buildings, construction queue');
+            
+            // Cannabis Magic UI - herb cultivation, smoke abilities
+            this.cannabisMagicUI = new CannabisMagicUI(this.cannabisMagicSystem);
+            console.log('   ✅ Cannabis Magic UI: 10 herbs, abilities menu');
+            
+            console.log('🎨 All UI Systems Active!');
+            console.log('   Press F = Farming, B = Building, M = Cannabis Magic');
+            
+            // Setup keyboard controls for UIs
+            this.setupUIControls();
             
         } catch (error) {
             console.error('Error initializing essential systems:', error);
@@ -1391,6 +1430,58 @@ export class GameEngine {
         // Track achievements
         if (this.achievementSystem) {
             this.achievementSystem.onEnemyDefeated(enemy.isBoss);
+        }
+    }
+}
+    
+    setupUIControls() {
+        // Add keyboard controls for UI panels
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'f' || e.key === 'F') {
+                if (this.farmingUI) {
+                    this.farmingUI.toggle();
+                    console.log('Farming UI toggled');
+                }
+            }
+            
+            if (e.key === 'b' || e.key === 'B') {
+                if (this.buildingUI) {
+                    this.buildingUI.toggle();
+                    console.log('Building UI toggled');
+                }
+            }
+            
+            if (e.key === 'm' || e.key === 'M') {
+                if (this.cannabisMagicUI) {
+                    this.cannabisMagicUI.toggle();
+                    console.log('Cannabis Magic UI toggled');
+                }
+            }
+            
+            if (e.key === 's' || e.key === 'S') {
+                if (this.survivalUI) {
+                    this.survivalUI.toggle();
+                    console.log('Survival UI toggled');
+                }
+            }
+        });
+        
+        console.log('🎮 UI Controls Setup:');
+        console.log('   F = Farming Menu');
+        console.log('   B = Building Menu');
+        console.log('   M = Cannabis Magic Menu');
+        console.log('   S = Survival Stats');
+    }
+    
+    handlePlayerDeath() {
+        console.log('💀 Player died!');
+        // Reset survival stats
+        if (this.survivalSystem) {
+            this.survivalSystem.reset();
+        }
+        // Respawn player
+        if (this.player) {
+            this.player.position.set(0, 1, 0);
         }
     }
 }
