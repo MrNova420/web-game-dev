@@ -820,6 +820,9 @@
             landmarks: [], // Add landmarks for exploration
             buildings: [], // Add buildings
             villages: [], // Add villages
+            resources: [], // Gatherable resources
+            farmPlots: [], // Player farms
+            playerBuildings: [], // Player-built structures
             enemiesDefeated: 0,
             bossesDefeated: 0,
             keys: {},
@@ -2042,14 +2045,104 @@
             // Check NPC interactions
             for (const npc of gameState.npcs) {
                 const dist = distance(gameState.player, npc);
-                if (dist < npc.radius + gameState.player.radius && !npc.interacted) {
-                    if (gameState.keys['e']) {
+                if (dist < npc.radius + gameState.player.radius + 30) {
+                    if (gameState.keys['e'] && !npc.interacted) {
                         npc.interacted = true;
                         createParticle(npc.x, npc.y, `${npc.emoji} ${npc.dialogue}`, '#00ff00');
-                        // Give rewards for NPC interaction
-                        gameState.player.gold += 10;
+                        
+                        // NPC gives based on type
+                        switch(npc.gives) {
+                            case 'gold':
+                                gameState.player.gold += 25;
+                                createParticle(npc.x, npc.y - 30, '+25 Gold!', '#ffd700');
+                                break;
+                            case 'exp':
+                                gainExp(50);
+                                createParticle(npc.x, npc.y - 30, '+50 EXP!', '#00ff00');
+                                break;
+                            case 'heal':
+                                gameState.player.hp = gameState.player.maxHp;
+                                gameState.player.mp = gameState.player.maxMp;
+                                createParticle(npc.x, npc.y - 30, '✨ Healed!', '#00ffff');
+                                break;
+                            case 'item':
+                                const randomItem = LOOT_ITEMS[Math.floor(Math.random() * LOOT_ITEMS.length)];
+                                gameState.player.inventory.push({...randomItem});
+                                createParticle(npc.x, npc.y - 30, `+${randomItem.name}!`, RARITY_COLORS[randomItem.rarity]);
+                                break;
+                            default:
+                                gameState.player.gold += 10;
+                        }
+                        
+                        checkAchievements();
                     }
                 }
+            }
+            
+            // RESOURCE GATHERING - Press F to gather
+            if (gameState.keys['f']) {
+                for (const resource of gameState.resources) {
+                    if (resource.depleted) continue;
+                    
+                    const dist = distance(gameState.player, resource);
+                    if (dist < resource.radius + gameState.player.radius + 30) {
+                        // Gather resource
+                        resource.depleted = true;
+                        gameState.crafting.materials[resource.resource] = 
+                            (gameState.crafting.materials[resource.resource] || 0) + resource.amount;
+                        
+                        createParticle(resource.x, resource.y, 
+                            `+${resource.amount} ${resource.resource}!`, '#8B4513');
+                        
+                        // Respawn after time
+                        setTimeout(() => {
+                            resource.depleted = false;
+                        }, resource.respawnTime);
+                        
+                        // Remove key to prevent spam
+                        gameState.keys['f'] = false;
+                        break;
+                    }
+                }
+            }
+            
+            // VILLAGE TRACKING - Check if player enters village
+            for (const village of gameState.villages) {
+                const dist = distance(gameState.player, village);
+                if (dist < 300) {
+                    if (!gameState.villagesVisited.has(village.name)) {
+                        gameState.villagesVisited.add(village.name);
+                        createParticle(gameState.player.x, gameState.player.y, 
+                            `🏘️ Discovered ${village.name}!`, '#ffd700');
+                        gainExp(100);
+                        checkAchievements();
+                    }
+                }
+            }
+            
+            // SURVIVAL MECHANICS - Passive drain
+            if (Math.random() < 0.001) { // Every ~16 seconds
+                gameState.survival.hunger = Math.max(0, gameState.survival.hunger - 1);
+                gameState.survival.thirst = Math.max(0, gameState.survival.thirst - 1);
+            }
+            
+            // Hunger/thirst effects
+            if (gameState.survival.hunger < 20 || gameState.survival.thirst < 20) {
+                gameState.player.hp -= 0.05; // Slow damage
+                if (Math.random() < 0.01) {
+                    createParticle(gameState.player.x, gameState.player.y, 
+                        '💀 Hungry/Thirsty!', '#ff0000');
+                }
+            }
+            
+            // Eating berries restores
+            if (gameState.crafting.materials.berries > 0 && gameState.keys['q']) {
+                gameState.crafting.materials.berries--;
+                gameState.survival.hunger = Math.min(100, gameState.survival.hunger + 20);
+                gameState.survival.thirst = Math.min(100, gameState.survival.thirst + 10);
+                createParticle(gameState.player.x, gameState.player.y, 
+                    '🫐 Ate Berry!', '#purple');
+                gameState.keys['q'] = false;
             }
 
             // Update enemies with better AI (only move if near camera for performance)
