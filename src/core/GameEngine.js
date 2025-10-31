@@ -1395,19 +1395,22 @@ export class GameEngine {
         
         // Damage nearby enemies
         const enemies = this.enemyManager.getEnemies();
-        enemies.forEach(enemy => {
-            const distance = enemy.mesh.position.distanceTo(this.player.mesh.position);
-            if (distance < 5 && enemy.isAlive) {
-                let damage = 25;
+        if (enemies && Array.isArray(enemies)) {
+            enemies.forEach(enemy => {
+                if (!enemy || !enemy.mesh || !enemy.isAlive) return;
                 
-                // Apply combo multiplier
-                if (this.comboSystem) {
-                    damage = this.comboSystem.onHit(damage);
-                }
-                
-                enemy.takeDamage(damage);
-                
-                // Create hit effect
+                const distance = enemy.mesh.position.distanceTo(this.player.mesh.position);
+                if (distance < 5) {
+                    let damage = 25;
+                    
+                    // Apply combo multiplier
+                    if (this.comboSystem) {
+                        damage = this.comboSystem.onHit(damage);
+                    }
+                    
+                    enemy.takeDamage(damage);
+                    
+                    // Create hit effect
                 if (this.particleSystem) {
                     this.particleSystem.createHitEffect(enemy.mesh.position);
                 }
@@ -1485,8 +1488,11 @@ export class GameEngine {
         let minDistance = Infinity;
         
         const enemies = this.enemyManager.getEnemies();
+        if (!enemies || !Array.isArray(enemies)) return null;
+        
         enemies.forEach(enemy => {
-            if (!enemy.isAlive) return;
+            if (!enemy || !enemy.mesh || !enemy.isAlive) return;
+            
             const distance = enemy.mesh.position.distanceTo(this.player.mesh.position);
             if (distance < minDistance) {
                 minDistance = distance;
@@ -1498,6 +1504,9 @@ export class GameEngine {
     }
     
     dropLoot(enemy) {
+        // Safety check
+        if (!enemy) return;
+        
         // Bosses always drop loot, regular enemies have 30% chance
         const dropChance = enemy.isBoss ? 1.0 : 0.3;
         
