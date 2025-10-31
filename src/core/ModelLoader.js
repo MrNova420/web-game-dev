@@ -189,25 +189,60 @@ export class ModelLoader {
      * This is what AssetRegistry returns
      */
     async load(modelPath) {
-        // Check cache first
+        // Check cache first - this makes subsequent loads instant!
         if (this.modelCache.has(modelPath)) {
             const cached = this.modelCache.get(modelPath).clone();
             return cached;
         }
         
         try {
-            // Suppress spam - only log first load
-            // console.log(`📦 Loading model from path: ${modelPath}`);
+            // Load from network (first time only)
             const gltf = await this.loadGLTF(modelPath);
             
             if (gltf && gltf.scene) {
-                // console.log(`✅ Successfully loaded: ${modelPath}`);
-                
-                // Cache the model
+                // Cache the model for instant cloning later
                 this.modelCache.set(modelPath, gltf.scene);
                 return gltf.scene.clone();
             } else {
                 console.error(`❌ Model loaded but no scene: ${modelPath}`);
+                return null;
+            }
+            
+        } catch (error) {
+            // Suppress error spam - models will use fallback
+            return null;
+        }
+    }
+    
+    /**
+     * Preload common models to speed up world building
+     * This loads and caches frequently used models before they're needed
+     */
+    async preloadCommonModels() {
+        console.log('📦 Preloading common models...');
+        
+        const commonModels = [
+            '/assets/models/nature/CommonTree_1.gltf',
+            '/assets/models/nature/CommonTree_2.gltf',
+            '/assets/models/nature/CommonTree_3.gltf',
+            '/assets/models/nature/Rock_Small_1.gltf',
+            '/assets/models/nature/Bush_Common.gltf',
+            '/assets/models/nature/Grass_Common_Tall.gltf'
+        ];
+        
+        const loaded = [];
+        for (const path of commonModels) {
+            try {
+                const model = await this.load(path);
+                if (model) loaded.push(path);
+            } catch (error) {
+                // Continue if one fails
+            }
+        }
+        
+        console.log(`✅ Preloaded ${loaded.length}/${commonModels.length} common models`);
+        return loaded.length;
+    }
                 return null;
             }
             
