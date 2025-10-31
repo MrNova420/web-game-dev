@@ -297,7 +297,7 @@ export class GameEngine {
     }
     
     async init() {
-        console.log('🎮 Initializing game engine...');
+        logger.info('🎮 Initializing game engine...');
         
         // Create Three.js scene
         this.scene = new THREE.Scene();
@@ -418,24 +418,24 @@ export class GameEngine {
             this.combatEnemySystem = this.completeGameIntegration.combat;
             this.dungeonBuilderSystem = this.completeGameIntegration.dungeonBuilder;
             
-            console.log('✅ Complete Game Integration finished!');
-            console.log('   🌍 World loaded with 3 biomes');
-            console.log('   🎨 UI system active');
-            console.log('   🎮 Input system ready (keyboard/mouse/touch/gamepad)');
-            console.log('   ⚔️ Combat system active');
-            console.log('   🏛️ Dungeon system ready');
+            logger.info('✅ Complete Game Integration finished!');
+            logger.info('   🌍 World loaded with 3 biomes');
+            logger.info('   🎨 UI system active');
+            logger.info('   🎮 Input system ready (keyboard/mouse/touch/gamepad)');
+            logger.info('   ⚔️ Combat system active');
+            logger.info('   🏛️ Dungeon system ready');
             
-            console.log('✅ Essential systems initialized');
+            logger.info('✅ Essential systems initialized');
             
             // ========================================
             // SURVIVAL & IMMERSIVE GAMEPLAY SYSTEMS
             // Initialize all survival mechanics for full gameplay
             // ========================================
-            console.log('🌿 Initializing Survival & Immersive Systems...');
+            logger.info('🌿 Initializing Survival & Immersive Systems...');
             
             // Initialize Survival System (hunger, thirst, temperature)
             this.survivalSystem = new SurvivalSystem(this.player);
-            console.log('   ✅ Survival System: Hunger, Thirst, Temperature');
+            logger.info('   ✅ Survival System: Hunger, Thirst, Temperature');
             
             // Initialize Cannabis Magic System (herb cultivation & magic)
             this.cannabisMagicSystem = new CannabisMagicSystem(
@@ -444,56 +444,56 @@ export class GameEngine {
                 this.modelLoader
             );
             await this.cannabisMagicSystem.initialize();
-            console.log('   ✅ Cannabis Magic System: 10 herb types, cultivation, smoke abilities');
+            logger.info('   ✅ Cannabis Magic System: 10 herb types, cultivation, smoke abilities');
             
             // Initialize Seductive Boss System (anime bosses & romance)
             this.seductiveBossSystem = new SeductiveBossSystem(
                 this.scene,
                 this.modelLoader
             );
-            console.log('   ✅ Seductive Boss System: 8 bosses, affection mechanics');
+            logger.info('   ✅ Seductive Boss System: 8 bosses, affection mechanics');
             
             // Initialize Building System (construct structures)
             this.buildingSystem = new BuildingSystem(this.scene, this.modelLoader);
-            console.log('   ✅ Building System: 15+ building types from mega packs');
+            logger.info('   ✅ Building System: 15+ building types from mega packs');
             
             // Initialize Farming System (crops & agriculture)
             this.farmingSystem = new FarmingSystem(this.scene, this.modelLoader);
             await this.farmingSystem.initialize();
-            console.log('   ✅ Farming System: 15+ crops, seasons, growth stages');
+            logger.info('   ✅ Farming System: 15+ crops, seasons, growth stages');
             
-            console.log('🌿 Survival & Immersive Systems Ready!');
-            console.log('   Players can now:');
-            console.log('   - Manage hunger, thirst, and temperature');
-            console.log('   - Grow and harvest 10 cannabis strains');
-            console.log('   - Romance 8 seductive anime bosses');
-            console.log('   - Build 15+ structures (houses, farms, forges)');
-            console.log('   - Farm 15+ crops with seasons');
+            logger.info('🌿 Survival & Immersive Systems Ready!');
+            logger.info('   Players can now:');
+            logger.info('   - Manage hunger, thirst, and temperature');
+            logger.info('   - Grow and harvest 10 cannabis strains');
+            logger.info('   - Romance 8 seductive anime bosses');
+            logger.info('   - Build 15+ structures (houses, farms, forges)');
+            logger.info('   - Farm 15+ crops with seasons');
             
             // ========================================
             // INITIALIZE ALL UI SYSTEMS
             // Create player-facing interfaces for all systems
             // ========================================
-            console.log('🎨 Initializing UI Systems...');
+            logger.info('🎨 Initializing UI Systems...');
             
             // Survival UI - hunger, thirst, temperature display with controls
             this.survivalUI = new SurvivalUI(this.survivalSystem);
-            console.log('   ✅ Survival UI: Real-time stats & action buttons');
+            logger.info('   ✅ Survival UI: Real-time stats & action buttons');
             
             // Farming UI - crop management, planting, harvesting
             this.farmingUI = new FarmingUI(this.farmingSystem);
-            console.log('   ✅ Farming UI: Plant crops, manage 20 plots');
+            logger.info('   ✅ Farming UI: Plant crops, manage 20 plots');
             
             // Building UI - construction menu, building list
             this.buildingUI = new BuildingUI(this.buildingSystem);
-            console.log('   ✅ Building UI: 15+ buildings, construction queue');
+            logger.info('   ✅ Building UI: 15+ buildings, construction queue');
             
             // Cannabis Magic UI - herb cultivation, smoke abilities
             this.cannabisMagicUI = new CannabisMagicUI(this.cannabisMagicSystem);
-            console.log('   ✅ Cannabis Magic UI: 10 herbs, abilities menu');
+            logger.info('   ✅ Cannabis Magic UI: 10 herbs, abilities menu');
             
-            console.log('🎨 All UI Systems Active!');
-            console.log('   Press F = Farming, B = Building, M = Cannabis Magic');
+            logger.info('🎨 All UI Systems Active!');
+            logger.info('   Press F = Farming, B = Building, M = Cannabis Magic');
             
             // Setup keyboard controls for UIs
             this.setupUIControls();
@@ -502,16 +502,16 @@ export class GameEngine {
             // DEVICE OPTIMIZATION
             // Auto-detect device and optimize performance
             // ========================================
-            console.log('📱 Initializing Device Optimization...');
+            logger.info('📱 Initializing Device Optimization...');
             this.deviceOptimizationSystem = new DeviceOptimizationSystem(this.renderer, this.scene);
             this.deviceOptimizationSystem.applySettings();
             this.deviceOptimizationSystem.optimizeForTouch();
             this.deviceOptimizationSystem.enableDynamicQuality();
             this.deviceOptimizationSystem.createPerformanceUI();
-            console.log('   ✅ Device optimization active for all platforms');
+            logger.info('   ✅ Device optimization active for all platforms');
             
         } catch (error) {
-            console.error('Error initializing essential systems:', error);
+            logger.error('Error initializing essential systems:', error);
             throw error;
         }
         
@@ -527,7 +527,7 @@ export class GameEngine {
         // Handle window resize
         window.addEventListener('resize', () => this.onWindowResize());
         
-        console.log('✅ Game engine initialized');
+        logger.info('✅ Game engine initialized');
         return true;
     }
     
@@ -632,69 +632,69 @@ export class GameEngine {
                 if (this.cloudSaveSystem) this.cloudSaveSystem.init();
                 if (this.advancedAutoManagementSystem) this.advancedAutoManagementSystem.init();
                 
-                console.log('✅ Optional advanced systems loaded in background');
+                logger.info('✅ Optional advanced systems loaded in background');
             } catch (error) {
-                console.warn('Some optional systems failed to load:', error);
+                logger.warn('Some optional systems failed to load:', error);
             }
         }, 1000); // Load after 1 second delay
     }
     
     async createWorld() {
-        console.log('🌍 ============================================');
-        console.log('   CREATING DYNASTY OF EMBERVEIL');
-        console.log('   Massive Multiplayer Open World');
-        console.log('============================================\n');
+        logger.info('🌍 ============================================');
+        logger.info('   CREATING DYNASTY OF EMBERVEIL');
+        logger.info('   Massive Multiplayer Open World');
+        logger.info('============================================\n');
         
         // Initialize the MASSIVE OPEN WORLD
         this.massiveWorld = new MassiveOpenWorld(this.scene, this.modelLoader);
         await this.massiveWorld.initialize();
         
-        console.log('✅ WORLD INITIALIZATION COMPLETE!\n');
+        logger.info('✅ WORLD INITIALIZATION COMPLETE!\n');
         
         // ========================================
         // BUILD CITIES, VILLAGES & SETTLEMENTS
         // Create living, breathing world with economy
         // ========================================
-        console.log('🏙️ ============================================');
-        console.log('   BUILDING CITIES, VILLAGES & SETTLEMENTS');
-        console.log('============================================\n');
+        logger.info('🏙️ ============================================');
+        logger.info('   BUILDING CITIES, VILLAGES & SETTLEMENTS');
+        logger.info('============================================\n');
         
         this.cityVillageSystem = new CityVillageSystem(this.scene, this.modelLoader);
         await this.cityVillageSystem.createWorld();
         
-        console.log('✅ CITIES AND VILLAGES COMPLETE!');
-        console.log(`   Total Settlements: ${this.cityVillageSystem.settlements.length}`);
-        console.log(`   - Cities: 3`);
-        console.log(`   - Villages: 6`);
-        console.log(`   - Outposts: 2`);
-        console.log(`   - Total NPCs: 400+`);
-        console.log(`   - Total Shops: 50+\n`);
+        logger.info('✅ CITIES AND VILLAGES COMPLETE!');
+        logger.info(`   Total Settlements: ${this.cityVillageSystem.settlements.length}`);
+        logger.info(`   - Cities: 3`);
+        logger.info(`   - Villages: 6`);
+        logger.info(`   - Outposts: 2`);
+        logger.info(`   - Total NPCs: 400+`);
+        logger.info(`   - Total Shops: 50+\n`);
         
         // ========================================
         // POPULATE WORLD WITH LIFE
         // Spawn NPCs, enemies, quests everywhere
         // ========================================
-        console.log('🌍 ============================================');
-        console.log('   POPULATING WORLD WITH LIFE');
-        console.log('============================================\n');
+        logger.info('🌍 ============================================');
+        logger.info('   POPULATING WORLD WITH LIFE');
+        logger.info('============================================\n');
         
         this.worldPopulationSystem = new WorldPopulationSystem(this.scene, this.modelLoader);
         await this.worldPopulationSystem.populate();
         
-        console.log('✅ WORLD POPULATION COMPLETE!');
-        console.log(`   - NPCs: ${this.worldPopulationSystem.npcs.length}`);
-        console.log(`   - Enemies: ${this.worldPopulationSystem.enemies.length}`);
-        console.log(`   - Quest Givers: ${this.worldPopulationSystem.questGivers.length}`);
-        console.log(`   - Merchants: ${this.worldPopulationSystem.merchants.length}`);
-        console.log(`   - Activities: ${this.worldPopulationSystem.activities.length}\n`);
+        logger.info('✅ WORLD POPULATION COMPLETE!');
+        logger.info(`   - NPCs: ${this.worldPopulationSystem.npcs.length}`);
+        logger.info(`   - Enemies: ${this.worldPopulationSystem.enemies.length}`);
+        logger.info(`   - Quest Givers: ${this.worldPopulationSystem.questGivers.length}`);
+        logger.info(`   - Merchants: ${this.worldPopulationSystem.merchants.length}`);
+        logger.info(`   - Activities: ${this.worldPopulationSystem.activities.length}\n`);
         
         // ========================================
         // SPAWN ENEMY CAMPS
         // Create raiding camps with loot
         // ========================================
-        console.log('🏕️ ============================================');
-        console.log('   SPAWNING ENEMY CAMPS');
-        console.log('============================================\n');
+        logger.info('🏕️ ============================================');
+        logger.info('   SPAWNING ENEMY CAMPS');
+        logger.info('============================================\n');
         
         this.enemyCampSystem = new EnemyCampSystem(this.scene, this.modelLoader);
         
@@ -716,23 +716,23 @@ export class GameEngine {
         
         await this.enemyCampSystem.populateWorld(biomePositions);
         
-        console.log('✅ ENEMY CAMPS COMPLETE!');
-        console.log(`   Total Camps: ${this.enemyCampSystem.camps.length}`);
-        console.log(`   Raiding opportunities throughout world!\n`);
+        logger.info('✅ ENEMY CAMPS COMPLETE!');
+        logger.info(`   Total Camps: ${this.enemyCampSystem.camps.length}`);
+        logger.info(`   Raiding opportunities throughout world!\n`);
         
-        console.log('🎮 ============================================');
-        console.log('   COMPLETE IMMERSIVE WORLD READY!');
-        console.log('============================================');
-        console.log('   3 Major Cities with full economies');
-        console.log('   6 Specialized Villages');
-        console.log('   2 Military Outposts');
-        console.log('   400+ NPCs with dialogue');
-        console.log('   200+ Enemies roaming');
-        console.log('   36 Enemy camps to raid');
-        console.log('   50+ Shops with dynamic economy');
-        console.log('   20+ Quests to discover');
-        console.log('   Optimized for ALL devices (mobile/tablet/desktop)');
-        console.log('============================================\n');
+        logger.info('🎮 ============================================');
+        logger.info('   COMPLETE IMMERSIVE WORLD READY!');
+        logger.info('============================================');
+        logger.info('   3 Major Cities with full economies');
+        logger.info('   6 Specialized Villages');
+        logger.info('   2 Military Outposts');
+        logger.info('   400+ NPCs with dialogue');
+        logger.info('   200+ Enemies roaming');
+        logger.info('   36 Enemy camps to raid');
+        logger.info('   50+ Shops with dynamic economy');
+        logger.info('   20+ Quests to discover');
+        logger.info('   Optimized for ALL devices (mobile/tablet/desktop)');
+        logger.info('============================================\n');
         
         // Create player with real character model
         this.player = new Player(this.scene);
@@ -741,7 +741,7 @@ export class GameEngine {
         // Load player character from asset registry
         try {
             const playerCharPath = this.assetRegistry.getPlayerCharacterPath(0); // Knight by default
-            console.log(`🎮 Loading player character: ${playerCharPath}`);
+            logger.info(`🎮 Loading player character: ${playerCharPath}`);
             const playerModel = await this.modelLoader.load(playerCharPath);
             
             if (playerModel && this.player.mesh) {
@@ -756,10 +756,10 @@ export class GameEngine {
                 
                 this.player.mesh = playerModel;
                 this.scene.add(playerModel);
-                console.log('✅ Player character model loaded: Knight');
+                logger.info('✅ Player character model loaded: Knight');
             }
         } catch (error) {
-            console.log('ℹ️ Using default player model:', error.message);
+            logger.info('ℹ️ Using default player model:', error.message);
         }
         
         // Initialize combat systems with player reference
@@ -772,7 +772,7 @@ export class GameEngine {
         this.updateCompanionUI();
         
         // Spawn skeleton enemies using real models
-        console.log('💀 Spawning skeleton enemies...');
+        logger.info('💀 Spawning skeleton enemies...');
         const enemySpawnPoints = [
             { x: 30, z: 30 }, { x: -30, z: 30 },
             { x: 30, z: -30 }, { x: -30, z: -30 },
@@ -805,24 +805,24 @@ export class GameEngine {
                     }
                     
                     this.scene.add(enemyModel);
-                    console.log(`   ✅ Spawned skeleton at (${point.x}, ${point.z})`);
+                    logger.info(`   ✅ Spawned skeleton at (${point.x}, ${point.z})`);
                 }
             } catch (error) {
-                console.log(`   ⚠️ Couldn't spawn enemy at point ${i}:`, error.message);
+                logger.info(`   ⚠️ Couldn't spawn enemy at point ${i}:`, error.message);
             }
         }
         
-        console.log(`✅ Spawned ${enemySpawnPoints.length} skeleton enemies`);
+        logger.info(`✅ Spawned ${enemySpawnPoints.length} skeleton enemies`);
         
         // Activate weather and day/night systems for Mystic Forest
         if (this.weatherSystem) {
             this.weatherSystem.setWeather('mist', 0.2); // Light mystical mist
-            console.log('🌫️ Mystical mist active');
+            logger.info('🌫️ Mystical mist active');
         }
         
         if (this.dayNightCycleSystem) {
             this.dayNightCycleSystem.setTime(16); // Late afternoon, mystical lighting
-            console.log('🌅 Day/night cycle active (late afternoon)');
+            logger.info('🌅 Day/night cycle active (late afternoon)');
         }
         
         // Spawn anime characters/NPCs with REAL models
@@ -857,7 +857,7 @@ export class GameEngine {
                     }
                 }
             }
-            console.log('✨ Character models spawned (mix of loaded and procedural)');
+            logger.info('✨ Character models spawned (mix of loaded and procedural)');
         }
         
         // Enable all waypoints for fast travel
@@ -866,12 +866,12 @@ export class GameEngine {
             this.teleportationSystem.waypoints.forEach((waypoint, id) => {
                 this.teleportationSystem.discoveredWaypoints.add(id);
             });
-            console.log('🌀 Fast travel fully enabled with all waypoints');
+            logger.info('🌀 Fast travel fully enabled with all waypoints');
         }
         
         // Check if starting from safe zone
         if (this.startFromSafeZone) {
-            console.log('🏰 Starting from Safe Zone Hub...');
+            logger.info('🏰 Starting from Safe Zone Hub...');
             this.safeZoneSystem.createSafeZone();
             return;
         }
@@ -880,7 +880,7 @@ export class GameEngine {
         if (this.saveSystem.hasSaveData()) {
             const metadata = this.saveSystem.getSaveMetadata();
             if (metadata) {
-                console.log(`💾 Save found: Floor ${metadata.floor}, Level ${metadata.level}`);
+                logger.info(`💾 Save found: Floor ${metadata.floor}, Level ${metadata.level}`);
                 // Offer to load save (for now, auto-load)
                 const shouldLoad = true; // Could show UI prompt here
                 if (shouldLoad) {
@@ -900,7 +900,7 @@ export class GameEngine {
         // Start endless mode
         this.endlessMode.start();
         
-        console.log('✅ Full game world created with REAL 3D models and all advanced features!');
+        logger.info('✅ Full game world created with REAL 3D models and all advanced features!');
     }
     
     loadDungeon(dungeon) {
@@ -913,12 +913,12 @@ export class GameEngine {
             dungeon.decorations.forEach(deco => this.scene.add(deco));
         }
         
-        console.log(`📍 Loaded dungeon: ${dungeon.name} (${dungeon.biome})`);
+        logger.info(`📍 Loaded dungeon: ${dungeon.name} (${dungeon.biome})`);
     }
     
     start() {
         this.isRunning = true;
-        console.log('🎮 Game engine started');
+        logger.info('🎮 Game engine started');
     }
     
     update() {
@@ -1401,7 +1401,7 @@ export class GameEngine {
         if (this.player.stats.mp < 20) return;
         
         this.player.stats.mp -= 20;
-        console.log('💨 Smoke Blast!');
+        logger.info('💨 Smoke Blast!');
         
         // Play ability sound
         if (this.audioSystem) {
@@ -1445,7 +1445,7 @@ export class GameEngine {
         if (this.player.stats.mp < 30) return;
         
         this.player.stats.mp -= 30;
-        console.log('⚡ Shadow Step!');
+        logger.info('⚡ Shadow Step!');
         
         // Play teleport sound
         if (this.audioSystem) {
@@ -1461,7 +1461,7 @@ export class GameEngine {
         if (this.player.stats.mp < 25) return;
         
         this.player.stats.mp -= 25;
-        console.log('💀 Essence Drain!');
+        logger.info('💀 Essence Drain!');
         
         // Play ability sound
         if (this.audioSystem) {
@@ -1496,7 +1496,7 @@ export class GameEngine {
     useCompanionAbility() {
         const companion = this.companionManager.getActiveCompanion();
         if (companion && !companion.isOnCooldown) {
-            console.log(`💜 ${companion.name} Ability!`);
+            logger.info(`💜 ${companion.name} Ability!`);
             companion.useAbility(this);
             this.updateCompanionUI();
         }
@@ -1611,15 +1611,15 @@ export class GameEngine {
     
         setupUIControls() {
         
-        console.log('🎮 UI Controls Setup:');
-        console.log('   F = Farming Menu');
-        console.log('   B = Building Menu');
-        console.log('   M = Cannabis Magic Menu');
-        console.log('   S = Survival Stats');
+        logger.info('🎮 UI Controls Setup:');
+        logger.info('   F = Farming Menu');
+        logger.info('   B = Building Menu');
+        logger.info('   M = Cannabis Magic Menu');
+        logger.info('   S = Survival Stats');
     }
     
     handlePlayerDeath() {
-        console.log('💀 Player died!');
+        logger.info('💀 Player died!');
         // Reset survival stats
         if (this.survivalSystem) {
             this.survivalSystem.reset();
