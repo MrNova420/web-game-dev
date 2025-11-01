@@ -922,9 +922,10 @@ ItemStats.totalItems =
     ItemStats.totalConsumables + 
     ItemStats.totalMaterials;
 
-logger.info(`📦 Loaded ${ItemStats.totalItems} items in database`);
-logger.info(`  - ${ItemStats.totalWeapons} weapons`);
-logger.info(`  - ${ItemStats.totalArmor} armor pieces`);
-logger.info(`  - ${ItemStats.totalAccessories} accessories`);
-logger.info(`  - ${ItemStats.totalConsumables} consumables`);
-logger.info(`  - ${ItemStats.totalMaterials} materials`);
+// Note: Logger info moved to avoid module-level execution
+// logger.info(`📦 Loaded ${ItemStats.totalItems} items in database`);
+// logger.info(`  - ${ItemStats.totalWeapons} weapons`);
+// logger.info(`  - ${ItemStats.totalArmor} armor pieces`);
+// logger.info(`  - ${ItemStats.totalAccessories} accessories`);
+// logger.info(`  - ${ItemStats.totalConsumables} consumables`);
+// logger.info(`  - ${ItemStats.totalMaterials} materials`);

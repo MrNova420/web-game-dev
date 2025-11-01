@@ -345,4 +345,5 @@ export class MonsterManager {
 }
 
 export const monsterManager = new MonsterManager();
-logger.info(`👹 Loaded ${Object.keys(MonsterDefinitions).length} monster definitions`);
+// Note: Logger info moved to avoid module-level execution
+// logger.info(`👹 Loaded ${Object.keys(MonsterDefinitions).length} monster definitions`);
