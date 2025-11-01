@@ -1,9 +1,9 @@
-This is the standard FREE version of the Fantasy Props MegaKit, which only contains 
-a portion of the models . You can buy the PRO version which has all the models,
-or the SOURCE version which has all the models and also includes Unity(URP), Unreal Engine and Godot projects
+This is the standard FREE version of the Universal Base Characters Kit, which only contains 
+a portion of the models . You can buy the SOURCE version which has all the models with rigged .blends,
+and Unity(URP), Unreal Engine and Godot projects
 with custom shaders already set up.
 
-You can get the other versions from the website https://quaternius.com
+You can get the other version from the website https://quaternius.com
 
 -------------------------------------------------------
 License:
