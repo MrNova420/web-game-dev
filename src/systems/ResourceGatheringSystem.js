@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ResourceGatheringSystem.js - Phase 4
  * Mining, herbalism, fishing, and logging.

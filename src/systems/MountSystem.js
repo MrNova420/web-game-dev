@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MountSystem.js
  * Handles rideable mounts for faster travel, mount abilities, and customization

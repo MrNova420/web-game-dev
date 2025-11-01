@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PerformanceOptimizer.js
  * Advanced performance optimization and monitoring system

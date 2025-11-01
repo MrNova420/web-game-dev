@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MarketplaceSystem.js - Phase 6
  */

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TacticalCombatAI.js
  * Phase 5.4 - Advanced Tactical Combat AI System

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * WeaponSkillSystem.js
  * Phase 5.3 - Weapon Skill and Mastery System

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * WorldExplorationSystem.js - Phase 4
  * Open world exploration with fog of war and discovery.

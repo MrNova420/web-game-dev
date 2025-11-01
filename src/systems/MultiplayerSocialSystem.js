@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MultiplayerSocialSystem - Player interaction and community features
  * Enables cooperative play, chat, and social gathering

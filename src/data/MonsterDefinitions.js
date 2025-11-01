@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MonsterDefinitions.js - 100+ Monster Types with Full Stats
  * Production-ready monster database with AI behaviors, animations, loot
@@ -344,4 +345,5 @@ export class MonsterManager {
 }
 
 export const monsterManager = new MonsterManager();
-logger.info(`👹 Loaded ${Object.keys(MonsterDefinitions).length} monster definitions`);
+// Note: Logger info moved to avoid module-level execution
+// logger.info(`👹 Loaded ${Object.keys(MonsterDefinitions).length} monster definitions`);

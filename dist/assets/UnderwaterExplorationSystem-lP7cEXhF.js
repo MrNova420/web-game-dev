@@ -1,1 +1,0 @@
-class a{constructor(){this.animations={swim:"/assets/animations/swimming.fbx",dive:"/assets/animations/diving.fbx"},this.creatures={shark:"/assets/models/underwater/shark.glb",whale:"/assets/models/underwater/whale.glb"}}dive(s){logger.info(`${s} diving`)}}export{a as UnderwaterExplorationSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SkillTreeSystem.js
  * Visual skill tree with branching paths and prerequisites.

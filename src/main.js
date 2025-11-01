@@ -1,9 +1,9 @@
-import { logger } from './core/Logger.js';
 /**
  * Dynasty of Emberveil - Main Entry Point
  * A browser-based psychedelic fantasy RPG
  */
 
+import { logger } from './core/Logger.js';
 import { GameEngine } from './core/GameEngine.js';
 import { AssetLoader } from './core/AssetLoader.js';
 import { InputManager } from './core/InputManager.js';

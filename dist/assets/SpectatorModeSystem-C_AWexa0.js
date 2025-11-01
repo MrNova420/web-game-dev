@@ -1,0 +1,1 @@
+import{l as e}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.cameras=new Map}spectate(t,o){e.info(`${t} spectating ${o}`)}}export{c as SpectatorModeSystem};

@@ -1,0 +1,1 @@
+import{l as s}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class d{constructor(){this.islands={floating_island:{model:"/assets/models/islands/floating_island.glb"},cloud_palace:{model:"/assets/models/islands/cloud_palace.glb"}}}teleportToIsland(l){s.info(`Teleporting to: ${l}`)}}export{d as SkyIslandSystem};

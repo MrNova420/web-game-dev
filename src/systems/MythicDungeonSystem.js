@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MythicDungeonSystem.js - Phase 7 Endgame
  * Challenging endgame dungeons with scaling difficulty.

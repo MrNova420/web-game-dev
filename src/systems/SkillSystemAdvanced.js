@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SkillSystemAdvanced.js
  * Advanced skill system with 100+ skills across 8 skill trees

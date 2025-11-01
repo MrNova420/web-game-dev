@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MailSystem.js
  * In-game mail with item/gold attachments.

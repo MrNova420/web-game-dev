@@ -1,0 +1,1 @@
+import{l as o}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class i{constructor(){this.errorLog=[]}logError(r){o.info(`Error logged: ${r.message}`),this.errorLog.push(r)}}export{i as ErrorReportingSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CompanionQuestSystem.js
  * Phase 5 - Companion Quest System

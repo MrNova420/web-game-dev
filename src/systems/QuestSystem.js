@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * QuestSystem - Manages quests and objectives
  * Simple quest system for Dynasty of Emberveil

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GuildSystem.js
  * Guild creation, management, and activities.

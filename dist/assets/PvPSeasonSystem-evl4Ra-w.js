@@ -1,0 +1,1 @@
+import{l as o}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.seasons=new Map,this.rewardModels={gladiator_mount:"/assets/models/mounts/gladiator_mount.glb",seasonal_armor:"/assets/models/armor/season_1_pvp.glb"}}startSeason(s){o.info(`PvP Season ${s} started`)}}export{m as PvPSeasonSystem};

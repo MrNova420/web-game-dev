@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EvolutionSystem.js
  * Phase 7 - Evolution System

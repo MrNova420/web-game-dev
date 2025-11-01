@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Cloud Save & Server Connection System
  * Reliable cloud-based save system with automatic sync to prevent data loss

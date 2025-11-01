@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DialogueSystemBranching.js
  * Branching dialogue with player choices and consequences.

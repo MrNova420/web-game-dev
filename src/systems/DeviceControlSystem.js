@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Device Detection & Control System
  * Auto-detects device type and adapts controls

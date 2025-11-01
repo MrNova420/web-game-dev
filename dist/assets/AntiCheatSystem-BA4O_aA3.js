@@ -1,1 +1,0 @@
-import{l as o}from"./index-uQPGMzc0.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class n{constructor(){this.suspiciousActivity=new Map}detectCheat(t,i){o.info(`Monitoring ${t}: ${i}`)}}export{n as AntiCheatSystem};

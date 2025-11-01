@@ -1,0 +1,1 @@
+import{l as i}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.latency=50,this.bandwidth=1e3}optimizePackets(t){i.info(`Optimized packet size: ${t.length} bytes`)}}export{m as NetworkOptimizationSystem};

@@ -1,1 +1,0 @@
-class t{constructor(){this.dungeonTilesets={crypt:"/assets/models/dungeons/crypt_tileset.glb",cave:"/assets/models/dungeons/cave_tileset.glb"}}generateDungeon(e,s){logger.info(`Generating ${e} dungeon (difficulty: ${s})`),logger.info(`  Tileset: ${this.dungeonTilesets[e]}`)}}export{t as DungeonGenerationSystem};

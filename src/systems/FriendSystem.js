@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * FriendSystem.js
  * Friend list, online status, and social features.

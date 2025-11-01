@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PvPSeasonSystem.js - Phase 7
  * Competitive PvP seasons with rewards.

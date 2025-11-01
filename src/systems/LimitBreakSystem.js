@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * LimitBreakSystem.js
  * Ultimate abilities charged by dealing/taking damage.

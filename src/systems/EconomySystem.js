@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EconomySystem.js
  * Handles currency, shops, merchants, and trading economy

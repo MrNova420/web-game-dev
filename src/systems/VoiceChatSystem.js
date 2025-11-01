@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * VoiceChatSystem.js - Phase 5
  */

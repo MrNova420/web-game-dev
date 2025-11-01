@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * QuestSystemAdvanced.js
  * Advanced quest system with branching paths and dynamic objectives.

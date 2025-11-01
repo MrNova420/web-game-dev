@@ -1,0 +1,1 @@
+import{l as a}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.marriages=new Map,this.ceremony={location:"/assets/models/social/chapel.glb"}}marry(r,o){a.info(`${r} married ${o}`)}}export{m as MarriageSystem};

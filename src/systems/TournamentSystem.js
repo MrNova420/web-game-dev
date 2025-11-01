@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TournamentSystem.js - Phase 5
  */

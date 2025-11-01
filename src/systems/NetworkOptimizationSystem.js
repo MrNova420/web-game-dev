@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * NetworkOptimizationSystem.js - Phase 8+ Polish
  * Network traffic optimization.

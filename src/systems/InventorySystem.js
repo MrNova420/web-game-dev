@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * InventorySystem - Manages player inventory and equipment
  * Handles items, equipment slots, and item management

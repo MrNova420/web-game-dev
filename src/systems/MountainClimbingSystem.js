@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MountainClimbingSystem.js - Phase 4
  */

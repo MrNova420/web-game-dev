@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TutorialSystem - Guides new players through game mechanics
  * Provides step-by-step onboarding experience

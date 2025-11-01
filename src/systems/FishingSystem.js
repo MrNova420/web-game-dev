@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * FishingSystem.js
  * Phase 8 - Fishing Mini-Game System

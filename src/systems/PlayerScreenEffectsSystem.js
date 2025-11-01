@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PlayerScreenEffectsSystem - Screen-space visual effects for player feedback
  * 

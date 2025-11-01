@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ContentExpansionSystem - Continuously adds more content and improves existing features
  * Adds: More enemies, more items, more quests, more areas, more features

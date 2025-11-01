@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PetSystemAdvanced.js
  * Pet collection, battles, and evolution.

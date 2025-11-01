@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * StorylineAndLoreSystem.js
  * Deep storyline, lore, narrative, and world-building system

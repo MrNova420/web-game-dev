@@ -1,1 +1,0 @@
-class r{constructor(){this.secrets={hidden_cave:{model:"/assets/models/secrets/hidden_cave.glb",entrance:"/assets/models/secrets/secret_door.glb"}}}discoverSecret(e){logger.info(`Secret discovered: ${e}`)}}export{r as SecretAreaSystem};

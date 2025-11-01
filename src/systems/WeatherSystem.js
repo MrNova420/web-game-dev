@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * WeatherSystem.js - Phase 4
  * Dynamic weather with rain, snow, storms.

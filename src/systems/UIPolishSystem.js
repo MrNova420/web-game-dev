@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * UIPolishSystem - Anime-style UI enhancements and polish
  * 

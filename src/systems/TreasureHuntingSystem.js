@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TreasureHuntingSystem.js - Phase 4
  */

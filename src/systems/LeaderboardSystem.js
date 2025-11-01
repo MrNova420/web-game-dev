@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * LeaderboardSystem.js
  * Global and regional leaderboards with rankings.

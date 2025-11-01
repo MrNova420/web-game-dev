@@ -1,0 +1,1 @@
+import{l as s}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.arenas={colosseum:{model:"/assets/models/pvp/colosseum.glb"}}}enterArena(e){s.info(`${e} enters arena`)}}export{m as PvPArenaSystemAdvanced};

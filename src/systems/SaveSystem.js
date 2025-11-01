@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SaveSystem - Handles game state persistence
  * Auto-saves player progress to localStorage

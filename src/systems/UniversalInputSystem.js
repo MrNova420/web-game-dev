@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Universal Input System - Dynasty of Emberveil
  * 

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Master Game Integration System - THE BRAIN
  * Centralizes and coordinates ALL game systems (old + new)

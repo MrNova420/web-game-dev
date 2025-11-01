@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DungeonGenerationSystem.js - Phase 4
  * Procedural dungeon generation.

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CraftingSystem.js
  * Handles material gathering, crafting recipes, and item creation

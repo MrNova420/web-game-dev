@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Seasonal Content Manager - Phase 9
  * Manages seasonal events, themes, and limited-time content

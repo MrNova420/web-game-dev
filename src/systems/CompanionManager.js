@@ -9,6 +9,8 @@
  * - Icons: game-icons.net (companion portraits)
  */
 
+import { logger } from '../core/Logger.js';
+
 export class CompanionManager {
     constructor() {
         this.companions = this.initializeCompanions();

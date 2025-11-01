@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * FishingSystemAdvanced.js - Phase 4
  */

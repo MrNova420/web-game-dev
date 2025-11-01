@@ -1,0 +1,1 @@
+import{l as a}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.taxRates={sales:.05,income:.1}}collectTax(t,o){a.info(`${t} paid tax: ${o}`)}}export{c as TaxationSystem};

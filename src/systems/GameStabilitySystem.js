@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GameStabilitySystem - Ensures game is stable and fully functional
  * All assets from external sources (Kenney, game-icons.net)

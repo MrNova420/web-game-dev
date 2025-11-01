@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GameReadinessSystem - Final verification that game is fully ready and playable
  * Verifies: All systems loaded, no bugs, performance good, content complete

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ModernUISystem - Enhanced UI with theme-aware design and animations
  * Provides a more polished and immersive user interface experience

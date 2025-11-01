@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Multiplayer Engagement System
  * Encourages players to play together with rewards and matchmaking

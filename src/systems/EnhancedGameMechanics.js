@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EnhancedGameMechanics.js
  * Advanced game mechanics system with combo chains, reaction systems, and strategic depth

@@ -1,0 +1,1 @@
+import{l as r}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class n{constructor(){this.rates={gold_to_gems:100,gems_to_premium:10}}exchange(o,e,t,s){r.info(`${o} exchanged ${e} to ${t}`)}}export{n as CurrencyExchangeSystem};

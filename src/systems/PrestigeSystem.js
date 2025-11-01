@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PrestigeSystem.js
  * Handles prestige/ascension mechanics with cosmic powers and permanent upgrades

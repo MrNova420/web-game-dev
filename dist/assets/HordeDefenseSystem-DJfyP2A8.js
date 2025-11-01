@@ -1,0 +1,1 @@
+import{l as e}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class r{constructor(){this.activeSessions=new Map,e.info("Horde Defense System initialized with full external asset integration")}}export{r as HordeDefenseSystem};

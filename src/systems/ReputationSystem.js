@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ReputationSystem.js
  * Faction reputation with rewards and ranks.

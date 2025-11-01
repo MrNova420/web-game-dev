@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SeasonalEventsSystem.js - Phase 4
  */

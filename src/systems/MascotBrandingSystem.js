@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MascotBrandingSystem - Game mascots, branding icons, and visual identity
  * Creates graphical, mature fantasy mascots and branding elements

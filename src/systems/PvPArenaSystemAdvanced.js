@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PvPArenaSystemAdvanced.js - Phase 5
  */

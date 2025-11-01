@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GameplayEnhancementSystem - Makes gameplay more fun, engaging, and polished
  * Enhances: Combat feel, exploration rewards, progression satisfaction

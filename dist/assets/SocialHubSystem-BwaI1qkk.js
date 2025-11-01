@@ -1,0 +1,1 @@
+import{l as s}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class i{constructor(){this.hub={model:"/assets/models/social/hub.glb"}}enterHub(o){s.info(`${o} enters social hub`)}}export{i as SocialHubSystem};

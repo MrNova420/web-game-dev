@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MountCollectionSystem.js
  * Mount collection with 50+ mounts and stats.

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Dynamic Event System - Phase 9
  * Manages world events, seasonal events, boss spawns, and special occasions

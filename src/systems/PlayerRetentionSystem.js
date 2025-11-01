@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Player Retention System
  * Keeps players engaged and coming back with daily rewards, weekly events, and comeback bonuses

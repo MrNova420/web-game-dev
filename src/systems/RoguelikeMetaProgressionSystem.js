@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * RoguelikeMetaProgressionSystem.js
  * Phase 7 - Roguelike Meta-Progression System

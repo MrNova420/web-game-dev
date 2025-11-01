@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SocialHubSystem.js - Phase 5
  */

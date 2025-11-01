@@ -1,0 +1,1 @@
+import{l as r}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class a{constructor(){this.metrics={fps:60,drawCalls:0,triangles:0}}monitor(){r.info(`FPS: ${this.metrics.fps}, Draw Calls: ${this.metrics.drawCalls}`)}}export{a as PerformanceMonitorSystem};

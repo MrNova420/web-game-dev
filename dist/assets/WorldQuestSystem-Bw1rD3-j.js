@@ -1,0 +1,1 @@
+import{l as o}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class l{constructor(){this.worldQuests=new Map,this.icons={world_quest:"/assets/icons/quests/world_quest.png"}}spawnWorldQuest(s){o.info(`World quest in ${s}`)}}export{l as WorldQuestSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * HousingSystem.js - Phase 4
  * Player housing with furniture and decorations.

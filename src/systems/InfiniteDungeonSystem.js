@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * InfiniteDungeonSystem.js
  * Handles infinite dungeon with scaling difficulty, modifiers, and checkpoints

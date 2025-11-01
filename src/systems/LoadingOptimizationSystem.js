@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * LoadingOptimizationSystem.js - Phase 8+ Polish
  * Optimized asset loading with streaming.

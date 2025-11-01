@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SecretAreaSystem.js - Phase 4
  */

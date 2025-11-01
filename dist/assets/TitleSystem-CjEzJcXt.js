@@ -1,0 +1,1 @@
+import{l as e}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.titles=new Map,this.icons={title_badge:"/assets/icons/titles/title_badge.png"}}unlockTitle(t,i){e.info(`${t} unlocked title: ${i}`),e.info(`  Icon: ${this.icons.title_badge}`)}equipTitle(t,i){e.info(`${t} equipped title: ${i}`)}}export{c as TitleSystem};

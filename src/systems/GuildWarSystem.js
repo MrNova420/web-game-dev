@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GuildWarSystem.js - Phase 5
  */
