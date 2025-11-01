@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ProceduralGenerationSystem.js
  * Endless procedural content generation based on player progress

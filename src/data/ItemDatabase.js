@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Complete Item Database
  * 1000+ items: weapons, armor, accessories, consumables, materials, quest items

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CraftingSystemComplex.js
  * Complex crafting with recipes, quality tiers, and experimentation.

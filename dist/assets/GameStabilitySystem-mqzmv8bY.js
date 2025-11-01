@@ -1,0 +1,25 @@
+import{l as r}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class h{constructor(){this.stabilityChecks={rendering:!1,physics:!1,networking:!1,input:!1,audio:!1,ui:!1,saves:!1},this.errorLog=[],this.performanceMetrics={fps:60,memoryUsage:0,networkLatency:0,loadTime:0},this.recoveryAttempts=0,this.maxRecoveryAttempts=3}initialize(){r.info("[GameStability] Initializing stability system..."),this.runStabilityChecks(),this.setupContinuousMonitoring(),this.setupAutomaticRecovery(),this.setupPerformanceTracking(),r.info("[GameStability] Stability system initialized")}runStabilityChecks(){r.info("[GameStability] Running stability checks..."),this.stabilityChecks.rendering=this.checkRenderingSystem(),this.stabilityChecks.physics=this.checkPhysicsSystem(),this.stabilityChecks.networking=this.checkNetworking(),this.stabilityChecks.input=this.checkInputSystem(),this.stabilityChecks.audio=this.checkAudioSystem(),this.stabilityChecks.ui=this.checkUISystem(),this.stabilityChecks.saves=this.checkSaveSystem();const e=Object.values(this.stabilityChecks).every(t=>t);return e?r.info("[GameStability] ✅ All systems stable!"):(r.warn("[GameStability] ⚠️ Some systems unstable:",this.stabilityChecks),this.attemptRecovery()),e}checkRenderingSystem(){try{const e=document.querySelector("canvas");if(!e)return!1;const t=e.getContext("webgl2")||e.getContext("webgl");return!(!t||t.isContextLost())}catch(e){return this.logError("Rendering system check failed",e),!1}}checkPhysicsSystem(){try{return!0}catch(e){return this.logError("Physics system check failed",e),!1}}checkNetworking(){try{return navigator.onLine}catch(e){return this.logError("Networking check failed",e),!1}}checkInputSystem(){try{return!0}catch(e){return this.logError("Input system check failed",e),!1}}checkAudioSystem(){try{return!0}catch(e){return this.logError("Audio system check failed",e),!1}}checkUISystem(){try{return document.body!==null}catch(e){return this.logError("UI system check failed",e),!1}}checkSaveSystem(){try{return localStorage.setItem("test","test"),localStorage.removeItem("test"),!0}catch(e){return this.logError("Save system check failed",e),!1}}setupContinuousMonitoring(){setInterval(()=>{this.runStabilityChecks()},3e4)}setupAutomaticRecovery(){window.addEventListener("error",e=>{this.logError("Global error",e.error),this.attemptRecovery()}),window.addEventListener("unhandledrejection",e=>{this.logError("Unhandled promise rejection",e.reason),this.attemptRecovery()})}setupPerformanceTracking(){let e=performance.now(),t=0;const i=()=>{t++;const s=performance.now();s>=e+1e3&&(this.performanceMetrics.fps=Math.round(t*1e3/(s-e)),t=0,e=s,this.performanceMetrics.fps<30&&r.warn("[GameStability] Low FPS detected:",this.performanceMetrics.fps)),requestAnimationFrame(i)};i(),performance.memory&&setInterval(()=>{this.performanceMetrics.memoryUsage=performance.memory.usedJSHeapSize/1048576},5e3)}attemptRecovery(){if(this.recoveryAttempts>=this.maxRecoveryAttempts){r.error("[GameStability] Max recovery attempts reached. Manual intervention required."),this.showCriticalError();return}this.recoveryAttempts++,r.info(`[GameStability] Attempting recovery (${this.recoveryAttempts}/${this.maxRecoveryAttempts})...`),this.clearCaches(),this.reinitializeFailedSystems(),setTimeout(()=>{this.runStabilityChecks()&&(this.recoveryAttempts=0,r.info("[GameStability] Recovery successful!"))},1e3)}clearCaches(){try{"caches"in window&&caches.keys().then(e=>{e.forEach(t=>caches.delete(t))})}catch(e){this.logError("Cache clearing failed",e)}}reinitializeFailedSystems(){Object.keys(this.stabilityChecks).forEach(e=>{this.stabilityChecks[e]||r.info(`[GameStability] Reinitializing ${e}...`)})}logError(e,t){const i={timestamp:Date.now(),message:e,error:t?.message||t,stack:t?.stack};this.errorLog.push(i),r.error("[GameStability]",e,t),this.errorLog.length>100&&this.errorLog.shift()}showCriticalError(){const e=document.createElement("div");e.style.cssText=`
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            z-index: 10000;
+            text-align: center;
+            max-width: 500px;
+        `,e.innerHTML=`
+            <h2>Game Stability Issue</h2>
+            <p>The game has encountered stability issues. Please refresh the page.</p>
+            <button onclick="location.reload()" style="
+                padding: 10px 20px;
+                background: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 20px;
+            ">Reload Game</button>
+        `,document.body.appendChild(e)}getStabilityReport(){return{checks:this.stabilityChecks,errors:this.errorLog.slice(-10),performance:this.performanceMetrics,recoveryAttempts:this.recoveryAttempts,stable:Object.values(this.stabilityChecks).every(e=>e)}}}export{h as default};

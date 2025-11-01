@@ -1,0 +1,1 @@
+import{l as a}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class i{constructor(){this.landmarks={ancient_tower:{model:"/assets/models/landmarks/ancient_tower.glb"},mystical_fountain:{model:"/assets/models/landmarks/fountain.glb",vfx:"/assets/particles/magic_water.png"}}}visitLandmark(s){a.info(`Visited: ${s}`)}}export{i as LandmarkSystem};

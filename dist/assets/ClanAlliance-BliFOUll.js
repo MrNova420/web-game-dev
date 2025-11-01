@@ -1,0 +1,1 @@
+import{l as a}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class e{constructor(){this.alliances=new Map}formAlliance(l,o){a.info(`Alliance: ${l} + ${o}`)}}export{e as ClanAlliance};

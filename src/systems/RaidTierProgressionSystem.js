@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * RaidTierProgressionSystem.js - Phase 7 Endgame
  * Multi-tier raid progression system with epic boss encounters.

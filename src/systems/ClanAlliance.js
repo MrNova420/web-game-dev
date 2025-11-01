@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ClanAlliance.js - Phase 5
  */

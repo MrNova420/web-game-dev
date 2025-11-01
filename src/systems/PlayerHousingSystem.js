@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PlayerHousingSystem.js
  * Phase 6 - Player Housing System

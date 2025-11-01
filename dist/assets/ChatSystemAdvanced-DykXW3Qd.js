@@ -1,1 +1,0 @@
-import{l as i}from"./index-uQPGMzc0.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.channels=["GLOBAL","GUILD","PARTY","WHISPER","TRADE"],this.ui={chat_window:"/assets/ui/chat/chat_window.png",emojis:"/assets/ui/chat/emojis.png"}}sendMessage(s,t){i.info(`[${s}] ${t}`)}}export{c as ChatSystemAdvanced};

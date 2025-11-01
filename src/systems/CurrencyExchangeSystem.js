@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CurrencyExchangeSystem.js - Phase 6
  */

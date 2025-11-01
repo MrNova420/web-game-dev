@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DiceGameSystem.js
  * Casino dice game mini-game with multiple game modes

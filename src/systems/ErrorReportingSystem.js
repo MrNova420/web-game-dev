@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ErrorReportingSystem.js - Phase 8+ Polish
  * Automated error reporting and crash handling.

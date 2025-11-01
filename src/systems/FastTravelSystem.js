@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * FastTravelSystem.js - Phase 4
  * Fast travel waypoints and teleportation.

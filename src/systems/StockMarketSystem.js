@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * StockMarketSystem.js - Phase 6
  */

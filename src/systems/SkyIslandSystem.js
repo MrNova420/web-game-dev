@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SkyIslandSystem.js - Phase 4
  */

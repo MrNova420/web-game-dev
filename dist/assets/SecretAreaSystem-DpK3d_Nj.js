@@ -1,0 +1,1 @@
+import{l as s}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class d{constructor(){this.secrets={hidden_cave:{model:"/assets/models/secrets/hidden_cave.glb",entrance:"/assets/models/secrets/secret_door.glb"}}}discoverSecret(e){s.info(`Secret discovered: ${e}`)}}export{d as SecretAreaSystem};

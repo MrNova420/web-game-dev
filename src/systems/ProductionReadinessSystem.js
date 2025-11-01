@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ProductionReadinessSystem - Ensures all game systems are bug-free and ready
  * Validates game state, handles errors, and provides polish features

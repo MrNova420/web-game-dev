@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class a{constructor(){this.loadQueue=[]}preloadAssets(o){t.info(`Preloading ${o.length} assets`)}}export{a as LoadingOptimizationSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EnchantingSystem.js
  * Item enchanting with runes and magical effects.

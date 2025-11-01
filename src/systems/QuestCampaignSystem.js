@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Quest Campaign System - Phase 9 Content Expansion
  * Manages story campaigns, quest chains, and narrative progression

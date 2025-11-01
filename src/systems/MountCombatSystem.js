@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MountCombatSystem.js
  * Combat while mounted with charge attacks and trample damage.

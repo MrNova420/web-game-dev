@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.mentors=new Map,this.icons={mentor:"/assets/icons/social/mentor.png"}}assignMentor(o,s){t.info(`${s} mentors ${o}`)}}export{m as MentorSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PlayerOnboardingSystem - Smooth experience for new and returning players
  * All assets from external sources (Mixamo, Kenney, game-icons.net)

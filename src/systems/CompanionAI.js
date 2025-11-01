@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CompanionAI.js
  * Enhanced companion AI with combat tactics, commands, formations, and synergies

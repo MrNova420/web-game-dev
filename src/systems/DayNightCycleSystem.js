@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DayNightCycleSystem.js - Phase 4
  * 24-hour day/night cycle with dynamic lighting.

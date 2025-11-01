@@ -1,1 +1,0 @@
-class s{constructor(){this.dialogueTrees=new Map,this.characterPortraits={npc_merchant:"/assets/portraits/merchant.png",npc_guard:"/assets/portraits/guard.png",npc_wizard:"/assets/portraits/wizard.png"}}startDialogue(r,t){logger.info(`Starting dialogue ${t} with ${r}`),logger.info(`  Portrait: ${this.characterPortraits[r]}`)}}export{s as DialogueSystemBranching};

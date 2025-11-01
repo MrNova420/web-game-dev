@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * RhythmGameSystem - Music Rhythm Mini-Game
  * 

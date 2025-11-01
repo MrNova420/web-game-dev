@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MonsterDefinitions.js - 100+ Monster Types with Full Stats
  * Production-ready monster database with AI behaviors, animations, loot

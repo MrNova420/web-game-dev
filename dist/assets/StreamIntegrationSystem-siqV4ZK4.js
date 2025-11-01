@@ -1,0 +1,1 @@
+import{l as o}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class i{constructor(){this.streams=new Map}startStream(t,r){o.info(`${t} streaming on ${r}`)}}export{i as StreamIntegrationSystem};

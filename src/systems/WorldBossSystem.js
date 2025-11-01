@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * WorldBossSystem.js - Phase 4
  */

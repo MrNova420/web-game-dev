@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class a{constructor(){this.waypoints=new Map,this.ui={map:"/assets/ui/travel/world_map.png"},this.vfx={teleport:"/assets/particles/teleport.png"}}teleport(e,o){t.info(`${e} teleporting to ${o}`),t.info(`  VFX: ${this.vfx.teleport}`)}}export{a as FastTravelSystem};

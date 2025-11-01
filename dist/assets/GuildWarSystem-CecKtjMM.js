@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.battlegrounds={fortress:{model:"/assets/models/pvp/fortress.glb"}}}startWar(r,s){t.info(`War: ${r} vs ${s}`)}}export{m as GuildWarSystem};

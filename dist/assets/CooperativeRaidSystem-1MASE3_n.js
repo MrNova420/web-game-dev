@@ -1,0 +1,1 @@
+import{l as s}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class d{constructor(){this.raids={dragon_lair:{model:"/assets/models/raids/dragon_lair.glb",bosses:5}}}startRaid(r){s.info(`Raid started: ${r}`)}}export{d as CooperativeRaidSystem};

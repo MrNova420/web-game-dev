@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GuildAndHousingSystem.js
  * Phase 6 - Guild Enhancement and Player Housing System

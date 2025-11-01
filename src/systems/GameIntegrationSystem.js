@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * GameIntegrationSystem - Ensures all 265 systems work together seamlessly
  * Handles system initialization, integration, and communication

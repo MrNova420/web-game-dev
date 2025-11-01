@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * FriendsAndChatSystem.js
  * Phase 6 - Friends and Chat System

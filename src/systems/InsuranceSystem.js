@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * InsuranceSystem.js - Phase 6
  */

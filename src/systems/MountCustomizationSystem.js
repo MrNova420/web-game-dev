@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MountCustomizationSystem.js
  * Phase 5 - Mount Customization System

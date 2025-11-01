@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PerformanceMonitorSystem.js - Phase 8+ Polish
  * Performance monitoring and optimization.

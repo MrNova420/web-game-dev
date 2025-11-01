@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ComboSystem - Tracks and rewards consecutive hits and skill usage
  * Provides damage multipliers and visual feedback for combos

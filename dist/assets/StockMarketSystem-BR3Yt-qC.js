@@ -1,0 +1,1 @@
+import{l as r}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class k{constructor(){this.stocks=new Map,this.ui={ticker:"/assets/ui/economy/stock_ticker.png"}}tradeStock(t,o,s){r.info(`${t} trades ${o}: ${s}`)}}export{k as StockMarketSystem};

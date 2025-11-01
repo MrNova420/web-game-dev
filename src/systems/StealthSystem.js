@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * StealthSystem.js
  * Stealth mechanics with detection radius and backstab bonuses.

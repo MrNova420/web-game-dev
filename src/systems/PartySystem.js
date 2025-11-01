@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PartySystem.js
  * Party formation and management for group content.

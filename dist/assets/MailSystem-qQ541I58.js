@@ -1,0 +1,1 @@
+import{l as i}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class p{constructor(){this.mailboxes=new Map,this.ui={mailbox:"/assets/ui/mail/mailbox.png",new_mail:"/assets/ui/mail/new_mail_icon.png"}}sendMail(a,s,o,m,l=[]){i.info(`${a} sent mail to ${s}: ${o}`),i.info(`  UI: ${this.ui.mailbox}`)}}export{p as MailSystem};

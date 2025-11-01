@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EmoteSystem.js
  * Character emotes and expressions.

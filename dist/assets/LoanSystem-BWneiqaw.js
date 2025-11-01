@@ -1,0 +1,1 @@
+import{l as a}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class i{constructor(){this.loans=new Map}takeLoan(o,t){a.info(`${o} took loan: ${t}`)}}export{i as LoanSystem};

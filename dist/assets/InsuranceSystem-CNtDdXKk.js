@@ -1,0 +1,1 @@
+import{l as s}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.policies=new Map}buyInsurance(o,r){s.info(`${o} bought ${r} insurance`)}}export{c as InsuranceSystem};

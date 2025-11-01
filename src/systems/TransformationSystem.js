@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TransformationSystem.js
  * Character transformations with stat boosts and new abilities.

@@ -1,1 +1,0 @@
-import{l as s}from"./index-uQPGMzc0.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class r{constructor(){this.caves={crystal_cave:{model:"/assets/models/caves/crystal_cave.glb",tileset:"/assets/models/caves/cave_tileset.glb"}}}exploreCave(e){s.info(`Exploring: ${e}`)}}export{r as CaveExplorationSystem};

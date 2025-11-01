@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * LoanSystem.js - Phase 6
  */

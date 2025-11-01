@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.shops={vendor:{model:"/assets/models/shops/marketplace.glb"}},this.ui={shop:"/assets/ui/shop/shop_window.png"}}buyItem(s,o){t.info(`${s} bought ${o}`)}}export{m as MarketplaceSystem};

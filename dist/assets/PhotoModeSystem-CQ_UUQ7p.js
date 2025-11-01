@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class a{constructor(){this.filters=["SEPIA","NOIR","VINTAGE"],this.ui={camera:"/assets/ui/photo/camera.png"}}takePhoto(o){t.info(`${o} took photo`)}}export{a as PhotoModeSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * LegendaryQuestlineSystem.js - Phase 7 Endgame
  * Epic story-driven legendary questlines.

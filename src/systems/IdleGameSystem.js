@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * IdleGameSystem - Idle/Incremental Game Mode
  * 

@@ -1,0 +1,1 @@
+import{l as r}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class a{constructor(){this.streamedAssets=new Map}streamAsset(t,s){r.info(`Streaming: ${t} (priority: ${s})`)}}export{a as AssetStreamingSystem};

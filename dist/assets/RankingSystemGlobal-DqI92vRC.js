@@ -1,0 +1,1 @@
+import{l as n}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class s{constructor(){this.rankings=new Map,this.ui={leaderboard:"/assets/ui/ranking/leaderboard.png"}}updateRank(a,r){n.info(`${a} rank updated: ${r}`)}}export{s as RankingSystemGlobal};

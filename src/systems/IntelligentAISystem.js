@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Intelligent Enemy AI System
  * Phase 8.1 - Advanced enemy AI with behavior trees, learning, and tactical behaviors

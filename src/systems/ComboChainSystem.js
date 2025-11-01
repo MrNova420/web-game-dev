@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ComboChainSystem.js
  * Phase 5.2 - Advanced Combo Chain System

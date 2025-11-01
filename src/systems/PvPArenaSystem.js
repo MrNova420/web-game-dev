@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PvPArenaSystem.js
  * Phase 5.2 - PvP Arena and Competitive Combat System

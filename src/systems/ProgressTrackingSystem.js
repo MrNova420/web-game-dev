@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * ProgressTrackingSystem - Tracks development progress and future enhancements
  * Automatically monitors game state and plans future improvements

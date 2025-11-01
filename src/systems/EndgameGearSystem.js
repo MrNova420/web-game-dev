@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EndgameGearSystem.js - Phase 7
  * Ultimate gear progression for endgame.

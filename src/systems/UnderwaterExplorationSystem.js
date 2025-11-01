@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * UnderwaterExplorationSystem.js - Phase 4
  */

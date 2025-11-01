@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CosmeticSystem.js
  * Cosmetic customization with hundreds of options.

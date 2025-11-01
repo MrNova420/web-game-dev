@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * RankingSystemGlobal.js - Phase 5
  */

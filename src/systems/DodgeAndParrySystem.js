@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DodgeAndParrySystem.js
  * Phase 5.1 - Dodge and Parry Combat System

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Horde Defense System
  * Cooperative tower defense with massive enemy waves, fortifications, and teamwork

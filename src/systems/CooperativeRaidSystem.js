@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CooperativeRaidSystem.js - Phase 5
  */

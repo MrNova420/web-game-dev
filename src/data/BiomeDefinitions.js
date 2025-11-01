@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * BiomeDefinitions.js - Complete 15 Biome System
  * Professional, production-ready biome definitions

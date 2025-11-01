@@ -1,0 +1,1 @@
+import{l as r}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class s{constructor(){this.tournaments=new Map,this.ui={bracket:"/assets/ui/tournament/bracket.png"}}createTournament(t){r.info(`Tournament created: ${t}`)}}export{s as TournamentSystem};

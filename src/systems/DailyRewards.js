@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DailyRewards - Daily login rewards system for player retention
  * Provides escalating rewards for consecutive daily logins

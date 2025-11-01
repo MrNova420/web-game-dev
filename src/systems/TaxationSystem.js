@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TaxationSystem.js - Phase 6
  */

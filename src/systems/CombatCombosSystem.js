@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * CombatCombosSystem - Advanced combo chain system
  * Manages combo attacks, timing windows, and finishers

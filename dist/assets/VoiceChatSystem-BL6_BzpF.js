@@ -1,0 +1,1 @@
+import{l as o}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class c{constructor(){this.channels=new Map}enableVoice(e){o.info(`Voice enabled: ${e}`)}}export{c as VoiceChatSystem};

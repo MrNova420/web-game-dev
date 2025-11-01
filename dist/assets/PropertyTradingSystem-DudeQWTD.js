@@ -1,0 +1,1 @@
+import{l as t}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class m{constructor(){this.properties=new Map}buyProperty(r,o){t.info(`${r} bought property ${o}`)}}export{m as PropertyTradingSystem};

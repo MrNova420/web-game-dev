@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PetBattleSystem.js
  * Phase 5 - Pet Battle System

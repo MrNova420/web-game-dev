@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * MainMenuSystem - Handles main menu, start screen, and game hub
  * Provides a polished starting experience with multiple options

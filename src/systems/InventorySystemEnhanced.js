@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * InventorySystemEnhanced.js
  * Enhanced inventory with sorting, filtering, and auto-stacking.

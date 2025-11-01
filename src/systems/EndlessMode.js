@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * EndlessMode - Manages infinite dungeon progression
  * Endless gameplay system for Dynasty of Emberveil

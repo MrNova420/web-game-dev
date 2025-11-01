@@ -1,1 +1,0 @@
-import{l as s}from"./index-uQPGMzc0.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class n{constructor(){this.battlegrounds={warsong:{model:"/assets/models/pvp/warsong_gulch.glb"}}}joinBattleground(o,t){s.info(`${o} joins ${t}`)}}export{n as BattlegroundSystem};

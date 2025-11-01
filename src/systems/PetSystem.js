@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PetSystem.js
  * Handles pet collection, leveling, abilities, evolution, and equipment

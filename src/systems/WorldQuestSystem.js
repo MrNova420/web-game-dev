@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * WorldQuestSystem.js - Phase 4
  */

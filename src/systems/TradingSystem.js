@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TradingSystem.js
  * Player-to-player trading with item inspection and secure exchange.

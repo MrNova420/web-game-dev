@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * PhotoModeSystem.js - Phase 5
  */

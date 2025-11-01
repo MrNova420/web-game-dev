@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Enhanced UI System - Dynasty of Emberveil
  * 

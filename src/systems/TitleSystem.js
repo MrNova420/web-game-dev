@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * TitleSystem.js
  * Earned titles displayed above character names.

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * SpectatorModeSystem.js - Phase 5
  */

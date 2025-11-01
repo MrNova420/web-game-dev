@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * DailyQuestSystem.js
  * Daily and weekly quests with reset timers.

@@ -1,0 +1,1 @@
+import{l as m}from"./index-Bf-_4h4A.js";import"./three-DTQjiZ7L.js";import"./cannon-DPZWuR6y.js";class a{constructor(){this.animations={climb:"/assets/animations/climbing.fbx",jump:"/assets/animations/climb_jump.fbx"}}climb(i){m.info(`${i} climbing`)}}export{a as MountainClimbingSystem};

@@ -1,3 +1,4 @@
+import { logger } from '../core/Logger.js';
 /**
  * Device Optimization System - Automatically adapt to device capabilities
  * Mobile, Tablet, Desktop - ALL devices get smooth 60 FPS gameplay
